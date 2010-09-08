@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="TSI_Practico">
+        <wb-resource deploy-path="/" source-path="/ejbModule"/>
+        <property name="java-output-path" value="/TSI_Practico/build/classes"/>
+        <property name="ClientProject" value="TSI_PracticoClient"/>
+        <property name="ClientJARURI" value="TSI_PracticoClient.jar"/>
+    </wb-module>
+</project-modules>
