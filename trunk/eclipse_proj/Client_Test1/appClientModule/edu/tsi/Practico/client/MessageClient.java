@@ -9,13 +9,15 @@ import javax.jms.Session;
 import javax.jms.MessageProducer;
 import javax.jms.TextMessage;
 import javax.jms.JMSException;
-import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+//import javax.annotation.Resource;
 
 
 public class MessageClient {
-    @Resource(mappedName = "ConnectionFactory")
+    //@Resource(mappedName = "ConnectionFactory")
     private static ConnectionFactory connectionFactory;
-    @Resource(mappedName = "queue/TsiQueue")
+    //@Resource(mappedName = "queue/TsiQueue")
     private static Queue queue;
 
     public static void main(String[] args) {
@@ -32,8 +34,12 @@ public class MessageClient {
         	props.setProperty( "java.naming.factory.initial",
         		"org.jnp.interfaces.NamingContextFactory" );
         	props.setProperty( "java.naming.provider.url", "127.0.0.1:1099" );
+        	Context initialContext = new InitialContext(props);        	
         	
+        	connectionFactory  = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
             connection = connectionFactory.createConnection();
+        	queue  = (Queue) initialContext.lookup("queue/TsiQueue");
+            
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             messageProducer = session.createProducer(queue);
             message = session.createTextMessage();
@@ -48,6 +54,7 @@ public class MessageClient {
             System.out.println(
                     " check <install_dir>/domains/domain1/logs/server.log.");
         } catch (/*JMS*/Exception e) {
+        	e.printStackTrace();
             System.out.println("Exception occurred: " + e.toString());
         } finally {
             if (connection != null) {

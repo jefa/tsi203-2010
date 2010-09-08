@@ -30,12 +30,7 @@ public class SessionClient {
     public String doTest() {
         try {
         	
-        	//String compName = "TSI_Practico_EAR/Session1/remote";
-        	//String compName = "TSI_Practico_EAR/Session1";
-        	//String path = "java:comp/env/ejb/miBean";
-        	//String compName = "java:DefaultDS";
         	String compName = "java:TSI_Practico_EAR/Session1Remote/remote";
-        	
         	
         	Properties props = new Properties();
         	props.setProperty( "java.naming.factory.initial",
