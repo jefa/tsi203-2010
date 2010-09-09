@@ -2,15 +2,15 @@ package edu.tsi.Practico.client;
 
 import javax.xml.ws.WebServiceRef;
 
-import edu.tsi.Practico.TestWSService_PortType;
-import edu.tsi.Practico.TestWSService_Service;
+import edu.tsi.Practico.SimpleWS1Service_PortType;
+import edu.tsi.Practico.SimpleWS1Service_Service;
 import javax.xml.rpc.ServiceException;
 
 
 public class WebServiceClient {
 
-    @WebServiceRef(wsdlLocation = "http://127.0.0.1:8080/WebProject/TestWS?wsdl")
-    static TestWSService_Service service;
+    @WebServiceRef(wsdlLocation = "http://127.0.0.1:8080/WebProject/SimpleWS1?wsdl")
+    static SimpleWS1Service_Service service;
 
 	/**
 	 * @param args
@@ -22,7 +22,7 @@ public class WebServiceClient {
                     "Retrieving the port from the following service: "
                     + service);
             
-            TestWSService_PortType port = service.getTestWSServicePort();
+            SimpleWS1Service_PortType port = service.getSimpleWS1ServicePort();
 
             System.out.println("Invoking the sayHello operation on the port.");
 
@@ -34,7 +34,7 @@ public class WebServiceClient {
                 name = "No Name";
             }
 
-            String response = port.greet(name);
+            String response = port.invoke(name);
             System.out.println(response);
         } catch (Exception ex) {
             ex.printStackTrace();

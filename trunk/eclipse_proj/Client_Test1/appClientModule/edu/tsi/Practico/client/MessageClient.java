@@ -38,7 +38,7 @@ public class MessageClient {
         	
         	connectionFactory  = (ConnectionFactory) initialContext.lookup("ConnectionFactory");
             connection = connectionFactory.createConnection();
-        	queue  = (Queue) initialContext.lookup("queue/TsiQueue");
+        	queue  = (Queue) initialContext.lookup(queueName);
             
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             messageProducer = session.createProducer(queue);
