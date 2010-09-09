@@ -2,13 +2,22 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <display-name>WebProjectClient</display-name>
     <servlet>
-        <display-name>greeting</display-name>
-        <servlet-name>greeting</servlet-name>
-        <jsp-file>/greeting.jsp</jsp-file>
+        <display-name>test_ws1</display-name>
+        <servlet-name>test_ws1</servlet-name>
+        <jsp-file>/test_ws1.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
-        <servlet-name>greeting</servlet-name>
-        <url-pattern>/greeting</url-pattern>
+        <servlet-name>test_ws1</servlet-name>
+        <url-pattern>/test_ws1</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <display-name>test_ws2</display-name>
+        <servlet-name>test_ws2</servlet-name>
+        <jsp-file>/test_ws2.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>test_ws2</servlet-name>
+        <url-pattern>/test_ws2</url-pattern>
     </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

@@ -14,7 +14,7 @@
     String username = request.getParameter("username");
     if ( username != null && username.length() > 0 ) {
 %>
-    <%@include file="response.jsp" %>
+    <%@include file="response_ws2.jsp" %>
 <%
     }
 %>
