@@ -2,16 +2,25 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>WebProject</display-name>
   <servlet>
-      <servlet-name>TestWS</servlet-name>
-      <servlet-class>edu.tsi.Practico.TestWS</servlet-class>
-      <load-on-startup>1</load-on-startup>
+    <servlet-name>SimpleWS1</servlet-name>
+    <servlet-class>edu.tsi.Practico.SimpleWS1</servlet-class>
+    <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-      <servlet-name>TestWS</servlet-name>
-      <url-pattern>/TestWS</url-pattern>
+    <servlet-name>SimpleWS1</servlet-name>
+    <url-pattern>/SimpleWS1</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>SimpleWS2</servlet-name>
+    <servlet-class>edu.tsi.Practico.SimpleWS2</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SimpleWS2</servlet-name>
+    <url-pattern>/SimpleWS2</url-pattern>
   </servlet-mapping>
   <session-config>
-      <session-timeout>30</session-timeout>
+    <session-timeout>30</session-timeout>
   </session-config>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
