@@ -19,5 +19,7 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/_Person/Dev/eclipse-jee/plugins/javax.wsdl_1.6.2.v201005080631.jar"/>
+	<classpathentry kind="lib" path="C:/_Person/Dev/eclipse-jee/plugins/org.apache.commons.logging_1.0.4.v201005080501.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

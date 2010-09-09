@@ -1,5 +1,5 @@
 /**
- * TestWSService_ServiceLocator.java
+ * SimpleWS1Service_ServiceLocator.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
@@ -7,53 +7,53 @@
 
 package edu.tsi.Practico;
 
-public class TestWSService_ServiceLocator extends org.apache.axis.client.Service implements edu.tsi.Practico.TestWSService_Service {
+public class SimpleWS1Service_ServiceLocator extends org.apache.axis.client.Service implements edu.tsi.Practico.SimpleWS1Service_Service {
 
-    public TestWSService_ServiceLocator() {
+    public SimpleWS1Service_ServiceLocator() {
     }
 
 
-    public TestWSService_ServiceLocator(org.apache.axis.EngineConfiguration config) {
+    public SimpleWS1Service_ServiceLocator(org.apache.axis.EngineConfiguration config) {
         super(config);
     }
 
-    public TestWSService_ServiceLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
+    public SimpleWS1Service_ServiceLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
         super(wsdlLoc, sName);
     }
 
-    // Use to get a proxy class for TestWSServicePort
-    private java.lang.String TestWSServicePort_address = "http://127.0.0.1:8080/WebProject/TestWS";
+    // Use to get a proxy class for SimpleWS1ServicePort
+    private java.lang.String SimpleWS1ServicePort_address = "http://127.0.0.1:8080/WebProject/SimpleWS1";
 
-    public java.lang.String getTestWSServicePortAddress() {
-        return TestWSServicePort_address;
+    public java.lang.String getSimpleWS1ServicePortAddress() {
+        return SimpleWS1ServicePort_address;
     }
 
     // The WSDD service name defaults to the port name.
-    private java.lang.String TestWSServicePortWSDDServiceName = "TestWSServicePort";
+    private java.lang.String SimpleWS1ServicePortWSDDServiceName = "SimpleWS1ServicePort";
 
-    public java.lang.String getTestWSServicePortWSDDServiceName() {
-        return TestWSServicePortWSDDServiceName;
+    public java.lang.String getSimpleWS1ServicePortWSDDServiceName() {
+        return SimpleWS1ServicePortWSDDServiceName;
     }
 
-    public void setTestWSServicePortWSDDServiceName(java.lang.String name) {
-        TestWSServicePortWSDDServiceName = name;
+    public void setSimpleWS1ServicePortWSDDServiceName(java.lang.String name) {
+        SimpleWS1ServicePortWSDDServiceName = name;
     }
 
-    public edu.tsi.Practico.TestWSService_PortType getTestWSServicePort() throws javax.xml.rpc.ServiceException {
+    public edu.tsi.Practico.SimpleWS1Service_PortType getSimpleWS1ServicePort() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
-            endpoint = new java.net.URL(TestWSServicePort_address);
+            endpoint = new java.net.URL(SimpleWS1ServicePort_address);
         }
         catch (java.net.MalformedURLException e) {
             throw new javax.xml.rpc.ServiceException(e);
         }
-        return getTestWSServicePort(endpoint);
+        return getSimpleWS1ServicePort(endpoint);
     }
 
-    public edu.tsi.Practico.TestWSService_PortType getTestWSServicePort(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
+    public edu.tsi.Practico.SimpleWS1Service_PortType getSimpleWS1ServicePort(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
-            edu.tsi.Practico.TestWSServiceBindingStub _stub = new edu.tsi.Practico.TestWSServiceBindingStub(portAddress, this);
-            _stub.setPortName(getTestWSServicePortWSDDServiceName());
+            edu.tsi.Practico.SimpleWS1ServiceBindingStub _stub = new edu.tsi.Practico.SimpleWS1ServiceBindingStub(portAddress, this);
+            _stub.setPortName(getSimpleWS1ServicePortWSDDServiceName());
             return _stub;
         }
         catch (org.apache.axis.AxisFault e) {
@@ -61,8 +61,8 @@ public class TestWSService_ServiceLocator extends org.apache.axis.client.Service
         }
     }
 
-    public void setTestWSServicePortEndpointAddress(java.lang.String address) {
-        TestWSServicePort_address = address;
+    public void setSimpleWS1ServicePortEndpointAddress(java.lang.String address) {
+        SimpleWS1ServicePort_address = address;
     }
 
     /**
@@ -72,9 +72,9 @@ public class TestWSService_ServiceLocator extends org.apache.axis.client.Service
      */
     public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
-            if (edu.tsi.Practico.TestWSService_PortType.class.isAssignableFrom(serviceEndpointInterface)) {
-                edu.tsi.Practico.TestWSServiceBindingStub _stub = new edu.tsi.Practico.TestWSServiceBindingStub(new java.net.URL(TestWSServicePort_address), this);
-                _stub.setPortName(getTestWSServicePortWSDDServiceName());
+            if (edu.tsi.Practico.SimpleWS1Service_PortType.class.isAssignableFrom(serviceEndpointInterface)) {
+                edu.tsi.Practico.SimpleWS1ServiceBindingStub _stub = new edu.tsi.Practico.SimpleWS1ServiceBindingStub(new java.net.URL(SimpleWS1ServicePort_address), this);
+                _stub.setPortName(getSimpleWS1ServicePortWSDDServiceName());
                 return _stub;
             }
         }
@@ -94,8 +94,8 @@ public class TestWSService_ServiceLocator extends org.apache.axis.client.Service
             return getPort(serviceEndpointInterface);
         }
         java.lang.String inputPortName = portName.getLocalPart();
-        if ("TestWSServicePort".equals(inputPortName)) {
-            return getTestWSServicePort();
+        if ("SimpleWS1ServicePort".equals(inputPortName)) {
+            return getSimpleWS1ServicePort();
         }
         else  {
             java.rmi.Remote _stub = getPort(serviceEndpointInterface);
@@ -105,7 +105,7 @@ public class TestWSService_ServiceLocator extends org.apache.axis.client.Service
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://Practico.tsi.edu/", "TestWSService");
+        return new javax.xml.namespace.QName("http://Practico.tsi.edu/", "SimpleWS1Service");
     }
 
     private java.util.HashSet ports = null;
@@ -113,7 +113,7 @@ public class TestWSService_ServiceLocator extends org.apache.axis.client.Service
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("http://Practico.tsi.edu/", "TestWSServicePort"));
+            ports.add(new javax.xml.namespace.QName("http://Practico.tsi.edu/", "SimpleWS1ServicePort"));
         }
         return ports.iterator();
     }
@@ -123,8 +123,8 @@ public class TestWSService_ServiceLocator extends org.apache.axis.client.Service
     */
     public void setEndpointAddress(java.lang.String portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
         
-if ("TestWSServicePort".equals(portName)) {
-            setTestWSServicePortEndpointAddress(address);
+if ("SimpleWS1ServicePort".equals(portName)) {
+            setSimpleWS1ServicePortEndpointAddress(address);
         }
         else 
 { // Unknown Port Name
