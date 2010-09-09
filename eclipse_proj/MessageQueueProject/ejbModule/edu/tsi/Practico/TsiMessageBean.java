@@ -18,8 +18,9 @@ import javax.jms.TextMessage;
 				propertyName = "destination", propertyValue = "queue/TsiQueue"
 		)}, 
 		mappedName = "queue/TsiQueue")
+		
 public class TsiMessageBean implements MessageListener {
-    static final Logger logger = Logger.getLogger("SimpleMessageBean");
+    static final Logger logger = Logger.getLogger("TsiMessageBean");
     @Resource
     private MessageDrivenContext mdc;
 
