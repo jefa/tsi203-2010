@@ -1,5 +1,5 @@
 /**
- * TestWSServiceBindingStub.java
+ * SimpleWS1ServiceBindingStub.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
@@ -7,7 +7,7 @@
 
 package edu.tsi.Practico;
 
-public class TestWSServiceBindingStub extends org.apache.axis.client.Stub implements edu.tsi.Practico.TestWSService_PortType {
+public class SimpleWS1ServiceBindingStub extends org.apache.axis.client.Stub implements edu.tsi.Practico.SimpleWS1Service_PortType {
     private java.util.Vector cachedSerClasses = new java.util.Vector();
     private java.util.Vector cachedSerQNames = new java.util.Vector();
     private java.util.Vector cachedSerFactories = new java.util.Vector();
@@ -24,8 +24,8 @@ public class TestWSServiceBindingStub extends org.apache.axis.client.Stub implem
         org.apache.axis.description.OperationDesc oper;
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("greet");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "name"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.setName("invoke");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "param"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         param.setOmittable(true);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -37,16 +37,16 @@ public class TestWSServiceBindingStub extends org.apache.axis.client.Stub implem
 
     }
 
-    public TestWSServiceBindingStub() throws org.apache.axis.AxisFault {
+    public SimpleWS1ServiceBindingStub() throws org.apache.axis.AxisFault {
          this(null);
     }
 
-    public TestWSServiceBindingStub(java.net.URL endpointURL, javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
+    public SimpleWS1ServiceBindingStub(java.net.URL endpointURL, javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
          this(service);
          super.cachedEndpoint = endpointURL;
     }
 
-    public TestWSServiceBindingStub(javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
+    public SimpleWS1ServiceBindingStub(javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
         if (service == null) {
             super.service = new org.apache.axis.client.Service();
         } else {
@@ -88,7 +88,7 @@ public class TestWSServiceBindingStub extends org.apache.axis.client.Stub implem
         }
     }
 
-    public java.lang.String greet(java.lang.String name) throws java.rmi.RemoteException {
+    public java.lang.String invoke(java.lang.String param) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -100,11 +100,11 @@ public class TestWSServiceBindingStub extends org.apache.axis.client.Stub implem
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("http://Practico.tsi.edu/", "greet"));
+        _call.setOperationName(new javax.xml.namespace.QName("http://Practico.tsi.edu/", "invoke"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {name});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {param});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
