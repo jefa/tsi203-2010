@@ -2,12 +2,12 @@
 
 import java.util.Properties;
 
+import javax.xml.namespace.QName;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.ejb.MessageDrivenContext;
 import javax.jms.*;
 import javax.naming.*;
-
 /**
  * Message-Driven Bean implementation class for: MessagesMDBean
  *
@@ -42,7 +42,17 @@ public class MessagesMDBean implements MessageListener {
             String text = tm.getText();
             System.out.println("Message Received: " + text );
             String result = "Hello, " + text;
-            System.out.println("Reply: " + result);
+            // System.out.println("Reply: " + result);
+            
+/*            String endpoint ="http://ws.apache.org:5049/axis/services/echo";
+            Service  service = new Service();
+            Call     call    = (Call) service.createCall();
+            call.setTargetEndpointAddress( new java.net.URL(endpoint) );
+            call.setOperationName(new QName("http://soapinterop.org/", echoString));
+            String ret = (String) call.invoke( new Object[] { "Hello!" } );
+            System.out.println("Sent 'Hello!', got '" + ret + "'");
+  */          
+                  
             TextMessage reply = session.createTextMessage(result);
 
             String destinationName = "queue/MessageBeanTestQueueOut";
