@@ -43,7 +43,7 @@ public class ServicioCompuesto {
 			col.add("Sesion finalizada a las " + new Date() + "\n");
 			String logs = col.toString();
 			System.out.println("Enviando logs al usuario " + userID + " que contiene:\n" + logs);
-			//session_reg.remove(userID);
+			session_reg.remove(userID);
 			return logs;
 		} else {
 			return "SID no válido";
