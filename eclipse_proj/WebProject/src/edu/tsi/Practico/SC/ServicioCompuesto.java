@@ -43,7 +43,7 @@ public class ServicioCompuesto {
 			col.add("Sesion finalizada a las " + new Date() + "\n");
 			String logs = col.toString();
 			System.out.println("Enviando logs al usuario " + userID + " que contiene:\n" + logs);
-			session_reg.remove(userID);
+			//session_reg.remove(userID);
 			return logs;
 		} else {
 			return "SID no válido";
@@ -52,14 +52,22 @@ public class ServicioCompuesto {
 	
 	@WebMethod
 	public String invocarCombinacionWS1(@WebParam(name="SID") String userID) {
-		System.out.println("Invocaron WS1 con SID = " + userID);
-		if(session_reg.containsKey(userID)){			
-			session_reg.get(userID).add("Se invocó al web service WS1 a las " + new Date());
+		
+        int index = userID.indexOf('_');
+        
+        if(index == -1) System.err.println("NO SE MANDO WS EN EL MENSAJE");
+        
+        int ID = Integer.parseInt(userID.substring(0, index));
+        String userName = userID.substring(index + 1);
+		
+		System.out.println("Invocaron WS1 con SID = " + ID);
+		if(session_reg.containsKey(ID)){			
+			session_reg.get(ID).add("Se invocó al web service WS1 a las " + new Date());
 			
 			//TODO: INVOCAR COMBINACION DE WS1
 			try {
 				SimpleWS1Service_PortType hello = new SimpleWS1Service_ServiceLocator().getSimpleWS1ServicePort();
-			    String resp = hello.invoke(userID);
+			    String resp = hello.invoke(userName);
 			    return resp;
 			} catch (ServiceException e) {
 				// TODO Auto-generated catch block
@@ -74,14 +82,21 @@ public class ServicioCompuesto {
 	
 	@WebMethod
 	public String invocarCombinacionWS2(@WebParam(name="SID") String userID) {
-		System.out.println("Invocaron WS2 con SID = " + userID);
-		if(session_reg.containsKey(userID)){
-			session_reg.get(userID).add("Se invocó a la combinacion 2 a las " + new Date());
+        int index = userID.indexOf('_');
+        
+        if(index == -1) System.err.println("NO SE MANDO WS EN EL MENSAJE");
+        
+        int ID = Integer.parseInt(userID.substring(0, index));
+        String userName = userID.substring(index + 1);
+        
+		System.out.println("Invocaron WS2 con SID = " + ID);
+		if(session_reg.containsKey(ID)){
+			session_reg.get(ID).add("Se invocó a la combinacion 2 a las " + new Date());
 			
 			try {
 				//TODO: INVOCAR COMBINACION DE WS2
 				SimpleWS2Service_PortType hello = new SimpleWS2Service_ServiceLocator().getSimpleWS2ServicePort();
-			    String resp = hello.invoke(userID);
+			    String resp = hello.invoke(userName);
 			    return resp;
 			} catch (ServiceException e) {
 				// TODO Auto-generated catch block
