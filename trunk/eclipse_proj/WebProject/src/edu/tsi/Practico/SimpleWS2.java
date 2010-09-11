@@ -5,7 +5,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 
 @WebService(name = "SimpleWS2Service")
-public class SimpleWS2 {
+public class SimpleWS2 {  
 
    @WebMethod
    public String invoke( @WebParam(name = "param")
