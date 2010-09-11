@@ -46,7 +46,7 @@ public class ServicioCompuesto {
 			session_reg.remove(userID);
 			return logs;
 		} else {
-			return "SID no válido";
+			return "SID no valido";
 		}
 	}
 	
@@ -64,7 +64,7 @@ public class ServicioCompuesto {
 		System.out.println("Invocaron WS1 con SID = " + ID);
 		if(session_reg.containsKey(ID)){			
 			Collection<String> col = session_reg.get(ID);
-			col.add("Se invocó al web service WS1 a las " + new Date());
+			col.add("Se invoco al web service WS1 a las " + new Date());
 			session_reg.put(ID, col);
 			
 			//TODO: INVOCAR COMBINACION DE WS1
@@ -80,7 +80,7 @@ public class ServicioCompuesto {
 				e.printStackTrace();
 			}
 		}			
-		return "SID no válido.";
+		return "SID no valido.";
 	}
 	
 	@WebMethod
@@ -96,7 +96,7 @@ public class ServicioCompuesto {
 		System.out.println("Invocaron WS2 con SID = " + ID);
 		if(session_reg.containsKey(ID)){
 			Collection<String> col = session_reg.get(ID);
-			col.add("Se invocó al web service WS1 a las " + new Date());
+			col.add("Se invoco al web service WS1 a las " + new Date());
 			session_reg.put(ID, col);
 			try {
 				//TODO: INVOCAR COMBINACION DE WS2
@@ -111,7 +111,7 @@ public class ServicioCompuesto {
 				e.printStackTrace();
 			}
 		}
-		return "SID no válido.";
+		return "SID no valido.";
 	}
 	
 	@WebMethod
