@@ -65,6 +65,7 @@ public class ServicioCompuesto {
 		if(session_reg.containsKey(ID)){			
 			Collection<String> col = session_reg.get(ID);
 			col.add("Se invocó al web service WS1 a las " + new Date());
+			session_reg.put(ID, col);
 			
 			//TODO: INVOCAR COMBINACION DE WS1
 			try {
@@ -96,7 +97,7 @@ public class ServicioCompuesto {
 		if(session_reg.containsKey(ID)){
 			Collection<String> col = session_reg.get(ID);
 			col.add("Se invocó al web service WS1 a las " + new Date());
-			
+			session_reg.put(ID, col);
 			try {
 				//TODO: INVOCAR COMBINACION DE WS2
 				SimpleWS2Service_PortType hello = new SimpleWS2Service_ServiceLocator().getSimpleWS2ServicePort();
