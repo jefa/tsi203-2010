@@ -1,13 +1,13 @@
 /**
- * SimpleWS1ServiceBindingStub.java
+ * SimpleWS2ServiceBindingStub.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package edu.tsi.Practico;
+package edu.tsi.Practico.Proxy;
 
-public class SimpleWS1ServiceBindingStub extends org.apache.axis.client.Stub implements edu.tsi.Practico.SimpleWS1Service_PortType {
+public class SimpleWS2ServiceBindingStub extends org.apache.axis.client.Stub implements edu.tsi.Practico.Proxy.SimpleWS2Service_PortType {
     private java.util.Vector cachedSerClasses = new java.util.Vector();
     private java.util.Vector cachedSerQNames = new java.util.Vector();
     private java.util.Vector cachedSerFactories = new java.util.Vector();
@@ -37,16 +37,16 @@ public class SimpleWS1ServiceBindingStub extends org.apache.axis.client.Stub imp
 
     }
 
-    public SimpleWS1ServiceBindingStub() throws org.apache.axis.AxisFault {
+    public SimpleWS2ServiceBindingStub() throws org.apache.axis.AxisFault {
          this(null);
     }
 
-    public SimpleWS1ServiceBindingStub(java.net.URL endpointURL, javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
+    public SimpleWS2ServiceBindingStub(java.net.URL endpointURL, javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
          this(service);
          super.cachedEndpoint = endpointURL;
     }
 
-    public SimpleWS1ServiceBindingStub(javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
+    public SimpleWS2ServiceBindingStub(javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
         if (service == null) {
             super.service = new org.apache.axis.client.Service();
         } else {
