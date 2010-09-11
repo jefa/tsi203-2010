@@ -15,9 +15,8 @@ String ws2 = "Invocar WS2";
 String fin = "Finalizar Sesion";
 
 String SID = (String)session.getAttribute("SID");// = request.getParameter("SID"); 
-String result = null;%>
-Valor de SID en la session: <%=SID%>
-<%if(session.getAttribute("SID") == null || session.getAttribute("SID").equals("")){
+
+if(session.getAttribute("SID") == null || session.getAttribute("SID").equals("")){
 	SID = sampleServicioCompuestoProxyid.inciarSesion();
 	//request.setParameter("SID",SID);
 	//session = request.getSession(true);
@@ -36,17 +35,16 @@ Valor de SID en la session: <%=SID%>
 	try {
 		if(action.equals(fin)) {
 			respuesta = sampleServicioCompuestoProxyid.finalizarSesion(SID);
+			session.removeAttribute("SID");
 		} else if ( username != null && username.length() > 0 ) {
 	    	
 	    	if(action.equals(ws1)) {
 	    		respuesta = sampleServicioCompuestoProxyid.invocarCombinacionWS1(SID + "_" + username);
 	    	} else if( action.equals(ws2)){
 	    		respuesta = sampleServicioCompuestoProxyid.invocarCombinacionWS2(SID + "_" + username);
-	    		session.setAttribute("SID",null);
+	    		
 	    	}
 	    }
-	} catch(org.apache.axis.AxisFault af){
-		session.setAttribute("SID",null);
 	} catch(Exception e) {
 		respuesta = e.getMessage();
 	}
@@ -56,11 +54,5 @@ Valor de SID en la session: <%=SID%>
 <input type="submit" name="action" value="<%=ws2%>">
 <input type="submit" name="action" value="<%=fin%>">
 </form>
-
-
-
-
-
-
 </body>
 </html>
