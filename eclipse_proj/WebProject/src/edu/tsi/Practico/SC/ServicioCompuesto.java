@@ -21,8 +21,7 @@ public class ServicioCompuesto {
 	private static HashMap<String, Collection<String>> session_reg;
 	private static int nextInt;
 	
-	public ServicioCompuesto() {
-		session_reg = new HashMap<String,Collection<String>>();
+	public ServicioCompuesto() {      
 		nextInt = 0;
 	}
 	
@@ -30,7 +29,7 @@ public class ServicioCompuesto {
 	public String inciarSesion() {
 		String userID = generateUserID();
 		Collection<String> col = new ArrayList<String>();
-		col.add("Sesion iniciada a las " + new Date() + "\n");
+		col.add("Sesión iniciada a las " + new Date() + "\n");
 		session_reg.put(userID, col);
 		System.out.println("Nueva sesion, SID = " + userID);
 		return userID;
@@ -117,7 +116,7 @@ public class ServicioCompuesto {
 	@WebMethod
 	public String invocarCombinacionWS3(@WebParam(name="SID") String userID) {
 		//TODO: INVOCAR COMBINACION DE WS3
-		session_reg.get(userID).add("Se invoc� a la combinacion 3 a las " + new Date());
+		session_reg.get(userID).add("Se invocó a la combinacion 3 a las " + new Date());
 		return "Combinacion 3 invocada";
 	}
 	
