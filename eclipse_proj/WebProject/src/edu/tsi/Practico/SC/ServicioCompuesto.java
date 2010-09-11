@@ -63,7 +63,8 @@ public class ServicioCompuesto {
 		
 		System.out.println("Invocaron WS1 con SID = " + ID);
 		if(session_reg.containsKey(ID)){			
-			session_reg.get(ID).add("Se invocó al web service WS1 a las " + new Date());
+			Collection<String> col = session_reg.get(ID);
+			col.add("Se invocó al web service WS1 a las " + new Date());
 			
 			//TODO: INVOCAR COMBINACION DE WS1
 			try {
@@ -93,7 +94,8 @@ public class ServicioCompuesto {
         
 		System.out.println("Invocaron WS2 con SID = " + ID);
 		if(session_reg.containsKey(ID)){
-			session_reg.get(ID).add("Se invocó a la combinacion 2 a las " + new Date());
+			Collection<String> col = session_reg.get(ID);
+			col.add("Se invocó al web service WS1 a las " + new Date());
 			
 			try {
 				//TODO: INVOCAR COMBINACION DE WS2
