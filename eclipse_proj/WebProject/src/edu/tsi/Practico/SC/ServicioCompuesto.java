@@ -57,7 +57,8 @@ public class ServicioCompuesto {
         
         if(index == -1) System.err.println("NO SE MANDO WS EN EL MENSAJE");
         
-        int ID = Integer.parseInt(userID.substring(0, index));
+        //int ID = Integer.parseInt(userID.substring(0, index));
+        String ID = userID.substring(0, index);
         String userName = userID.substring(index + 1);
 		
 		System.out.println("Invocaron WS1 con SID = " + ID);
@@ -86,7 +87,8 @@ public class ServicioCompuesto {
         
         if(index == -1) System.err.println("NO SE MANDO WS EN EL MENSAJE");
         
-        int ID = Integer.parseInt(userID.substring(0, index));
+        //int ID = Integer.parseInt(userID.substring(0, index));
+        String ID = userID.substring(0, index);
         String userName = userID.substring(index + 1);
         
 		System.out.println("Invocaron WS2 con SID = " + ID);
