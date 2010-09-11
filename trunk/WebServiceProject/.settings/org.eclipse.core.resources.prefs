@@ -1,0 +1,12 @@
+#Fri Sep 10 23:00:36 UYT 2010
+eclipse.preferences.version=1
+encoding//src/com/cdyne/ws/WeatherWS/Forecast.java=UTF-8
+encoding//src/com/cdyne/ws/WeatherWS/ForecastReturn.java=UTF-8
+encoding//src/com/cdyne/ws/WeatherWS/POP.java=UTF-8
+encoding//src/com/cdyne/ws/WeatherWS/Temp.java=UTF-8
+encoding//src/com/cdyne/ws/WeatherWS/Weather.java=UTF-8
+encoding//src/com/cdyne/ws/WeatherWS/WeatherDescription.java=UTF-8
+encoding//src/com/cdyne/ws/WeatherWS/WeatherLocator.java=UTF-8
+encoding//src/com/cdyne/ws/WeatherWS/WeatherReturn.java=UTF-8
+encoding//src/com/cdyne/ws/WeatherWS/WeatherSoap.java=UTF-8
+encoding//src/com/cdyne/ws/WeatherWS/WeatherSoapStub.java=UTF-8
