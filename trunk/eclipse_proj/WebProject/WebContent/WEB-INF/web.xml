@@ -2,6 +2,15 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>WebProject</display-name>
   <servlet>
+    <servlet-name>ServicioCompuesto</servlet-name>
+    <servlet-class>edu.tsi.Practico.SC.ServicioCompuesto</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServicioCompuesto</servlet-name>
+    <url-pattern>/ServicioCompuesto</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>SimpleWS1</servlet-name>
     <servlet-class>edu.tsi.Practico.SimpleWS1</servlet-class>
     <load-on-startup>1</load-on-startup>
