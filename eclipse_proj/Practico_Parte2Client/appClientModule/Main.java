@@ -1,4 +1,4 @@
-import com.MDBClient;
+import edu.tsi.Practico.MDB.MDBClient;
 
 public class Main {
 

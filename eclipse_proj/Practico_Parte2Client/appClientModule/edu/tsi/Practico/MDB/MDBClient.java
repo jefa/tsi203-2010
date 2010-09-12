@@ -1,4 +1,4 @@
-package com;
+package edu.tsi.Practico.MDB;
 
 import java.util.Properties;
 
