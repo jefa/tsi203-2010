@@ -3,6 +3,7 @@
 	<name>MessageQueueProject</name>
 	<comment></comment>
 	<projects>
+		<project>TSI_PracticoClient</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
