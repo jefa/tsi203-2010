@@ -7,7 +7,6 @@ import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
-import edu.tsi.Practico.Session1;
 import edu.tsi.Practico.Session1Remote;
 
 public class SessionClient {
