@@ -13,13 +13,8 @@ import javax.jms.Queue;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
-import javax.xml.ws.WebServiceRef;
 
-import edu.tsi.Practico.SimpleWS1Service_PortType;
-import edu.tsi.Practico.SimpleWS1Service_Service;
-import edu.tsi.Practico.SimpleWS1Service_ServiceLocator;
-import edu.tsi.Practico.SimpleWS2;
-import edu.tsi.Practico.SimpleWS2ServiceLocator;
+import edu.tsi.Practico.Proxy.*;
 /**
  * Message-Driven Bean implementation class for: MessagesMDBean
  *
@@ -103,7 +98,7 @@ public class MessagesMDBean implements MessageListener {
                 	result = simpleWS1.invoke(userName);
                 	break;
                 case WS2:
-                	SimpleWS2 simpleWS2 = new SimpleWS2ServiceLocator().getSimpleWS2();
+                	SimpleWS2Service_PortType simpleWS2 = new SimpleWS2Service_ServiceLocator().getSimpleWS2ServicePort();
                 	result = simpleWS2.invoke(userName);
                 	break;
                 default:

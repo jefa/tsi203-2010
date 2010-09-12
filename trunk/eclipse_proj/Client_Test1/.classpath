@@ -9,7 +9,6 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="var" path="JBOSS_HOME/client/jboss-javaee.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/TSI_PracticoClient"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/TSI_Practico"/>
 	<classpathentry kind="var" path="JBOSS_HOME/common/lib/jbossws-native-jaxrpc.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

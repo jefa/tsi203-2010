@@ -2,9 +2,8 @@ package edu.tsi.Practico.client;
 
 import javax.xml.ws.WebServiceRef;
 
-import edu.tsi.Practico.SimpleWS1Service_PortType;
-import edu.tsi.Practico.SimpleWS1Service_Service;
-import javax.xml.rpc.ServiceException;
+import edu.tsi.Practico.Proxy.SimpleWS1Service_PortType;
+import edu.tsi.Practico.Proxy.SimpleWS1Service_Service;
 
 
 public class WebServiceClient {
