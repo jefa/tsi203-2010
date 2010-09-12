@@ -30,7 +30,7 @@ public class MDBClient {
 			ic = new InitialContext(props);
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Excepcion en la creacion del MDBClient, no esta pudiendo obtener el InitialContext");
+			System.out.println("[MDBClient]Excepcion en la creacion del MDBClient, no esta pudiendo obtener el InitialContext");
 			e.printStackTrace();
 		}
 	}
@@ -60,7 +60,7 @@ public class MDBClient {
 	    	}
 	
 	    	String response = msgRcv.getText();
-	    	System.out.println("Respuesta del servidor: " + response);
+	    	System.out.println("[MDBClient]Respuesta recibida por el servidor: " + response);
 	
 	    	sender.close();
 	    	consumer.close();
@@ -70,7 +70,7 @@ public class MDBClient {
 	    	return response;
 		} catch (Exception e) {
 	    	e.printStackTrace();
-	    	return "ERROR in comunication";
+	    	return "[MDBClient]ERROR in comunication";
 	    }
 	}
 	
