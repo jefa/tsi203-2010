@@ -6,6 +6,9 @@
         <dependent-module archiveName="TSI_PracticoClient.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/TSI_PracticoClient/TSI_PracticoClient">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="Practico_Parte2Client.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/Practico_Parte2Client/Practico_Parte2Client">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="WebProjectClient"/>
         <property name="java-output-path" value="/WebProjectClient/build/classes"/>
     </wb-module>

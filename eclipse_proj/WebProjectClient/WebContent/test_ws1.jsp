@@ -1,3 +1,5 @@
+<%@page import="edu.tsi.Practico.Proxy.SimpleWS1Service_ServiceLocator"%>
+<%@ page import="edu.tsi.Practico.Proxy.SimpleWS1Service_Service,edu.tsi.Practico.Proxy.SimpleWS1Service_PortType" %>
 <html>
 <head><title>Hello</title></head>
 <body bgcolor="white">

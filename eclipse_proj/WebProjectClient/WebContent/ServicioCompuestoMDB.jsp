@@ -1,5 +1,4 @@
-<%@page import="com.MDBClient";%>
-
+<%@page import="edu.tsi.Practico.MDB.*" %>
 <html>
 <head><title>Hola MUNDO</title></head>
 <body bgcolor="white">
