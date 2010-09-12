@@ -9,5 +9,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="/MessageQueueProject"/>
+	<classpathentry kind="var" path="JBOSS_HOME/client/jboss-javaee.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
