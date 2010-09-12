@@ -14,6 +14,9 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 
+import edu.tsi.Practico.SC.ServicioCompuesto;
+import edu.tsi.Practico.SC.ServicioCompuestoServiceLocator;
+
 
 /**
  * Message-Driven Bean implementation class for: MessagesMDBean
@@ -38,11 +41,11 @@ public class MessagesMDBean implements MessageListener {
 	
 	//FIXME No esta bueno tener las ctes repetidas en el cliente y en el bean, si alguien ve una manera mas prolija, sirvace arreglarlo.
 	//		Se podría hacer que el cliente mande directamente el wsdl que quiere utilizar para invocar un ws, con lo que no se precisan las ctes. 
-	private static final int INICIAR_SESION = 1;
-	private static final int FINALIZAR_SESION = 2;
-	private static final int WS1 = 3;
-	private static final int WS2 = 4;
-	private static final int WS3 = 5;
+	public static final int INICIAR_SESION = 1;
+	public static final int FINALIZAR_SESION = 2;
+	public static final int WS1 = 3;
+	public static final int WS2 = 4;
+	public static final int WS3 = 5;
 	
     public MessagesMDBean() {
         // TODO Auto-generated constructor stub
@@ -83,7 +86,7 @@ public class MessagesMDBean implements MessageListener {
             if(index == -1) System.err.println("NO SE MANDO WS EN EL MENSAJE");
             
             int WS = Integer.parseInt(text.substring(0, index));
-            String userName = text.substring(index + 1);
+            String arguments = text.substring(index + 1);
             
             //ServicioCompuestoService scsl = null;
             //ServicioCompuesto servicioCompuesto = null;
@@ -103,13 +106,14 @@ public class MessagesMDBean implements MessageListener {
     		    //result = hello.invoke(userName);
             	
             	//FIXME
-            	edu.tsi.Practico.SC.ServicioCompuesto servicioCompuesto = new edu.tsi.Practico.SC.ServicioCompuesto();
+            	//edu.tsi.Practico.SC.ServicioCompuesto servicioCompuesto = new edu.tsi.Practico.SC.ServicioCompuesto();
     		    
             	//edu.tsi.Practico.ServicioCompuestoService = new edu.tsi.Practico.ServicioCompuestoService();
             	//edu.tsi.Practico.ServicioCompuestoProxy a = new edu.tsi.Practico.ServicioCompuestoProxy();
             	//ServicioCompuesto servicioCompuesto = a.getServicioCompuesto();
-                //ServicioCompuestoServiceLocator scsl = new ServicioCompuestoServiceLocator();
-            	//ServicioCompuesto servicioCompuesto = scsl.getServicioCompuestoPort();
+                
+            	ServicioCompuestoServiceLocator scsl = new ServicioCompuestoServiceLocator();
+            	ServicioCompuesto servicioCompuesto = scsl.getServicioCompuestoPort();
             	
                 switch(WS) {
                 
@@ -120,22 +124,22 @@ public class MessagesMDBean implements MessageListener {
                 	break;
                 case FINALIZAR_SESION:
                 	
-                	result = servicioCompuesto.finalizarSesion(userName);
+                	result = servicioCompuesto.finalizarSesion(arguments);
                 	
                 	break;
                 case WS1:
                 	
-                	result = servicioCompuesto.invocarCombinacionWS1(userName);
+                	result = servicioCompuesto.invocarCombinacionWS1(arguments);
                 	
                 	break;
                 case WS2:
                 	
-                	result = servicioCompuesto.invocarCombinacionWS2(userName);
+                	result = servicioCompuesto.invocarCombinacionWS2(arguments);
                 	
                 	break;
 				case WS3:
 					
-					result = servicioCompuesto.invocarCombinacionWS3(userName);
+					result = servicioCompuesto.invocarCombinacionWS3(arguments);
 					
 					break;
                 default:
