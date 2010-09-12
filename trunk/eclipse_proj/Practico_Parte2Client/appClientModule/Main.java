@@ -1,4 +1,4 @@
-import com.*;
+import com.MDBClient;
 
 public class Main {
 
@@ -6,11 +6,22 @@ public class Main {
 		
 		String userName = "Augusto Wismario";
 		
-		System.out.println("Invocando al WS1...");
-		System.out.println("Respuesta del servid: " + new MDBClient().invoke(userName, MDBClient.WS1));
+		System.out.println("Invocando a iniciarSesion");
+		MDBClient mdb = new MDBClient();
+		
+		String sessionID = mdb.iniciarSesion();
+		
+		System.out.println("Respuesta del servidor: " + sessionID);
+		
+		System.out.println("Invocando al WS1...");		
+		System.out.println("Respuesta del servid: " + mdb.invocarWS1(sessionID, userName));
 		
 		System.out.println("Invocando al WS2...");
-		System.out.println("Respuesta del servid: " + new MDBClient().invoke(userName, MDBClient.WS2));
+		System.out.println("Respuesta del servid: " + mdb.invocarWS1(sessionID, userName));
+		
+		System.out.println("Invocando al WS2...");
+		System.out.println("Respuesta del servid: " + mdb.finalizarSesion(sessionID));
+		
 		
 	}
 
