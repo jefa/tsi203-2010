@@ -7,6 +7,11 @@
   <servlet-name>ServicioCompuesto</servlet-name>
   <jsp-file>/ServicioCompuesto.jsp</jsp-file>
  </servlet>
+  <servlet>
+  <display-name>ServicioCompuestoMDB</display-name>
+  <servlet-name>ServicioCompuestoMDB</servlet-name>
+  <jsp-file>/ServicioCompuestoMDB.jsp</jsp-file>
+ </servlet>
  <servlet>
   <display-name>test_ws1</display-name>
   <servlet-name>test_ws1</servlet-name>
@@ -20,6 +25,10 @@
  <servlet-mapping>
   <servlet-name>ServicioCompuesto</servlet-name>
   <url-pattern>/ServicioCompuesto</url-pattern>
+ </servlet-mapping>
+  <servlet-mapping>
+  <servlet-name>ServicioCompuestoMDB</servlet-name>
+  <url-pattern>/ServicioCompuestoMDB</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>test_ws1</servlet-name>
