@@ -9,5 +9,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="/TSI_PracticoClient"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/javax.xml.rpc_1.1.0.v201005080400/lib/jaxrpc.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
