@@ -10,37 +10,47 @@ import javax.jms.Queue;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import edu.tsi.Practico.MDB.MessagesMDBean;
 
 public class MDBClient {
 	
-	//De alguna manera debo de poder diferenciar que ws quiero invocar, por lo que los mensajes enviados son username y ws
-	public static final int WS1 = 1;
-	public static final int WS2 = 2;
-
-	public String invoke(String userName, int WS) {
+	private Properties props;
+	private InitialContext ic;
+	private static final String destinationName = "queue/MessageBeanTestQueue";
+ 	private static final String destinationNameOut = "queue/MessageBeanTestQueueOut";
+	
+	public MDBClient() {
+		props = new Properties();
+		props.setProperty( "java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory" );
+		props.setProperty( "java.naming.provider.url", "127.0.0.1:1099" );
+	
+		try {
+			ic = new InitialContext(props);
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Excepcion en la creacion del MDBClient, no esta pudiendo obtener el InitialContext");
+			e.printStackTrace();
+		}
+	}
+	
+	private String sendAndReceiveMessage(String textToSend) {
 		try {
 			
-			if(WS != WS1 && WS != WS2) return "ERROR: Debe ingresar un WS válido.";
-			
-			Properties props = new Properties();
-			props.setProperty( "java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory" );
-			props.setProperty( "java.naming.provider.url", "127.0.0.1:1099" );
-	
-	    	InitialContext ic = new InitialContext(props);
 	        ConnectionFactory cf = (ConnectionFactory)ic.lookup("ConnectionFactory");
 	        Connection connection = cf.createConnection();
 	        connection.start();
 	        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 	
-	        //Insertamos el WS a invocar y el nombre del usuario en el mensaje. El servidor debe parsearlo para saber a que WS invocar
-	        TextMessage msg = session.createTextMessage(WS + "_" + userName);
+	        TextMessage msg = session.createTextMessage(textToSend);
 	
-	        String destinationName = "queue/MessageBeanTestQueue";
+	        //Envio el mensaje
 	        Queue queue = (Queue)ic.lookup(destinationName);
 	        MessageProducer sender = session.createProducer(queue);
 	        sender.send(msg);
 	
-	     	String destinationNameOut = "queue/MessageBeanTestQueueOut";
+	        //Polling consumer esperando la respuesta
 	        Queue queueOut = (Queue)ic.lookup(destinationNameOut);
 	    	MessageConsumer consumer = session.createConsumer(queueOut);
 	
@@ -52,8 +62,8 @@ public class MDBClient {
 	    	String response = msgRcv.getText();
 	    	System.out.println("Respuesta del servidor: " + response);
 	
-	    	consumer.close();
 	    	sender.close();
+	    	consumer.close();
 	    	session.close();
 	    	connection.close();
 	    	
@@ -63,4 +73,42 @@ public class MDBClient {
 	    	return "ERROR in comunication";
 	    }
 	}
+	
+	/**
+	 * Inicia la sesion con el servidor y retorna en id creado, el cual debe ser enviado en las demas invocaciones
+	 * @return ID de la sesion del usuario
+	 * */
+	public String iniciarSesion() {
+		return this.sendAndReceiveMessage(MessagesMDBean.INICIAR_SESION + "_");
+	}	
+	
+	/**
+	 * Finaliza la sesion con el servidor, retornando los logs de actividad del usuario
+	 * @param sessionID - El String devuleto al invocar inciarSesion()
+	 * @return Logs de actividad del ID pasado como parametro
+	 * */
+	public String finalizarSesion(String sessionID) {
+		return this.sendAndReceiveMessage(MessagesMDBean.FINALIZAR_SESION + "_" + sessionID);
+	}
+	
+	/**
+	 * Invoca al WS1, con el parametro param usando como ID sessionID. Retorna el resultado de ejecutar WS1.
+	 * @param sessionID - El String devuleto al invocar inciarSesion()
+	 * @param param - Parametro para WS1
+	 * @return Resultado de ejecutar WS1
+	 * */
+	public String invocarWS1(String sessionID, String param) {
+		return this.sendAndReceiveMessage(MessagesMDBean.WS1 + "_" + sessionID + "_" + param);
+	}	
+	
+	/**
+	 * Invoca al WS2, con el parametro param usando como ID sessionID. Retorna el resultado de ejecutar WS2.
+	 * @param sessionID - El String devuleto al invocar inciarSesion()
+	 * @param param - Parametro para WS2
+	 * @return Resultado de ejecutar WS2
+	 * */
+	public String invocarWS2(String sessionID, String param) {
+		return this.sendAndReceiveMessage(MessagesMDBean.WS2 + "_" + sessionID + "_" + param);
+	}
+	
 }
