@@ -75,9 +75,11 @@ public class ServicioCompuesto {
 			} catch (ServiceException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return "ERROR (ServiceException) al obtener la respuesta del servidor WS1 para el userName="+userName;
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return "ERROR (RemoteException)al obtener la respuesta del servidor WS1 para el userName="+userName;
 			}
 		}			
 		return "SID no valido.";
@@ -96,7 +98,7 @@ public class ServicioCompuesto {
 		System.out.println("Invocaron WS2 con SID = " + ID);
 		if(session_reg.containsKey(ID)){
 			Collection<String> col = session_reg.get(ID);
-			col.add("Se invoco al web service WS1 a las " + new Date());
+			col.add("Se invoco al web service WS2 a las " + new Date());
 			session_reg.put(ID, col);
 			try {
 				//TODO: INVOCAR COMBINACION DE WS2
@@ -106,9 +108,11 @@ public class ServicioCompuesto {
 			} catch (ServiceException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return "ERROR (ServiceException) al obtener la respuesta del servidor WS1 para el userName="+userName;
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return "ERROR (RemoteException)al obtener la respuesta del servidor WS1 para el userName="+userName;
 			}
 		}
 		return "SID no valido.";
@@ -117,7 +121,7 @@ public class ServicioCompuesto {
 	@WebMethod
 	public String invocarCombinacionWS3(@WebParam(name="SID") String userID) {
 		//TODO: INVOCAR COMBINACION DE WS3
-		session_reg.get(userID).add("Se invoc� a la combinacion 3 a las " + new Date());
+		session_reg.get(userID).add("Se invoco la combinacion 3 a las " + new Date());
 		return "Combinacion 3 invocada";
 	}
 	
