@@ -13,6 +13,12 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.xml.rpc.ServiceException;
 
+import com.cdyne.ws.WeatherWS.ForecastReturn;
+import com.cdyne.ws.WeatherWS.Forecast;
+import com.cdyne.ws.WeatherWS.WeatherLocator;
+import com.cdyne.ws.WeatherWS.WeatherSoap;
+import com.cdyne.ws.WeatherWS.WeatherSoapProxy;
+
 
 
 @WebService(name="ServicioCompuesto")
@@ -119,10 +125,50 @@ public class ServicioCompuesto {
 	}
 	
 	@WebMethod
-	public String invocarCombinacionWS3(@WebParam(name="SID") String userID) {
-		//TODO: INVOCAR COMBINACION DE WS3
-		session_reg.get(userID).add("Se invoco la combinacion 3 a las " + new Date());
-		return "Combinacion 3 invocada";
+	public String invocarCombinacionWS3(@WebParam(name="SID") String zipCode) {
+        int index = zipCode.indexOf('_');
+        if(index == -1) System.err.println("NO SE MANDO WS EN EL MENSAJE");
+        
+        String ID = zipCode.substring(0, index);
+        String param = zipCode.substring(index + 1);
+
+        int index2 = param.indexOf('_');
+        if(index2 == -1) System.err.println("NO SE MANDO WS EN EL MENSAJE");
+
+        String user = param.substring(0,index2);
+        String zip = param.substring(index2 + 1);
+        
+        System.out.println("Invocaron WS3 con SID = " + ID);
+		if(session_reg.containsKey(ID)){
+			Collection<String> col = session_reg.get(ID);
+			col.add("Se invoco al web service WS3 a las " + new Date());
+			session_reg.put(ID, col);
+			try {
+				// Invocar al SimpleWS1 con parametro username
+				SimpleWS1Service_PortType hello = new SimpleWS1Service_ServiceLocator().getSimpleWS1ServicePort();
+			    String respWS1 = hello.invoke(user);
+				
+				// Invocar al Web Service del Weather (externo), con el zipcode
+				WeatherLocator loc = new WeatherLocator();
+				WeatherSoap w = loc.getWeatherSoap();
+				ForecastReturn ret = w.getCityForecastByZIP(zip);	
+				Forecast[] res = ret.getForecastResult();
+				Forecast f = res[0];
+				String respWSWeather = "El zip code ingresado corresponde a la ciudad de " + ret.getCity()+ ". La temperatura pronosticada es de: " + f.getTemperatures().getDaytimeHigh() + " grados";				
+
+				return respWS1 + " " + respWSWeather;
+
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return "ERROR (RemoteException)al obtener la respuesta del servidor WS3 para el zipCode="+zip;
+			} catch (ServiceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return "SID no valido.";
+	
 	}
 	
 	private String generateUserID() {
