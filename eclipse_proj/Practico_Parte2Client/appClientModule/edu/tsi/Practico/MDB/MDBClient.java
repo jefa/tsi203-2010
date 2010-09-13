@@ -110,5 +110,15 @@ public class MDBClient {
 	public String invocarWS2(String sessionID, String param) {
 		return this.sendAndReceiveMessage(MessagesMDBean.WS2 + "_" + sessionID + "_" + param);
 	}
-	
+
+	/**
+	 * Invoca al WS3, con el parametro param usando como ID sessionID. Retorna el resultado de ejecutar WS3.
+	 * @param sessionID - El String devuleto al invocar inciarSesion()
+	 * @param param - Parametro para WS3
+	 * @return Resultado de ejecutar WS3
+	 * */
+	public String invocarWS3(String sessionID, String param1, String param2) {
+		return this.sendAndReceiveMessage(MessagesMDBean.WS3 + "_" + sessionID + "_" + param1 + "_" + param2);
+	}
+
 }

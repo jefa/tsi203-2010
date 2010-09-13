@@ -11,6 +11,6 @@ public class SimpleWS1 {
    public String invoke( @WebParam(name = "param")
    String param )
    {
-      return "SimpleWS1: " + param;
+      return "Hola " + param + "!";
    }
 }
