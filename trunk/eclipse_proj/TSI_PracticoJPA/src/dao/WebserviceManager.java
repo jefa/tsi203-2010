@@ -33,14 +33,22 @@ public class WebserviceManager implements IWebserviceManager {
 	}
 
 	public void remove(Object arg0) throws RemoteException, RemoveException {
-		// TODO Auto-generated method stub
-
+		if( arg0 instanceof Webservice) {
+			em.remove(arg0);
+		}
 	}
 
-	public Webservice create(int ID, String name, String url) throws RemoteException {
-		// TODO Auto-generated method stub
+	public Webservice create(String name, String url) throws RemoteException {
 		
-		return null;
+		Webservice ws = new Webservice();
+		
+		//El ID se asigna autmáticamente, ver bean.Webservice por más información
+		
+		ws.setName(name);
+		ws.setUrl(url);
+		em.persist(ws);
+		
+		return ws;
 	}
 
 }
