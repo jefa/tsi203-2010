@@ -11,7 +11,7 @@ import bean.Webservice;
 
 @Remote
 public interface IWebserviceManager extends EJBHome{
-	  public Webservice create(int ID, String TEXT) throws RemoteException;
+	  public Webservice create(int ID, String name, String url) throws RemoteException;
 	  //public Webservice findByPrimaryKey(TestPK key) throws RemoteException, FinderException;
 
 }
