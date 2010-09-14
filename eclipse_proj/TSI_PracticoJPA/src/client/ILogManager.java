@@ -12,7 +12,7 @@ import bean.LogPK;
 
 @Remote
 public interface ILogManager extends EJBHome{
-	  public Log create(int ID, String TEXT) throws RemoteException;
+	  public Log create(int ID, String outcome) throws RemoteException;
 	  public Log findByPrimaryKey(LogPK key) throws RemoteException, FinderException;
 
 }
