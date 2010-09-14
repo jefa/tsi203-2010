@@ -37,7 +37,7 @@ public class CacheManager implements ICacheManager {
 
 	}
 
-	public Cache create(int ID, String TEXT) throws RemoteException {
+	public Cache create(int ID, String params, String result) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
