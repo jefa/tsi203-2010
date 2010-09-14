@@ -37,7 +37,7 @@ public class WebserviceManager implements IWebserviceManager {
 
 	}
 
-	public Webservice create(int ID, String TEXT) throws RemoteException {
+	public Webservice create(int ID, String name, String url) throws RemoteException {
 		// TODO Auto-generated method stub
 		
 		return null;
