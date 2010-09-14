@@ -9,6 +9,7 @@ import javax.ejb.FinderException;
 import javax.ejb.Handle;
 import javax.ejb.HomeHandle;
 import javax.ejb.RemoveException;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -17,7 +18,7 @@ import bean.LogPK;
 import bean.Webservice;
 import client.ILogManager;
 
-public class LogManager implements ILogManager {
+public @Stateless class LogManager implements ILogManager {
 
 	@PersistenceContext
 	EntityManager em;

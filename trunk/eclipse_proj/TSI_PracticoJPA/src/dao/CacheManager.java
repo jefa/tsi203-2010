@@ -7,6 +7,7 @@ import javax.ejb.EJBMetaData;
 import javax.ejb.Handle;
 import javax.ejb.HomeHandle;
 import javax.ejb.RemoveException;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -14,7 +15,7 @@ import bean.Cache;
 import bean.Webservice;
 import client.ICacheManager;
 
-public class CacheManager implements ICacheManager {
+public @Stateless class CacheManager implements ICacheManager {
 
 	@PersistenceContext
 	EntityManager em;
