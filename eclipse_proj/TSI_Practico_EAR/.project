@@ -8,6 +8,7 @@
 		<project>WebProject</project>
 		<project>WebProjectClient</project>
 		<project>MessageQueueProject</project>
+		<project>CacheJPA</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
