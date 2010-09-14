@@ -39,7 +39,7 @@ public class LogManager implements ILogManager {
 
 	}
 
-	public Log create(int ID, String TEXT) throws RemoteException {
+	public Log create(int ID, String outcome) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
