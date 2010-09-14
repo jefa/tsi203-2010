@@ -2,21 +2,20 @@ package dao;
 
 import java.rmi.RemoteException;
 
-import javax.annotation.Resource;
 import javax.ejb.EJBMetaData;
 import javax.ejb.Handle;
 import javax.ejb.HomeHandle;
 import javax.ejb.RemoveException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import bean.Webservice;
 import client.IWebserviceManager;
 
 public @Stateless class WebserviceManager implements IWebserviceManager {
 
-	//@PersistenceContext
-	@Resource
+	@PersistenceContext
 	EntityManager em;
 	
 	public EJBMetaData getEJBMetaData() throws RemoteException {
