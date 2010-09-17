@@ -2,10 +2,6 @@
 <project-modules id="moduleCoreId" project-version="1.5.0">
     <wb-module deploy-name="TSI_Practico_EAR">
         <wb-resource deploy-path="/" source-path="/EarContent"/>
-        <dependent-module archiveName="TSI_Practico.jar" deploy-path="/" handle="module:/resource/TSI_Practico/TSI_Practico">
-            <dependent-object/>
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="TSI_PracticoClient.jar" deploy-path="/" handle="module:/resource/TSI_PracticoClient/TSI_PracticoClient">
             <dependency-type>uses</dependency-type>
         </dependent-module>
@@ -21,7 +17,7 @@
             <dependent-object/>
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="CacheJPA.jar" deploy-path="/" handle="module:/resource/CacheJPA/CacheJPA">
+        <dependent-module archiveName="TSI_PracticoJPA.jar" deploy-path="/" handle="module:/resource/TSI_PracticoJPA/TSI_PracticoJPA">
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>
