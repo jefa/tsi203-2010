@@ -19,7 +19,7 @@ public class Log implements Serializable {
 
 	//bi-directional many-to-one association to Webservice
     @ManyToOne
-	@JoinColumn(name="idws")
+	@JoinColumn(name="idws", insertable=false, updatable=false)
 	private Webservice webservice;
 
     public Log() {
