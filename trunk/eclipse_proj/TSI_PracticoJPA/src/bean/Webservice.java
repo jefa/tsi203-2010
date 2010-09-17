@@ -13,8 +13,8 @@ import java.util.Set;
 public class Webservice implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	//@GeneratedValue(strategy=GenerationType.AUTO)
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 
 	private String name;
