@@ -28,26 +28,7 @@ public @Stateless class CacheManager implements ICacheManager {
 		em = entityManager;
 	}
 	
-	public EJBMetaData getEJBMetaData() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public HomeHandle getHomeHandle() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void remove(Handle arg0) throws RemoteException, RemoveException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void remove(Object arg0) throws RemoteException, RemoveException {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	public Cache create(String params, String result, int idws) throws Exception {
 		Cache c = new Cache();
 		

@@ -28,27 +28,6 @@ public class WebserviceManager implements IWebserviceManager {
 		em = entityManager;
 	}
 	
-	public EJBMetaData getEJBMetaData() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public HomeHandle getHomeHandle() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void remove(Handle arg0) throws RemoteException, RemoveException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void remove(Object arg0) throws RemoteException, RemoveException {
-		if( arg0 instanceof Webservice) {
-			em.remove(arg0);
-		}
-	}
-
 	public Webservice create(String name, String url){
 		
 		Webservice ws = new Webservice();

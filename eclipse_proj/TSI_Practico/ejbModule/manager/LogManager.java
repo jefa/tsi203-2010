@@ -30,26 +30,6 @@ public @Stateless class LogManager implements ILogManager {
 		em = entityManager;
 	}
 	
-	public EJBMetaData getEJBMetaData() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public HomeHandle getHomeHandle() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void remove(Handle arg0) throws RemoteException, RemoveException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void remove(Object arg0) throws RemoteException, RemoveException {
-		// TODO Auto-generated method stub
-
-	}
-
 	public Log create(int idws, Date date, String outcome) throws Exception{
 		
 		Webservice ws = em.find(Webservice.class, idws);
