@@ -25,6 +25,7 @@ CREATE TABLE cache
   idws integer,
   params character varying(200),
   result character varying(200),
+  reg_date date NOT NULL,
   CONSTRAINT pk_cache PRIMARY KEY (id),
   CONSTRAINT fk_cachews FOREIGN KEY (idws)
       REFERENCES webservice (id) MATCH SIMPLE
@@ -45,7 +46,6 @@ CREATE TABLE log
   idws integer NOT NULL,
   date date NOT NULL,
   outcome character varying(30),
-  reg_date timestamp without time zone,
   CONSTRAINT pk_log PRIMARY KEY (idws, date),
   CONSTRAINT fk_logws FOREIGN KEY (idws)
       REFERENCES webservice (id) MATCH SIMPLE
