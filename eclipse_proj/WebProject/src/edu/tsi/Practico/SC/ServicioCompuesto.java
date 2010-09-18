@@ -221,7 +221,6 @@ public class ServicioCompuesto {
 	
 	private void escribirEnLog(int idws, String outcome) {
 		try {
-			managerFactory.getIWebserviceManager().create("WS4", "http://4");
 			managerFactory.getILogManager().create(idws, new Date(), outcome);			
 		} catch(Exception e) {
 			System.out.println("Error al escribir en log: " + idws + " - " + outcome);
