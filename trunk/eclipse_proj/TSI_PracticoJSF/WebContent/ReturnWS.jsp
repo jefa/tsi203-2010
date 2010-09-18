@@ -5,13 +5,14 @@
 
 <html>
 <head>
-	<title>List of Users</title>
+	<title>Respuesta WS</title>
 </head>
 <body>
 <f:view>
 	<h:form>
-		<h:outputText value="User #{userBean.name} is added successfully.">
+		<h:outputText value="#{ManagedBeanJSF.respuesta}.">
 		</h:outputText>
+	<br><h:outputLink value="ServicioCompuestoJSF.jsf"><h:outputText value="Volver"/></h:outputLink>
 	</h:form>
 </f:view>
 </body>

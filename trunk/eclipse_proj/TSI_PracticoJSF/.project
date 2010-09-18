@@ -3,6 +3,8 @@
 	<name>TSI_PracticoJSF</name>
 	<comment></comment>
 	<projects>
+		<project>Practico_Parte2Client</project>
+		<project>TSI_PracticoClient</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

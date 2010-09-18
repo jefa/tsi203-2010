@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PROCESS model-entity="JSFProcess">
- <PROCESS-ITEM NAME="rules:#AddUser.jsp" PATH="/AddUser.jsp"
-  SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
-  <PROCESS-ITEM ID="rules:#AddUser.jsp:0" NAME="item"
-   PATH="/AddUser.jsp" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID="success::#ListUser.jsp" NAME="output"
-    PATH="/ListUser.jsp" TARGET="rules:#ListUser.jsp" TITLE="success" model-entity="JSFProcessItemOutput"/>
+ <PROCESS-ITEM NAME="rules:#ServicioCompuestoJSF.jsp"
+  PATH="/ServicioCompuestoJSF.jsp" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#ServicioCompuestoJSF.jsp:0" NAME="item"
+   PATH="/ServicioCompuestoJSF.jsp" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="ws::#ReturnWS.jsp" NAME="output"
+    PATH="/ReturnWS.jsp" TARGET="rules:#ReturnWS.jsp" TITLE="ws" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="weather::#ReturnWeather.jsp" NAME="output1"
+    PATH="/ReturnWeather.jsp" TARGET="rules:#ReturnWeather.jsp"
+    TITLE="weather" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
- <PROCESS-ITEM NAME="rules:#ListUser.jsp" PATH="/ListUser.jsp"
-  SHAPE="240,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#ReturnWeather.jsp" PATH="/ReturnWeather.jsp"
+  SHAPE="256,177,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#ReturnWS.jsp" PATH="/ReturnWS.jsp"
+  SHAPE="256,33,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>
