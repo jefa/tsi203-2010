@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.Set;
 
 import javax.ejb.EJBMetaData;
+import javax.ejb.FinderException;
 import javax.ejb.Handle;
 import javax.ejb.HomeHandle;
 import javax.ejb.RemoveException;
@@ -16,9 +17,12 @@ import bean.Webservice;
 
 public @Stateless class CacheManager implements ICacheManager {
 
-	//@PersistenceContext(unitName="TSI_PracticoJPA", type=PersistenceContextType.TRANSACTION)
-	//@PersistenceContext
+	@PersistenceContext
 	EntityManager em;
+	
+	public CacheManager() {
+		
+	}
 	
 	public CacheManager(EntityManager entityManager) {
 		em = entityManager;
@@ -68,6 +72,13 @@ public @Stateless class CacheManager implements ICacheManager {
 		em.persist(ws);
 		
 		return c;
+	}
+
+	@Override
+	public Cache findByParamsAndIdws(String params, int idws)
+			throws RemoteException, FinderException {
+		// TODO
+		return null;
 	}
 
 }
