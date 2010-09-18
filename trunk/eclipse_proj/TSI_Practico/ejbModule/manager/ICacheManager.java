@@ -4,13 +4,12 @@ import java.rmi.RemoteException;
 
 import javax.ejb.EJBHome;
 import javax.ejb.FinderException;
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 import bean.Cache;
-import bean.Webservice;
 
-@Remote
+@Local
 public interface ICacheManager extends EJBHome{
-	  public Cache create(String params, String result, int idws) throws RemoteException;
-	  public Cache findByParamsAndIdws(String params, int idws) throws RemoteException, FinderException;
+	  public Cache create(String params, String result, int idws);
+	  public Cache findByParamsAndIdws(String params, int idws) throws FinderException;
 }
