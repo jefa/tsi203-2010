@@ -50,12 +50,12 @@ public @Stateless class LogManager implements ILogManager {
 
 	}
 
-	public Log create(int idws, Date date, String outcome) throws RemoteException {
+	public Log create(int idws, Date date, String outcome) throws Exception{
 		
 		Webservice ws = em.find(Webservice.class, idws);
 		
 		if(ws == null)
-			throw new RemoteException("No existe el Webservice con id " + idws);
+			throw new Exception("No existe el Webservice con id " + idws);
 		
 		Log l = new Log();
 		LogPK lpk = new LogPK();
@@ -78,11 +78,8 @@ public @Stateless class LogManager implements ILogManager {
 		return l;
 	}
 
-	public Log findByPrimaryKey(LogPK key) throws RemoteException,
-			FinderException {
-		
-		
-		
+	public Log findByPrimaryKey(LogPK key) throws FinderException {
+				
 		return null;
 	}
 

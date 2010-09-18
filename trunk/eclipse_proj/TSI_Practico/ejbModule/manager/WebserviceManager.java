@@ -49,7 +49,7 @@ public class WebserviceManager implements IWebserviceManager {
 		}
 	}
 
-	public Webservice create(String name, String url) throws RemoteException {
+	public Webservice create(String name, String url){
 		
 		Webservice ws = new Webservice();
 		
@@ -63,7 +63,6 @@ public class WebserviceManager implements IWebserviceManager {
 			em.persist(ws);
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new RemoteException(e.getMessage());
 		} 
 		return ws;
 	}
