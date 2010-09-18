@@ -48,7 +48,7 @@ public @Stateless class CacheManager implements ICacheManager {
 
 	}
 
-	public Cache create(String params, String result, int idws) throws RemoteException {
+	public Cache create(String params, String result, int idws) throws Exception {
 		Cache c = new Cache();
 		
 		Webservice ws = em.find(Webservice.class, idws);
@@ -76,7 +76,7 @@ public @Stateless class CacheManager implements ICacheManager {
 
 	@Override
 	public Cache findByParamsAndIdws(String params, int idws)
-			throws RemoteException, FinderException {
+			throws FinderException {
 		// TODO
 		return null;
 	}
