@@ -1,19 +1,17 @@
 package manager;
 
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.Set;
 
-import javax.ejb.EJBMetaData;
 import javax.ejb.FinderException;
-import javax.ejb.Handle;
-import javax.ejb.HomeHandle;
-import javax.ejb.RemoveException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import bean.Cache;
+import bean.CachePK;
 import bean.Webservice;
 
 public @Stateless class CacheManager implements ICacheManager {
@@ -30,7 +28,7 @@ public @Stateless class CacheManager implements ICacheManager {
 	}
 	
 	
-	public Cache create(String params, String result, int idws) throws Exception {
+	public Cache create(String params, String result, int idws, Date reg_date) throws Exception {
 		Cache c = new Cache();
 		
 		Webservice ws = em.find(Webservice.class, idws);
@@ -39,21 +37,22 @@ public @Stateless class CacheManager implements ICacheManager {
 			throw new RemoteException("No existe el Webservice con idws" + idws);
 		
 		//El ID se asigna automaticamente. Ver bean.Cache por mas informacion
-		
-		c.setParams(params);
+		CachePK cpk = new CachePK();
+		cpk.setIdws(idws);
+		cpk.setParams(params);
+		c.setId(cpk);
 		c.setResult(result);
+		c.setReg_date(reg_date);
 		c.setWebservice(ws);
-		
-		int id = em.createNamedQuery("Cache.findAll").getResultList().size();
-		c.setId(id);
-		
+
 		//Agregamos a c a la lista de Caches de ws
 		Set<Cache> sC = ws.getCaches();
 		sC.add(c);
 		ws.setCaches(sC);
 		
-		em.persist(c);
 		em.persist(ws);
+		em.persist(c);
+		
 		
 		return c;
 	}
@@ -74,8 +73,11 @@ public @Stateless class CacheManager implements ICacheManager {
 		return c;
 	}
 	
-	public void remove(Cache c) {
-		em.remove(c);
+	public void update(Cache c, String result, Date reg_date) {
+		c.setResult(result);
+		c.setReg_date(reg_date);
+		//em.persist(c);/
+		em.flush();
 	}
 
 }

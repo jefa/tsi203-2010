@@ -3,6 +3,7 @@
 	<persistence-unit name="TSI_Practico">
 		<jta-data-source>java:/Postgres3DS</jta-data-source>
 		<class>bean.Cache</class>
+		<class>bean.CachePK</class>
 		<class>bean.Log</class>
 		<class>bean.LogPK</class>
 		<class>bean.Webservice</class>

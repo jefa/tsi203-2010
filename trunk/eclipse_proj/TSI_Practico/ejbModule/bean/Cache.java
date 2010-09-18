@@ -3,6 +3,7 @@ package bean;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,19 +23,16 @@ import javax.persistence.TemporalType;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="Cache.findByIdwsParams",
-			query="SELECT c FROM Cache c, IN (c.webservice) ws " +
-					"WHERE ws.id = :idws AND c.params = :params"),
+			query="SELECT c FROM Cache c " +
+					"WHERE c.id.idws = :idws AND c.id.params = :params"),
 	@NamedQuery(name="Cache.findAll",
 			query="SELECT c FROM Cache c")
 })
 public class Cache implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
-
-	private String params;
+	@EmbeddedId
+	private CachePK id;
 
 	private String result;
 	
@@ -43,26 +41,18 @@ public class Cache implements Serializable {
 
 	//bi-directional many-to-one association to Webservice
     @ManyToOne
-	@JoinColumn(name="idws")
+	@JoinColumn(name="idws", insertable=false, updatable=false)
 	private Webservice webservice;
 
     public Cache() {
     }
 
-	public Integer getId() {
+	public CachePK getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(CachePK id) {
 		this.id = id;
-	}
-
-	public String getParams() {
-		return this.params;
-	}
-
-	public void setParams(String params) {
-		this.params = params;
 	}
 
 	public String getResult() {

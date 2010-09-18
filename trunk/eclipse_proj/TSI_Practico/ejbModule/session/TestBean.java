@@ -9,6 +9,7 @@
 
 package session;
 
+import java.util.Date;
 import java.util.Properties;
 
 import javax.ejb.Stateless;
@@ -60,7 +61,7 @@ public class TestBean implements TestRemote, TestLocal {
     		//iwsm.create("my webservice", "URL1");
     		
     		ICacheManager icm = mFL.getICacheManager();
-    		icm.create("param1", "result1", 1);
+    		icm.create("param1", "result1", 1, new Date());
     		
     		//ws.create("jojojo", "url");
     		/*
