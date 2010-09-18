@@ -3,16 +3,23 @@
  xmlns:xi="http://www.w3.org/2001/XInclude"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
  <managed-bean>
-  <managed-bean-name>userBean</managed-bean-name>
-  <managed-bean-class>tsi.UserBean</managed-bean-class>
+  <managed-bean-name>ManagedBeanJSF</managed-bean-name>
+  <managed-bean-class>tsi.ManagedBeanJSF</managed-bean-class>
   <managed-bean-scope>session</managed-bean-scope>
  </managed-bean>
  <navigation-rule>
-  <display-name>AddUser</display-name>
-  <from-view-id>/AddUser.jsp</from-view-id>
+  <display-name>ServicioCompuestoJSF</display-name>
+  <from-view-id>/ServicioCompuestoJSF.jsp</from-view-id>
   <navigation-case>
-   <from-outcome>success</from-outcome>
-   <to-view-id>/ListUser.jsp</to-view-id>
+   <from-outcome>ws</from-outcome>
+   <to-view-id>/ReturnWS.jsp</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>weather</from-outcome>
+   <to-view-id>/ReturnWeather.jsp</to-view-id>
   </navigation-case>
  </navigation-rule>
+   <application>
+    <message-bundle>tsi.Mensajes</message-bundle>
+  </application>
 </faces-config>

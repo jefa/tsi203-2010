@@ -3,6 +3,12 @@
     <wb-module deploy-name="TSI_PracticoJSF">
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/JavaSource"/>
+        <dependent-module archiveName="Practico_Parte2Client.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/Practico_Parte2Client/Practico_Parte2Client">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="TSI_PracticoClient.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/TSI_PracticoClient/TSI_PracticoClient">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="TSI_PracticoJSF"/>
         <property name="java-output-path" value="/TSI_PracticoJSF/WebContent/WEB-INF/classes"/>
     </wb-module>
