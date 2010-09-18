@@ -21,12 +21,11 @@ ALTER TABLE webservice OWNER TO postgres;
 
 CREATE TABLE cache
 (
-  id integer NOT NULL,
-  idws integer,
-  params character varying(200),
+  idws integer NOT NULL,
+  params character varying(200) NOT NULL,
   result character varying(200),
-  reg_date timestamp with time zone NOT NULL,
-  CONSTRAINT pk_cache PRIMARY KEY (id),
+  reg_date timestamp with time zone,
+  CONSTRAINT pk_cache PRIMARY KEY (idws, params),
   CONSTRAINT fk_cachews FOREIGN KEY (idws)
       REFERENCES webservice (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
