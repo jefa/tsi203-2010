@@ -3,11 +3,11 @@
 	<name>TSI_Practico_EAR</name>
 	<comment></comment>
 	<projects>
-		<project>TSI_PracticoJPA</project>
 		<project>TSI_PracticoClient</project>
 		<project>WebProject</project>
 		<project>WebProjectClient</project>
 		<project>MessageQueueProject</project>
+		<project>TSI_Practico</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
