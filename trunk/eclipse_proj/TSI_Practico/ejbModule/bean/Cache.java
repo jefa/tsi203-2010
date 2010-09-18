@@ -1,15 +1,14 @@
 package bean;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PersistenceContext;
 
 
 /**
@@ -27,6 +26,8 @@ public class Cache implements Serializable {
 	private String params;
 
 	private String result;
+	
+	private Date reg_date;
 
 	//bi-directional many-to-one association to Webservice
     @ManyToOne
@@ -58,6 +59,14 @@ public class Cache implements Serializable {
 
 	public void setResult(String result) {
 		this.result = result;
+	}
+	
+	public Date getReg_date() {
+		return this.reg_date;
+	}
+
+	public void setReg_date(Date date) {
+		this.reg_date = date;
 	}
 
 	public Webservice getWebservice() {
