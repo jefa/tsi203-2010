@@ -1,15 +1,7 @@
 package manager;
 
-import java.rmi.RemoteException;
-
-import javax.ejb.EJBMetaData;
-import javax.ejb.Handle;
-import javax.ejb.HomeHandle;
-import javax.ejb.RemoveException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 import bean.Webservice;

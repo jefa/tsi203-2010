@@ -10,4 +10,5 @@ import bean.Cache;
 public interface ICacheManager {
 	  public Cache create(String params, String result, int idws) throws Exception;
 	  public Cache findByParamsAndIdws(String params, int idws) throws FinderException;
+	  public void remove(Cache c);
 }

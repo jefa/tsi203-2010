@@ -9,6 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -16,6 +20,13 @@ import javax.persistence.ManyToOne;
  * 
  */
 @Entity
+@NamedQueries({
+	@NamedQuery(name="Cache.findByIdwsParams",
+			query="SELECT c FROM Cache c, IN (c.webservice) ws " +
+					"WHERE ws.id = :idws AND c.params = :params"),
+	@NamedQuery(name="Cache.findAll",
+			query="SELECT c FROM Cache c")
+})
 public class Cache implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -27,6 +38,7 @@ public class Cache implements Serializable {
 
 	private String result;
 	
+    @Temporal( TemporalType.TIMESTAMP)
 	private Date reg_date;
 
 	//bi-directional many-to-one association to Webservice

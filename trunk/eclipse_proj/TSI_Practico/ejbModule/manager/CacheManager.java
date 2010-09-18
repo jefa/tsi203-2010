@@ -10,6 +10,7 @@ import javax.ejb.HomeHandle;
 import javax.ejb.RemoveException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import bean.Cache;
@@ -43,13 +44,15 @@ public @Stateless class CacheManager implements ICacheManager {
 		c.setResult(result);
 		c.setWebservice(ws);
 		
-		em.persist(c);
+		int id = em.createNamedQuery("Cache.findAll").getResultList().size();
+		c.setId(id);
 		
 		//Agregamos a c a la lista de Caches de ws
 		Set<Cache> sC = ws.getCaches();
 		sC.add(c);
 		ws.setCaches(sC);
 		
+		em.persist(c);
 		em.persist(ws);
 		
 		return c;
@@ -58,8 +61,21 @@ public @Stateless class CacheManager implements ICacheManager {
 	@Override
 	public Cache findByParamsAndIdws(String params, int idws)
 			throws FinderException {
-		// TODO
-		return null;
+		Cache c = null;
+		try {
+			c = (Cache) em.createNamedQuery("Cache.findByIdwsParams")
+			.setParameter("idws", idws)
+			.setParameter("params", params)
+			.getSingleResult();
+		}
+		catch (NoResultException e) {
+			
+		}
+		return c;
+	}
+	
+	public void remove(Cache c) {
+		em.remove(c);
 	}
 
 }
