@@ -19,9 +19,12 @@ import bean.Webservice;
 
 public @Stateless class LogManager implements ILogManager {
 
-	//@PersistenceContext(unitName="TSI_PracticoJPA", type=PersistenceContextType.TRANSACTION)
-	//@PersistenceContext
+	@PersistenceContext
 	EntityManager em;
+	
+	public LogManager() {
+		
+	}
 	
 	public LogManager(EntityManager entityManager) {
 		em = entityManager;

@@ -17,14 +17,12 @@ import bean.Webservice;
 @Stateless 
 public class WebserviceManager implements IWebserviceManager {
 
-	//@PersistenceContext(unitName="TSI_PracticoJPA", name="PostgresDS")
-	
-	//@PersistenceContext(unitName="TEST_JPA_3", type=PersistenceContextType.TRANSACTION)
-	//@PersistenceContext(unitName="TEST_JPA_3")
+	@PersistenceContext
 	private EntityManager em;
-	
-	//@PersistenceUnit(unitName="TEST_JPA_3")
-	//private EntityManagerFactory emf;
+		
+	public WebserviceManager() {
+
+	}
 	
 	public WebserviceManager( EntityManager entityManager) {
 		em = entityManager;
@@ -56,7 +54,6 @@ public class WebserviceManager implements IWebserviceManager {
 		Webservice ws = new Webservice();
 		
 		int size = em.createQuery("SELECT w FROM Webservice w").getResultList().size();
-		
 		
 		ws.setName(name);
 		ws.setUrl(url);
