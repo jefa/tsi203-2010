@@ -1,14 +1,11 @@
 package manager;
 
-import java.rmi.RemoteException;
-
-import javax.ejb.EJBHome;
 import javax.ejb.Local;
 
 import bean.Webservice;
 
 @Local
-public interface IWebserviceManager extends EJBHome{
+public interface IWebserviceManager{
 	
 	/**
 	 * Crea un nuevo objeto Webservice en la base con nombre name y direccion url. El ID se asigna automáticamente

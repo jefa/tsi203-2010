@@ -73,6 +73,7 @@ public class managerFactoryBean implements managerFactoryLocal{
 			if(em == null) {
 				try {
 					wm = (IWebserviceManager)ic.lookup(wmJNDI);
+					wm.create("ALOHOMORA DESDE EL MANAGER FACTORY", "ASD");
 				} catch (NamingException e) {
 					System.out.println("[managerFactoryBean]Excepcion en la creacion del IWebserviceManager, no esta pudiendo obtener la inerfaz local a partir de 'lookup'");
 					e.printStackTrace();
