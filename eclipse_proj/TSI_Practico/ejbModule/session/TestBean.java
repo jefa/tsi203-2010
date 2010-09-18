@@ -9,7 +9,6 @@
 
 package session;
 
-import java.util.Date;
 import java.util.Properties;
 
 import javax.ejb.Stateless;
@@ -18,9 +17,8 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import manager.IWebserviceManager;
+import manager.ICacheManager;
 import manager.managerFactoryLocal;
-import bean.Webservice;
 
 /**
  *
@@ -58,8 +56,11 @@ public class TestBean implements TestRemote, TestLocal {
     		
     		managerFactoryLocal mFL = (managerFactoryLocal) ic.lookup("TSI_Practico_EAR/managerFactoryBean" + "/local");
     	
-    		IWebserviceManager iwsm = mFL.getIWebserviceManager();
-    		iwsm.create("my webservice", "URL1");
+    		//IWebserviceManager iwsm = mFL.getIWebserviceManager();
+    		//iwsm.create("my webservice", "URL1");
+    		
+    		ICacheManager icm = mFL.getICacheManager();
+    		icm.create("param1", "result1", 1);
     		
     		//ws.create("jojojo", "url");
     		/*
