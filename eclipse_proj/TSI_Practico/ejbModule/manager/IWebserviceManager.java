@@ -1,15 +1,13 @@
 package manager;
 
 import java.rmi.RemoteException;
-import java.util.Enumeration;
 
 import javax.ejb.EJBHome;
-import javax.ejb.FinderException;
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 import bean.Webservice;
 
-@Remote
+@Local
 public interface IWebserviceManager extends EJBHome{
 	
 	/**
@@ -18,7 +16,7 @@ public interface IWebserviceManager extends EJBHome{
 	 * @param url Direccion web del nuevo Webserice
 	 * @return El nuevo Webservice
 	 * */
-	public Webservice create(String name, String url) throws RemoteException;
+	public Webservice create(String name, String url);
 	  //public Webservice findByPrimaryKey(TestPK key) throws RemoteException, FinderException;
 
 }
