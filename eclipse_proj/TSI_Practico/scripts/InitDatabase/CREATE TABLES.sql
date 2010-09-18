@@ -25,7 +25,7 @@ CREATE TABLE cache
   idws integer,
   params character varying(200),
   result character varying(200),
-  reg_date date NOT NULL,
+  reg_date timestamp with time zone NOT NULL,
   CONSTRAINT pk_cache PRIMARY KEY (id),
   CONSTRAINT fk_cachews FOREIGN KEY (idws)
       REFERENCES webservice (id) MATCH SIMPLE
@@ -44,7 +44,7 @@ ALTER TABLE cache OWNER TO postgres;
 CREATE TABLE log
 (
   idws integer NOT NULL,
-  date date NOT NULL,
+  date timestamp with time zone NOT NULL,
   outcome character varying(30),
   CONSTRAINT pk_log PRIMARY KEY (idws, date),
   CONSTRAINT fk_logws FOREIGN KEY (idws)
