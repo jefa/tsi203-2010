@@ -14,7 +14,7 @@ public class LogPK implements Serializable {
 
 	private Integer idws;
 
-    @Temporal( TemporalType.DATE)
+    @Temporal( TemporalType.TIMESTAMP)
 	private java.util.Date date;
 
     public LogPK() {

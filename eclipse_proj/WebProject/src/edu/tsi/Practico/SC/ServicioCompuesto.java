@@ -221,7 +221,8 @@ public class ServicioCompuesto {
 	
 	private void escribirEnLog(int idws, String outcome) {
 		try {
-			managerFactory.getILogManager().create(idws, new Date(), outcome);			
+			Date date = new Date();
+			managerFactory.getILogManager().create(idws, date, outcome);			
 		} catch(Exception e) {
 			System.out.println("Error al escribir en log: " + idws + " - " + outcome);
 			System.out.println(e.getMessage());
@@ -259,7 +260,7 @@ public class ServicioCompuesto {
 					res = c.getResult();
 				} else {
 					//TODO Borramos la cache
-					//managerFactory.getICacheManager().remove(c);
+					managerFactory.getICacheManager().remove(c);
 				}
 			}
 		} catch(Exception e){
