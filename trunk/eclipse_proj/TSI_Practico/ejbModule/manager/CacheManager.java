@@ -77,7 +77,7 @@ public @Stateless class CacheManager implements ICacheManager {
 		c.setResult(result);
 		c.setReg_date(reg_date);
 		//em.persist(c);/
-		em.flush();
+		em.merge(c);
 	}
 
 }
