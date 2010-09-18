@@ -11,6 +11,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.xml.rpc.ServiceException;
 
+import manager.ICacheManager;
 import manager.managerFactoryBean;
 import bean.Cache;
 
@@ -96,7 +97,7 @@ public class ServicioCompuesto {
 					SimpleWS1Service_PortType hello = new SimpleWS1Service_ServiceLocator().getSimpleWS1ServicePort();
 				    resp = hello.invoke(userName);
 				    this.guardarEnCache(idws, userName, resp);
-				}				
+				}
 			    return resp;
 			} catch (ServiceException e) {
 				e.printStackTrace();
@@ -237,7 +238,15 @@ public class ServicioCompuesto {
 	 * */
 	private void guardarEnCache(int idws, String params, String result) {
 		try {
-			managerFactory.getICacheManager().create(params, result, idws);
+			ICacheManager icm = managerFactory.getICacheManager();
+			Cache c = icm.findByParamsAndIdws(params, idws);
+			if( c != null) {
+				//Update
+				icm.update(c, result, c.getReg_date());
+			} else {
+				//Create
+				icm.create(params, result, idws, new Date());
+			}
 		} catch (Exception e) {
 			System.out.println("No se pudo realizar cache para el idws = " + idws);
 			e.printStackTrace();
@@ -258,9 +267,6 @@ public class ServicioCompuesto {
 				//Verifico que sirva el cache, sino lo desecho
 				if(cacheAlDia(c.getReg_date(), new Date(), this.msecForValidCache)) {
 					res = c.getResult();
-				} else {
-					//TODO Borramos la cache
-					managerFactory.getICacheManager().remove(c);
 				}
 			}
 		} catch(Exception e){
