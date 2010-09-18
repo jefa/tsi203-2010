@@ -16,4 +16,7 @@
   <module>
     <ejb>MessageQueueProject.jar</ejb>
   </module>
+  <module>
+    <ejb>TSI_Practico.jar</ejb>
+  </module>
 </application>
