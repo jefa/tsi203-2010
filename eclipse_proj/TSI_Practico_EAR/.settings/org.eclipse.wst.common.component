@@ -17,7 +17,8 @@
             <dependent-object/>
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="TSI_PracticoJPA.jar" deploy-path="/" handle="module:/resource/TSI_PracticoJPA/TSI_PracticoJPA">
+        <dependent-module archiveName="TSI_Practico.jar" deploy-path="/" handle="module:/resource/TSI_Practico/TSI_Practico">
+            <dependent-object/>
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>
