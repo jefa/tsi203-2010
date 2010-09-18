@@ -221,6 +221,7 @@ public class ServicioCompuesto {
 	
 	private void escribirEnLog(int idws, String outcome) {
 		try {
+			managerFactory.getIWebserviceManager().create("WS4", "http://4");
 			managerFactory.getILogManager().create(idws, new Date(), outcome);			
 		} catch(Exception e) {
 			System.out.println("Error al escribir en log: " + idws + " - " + outcome);
@@ -237,7 +238,7 @@ public class ServicioCompuesto {
 	private void guardarEnCache(int idws, String params, String result) {
 		try {
 			managerFactory.getICacheManager().create(params, result, idws);
-		} catch (RemoteException e) {
+		} catch (Exception e) {
 			System.out.println("No se pudo realizar cache para el idws = " + idws);
 			e.printStackTrace();
 		}
@@ -258,8 +259,8 @@ public class ServicioCompuesto {
 				if(cacheAlDia(c.getReg_date(), new Date(), this.msecForValidCache)) {
 					res = c.getResult();
 				} else {
-					//Borramos la cache
-					managerFactory.getICacheManager().remove(c);
+					//TODO Borramos la cache
+					//managerFactory.getICacheManager().remove(c);
 				}
 			}
 		} catch(Exception e){
