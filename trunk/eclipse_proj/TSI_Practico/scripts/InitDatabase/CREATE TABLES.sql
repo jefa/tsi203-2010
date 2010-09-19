@@ -44,7 +44,7 @@ CREATE TABLE log
 (
   idws integer NOT NULL,
   date timestamp with time zone NOT NULL,
-  outcome character varying(30),
+  outcome character varying(200),
   CONSTRAINT pk_log PRIMARY KEY (idws, date),
   CONSTRAINT fk_logws FOREIGN KEY (idws)
       REFERENCES webservice (id) MATCH SIMPLE
