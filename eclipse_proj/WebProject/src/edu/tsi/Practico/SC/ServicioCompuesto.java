@@ -98,6 +98,7 @@ public class ServicioCompuesto {
 				    resp = hello.invoke(userName);
 				    this.guardarEnCache(idws, userName, resp);
 				}
+				this.escribirEnLog(idws, "Respuesta para " + ID + ": " + resp);
 			    return resp;
 			} catch (ServiceException e) {
 				e.printStackTrace();
@@ -136,18 +137,17 @@ public class ServicioCompuesto {
 			String msg = "Se invoco al web service WS2 a las " + new Date();
 			col.add(msg);
 			session_reg.put(ID, col);
-	    	this.escribirEnLog(idws, msg);
-	    	
+	    	this.escribirEnLog(idws, msg);	    	
 	    	
 			try {
 				String resp = this.resultadoDeCache(idws, userName);
 				if(resp == null) {
 					//No tengo cache
-				//TODO: INVOCAR COMBINACION DE WS2
 					SimpleWS2Service_PortType hello = new SimpleWS2Service_ServiceLocator().getSimpleWS2ServicePort();
 				    resp = hello.invoke(userName);
 				    this.guardarEnCache(idws, userName, resp);
-				}				
+				}
+				this.escribirEnLog(idws, "Respuesta para " + ID + ": " + resp);
 			    return resp;
 			} catch (ServiceException e) {
 				e.printStackTrace();
@@ -171,48 +171,73 @@ public class ServicioCompuesto {
 		int idws = 3;
 		
         int index = zipCode.indexOf('_');
-        if(index == -1) System.err.println("NO SE MANDO WS EN EL MENSAJE");
+        if(index == -1) {
+        	System.err.println("NO SE MANDO WS EN EL MENSAJE");
+        	this.escribirEnLog(idws, "NO SE MANDO WS EN EL MENSAJE");
+        }
         
         String ID = zipCode.substring(0, index);
         String param = zipCode.substring(index + 1);
 
         int index2 = param.indexOf('_');
-        if(index2 == -1) System.err.println("NO SE MANDO WS EN EL MENSAJE");
+        if(index2 == -1) {
+        	System.err.println("NO SE MANDO WS EN EL MENSAJE");
+        	this.escribirEnLog(idws, "NO SE MANDO WS EN EL MENSAJE");
+        }
 
         String user = param.substring(0,index2);
         String zip = param.substring(index2 + 1);
         
         System.out.println("Invocaron WS3 con SID = " + ID);
+        this.escribirEnLog(idws, "Invocaron WS3 con SID = " + ID);
+        
 		if(session_reg.containsKey(ID)){
 			Collection<String> col = session_reg.get(ID);
-			col.add("Se invoco al web service WS3 a las " + new Date());
+			String msg = "Se invoco al web service WS3 a las " + new Date();
+			col.add(msg);
 			session_reg.put(ID, col);
+	    	this.escribirEnLog(idws, msg);
+
 			try {
 				// Invocar al SimpleWS1 con parametro username
-				SimpleWS1Service_PortType hello = new SimpleWS1Service_ServiceLocator().getSimpleWS1ServicePort();
-			    String respWS1 = hello.invoke(user);
+			    String respWS1 = this.resultadoDeCache(idws, user);
+				if(respWS1 == null) {
+					//No tengo cache
+					SimpleWS1Service_PortType hello = new SimpleWS1Service_ServiceLocator().getSimpleWS1ServicePort();
+					respWS1 = hello.invoke(user);
+				    this.guardarEnCache(idws, user, respWS1);
+				}
 				
 				// Invocar al Web Service del Weather (externo), con el zipcode
-				WeatherLocator loc = new WeatherLocator();
-				WeatherSoap w = loc.getWeatherSoap();
-				ForecastReturn ret = w.getCityForecastByZIP(zip);	
-				Forecast[] res = ret.getForecastResult();
-				Forecast f = res[0];
-				String respWSWeather = "El zip code ingresado corresponde a la ciudad de " + ret.getCity()+ ". La temperatura pronosticada es de: " + f.getTemperatures().getDaytimeHigh() + " grados";				
+				String respWSWeather = this.resultadoDeCache(idws, zip);
+				if(respWSWeather == null) {
+					//No tengo cache
+					WeatherLocator loc = new WeatherLocator();
+					WeatherSoap w = loc.getWeatherSoap();
+					ForecastReturn ret = w.getCityForecastByZIP(zip);	
+					Forecast[] res = ret.getForecastResult();
+					Forecast f = res[0];
+					respWSWeather = "El zip code ingresado corresponde a la ciudad de " + ret.getCity()+ ". La temperatura pronosticada es de: " + f.getTemperatures().getDaytimeHigh() + " grados";				
+					this.guardarEnCache(idws, user, respWSWeather);
+				}				
 
+				this.escribirEnLog(idws, "Respuesta para " + ID + ": " +  respWS1 + " " + respWSWeather);
 				return respWS1 + " " + respWSWeather;
 
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return "ERROR (RemoteException)al obtener la respuesta del servidor WS3 para el zipCode="+zip;
+				String errMsg = "ERROR (RemoteException)al obtener la respuesta del servidor WS3 para el zipCode="+zip;
+				this.escribirEnLog(idws, errMsg);
+				return errMsg;
 			} catch (ServiceException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				String errMsg = "ERROR (ServiceException) al obtener la respuesta del servidor WS2 para el zipCode="+zip;
+				this.escribirEnLog(idws, errMsg);
+				//return errMsg;
 			}
 		}
+		this.escribirEnLog(idws, "SID no valido.");
 		return "SID no valido.";
-	
 	}
 	
 	private String generateUserID() {
@@ -242,7 +267,7 @@ public class ServicioCompuesto {
 			Cache c = icm.findByParamsAndIdws(params, idws);
 			if( c != null) {
 				//Update
-				icm.update(c, result, c.getReg_date());
+				icm.update(c, result, new Date());
 			} else {
 				//Create
 				icm.create(params, result, idws, new Date());
@@ -262,10 +287,10 @@ public class ServicioCompuesto {
 	private String resultadoDeCache(int idws, String params) {
 		String res = null;
 		try {
-			Cache c = managerFactory.getICacheManager().findByParamsAndIdws(params, idws);
+			Cache c = managerFactory.getICacheManager().findByParamsAndIdws(params, idws);			
 			if(c != null) {
 				//Verifico que sirva el cache, sino lo desecho
-				if(cacheAlDia(c.getReg_date(), new Date(), this.msecForValidCache)) {
+				if(cacheAlDia(c.getReg_date(), new Date(), ServicioCompuesto.msecForValidCache)) {
 					res = c.getResult();
 				}
 			}
@@ -277,7 +302,6 @@ public class ServicioCompuesto {
 	}
 	
 	private boolean cacheAlDia(Date d_en_cache, Date d_a_comparar, long msec) {
-
 		return ((d_en_cache.getTime() + msec) > d_a_comparar.getTime());
 		
 	}
