@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProjectTreeState projectID="ugpiPNSGAqBwAQAb" projectPath="D:\eclipseEEwork\Partuzabook.vpp">
+	<TreeState name="ModelRepository" viewX="0" viewY="0">
+		<ExpandedPath>ModelRepository</ExpandedPath>
+	</TreeState>
+	<TreeState name="DiagramNavigator" viewX="0" viewY="216">
+		<ExpandedPath>DiagramNavigator</ExpandedPath>
+		<ExpandedPath>DiagramNavigator,UML Diagrams</ExpandedPath>
+		<ExpandedPath>DiagramNavigator,Requirements Capturing</ExpandedPath>
+		<ExpandedPath>DiagramNavigator,Database Modeling</ExpandedPath>
+		<ExpandedPath>DiagramNavigator,Business Process Modeling</ExpandedPath>
+		<ExpandedPath>DiagramNavigator,Others</ExpandedPath>
+		<SelectedPath>InteractionOverviewDiagram</SelectedPath>
+	</TreeState>
+	<TreeState name="ClassBrowser" viewX="0" viewY="0">
+		<ExpandedPath>ClassBrowser</ExpandedPath>
+	</TreeState>
+	<TreeState name="LogicalView" viewX="0" viewY="0"/>
+</ProjectTreeState>
