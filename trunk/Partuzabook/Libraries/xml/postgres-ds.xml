@@ -10,7 +10,7 @@
 
       <!-- The jndi name of the DataSource, it is prefixed with java:/ -->
       <!-- Datasources are not available outside the virtual machine -->
-      <jndi-name>Postgres3DS</jndi-name>
+      <jndi-name>PostgresDS</jndi-name>
 
       <!-- For server mode db, allowing other processes to use hsqldb over tcp.
       This requires the org.jboss.jdbc.HypersonicDatabase mbean.
@@ -23,7 +23,7 @@
       <!-- For in-process persistent db, saved when jboss stops.
       The org.jboss.jdbc.HypersonicDatabase mbean is required for proper db shutdown
       -->
-      <connection-url>jdbc:postgresql://localhost:5432/PracticoParte3</connection-url>
+      <connection-url>jdbc:postgresql://localhost:5432/PartuzaBook</connection-url>
 
       <!-- The driver class -->
       <driver-class>org.postgresql.Driver</driver-class>
