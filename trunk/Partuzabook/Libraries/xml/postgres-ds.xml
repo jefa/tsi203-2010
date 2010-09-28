@@ -23,7 +23,7 @@
       <!-- For in-process persistent db, saved when jboss stops.
       The org.jboss.jdbc.HypersonicDatabase mbean is required for proper db shutdown
       -->
-      <connection-url>jdbc:postgresql://localhost:5432/PartuzaBook</connection-url>
+      <connection-url>jdbc:postgresql://localhost:5432/Partuzabook</connection-url>
 
       <!-- The driver class -->
       <driver-class>org.postgresql.Driver</driver-class>
