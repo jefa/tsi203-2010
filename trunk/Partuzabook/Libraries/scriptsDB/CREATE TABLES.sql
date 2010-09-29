@@ -1,3 +1,5 @@
+--LA BASE DE DATOS DEBE LLAMARSE Partuzabook
+
 -- Table: users
 
 -- DROP TABLE users;
