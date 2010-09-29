@@ -2,20 +2,29 @@
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="Datos">
 	<jta-data-source>java:/PostgresDS</jta-data-source>
+	<class>partuzabook.datos.persistencia.beans.Admin</class>
 	<class>partuzabook.datos.persistencia.beans.Album</class>
 	<class>partuzabook.datos.persistencia.beans.AlbumPK</class>
+	<class>partuzabook.datos.persistencia.beans.Client</class>
 	<class>partuzabook.datos.persistencia.beans.Comment</class>
 	<class>partuzabook.datos.persistencia.beans.CommentPK</class>
 	<class>partuzabook.datos.persistencia.beans.Content</class>
 	<class>partuzabook.datos.persistencia.beans.Event</class>
+	<class>partuzabook.datos.persistencia.beans.ExternalContent</class>
 	<class>partuzabook.datos.persistencia.beans.Mod</class>
+	<class>partuzabook.datos.persistencia.beans.ModeratedEvent</class>
 	<class>partuzabook.datos.persistencia.beans.ModPK</class>
 	<class>partuzabook.datos.persistencia.beans.Notification</class>
+	<class>partuzabook.datos.persistencia.beans.NormalUser</class>
 	<class>partuzabook.datos.persistencia.beans.Participant</class>
 	<class>partuzabook.datos.persistencia.beans.ParticipantPK</class>
+	<class>partuzabook.datos.persistencia.beans.Photo</class>
 	<class>partuzabook.datos.persistencia.beans.Rating</class>
 	<class>partuzabook.datos.persistencia.beans.RatingPK</class>
+	<class>partuzabook.datos.persistencia.beans.SelfContent</class>
 	<class>partuzabook.datos.persistencia.beans.Tag</class>
+	<class>partuzabook.datos.persistencia.beans.UnmoderatedEvent</class>
 	<class>partuzabook.datos.persistencia.beans.User</class>
+	<class>partuzabook.datos.persistencia.beans.Video</class>
 	</persistence-unit>
 </persistence>
