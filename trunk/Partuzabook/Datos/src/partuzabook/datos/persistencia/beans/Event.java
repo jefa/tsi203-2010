@@ -2,6 +2,7 @@ package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
@@ -13,7 +14,9 @@ import java.util.Set;
  */
 @Entity
 @Table(name="events")
-public class Event implements Serializable {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "flags", discriminatorType = DiscriminatorType.STRING)
+public abstract class Event implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -45,11 +48,7 @@ public class Event implements Serializable {
 	//bi-directional many-to-one association to User
     @ManyToOne
 	@JoinColumn(name="creator")
-	private User user;
-
-	//bi-directional many-to-one association to Mod
-	@OneToMany(mappedBy="event")
-	private Set<Mod> mods;
+	private Admin admin;
 
 	//bi-directional many-to-one association to Participant
 	@OneToMany(mappedBy="event")
@@ -130,20 +129,12 @@ public class Event implements Serializable {
 		this.albums = albums;
 	}
 	
-	public User getUser() {
-		return this.user;
+	public Admin getCreator() {
+		return this.admin;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
-	public Set<Mod> getMods() {
-		return this.mods;
-	}
-
-	public void setMods(Set<Mod> mods) {
-		this.mods = mods;
+	public void setCreator(Admin admin) {
+		this.admin = admin;
 	}
 	
 	public Set<Participant> getParticipants() {

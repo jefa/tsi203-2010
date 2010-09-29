@@ -29,7 +29,7 @@ public class Comment implements Serializable {
 	//bi-directional many-to-one association to User
     @ManyToOne
 	@JoinColumn(name="usr_id")
-	private User user;
+	private NormalUser user;
 
     public Comment() {
     }
@@ -70,7 +70,7 @@ public class Comment implements Serializable {
 		return this.user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(NormalUser user) {
 		this.user = user;
 	}
 	

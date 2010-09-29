@@ -23,12 +23,12 @@ public class Mod implements Serializable {
 	//bi-directional many-to-one association to Event
     @ManyToOne
 	@JoinColumn(name="evt_id")
-	private Event event;
+	private ModeratedEvent event;
 
 	//bi-directional many-to-one association to User
     @ManyToOne
 	@JoinColumn(name="usr_id")
-	private User user;
+	private Client user;
 
     public Mod() {
     }
@@ -49,11 +49,11 @@ public class Mod implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public Event getEvent() {
+	public ModeratedEvent getModeratedEvent() {
 		return this.event;
 	}
 
-	public void setEvent(Event event) {
+	public void setModeratedEvent(ModeratedEvent event) {
 		this.event = event;
 	}
 	
@@ -61,7 +61,7 @@ public class Mod implements Serializable {
 		return this.user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(Client user) {
 		this.user = user;
 	}
 	

@@ -35,8 +35,13 @@ public class Notification implements Serializable {
 
 	//bi-directional many-to-one association to User
     @ManyToOne
-	@JoinColumn(name="usr_id")
-	private User user;
+	@JoinColumn(name="usr_frm_id")
+	private User userFrom;
+    
+	//bi-directional many-to-one association to User
+    @ManyToOne
+	@JoinColumn(name="usr_to_id")
+	private NormalUser userTo;
 
     public Notification() {
     }
@@ -89,12 +94,20 @@ public class Notification implements Serializable {
 		this.text = text;
 	}
 
-	public User getUser() {
-		return this.user;
+	public User getUserFrm() {
+		return this.userFrom;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserFrm(User userFrom) {
+		this.userFrom = userFrom;
+	}
+	
+	public User getUserTo() {
+		return this.userTo;
+	}
+
+	public void setUserTo(NormalUser userTo) {
+		this.userTo = userTo;
 	}
 	
 }

@@ -1,9 +1,21 @@
 package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 
 /**
@@ -11,7 +23,9 @@ import java.util.Set;
  * 
  */
 @Entity
-public class Content implements Serializable {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "flags", discriminatorType = DiscriminatorType.STRING)
+public abstract class Content implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -19,16 +33,10 @@ public class Content implements Serializable {
 	@Column(name="cnt_id_auto")
 	private Integer cntIdAuto;
 
-	private String description;
-
 	private String flags;
 
 	@Column(name="reg_date")
 	private Timestamp regDate;
-
-	private Integer size;
-
-	private String url;
 
 	//bi-directional many-to-one association to Album
 	@OneToMany(mappedBy="content")
@@ -58,14 +66,6 @@ public class Content implements Serializable {
 		this.cntIdAuto = cntIdAuto;
 	}
 
-	public String getDescription() {
-		return this.description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public String getFlags() {
 		return this.flags;
 	}
@@ -80,22 +80,6 @@ public class Content implements Serializable {
 
 	public void setRegDate(Timestamp regDate) {
 		this.regDate = regDate;
-	}
-
-	public Integer getSize() {
-		return this.size;
-	}
-
-	public void setSize(Integer size) {
-		this.size = size;
-	}
-
-	public String getUrl() {
-		return this.url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
 	}
 
 	public Set<Album> getAlbums() {
