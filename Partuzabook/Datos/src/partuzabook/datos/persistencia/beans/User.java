@@ -2,6 +2,7 @@ package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -12,7 +13,9 @@ import java.util.Set;
  */
 @Entity
 @Table(name="users")
-public class User implements Serializable {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "flags", discriminatorType = DiscriminatorType.STRING)
+public abstract class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -26,41 +29,13 @@ public class User implements Serializable {
 	@Column(name="reg_date")
 	private Timestamp regDate;
 
-	//bi-directional many-to-one association to Comment
-	@OneToMany(mappedBy="user")
-	private Set<Comment> comments;
-
 	//bi-directional many-to-one association to Content
 	@OneToMany(mappedBy="user")
 	private Set<Content> contents;
 
-	//bi-directional many-to-one association to Event
-	@OneToMany(mappedBy="user")
-	private Set<Event> events;
-
-	//bi-directional many-to-one association to Mod
-	@OneToMany(mappedBy="user")
-	private Set<Mod> mods;
-
 	//bi-directional many-to-one association to Notification
-	@OneToMany(mappedBy="user")
-	private Set<Notification> notifications;
-
-	//bi-directional many-to-one association to Participant
-	@OneToMany(mappedBy="user")
-	private Set<Participant> participants;
-
-	//bi-directional many-to-one association to Rating
-	@OneToMany(mappedBy="user")
-	private Set<Rating> ratings;
-
-	//bi-directional many-to-one association to Tag
-	@OneToMany(mappedBy="user1")
-	private Set<Tag> tags1;
-
-	//bi-directional many-to-one association to Tag
-	@OneToMany(mappedBy="user2")
-	private Set<Tag> tags2;
+	@OneToMany(mappedBy="userFrom")
+	private Set<Notification> notificationsCreated;
 
     public User() {
     }
@@ -97,14 +72,6 @@ public class User implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public Set<Comment> getComments() {
-		return this.comments;
-	}
-
-	public void setComments(Set<Comment> comments) {
-		this.comments = comments;
-	}
-	
 	public Set<Content> getContents() {
 		return this.contents;
 	}
@@ -113,60 +80,12 @@ public class User implements Serializable {
 		this.contents = contents;
 	}
 	
-	public Set<Event> getEvents() {
-		return this.events;
+	public Set<Notification> getNotificationsCreated() {
+		return this.notificationsCreated;
 	}
 
-	public void setEvents(Set<Event> events) {
-		this.events = events;
-	}
-	
-	public Set<Mod> getMods() {
-		return this.mods;
-	}
-
-	public void setMods(Set<Mod> mods) {
-		this.mods = mods;
-	}
-	
-	public Set<Notification> getNotifications() {
-		return this.notifications;
-	}
-
-	public void setNotifications(Set<Notification> notifications) {
-		this.notifications = notifications;
-	}
-	
-	public Set<Participant> getParticipants() {
-		return this.participants;
-	}
-
-	public void setParticipants(Set<Participant> participants) {
-		this.participants = participants;
-	}
-	
-	public Set<Rating> getRatings() {
-		return this.ratings;
-	}
-
-	public void setRatings(Set<Rating> ratings) {
-		this.ratings = ratings;
-	}
-	
-	public Set<Tag> getTags1() {
-		return this.tags1;
-	}
-
-	public void setTags1(Set<Tag> tags1) {
-		this.tags1 = tags1;
-	}
-	
-	public Set<Tag> getTags2() {
-		return this.tags2;
-	}
-
-	public void setTags2(Set<Tag> tags2) {
-		this.tags2 = tags2;
+	public void setNotificationsCreated(Set<Notification> notificationsCreated) {
+		this.notificationsCreated = notificationsCreated;
 	}
 	
 }

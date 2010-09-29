@@ -28,7 +28,7 @@ public class Participant implements Serializable {
 	//bi-directional many-to-one association to User
     @ManyToOne
 	@JoinColumn(name="usr_id")
-	private User user;
+	private NormalUser user;
 
     public Participant() {
     }
@@ -61,7 +61,7 @@ public class Participant implements Serializable {
 		return this.user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(NormalUser user) {
 		this.user = user;
 	}
 	
