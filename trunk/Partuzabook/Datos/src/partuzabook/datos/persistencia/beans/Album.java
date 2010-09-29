@@ -21,12 +21,12 @@ public class Album implements Serializable {
 
 	//bi-directional many-to-one association to Content
     @ManyToOne
-	@JoinColumn(name="cnt_id")
+	@JoinColumn(name="cnt_id", insertable=false, updatable=false)
 	private Content content;
 
 	//bi-directional many-to-one association to Event
     @ManyToOne
-	@JoinColumn(name="evt_id")
+	@JoinColumn(name="evt_id", insertable=false, updatable=false)
 	private Event event;
 
     public Album() {

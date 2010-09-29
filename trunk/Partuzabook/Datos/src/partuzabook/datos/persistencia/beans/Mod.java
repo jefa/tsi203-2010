@@ -22,12 +22,12 @@ public class Mod implements Serializable {
 
 	//bi-directional many-to-one association to Event
     @ManyToOne
-	@JoinColumn(name="evt_id")
+	@JoinColumn(name="evt_id", insertable=false, updatable=false)
 	private ModeratedEvent event;
 
 	//bi-directional many-to-one association to User
     @ManyToOne
-	@JoinColumn(name="usr_id")
+	@JoinColumn(name="usr_id", insertable=false, updatable=false)
 	private Client user;
 
     public Mod() {

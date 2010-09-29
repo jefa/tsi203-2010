@@ -33,8 +33,6 @@ public abstract class Content implements Serializable {
 	@Column(name="cnt_id_auto")
 	private Integer cntIdAuto;
 
-	private String flags;
-
 	@Column(name="reg_date")
 	private Timestamp regDate;
 
@@ -64,14 +62,6 @@ public abstract class Content implements Serializable {
 
 	public void setCntIdAuto(Integer cntIdAuto) {
 		this.cntIdAuto = cntIdAuto;
-	}
-
-	public String getFlags() {
-		return this.flags;
-	}
-
-	public void setFlags(String flags) {
-		this.flags = flags;
 	}
 
 	public Timestamp getRegDate() {

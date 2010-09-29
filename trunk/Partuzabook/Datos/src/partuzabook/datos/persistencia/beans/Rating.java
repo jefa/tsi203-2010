@@ -24,12 +24,12 @@ public class Rating implements Serializable {
 
 	//bi-directional many-to-one association to Content
     @ManyToOne
-	@JoinColumn(name="cnt_id")
+	@JoinColumn(name="cnt_id", insertable=false, updatable=false)
 	private Content content;
 
 	//bi-directional many-to-one association to User
     @ManyToOne
-	@JoinColumn(name="usr_id")
+	@JoinColumn(name="usr_id", insertable=false, updatable=false)
 	private NormalUser user;
 
     public Rating() {
