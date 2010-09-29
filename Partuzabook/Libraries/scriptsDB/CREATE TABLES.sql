@@ -7,7 +7,7 @@
 CREATE TABLE users
 (
   username character varying(30) NOT NULL,
-  password character varying(50) NOT NULL,
+  "password" character varying(50) NOT NULL,
   flags character varying(1) NOT NULL,
   reg_date timestamp without time zone NOT NULL,
   CONSTRAINT "PK_USERS" PRIMARY KEY (username)
@@ -44,21 +44,20 @@ WITH (
 ALTER TABLE events OWNER TO postgres;
 
 
-
 -- Table: "content"
 
 -- DROP TABLE "content";
 
-CREATE TABLE content
+CREATE TABLE "content"
 (
   cnt_id_auto integer NOT NULL,
   creator character varying(30) NOT NULL,
   description character varying(100),
-  duration character varying(10),
   size integer,
   url character varying(50),
   flags character(1) NOT NULL,
   reg_date timestamp without time zone NOT NULL,
+  duration character varying(10),
   CONSTRAINT "PK_CONTENT" PRIMARY KEY (cnt_id_auto),
   CONSTRAINT "FK_CNT_USR" FOREIGN KEY (creator)
       REFERENCES users (username) MATCH SIMPLE
@@ -68,7 +67,6 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE "content" OWNER TO postgres;
-
 
 
 -- Table: album
@@ -82,7 +80,7 @@ CREATE TABLE album
   reg_date timestamp without time zone NOT NULL,
   CONSTRAINT "PK_ALBUM" PRIMARY KEY (evt_id, cnt_id),
   CONSTRAINT "FK_ALB_CNT" FOREIGN KEY (cnt_id)
-      REFERENCES content (cnt_id_auto) MATCH SIMPLE
+      REFERENCES "content" (cnt_id_auto) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT "FK_ALB_EVT" FOREIGN KEY (evt_id)
       REFERENCES events (evt_name) MATCH SIMPLE
@@ -94,22 +92,20 @@ WITH (
 ALTER TABLE album OWNER TO postgres;
 
 
-
-
 -- Table: "comment"
 
 -- DROP TABLE "comment";
 
-CREATE TABLE comment
+CREATE TABLE "comment"
 (
   usr_id character varying(30) NOT NULL,
   cnt_id integer NOT NULL,
-  text character varying(500) NOT NULL,
+  "text" character varying(500) NOT NULL,
   date date NOT NULL,
   reg_date timestamp without time zone NOT NULL,
   CONSTRAINT "PK_COMMENT" PRIMARY KEY (usr_id, cnt_id, date),
   CONSTRAINT "FK_CMN_CNT" FOREIGN KEY (cnt_id)
-      REFERENCES content (cnt_id_auto) MATCH SIMPLE
+      REFERENCES "content" (cnt_id_auto) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT "FK_CMN_USR" FOREIGN KEY (usr_id)
       REFERENCES users (username) MATCH SIMPLE
@@ -118,8 +114,7 @@ CREATE TABLE comment
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE comment OWNER TO postgres;
-
+ALTER TABLE "comment" OWNER TO postgres;
 
 
 -- Table: mods
@@ -145,7 +140,6 @@ WITH (
 ALTER TABLE mods OWNER TO postgres;
 
 
-
 -- Table: notifications
 
 -- DROP TABLE notifications;
@@ -153,14 +147,18 @@ ALTER TABLE mods OWNER TO postgres;
 CREATE TABLE notifications
 (
   not_id_auto integer NOT NULL,
-  usr_id character varying(30) NOT NULL,
-  text character varying(100) NOT NULL,
+  usr_frm_id character varying(30) NOT NULL,
+  "text" character varying(100) NOT NULL,
   reference character varying(50),
   not_date date NOT NULL,
-  read boolean NOT NULL,
+  "read" boolean NOT NULL,
   reg_date timestamp without time zone NOT NULL,
+  usr_to_id character varying(30) NOT NULL,
   CONSTRAINT "PK_NOTIFICATIONS" PRIMARY KEY (not_id_auto),
-  CONSTRAINT "FK_NOT_USR" FOREIGN KEY (usr_id)
+  CONSTRAINT "FK_NOT_USR" FOREIGN KEY (usr_frm_id)
+      REFERENCES users (username) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT "FK_NOT_USR_TO" FOREIGN KEY (usr_to_id)
       REFERENCES users (username) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 )
@@ -168,7 +166,6 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE notifications OWNER TO postgres;
-
 
 
 -- Table: participants
@@ -192,7 +189,6 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE participants OWNER TO postgres;
-
 
 
 -- Table: ratings
@@ -219,7 +215,6 @@ WITH (
 ALTER TABLE ratings OWNER TO postgres;
 
 
-
 -- Table: tags
 
 -- DROP TABLE tags;
@@ -228,8 +223,8 @@ CREATE TABLE tags
 (
   creator character varying(30) NOT NULL,
   cnt_id integer NOT NULL,
-  posX integer,
-  posY integer,
+  "posX" integer,
+  "posY" integer,
   usr_tag_custom character varying(30),
   usr_tag character varying(30),
   tag_id_auto integer NOT NULL,
