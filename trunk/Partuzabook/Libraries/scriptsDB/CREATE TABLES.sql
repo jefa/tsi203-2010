@@ -54,6 +54,7 @@ CREATE TABLE content
   cnt_id_auto integer NOT NULL,
   creator character varying(30) NOT NULL,
   description character varying(100),
+  duration character varying(10),
   size integer,
   url character varying(50),
   flags character(1) NOT NULL,
