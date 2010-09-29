@@ -36,8 +36,6 @@ public abstract class Event implements Serializable {
 
 	private Integer duration;
 
-	private String flags;
-
 	@Column(name="reg_date")
 	private Timestamp regDate;
 
@@ -103,14 +101,6 @@ public abstract class Event implements Serializable {
 
 	public void setDuration(Integer duration) {
 		this.duration = duration;
-	}
-
-	public String getFlags() {
-		return this.flags;
-	}
-
-	public void setFlags(String flags) {
-		this.flags = flags;
 	}
 
 	public Timestamp getRegDate() {

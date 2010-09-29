@@ -1,10 +1,21 @@
 package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 
 /**
@@ -19,10 +30,8 @@ public abstract class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	//@GeneratedValue(strategy=GenerationType.AUTO)
 	private String username;
-
-	private String flags;
 
 	private String password;
 
@@ -38,6 +47,8 @@ public abstract class User implements Serializable {
 	private Set<Notification> notificationsCreated;
 
     public User() {
+    	contents = new HashSet<Content>();
+    	notificationsCreated = new HashSet<Notification>();
     }
 
 	public String getUsername() {
@@ -46,14 +57,6 @@ public abstract class User implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getFlags() {
-		return this.flags;
-	}
-
-	public void setFlags(String flags) {
-		this.flags = flags;
 	}
 
 	public String getPassword() {
