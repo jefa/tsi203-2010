@@ -1,6 +1,7 @@
 package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -25,6 +26,9 @@ public class Comment implements Serializable {
 	private Timestamp regDate;
 
 	private String text;
+	
+	@Column(name="date")
+	private Date date;
 
 	//bi-directional many-to-one association to Content
     @ManyToOne
@@ -77,6 +81,14 @@ public class Comment implements Serializable {
 
 	public void setUser(NormalUser user) {
 		this.user = user;
+	}
+	
+	public Date getDate() {
+		return this.date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 	
 }
