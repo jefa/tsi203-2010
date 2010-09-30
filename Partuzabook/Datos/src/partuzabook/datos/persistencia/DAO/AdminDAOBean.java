@@ -1,6 +1,7 @@
 package partuzabook.datos.persistencia.DAO;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
@@ -13,13 +14,14 @@ import javax.transaction.UserTransaction;
 import partuzabook.datos.persistencia.beans.Admin;
 
 @Stateless
-public class AdminDAOBean implements AdminDAO {
+public class AdminDAOBean extends JpaDao<String, Admin> implements AdminDAO {
 
 	@PersistenceContext
 	EntityManager em;
 	@Resource
 	SessionContext sc;
 	
+	/*
 	@Override
 	public Admin create(String username, String password) {
 		//UserTransaction ut = sc.getUserTransaction();		
@@ -46,14 +48,11 @@ public class AdminDAOBean implements AdminDAO {
 		}
 	}
 
+*/
 	@Override
-	public Admin findById(String username) {
-		return em.find(Admin.class, username);
-	}
-
-	@Override
-	public void delete(Admin admin) {
-		//TODO: Borrado del usuario
+	public List<Admin> findAll() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
