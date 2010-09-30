@@ -27,9 +27,6 @@ public class Comment implements Serializable {
 
 	private String text;
 	
-	@Column(name="date")
-	private Date date;
-
 	//bi-directional many-to-one association to Content
     @ManyToOne
 	@JoinColumn(name="cnt_id", insertable=false, updatable=false)
@@ -81,14 +78,6 @@ public class Comment implements Serializable {
 
 	public void setUser(NormalUser user) {
 		this.user = user;
-	}
-	
-	public Date getDate() {
-		return this.date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
 	}
 	
 }
