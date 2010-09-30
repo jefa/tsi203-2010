@@ -14,7 +14,11 @@ import java.util.Date;
 @Entity
 @Table(name="notifications")
 @NamedQueries({
-	@NamedQuery(name = "Notification.findAll", query = "SELECT o FROM Notification o")
+	@NamedQuery(name = "Notification.findAll", query = "SELECT o FROM Notification o"),
+	@NamedQuery(name = "Notification.findByUser", query = "SELECT o FROM Notification o " +
+			"WHERE o.userTo = :user"),
+	@NamedQuery(name = "Notification.findByUserUnread", query = "SELECT o FROM Notification o " +
+			"WHERE o.userTo = :user AND o.read = false")		
 	})
 public class Notification implements Serializable {
 	private static final long serialVersionUID = 1L;
