@@ -7,8 +7,10 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.ExternalContent;
+import partuzabook.datos.persistencia.beans.ModeratedEvent;
 import partuzabook.datos.persistencia.beans.Photo;
 
 @Stateless
@@ -21,8 +23,8 @@ public class ExternalContentDAOBean extends JpaDao<Integer, ExternalContent> imp
 	
 	@Override
 	public List<ExternalContent> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Query namedQuery = em.createNamedQuery("ExternalContent.findAll");
+		return (List<ExternalContent>)namedQuery.getResultList();
 	}
 
 

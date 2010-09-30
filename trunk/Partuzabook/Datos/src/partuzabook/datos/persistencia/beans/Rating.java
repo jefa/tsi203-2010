@@ -2,6 +2,7 @@ package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 
 
@@ -11,6 +12,9 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name="ratings")
+@NamedQueries({
+	@NamedQuery(name = "Rating", query = "SELECT o FROM Rating o")
+	})
 public class Rating implements Serializable {
 	private static final long serialVersionUID = 1L;
 

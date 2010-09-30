@@ -7,7 +7,9 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
+import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.Video;
 
 @Stateless
@@ -20,8 +22,8 @@ public class VideoDAOBean extends JpaDao<Integer, Video> implements VideoDAO {
 	
 	@Override
 	public List<Video> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Query namedQuery = em.createNamedQuery("Video.findAll");
+		return (List<Video>)namedQuery.getResultList();
 	}
 
 

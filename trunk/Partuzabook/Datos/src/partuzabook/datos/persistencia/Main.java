@@ -1,6 +1,7 @@
 package partuzabook.datos.persistencia;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Properties;
 
 import javax.naming.Context;
@@ -44,18 +45,22 @@ public class Main {
     public static void main(String[] args) {
     	new Main();
     	TestAdminDAOBean();
-    	TestNormalUserDAOBean();
-    	TestClientDAOBean();
+    	//TestNormalUserDAOBean();
+    	//TestClientDAOBean();
     }
     
     static String TestAdminDAOBean() {
     	try {
+    		
 			AdminDAO aDAO=(AdminDAO) c.lookup("AdminDAOBean/remote");
+			/*
 			Admin a = new Admin();
 			a.setUsername("admin");
 	        a.setPassword("admin");
 	        a.setRegDate(new Timestamp((new java.util.Date()).getTime()));
 	        aDAO.persist(a);
+	        */
+			List<Admin> la = aDAO.findAll();
 			return "OK";
 		} catch (NamingException e) {			
 			e.printStackTrace();

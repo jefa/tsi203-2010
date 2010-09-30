@@ -7,9 +7,11 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.Mod;
 import partuzabook.datos.persistencia.beans.ModPK;
+import partuzabook.datos.persistencia.beans.ModeratedEvent;
 
 @Stateless
 public class ModDAOBean extends JpaDao<ModPK, Mod> implements ModDAO {
@@ -21,8 +23,8 @@ public class ModDAOBean extends JpaDao<ModPK, Mod> implements ModDAO {
 	
 	@Override
 	public List<Mod> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Query namedQuery = em.createNamedQuery("Mod.findAll");
+		return (List<Mod>)namedQuery.getResultList();
 	}
 
 

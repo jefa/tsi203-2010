@@ -7,8 +7,10 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.Photo;
+import partuzabook.datos.persistencia.beans.UnmoderatedEvent;
 
 @Stateless
 public class PhotoDAOBean extends JpaDao<Integer, Photo> implements PhotoDAO {
@@ -20,8 +22,8 @@ public class PhotoDAOBean extends JpaDao<Integer, Photo> implements PhotoDAO {
 	
 	@Override
 	public List<Photo> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Query namedQuery = em.createNamedQuery("Photo.findAll");
+		return (List<Photo>)namedQuery.getResultList();
 	}
 
 

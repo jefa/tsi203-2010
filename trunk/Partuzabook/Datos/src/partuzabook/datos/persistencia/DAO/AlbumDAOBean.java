@@ -7,9 +7,11 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.Album;
 import partuzabook.datos.persistencia.beans.AlbumPK;
+import partuzabook.datos.persistencia.beans.Client;
 
 @Stateless
 public class AlbumDAOBean extends JpaDao<AlbumPK, Album> implements AlbumDAO {
@@ -21,8 +23,8 @@ public class AlbumDAOBean extends JpaDao<AlbumPK, Album> implements AlbumDAO {
 	
 	@Override
 	public List<Album> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Query namedQuery = em.createNamedQuery("Album.findAll");
+		return (List<Album>)namedQuery.getResultList();
 	}
 
 
