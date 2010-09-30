@@ -7,7 +7,9 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
+import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.Client;
 
 @Stateless
@@ -20,8 +22,8 @@ public class ClientDAOBean extends JpaDao<String, Client> implements ClientDAO {
 	
 	@Override
 	public List<Client> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Query namedQuery = em.createNamedQuery("Client.findAll");
+		return (List<Client>)namedQuery.getResultList();
 	}
 
 

@@ -7,7 +7,9 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
+import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.Participant;
 import partuzabook.datos.persistencia.beans.ParticipantPK;
 
@@ -21,8 +23,8 @@ public class ParticipantDAOBean extends JpaDao<ParticipantPK, Participant> imple
 	
 	@Override
 	public List<Participant> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Query namedQuery = em.createNamedQuery("Participant.findAll");
+		return (List<Participant>)namedQuery.getResultList();
 	}
 
 

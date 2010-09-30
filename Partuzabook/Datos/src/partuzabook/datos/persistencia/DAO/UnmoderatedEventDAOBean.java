@@ -7,7 +7,9 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
+import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.UnmoderatedEvent;
 
 @Stateless
@@ -20,8 +22,8 @@ public class UnmoderatedEventDAOBean extends JpaDao<String, UnmoderatedEvent> im
 	
 	@Override
 	public List<UnmoderatedEvent> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Query namedQuery = em.createNamedQuery("UnmoderatedEvent.findAll");
+		return (List<UnmoderatedEvent>)namedQuery.getResultList();
 	}
 
 

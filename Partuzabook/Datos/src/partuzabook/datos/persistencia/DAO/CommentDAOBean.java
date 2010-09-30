@@ -7,9 +7,11 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.Comment;
 import partuzabook.datos.persistencia.beans.CommentPK;
+import partuzabook.datos.persistencia.beans.ExternalContent;
 
 @Stateless
 public class CommentDAOBean extends JpaDao<CommentPK, Comment> implements CommentDAO {
@@ -21,8 +23,8 @@ public class CommentDAOBean extends JpaDao<CommentPK, Comment> implements Commen
 	
 	@Override
 	public List<Comment> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Query namedQuery = em.createNamedQuery("Comment.findAll");
+		return (List<Comment>)namedQuery.getResultList();
 	}
 
 

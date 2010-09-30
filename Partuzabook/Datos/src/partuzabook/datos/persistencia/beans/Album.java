@@ -2,6 +2,7 @@ package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 
 
@@ -10,6 +11,9 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "Album.findAll", query = "SELECT o FROM Album o")
+	})
 public class Album implements Serializable {
 	private static final long serialVersionUID = 1L;
 

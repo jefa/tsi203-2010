@@ -7,8 +7,10 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.Tag;
+import partuzabook.datos.persistencia.beans.UnmoderatedEvent;
 
 @Stateless
 public class TagDAOBean extends JpaDao<Integer, Tag> implements TagDAO {
@@ -20,8 +22,8 @@ public class TagDAOBean extends JpaDao<Integer, Tag> implements TagDAO {
 	
 	@Override
 	public List<Tag> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Query namedQuery = em.createNamedQuery("Tag.findAll");
+		return (List<Tag>)namedQuery.getResultList();
 	}
 
 

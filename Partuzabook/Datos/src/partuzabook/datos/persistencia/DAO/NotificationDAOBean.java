@@ -7,8 +7,10 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.Notification;
+import partuzabook.datos.persistencia.beans.UnmoderatedEvent;
 
 @Stateless
 public class NotificationDAOBean extends JpaDao<Integer, Notification> implements NotificationDAO {
@@ -20,8 +22,8 @@ public class NotificationDAOBean extends JpaDao<Integer, Notification> implement
 	
 	@Override
 	public List<Notification> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Query namedQuery = em.createNamedQuery("Notification.findAll");
+		return (List<Notification>)namedQuery.getResultList();
 	}
 
 

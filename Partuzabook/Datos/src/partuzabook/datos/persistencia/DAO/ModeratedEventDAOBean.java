@@ -7,9 +7,11 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.Client;
 import partuzabook.datos.persistencia.beans.ModeratedEvent;
+import partuzabook.datos.persistencia.beans.Notification;
 
 @Stateless
 public class ModeratedEventDAOBean extends JpaDao<String, ModeratedEvent> implements ModeratedEventDAO {
@@ -21,8 +23,8 @@ public class ModeratedEventDAOBean extends JpaDao<String, ModeratedEvent> implem
 	
 	@Override
 	public List<ModeratedEvent> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Query namedQuery = em.createNamedQuery("ModeratedEvent.findAll");
+		return (List<ModeratedEvent>)namedQuery.getResultList();
 	}
 
 

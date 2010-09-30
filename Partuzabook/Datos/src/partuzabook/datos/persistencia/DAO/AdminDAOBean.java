@@ -1,6 +1,5 @@
 package partuzabook.datos.persistencia.DAO;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,8 +7,7 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
+import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.Admin;
 
@@ -51,8 +49,8 @@ public class AdminDAOBean extends JpaDao<String, Admin> implements AdminDAO {
 */
 	@Override
 	public List<Admin> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Query namedQuery = em.createNamedQuery("Admin.findAll");
+		return (List<Admin>)namedQuery.getResultList();
 	}
 
 }
