@@ -9,7 +9,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import partuzabook.datos.persistencia.beans.Notification;
-import partuzabook.servicioDatos.usuarios.UserRemote;
+import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
 public class Main {
 
@@ -28,7 +28,7 @@ public class Main {
 	        properties.put("java.naming.provider.url", "jnp://localhost:1099");
 	        Context ctx = new InitialContext(properties);
 	        System.out.println("Got context - Main");
-	        UserRemote usr = (UserRemote) ctx.lookup("User/remote");
+	        ServicesUserRemote usr = (ServicesUserRemote) ctx.lookup("User/remote");
 	        if (usr != null) {
 		        List<Notification> list = usr.getUpdateNotifications("vero");
 		        if (list == null){

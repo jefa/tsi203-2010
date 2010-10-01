@@ -22,7 +22,7 @@ import partuzabook.datos.persistencia.beans.Participant;
  * Session Bean implementation class Usuario
  */
 @Stateless
-public class User implements UserRemote {
+public class ServicesUser implements ServicesUserRemote {
 
 	private NormalUserDAO nUserDao;
 	private NotificationDAO notifDao;
@@ -30,7 +30,7 @@ public class User implements UserRemote {
     /**
      * Default constructor. 
      */
-    public User() {
+    public ServicesUser() {
         // TODO Auto-generated constructor stub
         try {
         	Properties properties = new Properties();
@@ -51,9 +51,14 @@ public class User implements UserRemote {
 
     public Set<Event> getEventSummary(String user) {
     	NormalUser nUser = (NormalUser) nUserDao.findByID(user);   	
+    	if (nUser == null) {
+    		return null;
+    	}
     	Set<Participant> part =  (Set<Participant>) nUser.getParticipants();
-
-    	Set<Event> ret = new HashSet<Event>();
+    	if (part.isEmpty()){
+    		return null;
+    	} 
+	    Set<Event> ret = new HashSet<Event>();
     	Iterator<Participant> it = part.iterator();
     	while (it.hasNext()){
     		ret.add(it.next().getEvent());
@@ -65,21 +70,16 @@ public class User implements UserRemote {
     public List<Notification> getUpdateNotifications(String user) {
     	NormalUser nUser = (NormalUser) nUserDao.findByID(user);  
     	Set<Notification> notif = (Set<Notification>) nUser.getNotificationsReceived();
-    	List<Notification> ntf = new ArrayList<Notification>();
-    	Iterator it = notif.iterator();
-    	while (it.hasNext()) {
-    		ntf.add((Notification)it.next());    		
-    	}
-   /* 	List<Notification> notif = null;
-    	if (nUser != null) {
-    		notif = (List<Notification>) notifDao.findByUser(nUser);
-    		System.out.println("obtuve mi NOTIFICATIONS LIST !!");
+    	if (notif.isEmpty()) {
+    		return null;
     	} else {
-    		System.out.println("No encontre al normal user");
-    	}
-    	return notif;
-*/
-    	return ntf;
-    	}
+	    	List<Notification> ntf = new ArrayList<Notification>();
+	    	Iterator<Notification> it = notif.iterator();
+	    	while (it.hasNext()) {
+	    		ntf.add((Notification)it.next());    		
+	    	}
+	    	return ntf;
+	    }
+    }
 
 }
