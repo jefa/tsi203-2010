@@ -2,11 +2,11 @@ package partuzabook.datos.persistencia.DAO;
 
 import java.util.List;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 import partuzabook.datos.persistencia.beans.Notification;
 
-@Remote
+@Local
 public interface NotificationDAO extends Dao<Integer, Notification>{
 	
 	//TODO: Preguntar si quieren que la creacion de la entidad sea en el DAO o que la haga la logica
