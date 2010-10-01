@@ -10,8 +10,8 @@ import partuzabook.datos.persistencia.beans.Notification;
 @Remote
 public interface UserRemote {
 
-    public List<Event> getEventSummary(String user);
+    public Set<Event> getEventSummary(String user);
 
-    public Set<Notification> getUpdateNotifications(String user);
+    public List<Notification> getUpdateNotifications(String user);
 
 }
