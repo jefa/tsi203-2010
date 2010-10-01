@@ -16,6 +16,9 @@ import java.util.Set;
 @Table(name="events")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "flags", discriminatorType = DiscriminatorType.STRING)
+@NamedQueries({
+	@NamedQuery(name = "Event.findAll", query = "SELECT o FROM Event o")
+	})
 public abstract class Event implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -8,7 +8,7 @@ import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.Notification;
 
 @Remote
-public interface UserRemote {
+public interface ServicesUserRemote {
 
     public Set<Event> getEventSummary(String user);
 

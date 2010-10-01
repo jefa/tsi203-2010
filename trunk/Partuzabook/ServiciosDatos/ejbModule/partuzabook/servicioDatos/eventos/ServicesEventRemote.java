@@ -4,10 +4,11 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import partuzabook.datos.persistencia.beans.Content;
+import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.User;
 
 @Remote
-public interface EventRemote {
+public interface ServicesEventRemote {
 	
 	public List<Event> getSummaryEvents();
 	
