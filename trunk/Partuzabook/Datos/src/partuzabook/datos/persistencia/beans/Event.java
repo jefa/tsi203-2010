@@ -29,9 +29,6 @@ public abstract class Event implements Serializable {
 
 	private String address;
 
-	@Column(name="album_url")
-	private String albumUrl;
-
     @Temporal( TemporalType.DATE)
 	private Date date;
 
@@ -42,9 +39,9 @@ public abstract class Event implements Serializable {
 	@Column(name="reg_date")
 	private Timestamp regDate;
 
-	//bi-directional many-to-one association to Album
-	@OneToMany(mappedBy="event")
-	private Set<Album> albums;
+	//bi-directional one-to-one association to Album
+	@OneToOne(mappedBy="event")
+	private Album album;
 
 	//bi-directional many-to-one association to User
     @ManyToOne
@@ -72,14 +69,6 @@ public abstract class Event implements Serializable {
 
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public String getAlbumUrl() {
-		return this.albumUrl;
-	}
-
-	public void setAlbumUrl(String albumUrl) {
-		this.albumUrl = albumUrl;
 	}
 
 	public Date getDate() {
@@ -114,12 +103,12 @@ public abstract class Event implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public Set<Album> getAlbums() {
-		return this.albums;
+	public Album getAlbum() {
+		return this.album;
 	}
 
-	public void setAlbums(Set<Album> albums) {
-		this.albums = albums;
+	public void setAlbum(Album album) {
+		this.album = album;
 	}
 	
 	public Admin getCreator() {

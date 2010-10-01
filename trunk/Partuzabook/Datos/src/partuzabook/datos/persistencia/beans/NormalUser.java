@@ -1,6 +1,5 @@
 package partuzabook.datos.persistencia.beans;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.DiscriminatorValue;
@@ -16,10 +15,6 @@ import javax.persistence.OneToMany;
 	})
 public class NormalUser extends User {
 	private static final long serialVersionUID = 1L;
-	
-	public NormalUser() {
-		this.notificationsReceived = new HashSet<Notification>();
-	}
 	
 	//bi-directional many-to-one association to Comment
 	@OneToMany(mappedBy="user")
@@ -38,7 +33,7 @@ public class NormalUser extends User {
 	private Set<Tag> tags2;
 	
 	//bi-directional many-to-one association to Notification
-	@OneToMany(mappedBy="userTo")	
+	@OneToMany(mappedBy="userTo") 
 	private Set<Notification> notificationsReceived;
 	
 	//bi-directional many-to-one association to Participant

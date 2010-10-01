@@ -17,33 +17,41 @@ import java.sql.Timestamp;
 public class Album implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private AlbumPK id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="evt_id")
+	private String evtId;
 
+	@Column(name="album_url")
+	private String albumUrl;
+	
 	@Column(name="reg_date")
 	private Timestamp regDate;
-
-	//bi-directional many-to-one association to Content
-    @ManyToOne
-	@JoinColumn(name="cnt_id", insertable=false, updatable=false)
-	private Content content;
-
-	//bi-directional many-to-one association to Event
-    @ManyToOne
-	@JoinColumn(name="evt_id", insertable=false, updatable=false)
+	
+	//bi-directional one-to-one association to Event
+	@OneToOne
+	@JoinColumn(name="evt_id")
 	private Event event;
-
-    public Album() {
+	
+	public Album() {
     }
 
-	public AlbumPK getId() {
-		return this.id;
+	public String getEvtId() {
+		return this.evtId;
 	}
 
-	public void setId(AlbumPK id) {
-		this.id = id;
+	public void setEvtId(String evtId) {
+		this.evtId = evtId;
 	}
-	
+
+	public String getAlbumUrl() {
+		return this.albumUrl;
+	}
+
+	public void setAlbumUrl(String albumUrl) {
+		this.albumUrl = albumUrl;
+	}
+
 	public Timestamp getRegDate() {
 		return this.regDate;
 	}
@@ -52,14 +60,6 @@ public class Album implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public Content getContent() {
-		return this.content;
-	}
-
-	public void setContent(Content content) {
-		this.content = content;
-	}
-	
 	public Event getEvent() {
 		return this.event;
 	}
