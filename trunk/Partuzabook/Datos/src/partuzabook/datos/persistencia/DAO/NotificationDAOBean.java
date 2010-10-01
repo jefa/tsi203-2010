@@ -11,7 +11,6 @@ import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
-import partuzabook.datos.persistencia.beans.UnmoderatedEvent;
 
 @Stateless
 public class NotificationDAOBean extends JpaDao<Integer, Notification> implements NotificationDAO {
@@ -27,7 +26,7 @@ public class NotificationDAOBean extends JpaDao<Integer, Notification> implement
 		return (List<Notification>)namedQuery.getResultList();
 	}
 	
-	public List<Notification> findByUser(String user) {
+	public List<Notification> findByUser(NormalUser user) {
 		Query namedQuery = em.createNamedQuery("Notification.findByUser");
 		namedQuery.setParameter("user", user);
 		return (List<Notification>) namedQuery.getResultList();
