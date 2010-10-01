@@ -1,13 +1,12 @@
 package partuzabook.servicioDatos.prueba;
 
-import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.servicioDatos.usuarios.UserRemote;
 
@@ -32,7 +31,7 @@ public class Main {
         System.out.println("Got context - Main");
         UserRemote usr = (UserRemote) ctx.lookup("User/remote");
         if (usr != null) {
-	        List<Notification> list = usr.getUpdateNotifications("vero");
+	        Set<Notification> list = usr.getUpdateNotifications("Normla User");
 	        System.out.println("El tamaño de lo devuelto es: " + list.size());
 	    } else {
 	        System.out.println("Nulllll");
