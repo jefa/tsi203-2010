@@ -4,20 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
-import javax.annotation.Resource;
-import javax.ejb.SessionContext;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
-import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
-import partuzabook.datos.persistencia.DAO.ParticipantDAO;
-import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
@@ -44,7 +39,7 @@ public class User implements UserRemote {
 	        properties.put("java.naming.provider.url", "jnp://localhost:1099");
 	        Context ctx = new InitialContext(properties);
 	        System.out.println("Got context!!");
-	        dao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/remote");  
+	        dao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");  
 	        System.out.println("Lookup worked!"); 
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
@@ -67,14 +62,15 @@ public class User implements UserRemote {
     	return ret;
     }
 
-    public List<Notification> getUpdateNotifications(String user) {
+    public Set<Notification> getUpdateNotifications(String user) {
     	NormalUser nUser = (NormalUser) dao.findByID(user);
     	if (nUser == null) {
     		System.out.println("EMPTY NORMAL USER!!");
     		return null;
     	} else {
-    		System.out.println("Encontré al NORMAL USER!!");
-    		return (List<Notification>) nUser.getNotificationsReceived();
+    		System.out.println("Encontre al NORMAL USER!!");
+    		Set<Notification> res = nUser.getNotificationsReceived();
+    		return res;
     	}
     }
 
