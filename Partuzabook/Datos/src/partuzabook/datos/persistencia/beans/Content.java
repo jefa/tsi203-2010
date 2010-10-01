@@ -33,12 +33,10 @@ public abstract class Content implements Serializable {
 	@Column(name="cnt_id_auto")
 	private Integer cntIdAuto;
 
+	private Boolean album;
+	
 	@Column(name="reg_date")
 	private Timestamp regDate;
-
-	//bi-directional many-to-one association to Album
-	@OneToMany(mappedBy="content")
-	private Set<Album> albums;
 
 	//bi-directional many-to-one association to Comment
 	@OneToMany(mappedBy="content")
@@ -52,7 +50,12 @@ public abstract class Content implements Serializable {
 	//bi-directional many-to-one association to Rating
 	@OneToMany(mappedBy="content")
 	private Set<Rating> ratings;
-
+	
+	//bi-directional many-to-one association to Event
+    @ManyToOne
+	@JoinColumn(name="evt_id")
+	private Event event;
+    
     public Content() {
     }
 
@@ -63,6 +66,14 @@ public abstract class Content implements Serializable {
 	public void setCntIdAuto(Integer cntIdAuto) {
 		this.cntIdAuto = cntIdAuto;
 	}
+	
+	public Boolean getAlbum() {
+		return this.album;
+	}
+
+	public void setAlbum(Boolean album) {
+		this.album = album;
+	}
 
 	public Timestamp getRegDate() {
 		return this.regDate;
@@ -72,14 +83,6 @@ public abstract class Content implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public Set<Album> getAlbums() {
-		return this.albums;
-	}
-
-	public void setAlbums(Set<Album> albums) {
-		this.albums = albums;
-	}
-	
 	public Set<Comment> getComments() {
 		return this.comments;
 	}
@@ -104,4 +107,11 @@ public abstract class Content implements Serializable {
 		this.ratings = ratings;
 	}
 	
+	public Event getEvent() {
+		return this.event;
+	}
+
+	public void setEvent(Event event) {
+		this.event = event;
+	}
 }

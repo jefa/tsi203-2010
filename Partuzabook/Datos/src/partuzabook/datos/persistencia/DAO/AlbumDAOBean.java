@@ -10,11 +10,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.Album;
-import partuzabook.datos.persistencia.beans.AlbumPK;
-import partuzabook.datos.persistencia.beans.Client;
 
 @Stateless
-public class AlbumDAOBean extends JpaDao<AlbumPK, Album> implements AlbumDAO {
+public class AlbumDAOBean extends JpaDao<String, Album> implements AlbumDAO {
 	
 	@PersistenceContext
 	EntityManager em;
