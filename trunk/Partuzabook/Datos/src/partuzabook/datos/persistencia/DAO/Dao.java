@@ -8,5 +8,5 @@ public interface Dao<K, E> {
 	void remove(E entity);
 	E findByID(K id);
 	List<E> findAll();
-
+ 
 }
