@@ -1,3 +1,5 @@
+package partuzabook.datos.persistencia.beans;
+
 
 import java.io.Serializable;
 import java.sql.Timestamp;
