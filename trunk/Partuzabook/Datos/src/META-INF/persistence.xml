@@ -21,7 +21,6 @@
 	<class>partuzabook.datos.persistencia.beans.Tag</class>
 	<class>partuzabook.datos.persistencia.beans.TagForNotUser</class>
 	<class>partuzabook.datos.persistencia.beans.TagForUser</class>
-	<class>partuzabook.datos.persistencia.beans.UnmoderatedEvent</class>
 	<class>partuzabook.datos.persistencia.beans.User</class>
 	<class>partuzabook.datos.persistencia.beans.Video</class>
 	</persistence-unit>
