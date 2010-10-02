@@ -25,10 +25,13 @@ public abstract class Event implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	//@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="evt_id_auto")
+	private Integer evtIdAuto;
+	
 	@Column(name="evt_name")
 	private String evtName;
-
+	
 	private String address;
 
 	@Temporal( TemporalType.DATE)
@@ -59,6 +62,14 @@ public abstract class Event implements Serializable {
 	private Set<Participant> participants;
 
 	public Event() {
+	}
+	
+	public Integer getEvtIdAuto() {
+		return this.evtIdAuto;
+	}
+
+	public void setEvtIdAuto(Integer evtIdAuto) {
+		this.evtIdAuto = evtIdAuto;
 	}
 
 	public String getEvtName() {

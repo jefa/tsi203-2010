@@ -20,7 +20,7 @@ public class Album implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="evt_id")
-	private String evtId;
+	private Integer evtId;
 
 	@Column(name="album_url")
 	private String albumUrl;
@@ -36,11 +36,11 @@ public class Album implements Serializable {
 	public Album() {
     }
 
-	public String getEvtId() {
+	public Integer getEvtId() {
 		return this.evtId;
 	}
 
-	public void setEvtId(String evtId) {
+	public void setEvtId(Integer evtId) {
 		this.evtId = evtId;
 	}
 
