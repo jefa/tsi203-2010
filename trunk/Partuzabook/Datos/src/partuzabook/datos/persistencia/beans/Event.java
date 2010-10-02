@@ -1,11 +1,29 @@
-package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -24,25 +42,27 @@ import java.util.Set;
 	@NamedQuery(name = "Event.findContentById",
 			query = "SELECT c FROM Content c WHERE c.date >= :after")
 })
-public abstract class Event implements Serializable {
+public class Event implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="evt_id_auto")
 	private Integer evtIdAuto;
-	
-	@Column(name="evt_name")
-	private String evtName;
 
 	private String address;
 
-	@Temporal( TemporalType.DATE)
+    @Temporal( TemporalType.DATE)
 	private Date date;
 
 	private String description;
 
 	private Integer duration;
+
+	@Column(name="evt_name")
+	private String evtName;
+
+	private String flags;
 
 	@Column(name="reg_date")
 	private Timestamp regDate;
@@ -53,34 +73,36 @@ public abstract class Event implements Serializable {
 
 	//bi-directional many-to-one association to Content
 	@OneToMany(mappedBy="event")
-	private Set<Content> contents;
+	private List<Content> contents;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
+    @ManyToOne
 	@JoinColumn(name="creator")
-	private Admin admin;
+	private User creator;
 
-	//bi-directional many-to-one association to Participant
-	@OneToMany(mappedBy="event")
-	private Set<Participant> participants;
-
-	public Event() {
-	}
+	//bi-directional many-to-many association to User
+	@ManyToMany(mappedBy="myModeratedEvents")
+	@JoinTable(name="Mods", 
+          joinColumns=@JoinColumn(name="evt_id"),
+          inverseJoinColumns=@JoinColumn(name="usr_id"))
+	private List<User> myMods;
 	
+	//bi-directional many-to-many association to User
+	@ManyToMany(mappedBy="myEvents")
+	@JoinTable(name="Participants", 
+          joinColumns=@JoinColumn(name="evt_id"),
+          inverseJoinColumns=@JoinColumn(name="usr_id"))
+	private List<User> myParticipants;
+
+    public Event() {
+    }
+
 	public Integer getEvtIdAuto() {
 		return this.evtIdAuto;
 	}
 
 	public void setEvtIdAuto(Integer evtIdAuto) {
 		this.evtIdAuto = evtIdAuto;
-	}
-
-	public String getEvtName() {
-		return this.evtName;
-	}
-
-	public void setEvtName(String evtName) {
-		this.evtName = evtName;
 	}
 
 	public String getAddress() {
@@ -115,6 +137,22 @@ public abstract class Event implements Serializable {
 		this.duration = duration;
 	}
 
+	public String getEvtName() {
+		return this.evtName;
+	}
+
+	public void setEvtName(String evtName) {
+		this.evtName = evtName;
+	}
+
+	public String getFlags() {
+		return this.flags;
+	}
+
+	public void setFlags(String flags) {
+		this.flags = flags;
+	}
+
 	public Timestamp getRegDate() {
 		return this.regDate;
 	}
@@ -130,29 +168,37 @@ public abstract class Event implements Serializable {
 	public void setAlbum(Album album) {
 		this.album = album;
 	}
-
-	public Set<Content> getContents() {
+	
+	public List<Content> getContents() {
 		return this.contents;
 	}
 
-	public void setContents(Set<Content> contents) {
+	public void setContents(List<Content> contents) {
 		this.contents = contents;
 	}
 	
-	public Admin getCreator() {
-		return this.admin;
+	public User getCreator() {
+		return this.creator;
 	}
 
-	public void setCreator(Admin admin) {
-		this.admin = admin;
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+	
+	public List<User> getMyMods() {
+		return this.myMods;
 	}
 
-	public Set<Participant> getParticipants() {
-		return this.participants;
+	public void setMyMods(List<User> myMods) {
+		this.myMods = myMods;
+	}
+	
+	public List<User> getMyParticipants() {
+		return this.myParticipants;
 	}
 
-	public void setParticipants(Set<Participant> participants) {
-		this.participants = participants;
+	public void Participants(List<User> myParticipants) {
+		this.myMods = myParticipants;
 	}
-
+	
 }

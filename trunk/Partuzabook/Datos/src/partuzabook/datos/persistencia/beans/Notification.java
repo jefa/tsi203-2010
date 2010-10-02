@@ -1,4 +1,3 @@
-package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -45,11 +44,11 @@ public class Notification implements Serializable {
     @ManyToOne
 	@JoinColumn(name="usr_frm_id")
 	private User userFrom;
-    
+
 	//bi-directional many-to-one association to User
     @ManyToOne
 	@JoinColumn(name="usr_to_id")
-	private NormalUser userTo;
+	private User userTo;
 
     public Notification() {
     }
@@ -102,11 +101,11 @@ public class Notification implements Serializable {
 		this.text = text;
 	}
 
-	public User getUserFrm() {
+	public User getUserFrom() {
 		return this.userFrom;
 	}
 
-	public void setUserFrm(User userFrom) {
+	public void setUserFrom(User userFrom) {
 		this.userFrom = userFrom;
 	}
 	
@@ -114,7 +113,7 @@ public class Notification implements Serializable {
 		return this.userTo;
 	}
 
-	public void setUserTo(NormalUser userTo) {
+	public void setUserTo(User userTo) {
 		this.userTo = userTo;
 	}
 	

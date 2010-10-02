@@ -1,4 +1,3 @@
-package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -24,16 +23,16 @@ public class Album implements Serializable {
 
 	@Column(name="album_url")
 	private String albumUrl;
-	
+
 	@Column(name="reg_date")
 	private Timestamp regDate;
-	
+
 	//bi-directional one-to-one association to Event
 	@OneToOne
 	@JoinColumn(name="evt_id")
 	private Event event;
-	
-	public Album() {
+
+    public Album() {
     }
 
 	public Integer getEvtId() {

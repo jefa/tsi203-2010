@@ -1,4 +1,3 @@
-package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -28,13 +27,16 @@ public class Rating implements Serializable {
 
 	//bi-directional many-to-one association to Content
     @ManyToOne
-	@JoinColumn(name="cnt_id", insertable=false, updatable=false)
+	@JoinColumns({
+		@JoinColumn(name="cnt_id", referencedColumnName="cnt_id_auto"),
+		@JoinColumn(name="evt_id", referencedColumnName="evt_id")
+		})
 	private Content content;
 
 	//bi-directional many-to-one association to User
     @ManyToOne
-	@JoinColumn(name="usr_id", insertable=false, updatable=false)
-	private NormalUser user;
+	@JoinColumn(name="usr_id")
+	private User user;
 
     public Rating() {
     }
@@ -75,7 +77,7 @@ public class Rating implements Serializable {
 		return this.user;
 	}
 
-	public void setUser(NormalUser user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	

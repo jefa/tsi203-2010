@@ -1,23 +1,9 @@
-package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Set;
+import javax.persistence.*;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import java.sql.Timestamp;
+import java.util.List;
 
 
 /**
@@ -34,19 +20,32 @@ import javax.persistence.OneToMany;
 public abstract class Content implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="cnt_id_auto")
-	private Integer cntIdAuto;
+	@EmbeddedId
+	private ContentPK id;
 
 	private Boolean album;
-	
+
+	private String description;
+
+	private String duration;
+
+	private String flags;
+
 	@Column(name="reg_date")
 	private Timestamp regDate;
 
+	private Integer size;
+
+	private String url;
+
 	//bi-directional many-to-one association to Comment
 	@OneToMany(mappedBy="content")
-	private Set<Comment> comments;
+	private List<Comment> comments;
+
+	//bi-directional many-to-one association to Event
+    @ManyToOne
+	@JoinColumn(name="evt_id")
+	private Event event;
 
 	//bi-directional many-to-one association to User
     @ManyToOne
@@ -55,24 +54,21 @@ public abstract class Content implements Serializable {
 
 	//bi-directional many-to-one association to Rating
 	@OneToMany(mappedBy="content")
-	private Set<Rating> ratings;
-	
-	//bi-directional many-to-one association to Event
-    @ManyToOne
-	@JoinColumn(name="evt_id")
-	private Event event;
-    
-	private String url;
-	
+	private List<Rating> ratings;
+
+	//bi-directional many-to-one association to Tag
+	@OneToMany(mappedBy="content")
+	private List<Tag> tags;
+
     public Content() {
     }
 
-	public Integer getCntIdAuto() {
-		return this.cntIdAuto;
+	public ContentPK getId() {
+		return this.id;
 	}
 
-	public void setCntIdAuto(Integer cntIdAuto) {
-		this.cntIdAuto = cntIdAuto;
+	public void setId(ContentPK id) {
+		this.id = id;
 	}
 	
 	public Boolean getAlbum() {
@@ -83,6 +79,30 @@ public abstract class Content implements Serializable {
 		this.album = album;
 	}
 
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDuration() {
+		return this.duration;
+	}
+
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
+
+	public String getFlags() {
+		return this.flags;
+	}
+
+	public void setFlags(String flags) {
+		this.flags = flags;
+	}
+
 	public Timestamp getRegDate() {
 		return this.regDate;
 	}
@@ -91,28 +111,28 @@ public abstract class Content implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public Set<Comment> getComments() {
+	public Integer getSize() {
+		return this.size;
+	}
+
+	public void setSize(Integer size) {
+		this.size = size;
+	}
+
+	public String getUrl() {
+		return this.url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public List<Comment> getComments() {
 		return this.comments;
 	}
 
-	public void setComments(Set<Comment> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
-	}
-	
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
-	public Set<Rating> getRatings() {
-		return this.ratings;
-	}
-
-	public void setRatings(Set<Rating> ratings) {
-		this.ratings = ratings;
 	}
 	
 	public Event getEvent() {
@@ -123,12 +143,28 @@ public abstract class Content implements Serializable {
 		this.event = event;
 	}
 	
-	public String getUrl() {
-		return this.url;
+	public User getUser() {
+		return this.user;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public List<Rating> getRatings() {
+		return this.ratings;
+	}
+
+	public void setRatings(List<Rating> ratings) {
+		this.ratings = ratings;
+	}
+	
+	public List<Tag> getTags() {
+		return this.tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
 	}
 	
 }

@@ -1,4 +1,3 @@
-package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -17,16 +16,13 @@ import java.sql.Timestamp;
 @NamedQueries({
 	@NamedQuery(name = "Tag.findAll", query = "SELECT o FROM Tag o")
 	})
-public class Tag implements Serializable {
+public abstract class Tag implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="tag_id_auto")
-	private Integer tagIdAuto;
+	@EmbeddedId
+	private TagPK id;
 
-	@Column(name="cnt_id")
-	private Integer cntId;
+	private String flags;
 
 	@Column(name="\"posX\"")
 	private Integer _posX_;
@@ -37,29 +33,44 @@ public class Tag implements Serializable {
 	@Column(name="reg_date")
 	private Timestamp regDate;
 
+	@Column(name="usr_tag_custom")
+	private String usrTagCustom;
+
+	//bi-directional many-to-one association to Content
+    @ManyToOne
+	@JoinColumns({
+		@JoinColumn(name="cnt_id", referencedColumnName="cnt_id_auto"),
+		@JoinColumn(name="evt_id", referencedColumnName="evt_id")
+		})
+	private Content content;
 
 	//bi-directional many-to-one association to User
     @ManyToOne
 	@JoinColumn(name="creator")
-	private NormalUser user1;
+	private User user1;
+
+	//bi-directional many-to-one association to User
+    @ManyToOne
+	@JoinColumn(name="usr_tag")
+	private User user2;
 
     public Tag() {
     }
 
-	public Integer getTagIdAuto() {
-		return this.tagIdAuto;
+	public TagPK getId() {
+		return this.id;
 	}
 
-	public void setTagIdAuto(Integer tagIdAuto) {
-		this.tagIdAuto = tagIdAuto;
+	public void setId(TagPK id) {
+		this.id = id;
+	}
+	
+	public String getFlags() {
+		return this.flags;
 	}
 
-	public Integer getCntId() {
-		return this.cntId;
-	}
-
-	public void setCntId(Integer cntId) {
-		this.cntId = cntId;
+	public void setFlags(String flags) {
+		this.flags = flags;
 	}
 
 	public Integer get_posX_() {
@@ -86,12 +97,36 @@ public class Tag implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public User getUserCreator() {
+	public String getUsrTagCustom() {
+		return this.usrTagCustom;
+	}
+
+	public void setUsrTagCustom(String usrTagCustom) {
+		this.usrTagCustom = usrTagCustom;
+	}
+
+	public Content getContent() {
+		return this.content;
+	}
+
+	public void setContent(Content content) {
+		this.content = content;
+	}
+	
+	public User getUser1() {
 		return this.user1;
 	}
 
-	public void setUserCreator(NormalUser user1) {
+	public void setUser1(User user1) {
 		this.user1 = user1;
+	}
+	
+	public User getUser2() {
+		return this.user2;
+	}
+
+	public void setUser2(User user2) {
+		this.user2 = user2;
 	}
 	
 }
