@@ -1,7 +1,6 @@
 package partuzabook.servicioDatos.usuarios;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -16,7 +15,6 @@ import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
-import partuzabook.datos.persistencia.beans.Participant;
 
 /**
  * Session Bean implementation class Usuario
@@ -49,20 +47,15 @@ public class ServicesUser implements ServicesUserRemote {
 
     }
 
-    public Set<Event> getEventSummaryByUser(String user) {
+    public List<Event> getEventSummaryByUser(String user) {
     	NormalUser nUser = (NormalUser) nUserDao.findByID(user);   	
     	if (nUser == null) {
     		return null;
     	}
-    	Set<Participant> part =  (Set<Participant>) nUser.getParticipants();
-    	if (part.isEmpty()){
+    	List<Event> ret = nUser.getMyEvents();
+    	if (ret.isEmpty()){
     		return null;
     	} 
-	    Set<Event> ret = new HashSet<Event>();
-    	Iterator<Participant> it = part.iterator();
-    	while (it.hasNext()){
-    		ret.add(it.next().getEvent());
-    	}
     	return ret;
     }
 
