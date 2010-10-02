@@ -2,9 +2,14 @@
 <faces-config version="1.2" xmlns="http://java.sun.com/xml/ns/javaee"
  xmlns:xi="http://www.w3.org/2001/XInclude"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
- <application>
-  <locale-config/>
- </application>
- <factory/>
- <lifecycle/>
+ <managed-bean>
+  <managed-bean-name>paginaInicioMB</managed-bean-name>
+  <managed-bean-class>partuzabook.usuarioUI.paginaInicio.paginaInicioMB</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+  <managed-property>
+   <property-name>name</property-name>
+   <property-class>java.lang.String</property-class>
+   <value/>
+  </managed-property>
+ </managed-bean>
 </faces-config>
