@@ -56,6 +56,8 @@ public abstract class Content implements Serializable {
 	@JoinColumn(name="evt_id")
 	private Event event;
     
+	private String url;
+	
     public Content() {
     }
 
@@ -114,4 +116,13 @@ public abstract class Content implements Serializable {
 	public void setEvent(Event event) {
 		this.event = event;
 	}
+	
+	public String getUrl() {
+		return this.url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
 }
