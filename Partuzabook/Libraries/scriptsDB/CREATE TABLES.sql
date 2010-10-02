@@ -157,6 +157,7 @@ CREATE TABLE notifications
   "read" boolean NOT NULL,
   reg_date timestamp without time zone NOT NULL,
   usr_to_id character varying(30) NOT NULL,
+  "type" integer NOT NULL,
   CONSTRAINT "PK_NOTIFICATIONS" PRIMARY KEY (not_id_auto),
   CONSTRAINT "FK_NOT_USR" FOREIGN KEY (usr_frm_id)
       REFERENCES users (username) MATCH SIMPLE
@@ -250,4 +251,3 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE tags OWNER TO postgres;
-
