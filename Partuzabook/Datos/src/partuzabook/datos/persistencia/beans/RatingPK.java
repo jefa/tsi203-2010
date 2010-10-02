@@ -1,4 +1,3 @@
-package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -18,6 +17,9 @@ public class RatingPK implements Serializable {
 	@Column(name="cnt_id")
 	private Integer cntId;
 
+	@Column(name="evt_id")
+	private Integer evtId;
+
     public RatingPK() {
     }
 	public String getUsrId() {
@@ -32,6 +34,12 @@ public class RatingPK implements Serializable {
 	public void setCntId(Integer cntId) {
 		this.cntId = cntId;
 	}
+	public Integer getEvtId() {
+		return this.evtId;
+	}
+	public void setEvtId(Integer evtId) {
+		this.evtId = evtId;
+	}
 
 	public boolean equals(Object other) {
 		if (this == other) {
@@ -43,7 +51,8 @@ public class RatingPK implements Serializable {
 		RatingPK castOther = (RatingPK)other;
 		return 
 			this.usrId.equals(castOther.usrId)
-			&& this.cntId.equals(castOther.cntId);
+			&& this.cntId.equals(castOther.cntId)
+			&& this.evtId.equals(castOther.evtId);
 
     }
     
@@ -52,6 +61,7 @@ public class RatingPK implements Serializable {
 		int hash = 17;
 		hash = hash * prime + this.usrId.hashCode();
 		hash = hash * prime + this.cntId.hashCode();
+		hash = hash * prime + this.evtId.hashCode();
 		
 		return hash;
     }

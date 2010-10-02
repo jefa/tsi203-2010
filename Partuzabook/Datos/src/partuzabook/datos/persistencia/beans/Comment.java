@@ -1,15 +1,8 @@
-package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import javax.persistence.*;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import java.sql.Timestamp;
 
 
 /**
@@ -30,16 +23,19 @@ public class Comment implements Serializable {
 	private Timestamp regDate;
 
 	private String text;
-	
+
 	//bi-directional many-to-one association to Content
     @ManyToOne
-	@JoinColumn(name="cnt_id", insertable=false, updatable=false)
+	@JoinColumns({
+		@JoinColumn(name="cnt_id", referencedColumnName="cnt_id_auto"),
+		@JoinColumn(name="evt_id", referencedColumnName="evt_id")
+		})
 	private Content content;
 
 	//bi-directional many-to-one association to User
     @ManyToOne
-	@JoinColumn(name="usr_id", insertable=false, updatable=false)
-	private NormalUser user;
+	@JoinColumn(name="usr_id")
+	private User user;
 
     public Comment() {
     }
@@ -80,7 +76,7 @@ public class Comment implements Serializable {
 		return this.user;
 	}
 
-	public void setUser(NormalUser user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	
