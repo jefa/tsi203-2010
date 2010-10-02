@@ -59,10 +59,12 @@ public class ServicesEvent implements ServicesEventRemote {
 		while (it.hasNext()){
 			Event ev = (Event) it.next();
 			Date evDate = (Date) ev.getDate();
-			if ((today.before(evDate) && evDate.compareTo(today) > 5) 
-					|| (today.after(evDate) && today.compareTo(evDate) > 5)) {
+			int thisMonth = today.getMonth();
+			int evMonth = evDate.getMonth();
+			// Por ahora me quedo con los eventos del mes actual
+			if (thisMonth != evMonth) {
 				list.remove(ev);
-			} 
+			}
 		}
 		return list;		
 	}
@@ -82,7 +84,6 @@ public class ServicesEvent implements ServicesEventRemote {
     	Iterator<Participant> it = part.iterator();
     	while (it.hasNext()){
     		ret.add(it.next().getEvent());
-        	it.next();
     	}
     	return ret.contains(event);  	
   	}
@@ -94,6 +95,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	
 	// Returns a list of candidate Users for Tag 
 	public List<User> getUsersForTag(String eventID, String contentID){
+		// TODO Para que tenemos el contentID?? No lo estoy usando
 		Event event = (Event) evDao.findByID(eventID);
 		if (event == null) {
 			return null;
@@ -106,7 +108,6 @@ public class ServicesEvent implements ServicesEventRemote {
     	Iterator<Participant> it = part.iterator();
     	while (it.hasNext()){
     		ret.add(it.next().getUser());
-        	it.next();
     	}
     	return ret;  			
 	}
