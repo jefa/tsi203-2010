@@ -49,12 +49,12 @@ public abstract class Tag implements Serializable {
 	//bi-directional many-to-one association to User
     @ManyToOne
 	@JoinColumn(name="creator")
-	private User user1;
+	private User creator;
 
 	//bi-directional many-to-one association to User
     @ManyToOne
 	@JoinColumn(name="usr_tag")
-	private User user2;
+	private User userTagged;
 
     public Tag() {
     }
@@ -115,20 +115,20 @@ public abstract class Tag implements Serializable {
 		this.content = content;
 	}
 	
-	public User getUser1() {
-		return this.user1;
+	public User getCreator() {
+		return this.creator;
 	}
 
-	public void setUser1(User user1) {
-		this.user1 = user1;
+	public void setCreator(User creator) {
+		this.creator = creator;
 	}
 	
-	public User getUser2() {
-		return this.user2;
+	public User getUserTagged() {
+		return this.userTagged;
 	}
 
-	public void setUser2(User user2) {
-		this.user2 = user2;
+	public void setUserTagged(User userTagged) {
+		this.userTagged = userTagged;
 	}
 	
 }
