@@ -82,12 +82,6 @@ public class Event implements Serializable {
 	@JoinColumn(name="creator")
 	private User creator;
 
-	//bi-directional many-to-many association to User
-	@ManyToMany(mappedBy="myModeratedEvents")
-	@JoinTable(name="Mods", 
-          joinColumns=@JoinColumn(name="evt_id"),
-          inverseJoinColumns=@JoinColumn(name="usr_id"))
-	private List<User> myMods;
 	
 	//bi-directional many-to-many association to User
 	@ManyToMany(mappedBy="myEvents")
@@ -186,21 +180,13 @@ public class Event implements Serializable {
 	public void setCreator(User creator) {
 		this.creator = creator;
 	}
-	
-	public List<User> getMyMods() {
-		return this.myMods;
-	}
-
-	public void setMyMods(List<User> myMods) {
-		this.myMods = myMods;
-	}
-	
+		
 	public List<User> getMyParticipants() {
 		return this.myParticipants;
 	}
 
 	public void Participants(List<User> myParticipants) {
-		this.myMods = myParticipants;
+		this.myParticipants = myParticipants;
 	}
 	
 }
