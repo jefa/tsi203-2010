@@ -44,7 +44,7 @@ public class User implements Serializable {
 
 	//bi-directional many-to-one association to Content
 	@OneToMany(mappedBy="user")
-	private List<Content> contentCreated;
+	private List<Content> contentsCreated;
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="creator")
@@ -63,12 +63,12 @@ public class User implements Serializable {
 	private List<Rating> ratings;
 
 	//bi-directional many-to-one association to Tag
-	@OneToMany(mappedBy="user1")
-	private List<Tag> tags1;
+	@OneToMany(mappedBy="creator")
+	private List<Tag> tagsCreated;
 
 	//bi-directional many-to-one association to Tag
-	@OneToMany(mappedBy="user2")
-	private List<Tag> tags2;
+	@OneToMany(mappedBy="userTagged")
+	private List<Tag> myTags;
 
 	//bi-directional many-to-many association to Event
     @ManyToMany
@@ -119,12 +119,12 @@ public class User implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public List<Content> getContentCreated() {
-		return this.contentCreated;
+	public List<Content> getContentsCreated() {
+		return this.contentsCreated;
 	}
 
-	public void setContentCreated(List<Content> contentCreated) {
-		this.contentCreated = contentCreated;
+	public void setContentsCreated(List<Content> contentsCreated) {
+		this.contentsCreated = contentsCreated;
 	}
 	
 	public List<Event> getEventsCreated() {
@@ -159,20 +159,20 @@ public class User implements Serializable {
 		this.ratings = ratings;
 	}
 	
-	public List<Tag> getTags1() {
-		return this.tags1;
+	public List<Tag> getTagsCreated() {
+		return this.tagsCreated;
 	}
 
-	public void setTags1(List<Tag> tags1) {
-		this.tags1 = tags1;
+	public void setTagsCreated(List<Tag> tagsCreated) {
+		this.tagsCreated = tagsCreated;
 	}
 	
 	public List<Tag> getTags2() {
-		return this.tags2;
+		return this.myTags;
 	}
 
-	public void setTags2(List<Tag> tags2) {
-		this.tags2 = tags2;
+	public void setMyTags(List<Tag> myTags) {
+		this.myTags = myTags;
 	}
 	
 	public List<Event> getMyModeratedEvents() {
