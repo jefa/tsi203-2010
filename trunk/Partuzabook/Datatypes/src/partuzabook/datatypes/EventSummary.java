@@ -12,10 +12,7 @@ public class EventSummary {
 	public String description;
 	public List<Content> contents;
 
-    public EventSummary(String evtName, Date date, String description) {
-    	this.evtName = evtName;
-    	this.date = date;
-    	this.description = description;
+    public EventSummary() {
     	this.contents = new ArrayList<Content>();
     }
 
