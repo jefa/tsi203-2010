@@ -1,4 +1,4 @@
-import Content;
+package partuzabook.datos.persistencia.beans;
 
 import javax.persistence.MappedSuperclass;
 
