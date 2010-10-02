@@ -8,15 +8,12 @@
 	<class>partuzabook.datos.persistencia.beans.Comment</class>
 	<class>partuzabook.datos.persistencia.beans.CommentPK</class>
 	<class>partuzabook.datos.persistencia.beans.Content</class>
+	<class>partuzabook.datos.persistencia.beans.ContentPK</class>
 	<class>partuzabook.datos.persistencia.beans.Event</class>
 	<class>partuzabook.datos.persistencia.beans.ExternalContent</class>
-	<class>partuzabook.datos.persistencia.beans.Mod</class>
 	<class>partuzabook.datos.persistencia.beans.ModeratedEvent</class>
-	<class>partuzabook.datos.persistencia.beans.ModPK</class>
 	<class>partuzabook.datos.persistencia.beans.Notification</class>
 	<class>partuzabook.datos.persistencia.beans.NormalUser</class>
-	<class>partuzabook.datos.persistencia.beans.Participant</class>
-	<class>partuzabook.datos.persistencia.beans.ParticipantPK</class>
 	<class>partuzabook.datos.persistencia.beans.Photo</class>
 	<class>partuzabook.datos.persistencia.beans.Rating</class>
 	<class>partuzabook.datos.persistencia.beans.RatingPK</class>
