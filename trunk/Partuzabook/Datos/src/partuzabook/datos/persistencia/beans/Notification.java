@@ -29,6 +29,9 @@ public class Notification implements Serializable {
 	@Column(name="not_id_auto")
 	private Integer notIdAuto;
 
+	@Column(name="type")
+	private Integer type;
+	
     @Temporal( TemporalType.DATE)
 	@Column(name="not_date")
 	private Date notDate;
@@ -50,7 +53,7 @@ public class Notification implements Serializable {
 	//bi-directional many-to-one association to User
     @ManyToOne
 	@JoinColumn(name="usr_to_id")
-	private User userTo;
+	private NormalUser userTo;
 
     public Notification() {
     }
@@ -63,6 +66,14 @@ public class Notification implements Serializable {
 		this.notIdAuto = notIdAuto;
 	}
 
+	public Integer getType() {
+		return this.type;
+	}
+	
+	public void setType(Integer t) {
+		this.type = t;
+	}
+	
 	public Date getNotDate() {
 		return this.notDate;
 	}
@@ -111,11 +122,11 @@ public class Notification implements Serializable {
 		this.userFrom = userFrom;
 	}
 	
-	public User getUserTo() {
+	public NormalUser getUserTo() {
 		return this.userTo;
 	}
 
-	public void setUserTo(User userTo) {
+	public void setUserTo(NormalUser userTo) {
 		this.userTo = userTo;
 	}
 	

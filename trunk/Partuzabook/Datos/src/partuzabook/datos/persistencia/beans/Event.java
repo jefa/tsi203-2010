@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,6 +37,7 @@ import javax.persistence.TemporalType;
 @Table(name="events")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "flags", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("E")
 @NamedQueries({
 	@NamedQuery(name = "Event.findAll", query = "SELECT o FROM Event o"),
 	@NamedQuery(name = "Event.findByName", query = "SELECT o FROM Event o WHERE o.evtName = :name"),
@@ -64,8 +66,6 @@ public class Event implements Serializable {
 	@Column(name="evt_name")
 	private String evtName;
 
-	private String flags;
-
 	@Column(name="reg_date")
 	private Timestamp regDate;
 
@@ -80,15 +80,14 @@ public class Event implements Serializable {
 	//bi-directional many-to-one association to User
     @ManyToOne
 	@JoinColumn(name="creator")
-	private User creator;
-
+	private Admin creator;
 	
 	//bi-directional many-to-many association to User
 	@ManyToMany(mappedBy="myEvents")
 	@JoinTable(name="Participants", 
           joinColumns=@JoinColumn(name="evt_id"),
           inverseJoinColumns=@JoinColumn(name="usr_id"))
-	private List<User> myParticipants;
+	private List<NormalUser> myParticipants;
 
     public Event() {
     }
@@ -141,14 +140,6 @@ public class Event implements Serializable {
 		this.evtName = evtName;
 	}
 
-	public String getFlags() {
-		return this.flags;
-	}
-
-	public void setFlags(String flags) {
-		this.flags = flags;
-	}
-
 	public Timestamp getRegDate() {
 		return this.regDate;
 	}
@@ -173,19 +164,19 @@ public class Event implements Serializable {
 		this.contents = contents;
 	}
 	
-	public User getCreator() {
+	public Admin getCreator() {
 		return this.creator;
 	}
 
-	public void setCreator(User creator) {
+	public void setCreator(Admin creator) {
 		this.creator = creator;
 	}
 		
-	public List<User> getMyParticipants() {
+	public List<NormalUser> getMyParticipants() {
 		return this.myParticipants;
 	}
 
-	public void Participants(List<User> myParticipants) {
+	public void Participants(List<NormalUser> myParticipants) {
 		this.myParticipants = myParticipants;
 	}
 	

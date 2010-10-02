@@ -24,8 +24,6 @@ public abstract class Tag implements Serializable {
 	@EmbeddedId
 	private TagPK id;
 
-	private String flags;
-
 	@Column(name="\"posX\"")
 	private Integer _posX_;
 
@@ -34,9 +32,6 @@ public abstract class Tag implements Serializable {
 
 	@Column(name="reg_date")
 	private Timestamp regDate;
-
-	@Column(name="usr_tag_custom")
-	private String usrTagCustom;
 
 	//bi-directional many-to-one association to Content
     @ManyToOne
@@ -49,12 +44,8 @@ public abstract class Tag implements Serializable {
 	//bi-directional many-to-one association to User
     @ManyToOne
 	@JoinColumn(name="creator")
-	private User creator;
+	private NormalUser creator;
 
-	//bi-directional many-to-one association to User
-    @ManyToOne
-	@JoinColumn(name="usr_tag")
-	private User userTagged;
 
     public Tag() {
     }
@@ -67,14 +58,6 @@ public abstract class Tag implements Serializable {
 		this.id = id;
 	}
 	
-	public String getFlags() {
-		return this.flags;
-	}
-
-	public void setFlags(String flags) {
-		this.flags = flags;
-	}
-
 	public Integer get_posX_() {
 		return this._posX_;
 	}
@@ -99,14 +82,6 @@ public abstract class Tag implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public String getUsrTagCustom() {
-		return this.usrTagCustom;
-	}
-
-	public void setUsrTagCustom(String usrTagCustom) {
-		this.usrTagCustom = usrTagCustom;
-	}
-
 	public Content getContent() {
 		return this.content;
 	}
@@ -115,20 +90,12 @@ public abstract class Tag implements Serializable {
 		this.content = content;
 	}
 	
-	public User getCreator() {
+	public NormalUser getCreator() {
 		return this.creator;
 	}
 
-	public void setCreator(User creator) {
+	public void setCreator(NormalUser creator) {
 		this.creator = creator;
 	}
-	
-	public User getUserTagged() {
-		return this.userTagged;
-	}
-
-	public void setUserTagged(User userTagged) {
-		this.userTagged = userTagged;
-	}
-	
+		
 }
