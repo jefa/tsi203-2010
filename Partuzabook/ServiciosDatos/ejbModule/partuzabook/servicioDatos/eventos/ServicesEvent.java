@@ -17,6 +17,7 @@ import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
+import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.datos.persistencia.beans.Tag;
 import partuzabook.datos.persistencia.beans.TagForNotUser;
 import partuzabook.datos.persistencia.beans.TagForUser;
@@ -160,6 +161,12 @@ public class ServicesEvent implements ServicesEventRemote {
 			tagUser.setUserTagged(nUserTagged);
 			//TODO Averiguar si es necesario setear ademas el tag al userTagged, ya setee el userTagged al tag
 			nUserTagged.getMyTags().add(tagUser);
+			
+			// Notify the existing user that has been tagged
+			Notification ntfTagged = new Notification();
+			ntfTagged.setRead(false);
+			ntfTagged.setText("Has sido etiquetado");
+			ntfTagged.setUserTo(nUserTagged);
 		}
 		tag.setContent(cont);
 		//TODO Averiguar si es necesario setear ademas el tag al content, ya setee el content al tag
@@ -171,6 +178,14 @@ public class ServicesEvent implements ServicesEventRemote {
 		
 		tag.set_posX_(posX);
 		tag.set_posY_(posY);
+		
+		// Create a new notification once the tag has been created
+		Notification ntfToCreator = new Notification();
+		ntfToCreator.setRead(false);
+		ntfToCreator.setText("La etiqueta ha sido creada de forma exitosa");
+		ntfToCreator.setUserTo(nUserTagger);
+		
+		
 	}
 
 	public void confirmUploadContent(List<Content> list) {

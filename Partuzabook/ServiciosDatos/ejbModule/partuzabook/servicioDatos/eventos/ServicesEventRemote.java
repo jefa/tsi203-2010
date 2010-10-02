@@ -12,13 +12,13 @@ public interface ServicesEventRemote {
 	
 	public List<Event> getSummaryEvents();
 	
-	public Content getGalleryMultimediaAtPos(String eventID, int pos);
+	public Content getGalleryMultimediaAtPos(String eventName, int pos);
 	
-	public boolean isUserRelatedToEvent(String eventID, String user);
+	public boolean isUserRelatedToEvent(String eventName, String user);
 	
-	public List<NormalUser> getUsersForTag(String eventID, int contentID);	
+	public List<NormalUser> getUsersForTag(String eventName, int contentID);	
 	
-	public void tagUserInContent(String eventID, int contentID, String userTagger, String userToTag, int posX, int posY) throws Exception;
+	public void tagUserInContent(String eventName, int contentID, String userTagger, String userToTag, int posX, int posY) throws Exception;
 
 	public void confirmUploadContent(List<Content> list); 
 	
