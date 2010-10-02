@@ -9,12 +9,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import partuzabook.datos.persistencia.beans.ContentPK;
 import partuzabook.datos.persistencia.beans.ExternalContent;
-import partuzabook.datos.persistencia.beans.ModeratedEvent;
-import partuzabook.datos.persistencia.beans.Photo;
 
 @Stateless
-public class ExternalContentDAOBean extends JpaDao<Integer, ExternalContent> implements ExternalContentDAO {
+public class ExternalContentDAOBean extends JpaDao<ContentPK, ExternalContent> implements ExternalContentDAO {
 	
 	@PersistenceContext
 	EntityManager em;

@@ -14,7 +14,7 @@ import partuzabook.datos.persistencia.beans.ModeratedEvent;
 import partuzabook.datos.persistencia.beans.Notification;
 
 @Stateless
-public class ModeratedEventDAOBean extends JpaDao<String, ModeratedEvent> implements ModeratedEventDAO {
+public class ModeratedEventDAOBean extends JpaDao<Integer, ModeratedEvent> implements ModeratedEventDAO {
 	
 	@PersistenceContext
 	EntityManager em;

@@ -10,9 +10,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.TagForUser;
+import partuzabook.datos.persistencia.beans.TagPK;
 
 @Stateless
-public class TagForUserDAOBean extends JpaDao<Integer, TagForUser> implements TagForUserDAO {
+public class TagForUserDAOBean extends JpaDao<TagPK, TagForUser> implements TagForUserDAO {
 	
 	@PersistenceContext
 	EntityManager em;
@@ -21,7 +22,7 @@ public class TagForUserDAOBean extends JpaDao<Integer, TagForUser> implements Ta
 	
 	@Override
 	public List<TagForUser> findAll() {
-		Query namedQuery = em.createNamedQuery("Tag.findAll");
+		Query namedQuery = em.createNamedQuery("TagForUser.findAll");
 		return (List<TagForUser>)namedQuery.getResultList();
 	}
 
