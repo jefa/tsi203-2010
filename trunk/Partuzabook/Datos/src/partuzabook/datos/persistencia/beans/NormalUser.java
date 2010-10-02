@@ -26,11 +26,11 @@ public class NormalUser extends User {
 	
 	//bi-directional many-to-one association to Tag
 	@OneToMany(mappedBy="user1")
-	private Set<Tag> tags1;
+	private Set<Tag> tagsMade;
 
 	//bi-directional many-to-one association to Tag
-	@OneToMany(mappedBy="user2")
-	private Set<Tag> tags2;
+	@OneToMany(mappedBy="user_tagged")
+	private Set<TagForUser> myTags;
 	
 	//bi-directional many-to-one association to Notification
 	@OneToMany(mappedBy="userTo") 
@@ -72,20 +72,20 @@ public class NormalUser extends User {
 		this.ratings = ratings;
 	}
 	
-	public Set<Tag> getTags1() {
-		return this.tags1;
+	public Set<Tag> getTagsMade() {
+		return this.tagsMade;
 	}
 
-	public void setTags1(Set<Tag> tags1) {
-		this.tags1 = tags1;
+	public void setTagsMade(Set<Tag> tagsMade) {
+		this.tagsMade = tagsMade;
 	}
 	
-	public Set<Tag> getTags2() {
-		return this.tags2;
+	public Set<TagForUser> getMyTags() {
+		return this.myTags;
 	}
 
-	public void setTags2(Set<Tag> tags2) {
-		this.tags2 = tags2;
+	public void setMyTags(Set<TagForUser> myTags) {
+		this.myTags = myTags;
 	}
 	
 }

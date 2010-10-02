@@ -13,7 +13,7 @@ import javax.persistence.Query;
 import partuzabook.datos.persistencia.beans.Event;
 
 @Stateless
-public class EventDAOBean extends JpaDao<String, Event> implements EventDAO {
+public class EventDAOBean extends JpaDao<Integer, Event> implements EventDAO {
 	
 	@PersistenceContext
 	EntityManager em;

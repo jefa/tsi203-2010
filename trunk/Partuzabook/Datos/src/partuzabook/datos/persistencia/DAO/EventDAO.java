@@ -8,7 +8,7 @@ import javax.ejb.Local;
 import partuzabook.datos.persistencia.beans.Event;
 
 @Local
-public interface EventDAO extends Dao<String, Event>{
+public interface EventDAO extends Dao<Integer, Event>{
 
 	List<Event> findAll();
 	List<Event> findAllAfterDate(Date after);
