@@ -5,7 +5,7 @@ import javax.ejb.Remote;
 
 import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
-import partuzabook.datos.persistencia.beans.User;
+import partuzabook.datos.persistencia.beans.NormalUser;
 
 @Remote
 public interface ServicesEventRemote {
@@ -16,7 +16,7 @@ public interface ServicesEventRemote {
 	
 	public boolean isUserRelatedToEvent(String eventID, String user);
 	
-	public List<User> getUsersForTag(String eventID, int contentID);	
+	public List<NormalUser> getUsersForTag(String eventID, int contentID);	
 	
 	public void tagUserInContent(String eventID, int contentID, String userTagger, String userToTag, int posX, int posY) throws Exception;
 

@@ -2,15 +2,14 @@ package partuzabook.servicioDatos.prueba;
 
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import partuzabook.datos.persistencia.beans.Event;
+import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
-import partuzabook.datos.persistencia.beans.User;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
@@ -41,7 +40,7 @@ public class Main {
 		        	System.out.println("El tamaño de lo devuelto es: " + list.size());
 		        }
 		        // Invocar getEventsSummary
-		        Set<Event> setEv = usr.getEventSummaryByUser("vero");
+		        List<Event> setEv = usr.getEventSummaryByUser("vero");
 		        if (setEv == null){
 		        	System.out.println("SET DE EVENTS ES NULL !!");
 		        } else {
@@ -67,12 +66,14 @@ public class Main {
 	        		System.out.println("El tamaño de la lista de events es: " + list.size());
 	        	}
 	        	// Invocar getUsersForTag
-	        	List<User> users = evt.getUsersForTag("Cumple Vero",0);
+	        	List<NormalUser> users = evt.getUsersForTag("Cumple Vero",0);
 	        	if (users == null){
 	        		System.out.println("getUsersForTag retorno lista vacia");
 	        	} else {
 	        		System.out.println("El tamaño de la lista de users para taggear es: " + users.size());
 	        	}
+	        	// Invocar tagUserInContent
+//	        	tagUserInContent("Recib, int contentID, String userTagger, String userToTag, 4, 6)
 	        } else {
 	        	System.out.println("ServicesEventRemote was not found");    	
 	        }

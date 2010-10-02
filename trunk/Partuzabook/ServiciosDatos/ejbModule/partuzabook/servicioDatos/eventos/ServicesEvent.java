@@ -2,11 +2,9 @@ package partuzabook.servicioDatos.eventos;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.naming.Context;
@@ -19,7 +17,6 @@ import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
-import partuzabook.datos.persistencia.beans.Participant;
 import partuzabook.datos.persistencia.beans.Tag;
 import partuzabook.datos.persistencia.beans.TagForNotUser;
 import partuzabook.datos.persistencia.beans.TagForUser;
@@ -80,15 +77,10 @@ public class ServicesEvent implements ServicesEventRemote {
 		if (nUser == null  || event == null) {
 			return false;
 		}
-    	Set<Participant> part =  (Set<Participant>) nUser.getParticipants();
-    	if (part.isEmpty()){
+		List<Event> ret = nUser.getMyEvents();
+    	if (ret.isEmpty()){
     		return false;
     	} 
-	    Set<Event> ret = new HashSet<Event>();
-    	Iterator<Participant> it = part.iterator();
-    	while (it.hasNext()){
-    		ret.add(it.next().getEvent());
-    	}
     	return ret.contains(event);  	
   	}
 
@@ -98,7 +90,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	}
 	
 	// Returns a list of candidate Users for Tagging -who have not already been tagged in the content-   
-	public List<User> getUsersForTag(String eventID, int contentID){
+	public List<NormalUser> getUsersForTag(String eventID, int contentID){
 		// Verify existence of Event
 		Event event = (Event) evDao.findByName(eventID);
 		if (event == null) {
@@ -110,34 +102,28 @@ public class ServicesEvent implements ServicesEventRemote {
 			return null;
 		}
 		// Obtain set of users already tagged in the content
-		List<User> usersAlreadyTagged = new ArrayList<User>();
-	/*	List<Tag> tags = cont.getTags();
+		List<User> usersAlreadyTagged = new ArrayList<User>();		
+		List<Tag> tags = cont.getTags();
 		Iterator<Tag> it = tags.iterator();
 		while (it.hasNext()) {
 			Tag current = it.next();	
 			TagForUser currentCast;
 			if (current instanceof TagForUser) {
 				currentCast = (TagForUser) current;
-				usersAlreadyTagged.add(currentCast.getUserCreator());
+				usersAlreadyTagged.add(currentCast.getCreator());
 			}
 		}
-	*/
-		
+			
 		// Obtain a set of all users related to the event 
-    	Set<Participant> part =  (Set<Participant>) event.getParticipants();
-    	if (part.isEmpty()){
+		List<NormalUser> allUsersInEvent = event.getMyParticipants();
+    	if (allUsersInEvent.isEmpty()){
     		return null;
     	} 
-	    List<User> ret = new ArrayList<User>();
-    	Iterator<Participant> it = part.iterator();
-    	while (it.hasNext()){
-    		Participant p = it.next();
-    		// Filter users that have already been tagged in this content
-    		if (!usersAlreadyTagged.contains(p.getUser())) {
-    			ret.add(it.next().getUser());
-    		}	
-    	}    	
-    	return ret;  			
+    	
+    	// Filter users that have already been tagged in this content    	
+    	allUsersInEvent.removeAll(usersAlreadyTagged);
+    	
+    	return allUsersInEvent;
 	}
 	
 	// Create a new instance of Tag associated to the content, user that was tagged, and the tagger 
@@ -175,13 +161,16 @@ public class ServicesEvent implements ServicesEventRemote {
 			//TODO Averiguar si es necesario setear ademas el tag al userTagged, ya setee el userTagged al tag
 			nUserTagged.getMyTags().add(tagUser);
 		}
-		tag.setCntId(contentID);
+		tag.setContent(cont);
 		//TODO Averiguar si es necesario setear ademas el tag al content, ya setee el content al tag
-		//		cont.getTags().add(tag;)
+		cont.getTags().add(tag);
 
-		tag.setUserCreator(nUserTagger);
+		tag.setCreator(nUserTagger);
 		//TODO Averiguar si es necesario setear ademas el tag a los users, ya setee los users al tag
-		nUserTagger.getTagsMade().add(tag);
+		nUserTagger.getTagsCreated().add(tag);
+		
+		tag.set_posX_(posX);
+		tag.set_posY_(posY);
 	}
 
 	public void confirmUploadContent(List<Content> list) {
