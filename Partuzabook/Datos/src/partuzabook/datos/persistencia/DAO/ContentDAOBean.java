@@ -10,10 +10,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.Content;
+import partuzabook.datos.persistencia.beans.ContentPK;
 import partuzabook.datos.persistencia.beans.Event;
 
 @Stateless
-public class ContentDAOBean extends JpaDao<Integer, Content> implements ContentDAO {
+public class ContentDAOBean extends JpaDao<ContentPK, Content> implements ContentDAO {
 	
 	@PersistenceContext
 	EntityManager em;

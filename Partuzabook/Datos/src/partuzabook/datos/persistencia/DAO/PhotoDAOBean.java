@@ -9,11 +9,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import partuzabook.datos.persistencia.beans.ContentPK;
 import partuzabook.datos.persistencia.beans.Photo;
-import partuzabook.datos.persistencia.beans.UnmoderatedEvent;
 
 @Stateless
-public class PhotoDAOBean extends JpaDao<Integer, Photo> implements PhotoDAO {
+public class PhotoDAOBean extends JpaDao<ContentPK, Photo> implements PhotoDAO {
 	
 	@PersistenceContext
 	EntityManager em;

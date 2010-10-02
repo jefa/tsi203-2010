@@ -12,7 +12,7 @@ import javax.persistence.Query;
 import partuzabook.datos.persistencia.beans.Album;
 
 @Stateless
-public class AlbumDAOBean extends JpaDao<String, Album> implements AlbumDAO {
+public class AlbumDAOBean extends JpaDao<Integer, Album> implements AlbumDAO {
 	
 	@PersistenceContext
 	EntityManager em;
