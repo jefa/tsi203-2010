@@ -13,13 +13,5 @@ import javax.persistence.NamedQuery;
 public class ExternalContent extends Content {
 	private static final long serialVersionUID = 1L;
 
-	private String url;
-	
-	public String getUrl() {
-		return this.url;
-	}
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
 }
