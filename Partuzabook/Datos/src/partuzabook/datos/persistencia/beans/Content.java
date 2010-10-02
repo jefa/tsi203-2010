@@ -38,16 +38,8 @@ public abstract class Content implements Serializable {
 
 	private Boolean album;
 
-	private String description;
-
-	private String duration;
-
-	private String flags;
-
 	@Column(name="reg_date")
 	private Timestamp regDate;
-
-	private Integer size;
 
 	private String url;
 
@@ -92,30 +84,6 @@ public abstract class Content implements Serializable {
 		this.album = album;
 	}
 
-	public String getDescription() {
-		return this.description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getDuration() {
-		return this.duration;
-	}
-
-	public void setDuration(String duration) {
-		this.duration = duration;
-	}
-
-	public String getFlags() {
-		return this.flags;
-	}
-
-	public void setFlags(String flags) {
-		this.flags = flags;
-	}
-
 	public Timestamp getRegDate() {
 		return this.regDate;
 	}
@@ -124,13 +92,6 @@ public abstract class Content implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public Integer getSize() {
-		return this.size;
-	}
-
-	public void setSize(Integer size) {
-		this.size = size;
-	}
 
 	public String getUrl() {
 		return this.url;
