@@ -62,7 +62,6 @@ public class ServicesUser implements ServicesUserRemote {
     	Iterator<Participant> it = part.iterator();
     	while (it.hasNext()){
     		ret.add(it.next().getEvent());
-        	it.next();
     	}
     	return ret;
     }
