@@ -17,8 +17,10 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "flags", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
-	@NamedQuery(name = "Event.findAll", query = "SELECT o FROM Event o")
-	})
+	@NamedQuery(name = "Event.findAll", query = "SELECT o FROM Event o"),
+	@NamedQuery(name = "Event.findAllAfterDate",
+			query = "SELECT o FROM Event o WHERE o.date >= :after")	
+})
 public abstract class Event implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -29,7 +31,7 @@ public abstract class Event implements Serializable {
 
 	private String address;
 
-    @Temporal( TemporalType.DATE)
+	@Temporal( TemporalType.DATE)
 	private Date date;
 
 	private String description;
@@ -43,8 +45,12 @@ public abstract class Event implements Serializable {
 	@OneToOne(mappedBy="event")
 	private Album album;
 
+	//bi-directional many-to-one association to Content
+	@OneToMany(mappedBy="event")
+	private Set<Content> contents;
+
 	//bi-directional many-to-one association to User
-    @ManyToOne
+	@ManyToOne
 	@JoinColumn(name="creator")
 	private Admin admin;
 
@@ -52,8 +58,8 @@ public abstract class Event implements Serializable {
 	@OneToMany(mappedBy="event")
 	private Set<Participant> participants;
 
-    public Event() {
-    }
+	public Event() {
+	}
 
 	public String getEvtName() {
 		return this.evtName;
@@ -110,6 +116,14 @@ public abstract class Event implements Serializable {
 	public void setAlbum(Album album) {
 		this.album = album;
 	}
+
+	public Set<Content> getContents() {
+		return this.contents;
+	}
+
+	public void setContents(Set<Content> contents) {
+		this.contents = contents;
+	}
 	
 	public Admin getCreator() {
 		return this.admin;
@@ -118,7 +132,7 @@ public abstract class Event implements Serializable {
 	public void setCreator(Admin admin) {
 		this.admin = admin;
 	}
-	
+
 	public Set<Participant> getParticipants() {
 		return this.participants;
 	}
@@ -126,5 +140,5 @@ public abstract class Event implements Serializable {
 	public void setParticipants(Set<Participant> participants) {
 		this.participants = participants;
 	}
-	
+
 }

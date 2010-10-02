@@ -1,11 +1,11 @@
 package partuzabook.datatypes;
 
-public class Content {
+public class DatatypeContent {
 	private static final long serialVersionUID = 1L;
 	
 	public String url;
 	
-	public Content(String url) {
+	public DatatypeContent(String url) {
 		this.url = url;
 	}
 }

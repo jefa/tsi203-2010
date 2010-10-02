@@ -1,5 +1,6 @@
 package partuzabook.datos.persistencia.DAO;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -19,10 +20,18 @@ public class EventDAOBean extends JpaDao<String, Event> implements EventDAO {
 	@Resource
 	SessionContext sc;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Event> findAll() {
 		Query namedQuery = em.createNamedQuery("Event.findAll");
 		return (List<Event>)namedQuery.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Event> findAllAfterDate(Date after) {
+		return (List<Event>)em.createNamedQuery("Event.findAllAfterDate")
+			.setParameter("after", after).getResultList();
 	}
 
 

@@ -1,11 +1,11 @@
 package partuzabook.entityTranslators;
 
-import partuzabook.datatypes.EventSummary;
+import partuzabook.datatypes.DatatypeEventSummary;
 
 public class TranslatorEvent {
-	partuzabook.datatypes.EventSummary fromEntityEventSummary(
+	partuzabook.datatypes.DatatypeEventSummary fromEntityEventSummary(
 			partuzabook.datos.persistencia.beans.Event ent) {
-		partuzabook.datatypes.EventSummary dat = new EventSummary();
+		partuzabook.datatypes.DatatypeEventSummary dat = new DatatypeEventSummary();
 		dat.evtName = ent.getEvtName();
 		dat.date = ent.getDate();
 		dat.description = ent.getDescription();
