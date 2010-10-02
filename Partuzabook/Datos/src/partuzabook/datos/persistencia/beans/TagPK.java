@@ -1,20 +1,19 @@
 package partuzabook.datos.persistencia.beans;
 
-
 import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- * The primary key class for the ratings database table.
+ * The primary key class for the tags database table.
  * 
  */
 @Embeddable
-public class RatingPK implements Serializable {
+public class TagPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="usr_id")
-	private String usrId;
+	@Column(name="tag_id_auto")
+	private Integer tagIdAuto;
 
 	@Column(name="cnt_id")
 	private Integer cntId;
@@ -22,13 +21,13 @@ public class RatingPK implements Serializable {
 	@Column(name="evt_id")
 	private Integer evtId;
 
-    public RatingPK() {
+    public TagPK() {
     }
-	public String getUsrId() {
-		return this.usrId;
+	public Integer getTagIdAuto() {
+		return this.tagIdAuto;
 	}
-	public void setUsrId(String usrId) {
-		this.usrId = usrId;
+	public void setTagIdAuto(Integer tagIdAuto) {
+		this.tagIdAuto = tagIdAuto;
 	}
 	public Integer getCntId() {
 		return this.cntId;
@@ -47,12 +46,12 @@ public class RatingPK implements Serializable {
 		if (this == other) {
 			return true;
 		}
-		if (!(other instanceof RatingPK)) {
+		if (!(other instanceof TagPK)) {
 			return false;
 		}
-		RatingPK castOther = (RatingPK)other;
+		TagPK castOther = (TagPK)other;
 		return 
-			this.usrId.equals(castOther.usrId)
+			this.tagIdAuto.equals(castOther.tagIdAuto)
 			&& this.cntId.equals(castOther.cntId)
 			&& this.evtId.equals(castOther.evtId);
 
@@ -61,7 +60,7 @@ public class RatingPK implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
-		hash = hash * prime + this.usrId.hashCode();
+		hash = hash * prime + this.tagIdAuto.hashCode();
 		hash = hash * prime + this.cntId.hashCode();
 		hash = hash * prime + this.evtId.hashCode();
 		

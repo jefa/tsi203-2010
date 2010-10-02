@@ -1,3 +1,5 @@
+package partuzabook.datos.persistencia.beans;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 

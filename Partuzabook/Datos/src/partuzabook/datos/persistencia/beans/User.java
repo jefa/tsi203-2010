@@ -1,3 +1,4 @@
+package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -43,7 +44,7 @@ public class User implements Serializable {
 
 	//bi-directional many-to-one association to Content
 	@OneToMany(mappedBy="user")
-	private List<Content> contents;
+	private List<Content> contentCreated;
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="creator")
@@ -118,12 +119,12 @@ public class User implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public List<Content> getContents() {
-		return this.contents;
+	public List<Content> getContentCreated() {
+		return this.contentCreated;
 	}
 
-	public void setContents(List<Content> contents) {
-		this.contents = contents;
+	public void setContentCreated(List<Content> contentCreated) {
+		this.contentCreated = contentCreated;
 	}
 	
 	public List<Event> getEventsCreated() {
