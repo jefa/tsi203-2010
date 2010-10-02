@@ -12,6 +12,8 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name="tags")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "flags", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
 	@NamedQuery(name = "Tag.findAll", query = "SELECT o FROM Tag o")
 	})
@@ -35,18 +37,11 @@ public class Tag implements Serializable {
 	@Column(name="reg_date")
 	private Timestamp regDate;
 
-	@Column(name="usr_tag_custom")
-	private String usrTagCustom;
 
 	//bi-directional many-to-one association to User
     @ManyToOne
 	@JoinColumn(name="creator")
 	private NormalUser user1;
-
-	//bi-directional many-to-one association to User
-    @ManyToOne
-	@JoinColumn(name="usr_tag")
-	private NormalUser user2;
 
     public Tag() {
     }
@@ -91,28 +86,12 @@ public class Tag implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public String getUsrTagCustom() {
-		return this.usrTagCustom;
-	}
-
-	public void setUsrTagCustom(String usrTagCustom) {
-		this.usrTagCustom = usrTagCustom;
-	}
-
 	public User getUser1() {
 		return this.user1;
 	}
 
 	public void setUserCreator(NormalUser user1) {
 		this.user1 = user1;
-	}
-	
-	public User getUser2() {
-		return this.user2;
-	}
-
-	public void setUserTag(NormalUser user2) {
-		this.user2 = user2;
 	}
 	
 }
