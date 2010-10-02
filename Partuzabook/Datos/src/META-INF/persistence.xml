@@ -19,6 +19,7 @@
 	<class>partuzabook.datos.persistencia.beans.RatingPK</class>
 	<class>partuzabook.datos.persistencia.beans.SelfContent</class>
 	<class>partuzabook.datos.persistencia.beans.Tag</class>
+	<class>partuzabook.datos.persistencia.beans.TagPK</class>
 	<class>partuzabook.datos.persistencia.beans.TagForNotUser</class>
 	<class>partuzabook.datos.persistencia.beans.TagForUser</class>
 	<class>partuzabook.datos.persistencia.beans.User</class>
