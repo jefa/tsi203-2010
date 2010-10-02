@@ -15,11 +15,11 @@ public class TagForUser extends Tag{
 	@JoinColumn(name="usr_tag")
 	private NormalUser user_tagged;
 	
-	public User getUser2() {
+	public User getUserTagged() {
 		return this.user_tagged;
 	}
 
-	public void setUserTag(NormalUser user_tagged) {
+	public void setUserTagged(NormalUser user_tagged) {
 		this.user_tagged = user_tagged;
 	}
 

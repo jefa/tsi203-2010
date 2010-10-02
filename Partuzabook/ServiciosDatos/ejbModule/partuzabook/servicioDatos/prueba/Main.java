@@ -41,7 +41,7 @@ public class Main {
 		        	System.out.println("El tamaño de lo devuelto es: " + list.size());
 		        }
 		        // Invocar getEventsSummary
-		        Set<Event> setEv = usr.getEventSummary("vero");
+		        Set<Event> setEv = usr.getEventSummaryByUser("vero");
 		        if (setEv == null){
 		        	System.out.println("SET DE EVENTS ES NULL !!");
 		        } else {
@@ -67,7 +67,7 @@ public class Main {
 	        		System.out.println("El tamaño de la lista de events es: " + list.size());
 	        	}
 	        	// Invocar getUsersForTag
-	        	List<User> users = evt.getUsersForTag("Cumple Vero","Lala");
+	        	List<User> users = evt.getUsersForTag("Cumple Vero",0);
 	        	if (users == null){
 	        		System.out.println("getUsersForTag retorno lista vacia");
 	        	} else {
