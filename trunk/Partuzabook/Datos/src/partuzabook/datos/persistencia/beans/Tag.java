@@ -86,7 +86,7 @@ public class Tag implements Serializable {
 		this.regDate = regDate;
 	}
 
-	public User getUser1() {
+	public User getUserCreator() {
 		return this.user1;
 	}
 

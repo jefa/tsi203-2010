@@ -18,8 +18,11 @@ import java.util.Set;
 @DiscriminatorColumn(name = "flags", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
 	@NamedQuery(name = "Event.findAll", query = "SELECT o FROM Event o"),
+	@NamedQuery(name = "Event.findByName", query = "SELECT o FROM Event o WHERE o.evtName = :name"),
 	@NamedQuery(name = "Event.findAllAfterDate",
-			query = "SELECT o FROM Event o WHERE o.date >= :after")	
+			query = "SELECT o FROM Event o WHERE o.date >= :after"),
+	@NamedQuery(name = "Event.findContentById",
+			query = "SELECT c FROM Content c WHERE c.date >= :after")
 })
 public abstract class Event implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -31,7 +34,7 @@ public abstract class Event implements Serializable {
 	
 	@Column(name="evt_name")
 	private String evtName;
-	
+
 	private String address;
 
 	@Temporal( TemporalType.DATE)

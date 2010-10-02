@@ -20,6 +20,13 @@ public class EventDAOBean extends JpaDao<Integer, Event> implements EventDAO {
 	@Resource
 	SessionContext sc;
 	
+	
+	public Event findByName(String name) {
+		Query namedQuery = em.createNamedQuery("Event.findByName");
+		namedQuery.setParameter("name", name);
+		return (Event)namedQuery.getSingleResult();
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Event> findAll() {

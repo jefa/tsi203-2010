@@ -15,6 +15,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 
@@ -25,6 +27,10 @@ import javax.persistence.OneToMany;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "flags", discriminatorType = DiscriminatorType.STRING)
+@NamedQueries({
+	@NamedQuery(name = "Content.findByIDInEvent",
+			query = "SELECT c FROM Content c WHERE c.event = :event AND c.cntIdAuto = :content")
+})
 public abstract class Content implements Serializable {
 	private static final long serialVersionUID = 1L;
 

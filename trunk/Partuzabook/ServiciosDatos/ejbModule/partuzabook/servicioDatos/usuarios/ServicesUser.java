@@ -49,7 +49,7 @@ public class ServicesUser implements ServicesUserRemote {
 
     }
 
-    public Set<Event> getEventSummary(String user) {
+    public Set<Event> getEventSummaryByUser(String user) {
     	NormalUser nUser = (NormalUser) nUserDao.findByID(user);   	
     	if (nUser == null) {
     		return null;

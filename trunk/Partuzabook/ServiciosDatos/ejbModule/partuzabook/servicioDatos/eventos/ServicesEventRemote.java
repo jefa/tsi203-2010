@@ -16,9 +16,9 @@ public interface ServicesEventRemote {
 	
 	public boolean isUserRelatedToEvent(String eventID, String user);
 	
-	public List<User> getUsersForTag(String eventID, String contentID);	
+	public List<User> getUsersForTag(String eventID, int contentID);	
 	
-	public void tagUserInContent(String eventID, String contentID, String user, int posX, int posY);
+	public void tagUserInContent(String eventID, int contentID, String userTagger, String userToTag, int posX, int posY) throws Exception;
 
 	public void confirmUploadContent(List<Content> list); 
 	
