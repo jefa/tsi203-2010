@@ -73,12 +73,14 @@ public class Main {
 	        		System.out.println("El tamaño de la lista de users para taggear es: " + users.size());
 	        	}
 	        	// Invocar tagUserInContent
-//	        	tagUserInContent("Recib, int contentID, String userTagger, String userToTag, 4, 6)
+	        	evt.tagUserInContent("Cumple Vero", 0, "vero", "gonzalo", 1, 1);	        		        	
+	        	System.out.println("termine");
+	        	usr.getUpdateNotifications("gonzalo");
 	        } else {
 	        	System.out.println("ServicesEventRemote was not found");    	
 	        }
 
-	    } catch (NamingException e) {
+	    } catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
