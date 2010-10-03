@@ -19,7 +19,9 @@ import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
+import partuzabook.entityTranslators.TranslatorUser;
 import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
+import partuzabook.servicioDatos.exception.UserNotFoundException;
 
 /**
  * Session Bean implementation class Usuario
@@ -62,8 +64,8 @@ public class ServicesUser implements ServicesUserRemote {
 //    	notifDao = null;
     }
 
-	public DatatypeUser createUser(String username, String password, String mail) {
-		if (existsUser(username)) {
+	public DatatypeUser createNormalUser(String username, String password, String mail) {
+		if (existsNormalUser(username)) {
 			throw new UserAlreadyExistsException();
 		}
 		NormalUser newUser = new NormalUser();
@@ -74,12 +76,19 @@ public class ServicesUser implements ServicesUserRemote {
 		
 		nUserDao.persist(newUser);
 		
-		//TODO Retornar datatype con el user
-		return null;
+		return (DatatypeUser)new TranslatorUser().translate(newUser);
 	}
 	
-	public boolean existsUser(String username) {
+	public boolean existsNormalUser(String username) {
 		return nUserDao.findByID(username) !=null;
+	}
+	
+	private NormalUser getNormalUser(String username) {
+		NormalUser user = nUserDao.findByID(username);
+		if (user == null) {
+			throw new UserNotFoundException();
+		}
+		return user;
 	}
 
     public List<Event> getEventSummaryByUser(String user) {
@@ -114,9 +123,8 @@ public class ServicesUser implements ServicesUserRemote {
     	return dataList;
     }
 
-	public String getUserPassword(String username) {
-		// TODO Auto-generated method stub
-		return "";
+	public String getNormalUserPassword(String username) {
+		return getNormalUser(username).getPassword();
 	}
 
 }

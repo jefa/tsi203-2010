@@ -50,8 +50,8 @@ public class ServicesMultimedia implements ServicesMultimediaRemote {
     }
 
 	public boolean uploadContent(String eventID,
-			List<DatatypeUploadedContent> pics) {
-		//servEvent.getEvent(eventID);
+			List<DatatypeUploadedContent> contents) {
+		//servEvent.getEvent(eventID)
 		
 		return false;
 	}

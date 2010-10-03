@@ -47,8 +47,8 @@ public class ServicesAutenticacion implements ServicesAutenticacionRemote {
     }
 
     public boolean verifyUserAndPassword(String username, String password) throws LoginException {
-    	if (servUser.existsUser(username)) {
-    		if (servUser.getUserPassword(username).equals(password)) {
+    	if (servUser.existsNormalUser(username)) {
+    		if (servUser.getNormalUserPassword(username).equals(password)) {
     			throw new LoginException("Incorrect password.");
     		}
     		else {

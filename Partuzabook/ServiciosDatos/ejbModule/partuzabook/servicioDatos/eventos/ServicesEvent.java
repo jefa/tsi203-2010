@@ -144,7 +144,7 @@ public class ServicesEvent implements ServicesEventRemote {
 
 	
 	public DatatypeContent getGalleryMultimediaAtPos(String eventID, int pos) {
-		//TODO
+		//TODO getGalleryMultimediaAtPos
 		return null;
 	}
 	
