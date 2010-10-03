@@ -5,13 +5,11 @@ import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.beans.Event;
-import partuzabook.datos.persistencia.beans.NormalUser;
-import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
@@ -35,7 +33,7 @@ public class Main {
 	        ServicesUserRemote usr = (ServicesUserRemote) ctx.lookup("ServicesUser/remote");
 	        if (usr != null) {
 		        // Invocar getUpdateNotifications
-	        	List<Notification> list = usr.getUpdateNotifications("vero");
+	        	List<DatatypeNotification> list = usr.getUpdateNotifications("vero");
 		        if (list == null){
 		        	System.out.println("LIST DE NOTIF ES NULL !!");
 		        } else {

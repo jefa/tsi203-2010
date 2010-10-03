@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.ejb.PostActivate;
 import javax.ejb.PrePassivate;
@@ -13,10 +12,10 @@ import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
-import partuzabook.datos.persistencia.DAO.Dao;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
-import partuzabook.datos.persistencia.DAO.NotificationDAO;
+//import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
@@ -29,7 +28,7 @@ import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
 public class ServicesUser implements ServicesUserRemote {
 
 	private NormalUserDAO nUserDao;
-	private NotificationDAO notifDao;
+//	private NotificationDAO notifDao;
 		
     /**
      * Default constructor. 
@@ -48,7 +47,7 @@ public class ServicesUser implements ServicesUserRemote {
 	        Context ctx = new InitialContext(properties);
 	        System.out.println("Got context!!");
 	        nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");  
-	        notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
+//	        notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
 	        System.out.println("Lookup worked!"); 
 		}
         catch (Exception e) {
@@ -60,7 +59,7 @@ public class ServicesUser implements ServicesUserRemote {
     @PrePassivate
     public void prePassivate() {
     	nUserDao = null;
-    	notifDao = null;
+//    	notifDao = null;
     }
 
 	public DatatypeUser createUser(String username, String password, String mail) {
@@ -75,7 +74,7 @@ public class ServicesUser implements ServicesUserRemote {
 		
 		nUserDao.persist(newUser);
 		
-		
+		//TODO Retornar datatype con el user
 		return null;
 	}
 	
@@ -95,19 +94,24 @@ public class ServicesUser implements ServicesUserRemote {
     	return ret;
     }
 
-    public List<Notification> getUpdateNotifications(String user) {
+    public List<DatatypeNotification> getUpdateNotifications(String user) {
     	NormalUser nUser = (NormalUser) nUserDao.findByID(user);  
-    	Set<Notification> notif = (Set<Notification>) nUser.getNotificationsReceived();
-    	if (notif.isEmpty()) {
-    		return null;
-    	} else {
-	    	List<Notification> ntf = new ArrayList<Notification>();
-	    	Iterator<Notification> it = notif.iterator();
-	    	while (it.hasNext()) {
-	    		ntf.add((Notification)it.next());    		
-	    	}
-	    	return ntf;
-	    }
+    	List<Notification> notif = nUser.getNotificationsReceived();
+    	List<DatatypeNotification> dataList = new ArrayList<DatatypeNotification>();
+    	Iterator<Notification> it = notif.iterator();
+    	while (it.hasNext()) {
+    		Notification ntf = it.next();
+        	DatatypeNotification dataNtf = new DatatypeNotification();
+        	dataNtf.notDate = ntf.getNotDate();
+        	dataNtf.read = ntf.getRead();
+        	dataNtf.reference = ntf.getReference();
+        	dataNtf.text = ntf.getText();
+        	dataNtf.type = ntf.getType();
+        	dataNtf.userFrom = ntf.getUserFrom().getUsername();
+        	dataNtf.userTo = ntf.getUserTo().getUsername();
+        	dataList.add(dataNtf);
+    	}
+    	return dataList;
     }
 
 	public String getUserPassword(String username) {

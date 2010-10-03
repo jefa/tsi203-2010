@@ -15,6 +15,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.ContentDAO;
@@ -30,6 +31,7 @@ import partuzabook.datos.persistencia.beans.TagForUser;
 import partuzabook.datos.persistencia.beans.User;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
+import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.utils.TranslatorCollection;
 
 /**
@@ -96,7 +98,11 @@ public class ServicesEvent implements ServicesEventRemote {
 		}
     }
     
-    // Returns a list of Events of interest (Eg: Events from this week)
+    /**
+     * Returns a list of Events of interest (Eg: Events from this week)
+     * @param maxEvents - Max number of events to return 
+     * @param maxContentPerEvent - Max number of content to return for each event
+     */ 
 	public List<DatatypeEventSummary> getSummaryEvents(int maxEvents,
 			int maxContentPerEvent) {
 		// Calculate one week before date
@@ -119,19 +125,35 @@ public class ServicesEvent implements ServicesEventRemote {
 		return listDatatypes;
 	}
 		
-	// Returns true if NormalUser is related to the Event
-	public boolean isUserRelatedToEvent(String eventID, String user){
-		//TODO: return evDao.isUserParticipant(eventID, user);
-		return true;
+	/**
+	 * Returns true if the User exists, and is related to the Event
+	 * @param eventName - Name of the event
+	 * @param user - Identifier of the user  
+	 */
+	public boolean isUserRelatedToEvent(String eventName, String user){
+		Event ev = evDao.findByName(eventName);
+		if (ev == null) {
+			throw new EventNotFoundException();
+		}
+		NormalUser nUser = nUserDao.findByID(user);
+		if (nUser == null) {
+			throw new UserNotFoundException();
+		}
+		return nUser.getMyEvents().contains(ev);
   	}
 
 	
-	public Content getGalleryMultimediaAtPos(String eventID, int pos) {
+	public DatatypeContent getGalleryMultimediaAtPos(String eventID, int pos) {
 		//TODO
 		return null;
 	}
 	
-	// Returns a list of candidate Users for Tagging -who have not already been tagged in the content-   
+	//    
+	/**
+	 * Returns a list of candidate Users for Tagging -participants of the event, who have not already been tagged in the content-
+	 * @param eventID - Identifier of the event
+	 * @param contentID - Identifier of the content 
+	 */
 	public List<DatatypeUser> getUsersForTag(String eventID, int contentID){
 		// Verify existence of Event
 		Event event = (Event) evDao.findByName(eventID);
@@ -170,7 +192,15 @@ public class ServicesEvent implements ServicesEventRemote {
     	return TranslatorCollection.translateUser(allUsersInEvent);
 	}
 	
-	// Create a new instance of Tag associated to the content, user that was tagged, and the tagger 
+	/**
+	 * Create a new instance of Tag associated to the content, user that was tagged, and the tagger
+	 * @param eventID - Identifier of the event
+	 * @param contentID - Identifier of the content within the event
+	 * @param userTagger - Identifier of the user who is tagging
+	 * @param userToTag - User tagged -may be a registered user or not- 
+	 * @param posX - Position of the tag in the X axis within the content
+	 * @param posY - Position of the tag in the Y axis within the content 
+	 */
 	public void tagUserInContent(String eventID, int contentID, String userTagger, String userToTag, int posX, int posY) throws Exception {
 		// Verify existence of Event
 		Event event = (Event) evDao.findByName(eventID);
@@ -187,7 +217,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		initNormalUserDAO();
 		User tagger = (User) nUserDao.findByID(userTagger);
 		if (tagger == null || (!(tagger instanceof NormalUser))) {
-			new Exception("Tagging failed - User Tagger was not found");
+			throw new UserNotFoundException();
 		}
 		NormalUser nUserTagger = (NormalUser) tagger;
 		// Check if user to tag is registered 
@@ -230,19 +260,10 @@ public class ServicesEvent implements ServicesEventRemote {
 		ntfToCreator.setText("La etiqueta ha sido creada de forma exitosa");
 		ntfToCreator.setUserTo(nUserTagger);
 		
-		
 	}
 
 	public void confirmUploadContent(List<Content> list) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
-
-	public void tagUserInContent(String eventID, String contentID, String user,
-			int posX, int posY) {
-		// TODO Auto-generated method stub
-		
-	}
-
     
 }

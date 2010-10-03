@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 
+import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.Notification;
@@ -15,6 +16,6 @@ public interface ServicesUserRemote {
 	public boolean existsUser(String username);
 	
     public List<Event> getEventSummaryByUser(String user);
-    public List<Notification> getUpdateNotifications(String user);
+    public List<DatatypeNotification> getUpdateNotifications(String user);
 
 }
