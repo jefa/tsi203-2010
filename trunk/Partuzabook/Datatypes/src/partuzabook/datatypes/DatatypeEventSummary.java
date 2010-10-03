@@ -1,6 +1,5 @@
 package partuzabook.datatypes;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +12,7 @@ public class DatatypeEventSummary {
 	public List<DatatypeContent> contents;
 
     public DatatypeEventSummary() {
-    	this.contents = new ArrayList<DatatypeContent>();
+    	
     }
 
 }

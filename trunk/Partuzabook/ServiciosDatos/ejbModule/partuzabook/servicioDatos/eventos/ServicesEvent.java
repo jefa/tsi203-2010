@@ -2,15 +2,21 @@ package partuzabook.servicioDatos.eventos;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import javax.ejb.PostActivate;
+import javax.ejb.PrePassivate;
 import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.ContentDAO;
 import partuzabook.datos.persistencia.DAO.EventDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
@@ -22,6 +28,9 @@ import partuzabook.datos.persistencia.beans.Tag;
 import partuzabook.datos.persistencia.beans.TagForNotUser;
 import partuzabook.datos.persistencia.beans.TagForUser;
 import partuzabook.datos.persistencia.beans.User;
+import partuzabook.servicioDatos.exception.ContentNotFoundException;
+import partuzabook.servicioDatos.exception.EventNotFoundException;
+import partuzabook.utils.TranslatorCollection;
 
 /**
  * Session Bean implementation class Event
@@ -30,78 +39,112 @@ import partuzabook.datos.persistencia.beans.User;
 public class ServicesEvent implements ServicesEventRemote {
 
 	private EventDAO evDao;
-	private NormalUserDAO nUserDao;
 	private ContentDAO contDao;
+	private NormalUserDAO nUserDao;
 	
     public ServicesEvent() {
+    	
+    }
+    
+    @PostActivate
+    public void postActivate() {
         try {
-			Properties properties = new Properties();
-	        properties.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
-	        properties.put("java.naming.factory.url.pkgs", "org.jboss.naming rg.jnp.interfaces");
-	        properties.put("java.naming.provider.url", "jnp://localhost:1099");
-	        Context ctx = new InitialContext(properties);
-	        System.out.println("Got context");
+			Context ctx = getContext();
 	        evDao = (EventDAO) ctx.lookup("EventDAOBean/local");  
-	        nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
-	        contDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
-	        System.out.println("Lookup worked!"); 
-		} catch (NamingException e) {
+		}
+        catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
 
-    // Returns a list of Events of interest (Eg: Events from this week)
-	public List<Event> getSummaryEvents() {
-		List<Event> list =  evDao.findAll();
-		//TODO Aca debemos decidir como filtramos los eventos, si es por fecha o como
-		java.util.Date d = new java.util.Date();
-		Date today = new Date(d.getTime());
-		Iterator<Event> it = list.iterator();
-		while (it.hasNext()){
-			Event ev = (Event) it.next();
-			Date evDate = (Date) ev.getDate();
-			int thisMonth = today.getMonth();
-			int evMonth = evDate.getMonth();
-			// Por ahora me quedo con los eventos del mes actual
-			if (thisMonth != evMonth) {
-				list.remove(ev);
-			}
+	private Context getContext() throws NamingException {
+		Properties properties = new Properties();
+		properties.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
+		properties.put("java.naming.factory.url.pkgs", "org.jboss.naming rg.jnp.interfaces");
+		properties.put("java.naming.provider.url", "jnp://localhost:1099");
+		Context ctx = new InitialContext(properties);
+		return ctx;
+	}
+
+    @PrePassivate
+    public void prePassivate() {
+    	evDao = null;
+    	contDao = null;
+    	nUserDao = null;
+    }
+    
+    private void initContentDAO() {
+    	try {
+    		Context ctx = getContext();
+    		contDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
+    	}
+    	catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return list;		
+    }
+    
+    private void initNormalUserDAO() {
+    	try {
+    		Context ctx = getContext();
+    		nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
+    	}
+    	catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    // Returns a list of Events of interest (Eg: Events from this week)
+	public List<DatatypeEventSummary> getSummaryEvents(int maxEvents,
+			int maxContentPerEvent) {
+		// Calculate one week before date
+		Calendar after = new GregorianCalendar();
+		after.set(Calendar.DAY_OF_YEAR, after.get(Calendar.DAY_OF_YEAR) - 7);
+		Date afterDate = new Date(after.getTimeInMillis());
+		
+		// Take the first maxEvents and translate to the datatype
+		List<Event> list =  evDao.findAllAfterDate(afterDate).subList(0, maxEvents);
+		List<DatatypeEventSummary> listDatatypes = TranslatorCollection.translateEventSummary(list);
+		
+		// add to the datatype the contents and translate them
+		Iterator<Event> itEvent = list.iterator();
+		Iterator<DatatypeEventSummary> itDatatype = listDatatypes.iterator();
+		while (itEvent.hasNext()){
+			Event ev = (Event) itEvent.next();
+			List<Content> contents = ev.getContents().subList(0, maxContentPerEvent);
+			itDatatype.next().contents = TranslatorCollection.translateContent(contents);
+		}
+		return listDatatypes;
 	}
 		
 	// Returns true if NormalUser is related to the Event
 	public boolean isUserRelatedToEvent(String eventID, String user){
-		NormalUser nUser = (NormalUser) nUserDao.findByID(user);
-		Event event = (Event) evDao.findByName(eventID);
-		if (nUser == null  || event == null) {
-			return false;
-		}
-		List<Event> ret = nUser.getMyEvents();
-    	if (ret.isEmpty()){
-    		return false;
-    	} 
-    	return ret.contains(event);  	
+		//TODO: return evDao.isUserParticipant(eventID, user);
+		return true;
   	}
 
 	
 	public Content getGalleryMultimediaAtPos(String eventID, int pos) {
+		//TODO
 		return null;
 	}
 	
 	// Returns a list of candidate Users for Tagging -who have not already been tagged in the content-   
-	public List<NormalUser> getUsersForTag(String eventID, int contentID){
+	public List<DatatypeUser> getUsersForTag(String eventID, int contentID){
 		// Verify existence of Event
 		Event event = (Event) evDao.findByName(eventID);
 		if (event == null) {
-			return null;
+			throw new EventNotFoundException();
 		}
 		// Verify existence of content
+		initContentDAO();
 		Content cont = (Content) contDao.findByIDInEvent(event, contentID);
 		if (cont == null) {
-			return null;
+			throw new ContentNotFoundException();
 		}
+		
 		// Obtain set of users already tagged in the content
 		List<User> usersAlreadyTagged = new ArrayList<User>();		
 		List<Tag> tags = cont.getTags();
@@ -124,7 +167,7 @@ public class ServicesEvent implements ServicesEventRemote {
     	// Filter users that have already been tagged in this content    	
     	allUsersInEvent.removeAll(usersAlreadyTagged);
     	
-    	return allUsersInEvent;
+    	return TranslatorCollection.translateUser(allUsersInEvent);
 	}
 	
 	// Create a new instance of Tag associated to the content, user that was tagged, and the tagger 
@@ -132,14 +175,16 @@ public class ServicesEvent implements ServicesEventRemote {
 		// Verify existence of Event
 		Event event = (Event) evDao.findByName(eventID);
 		if (event == null) {
-			new Exception("Tagging failed - Event was not found");
+			throw new EventNotFoundException();
 		}
 		// Verify existence of content
+		initContentDAO();
 		Content cont = (Content) contDao.findByIDInEvent(event, contentID);
 		if (cont == null) {
-			new Exception("Tagging failed - Content was not found");
+			throw new ContentNotFoundException();
 		}
 		// Verify existence of user who is tagging and user who will be tagged
+		initNormalUserDAO();
 		User tagger = (User) nUserDao.findByID(userTagger);
 		if (tagger == null || (!(tagger instanceof NormalUser))) {
 			new Exception("Tagging failed - User Tagger was not found");
@@ -189,6 +234,12 @@ public class ServicesEvent implements ServicesEventRemote {
 	}
 
 	public void confirmUploadContent(List<Content> list) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void tagUserInContent(String eventID, String contentID, String user,
+			int posX, int posY) {
 		// TODO Auto-generated method stub
 		
 	}
