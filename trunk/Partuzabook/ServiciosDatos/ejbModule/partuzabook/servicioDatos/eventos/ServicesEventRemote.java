@@ -3,6 +3,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
+import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.beans.Content;
@@ -13,7 +14,7 @@ public interface ServicesEventRemote {
 	public List<DatatypeEventSummary> getSummaryEvents(int maxEvents,
 			int maxContentsPerEvent);
 	
-	public Content getGalleryMultimediaAtPos(String eventName, int pos);
+	public DatatypeContent getGalleryMultimediaAtPos(String eventName, int pos);
 	
 	public boolean isUserRelatedToEvent(String eventName, String user);
 	
