@@ -9,5 +9,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Datos"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Datatypes"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/EntityTranslators"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

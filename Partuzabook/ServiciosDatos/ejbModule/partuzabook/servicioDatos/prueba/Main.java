@@ -7,6 +7,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
@@ -59,14 +61,14 @@ public class Main {
 	        		System.out.println("No estan asociados 'vero' y 'Cumple Vero'");
 	        	}
 	        	// Invocar getSummaryEvents
-	        	List<Event> list = evt.getSummaryEvents();
+	        	List<DatatypeEventSummary> list = evt.getSummaryEvents(10, 4);
 	        	if (list == null){
 	        		System.out.println("getSummaryEvents retorno lista vacia");
 	        	} else {
 	        		System.out.println("El tamaño de la lista de events es: " + list.size());
 	        	}
 	        	// Invocar getUsersForTag
-	        	List<NormalUser> users = evt.getUsersForTag("Cumple Vero",0);
+	        	List<DatatypeUser> users = evt.getUsersForTag("Cumple Vero",0);
 	        	if (users == null){
 	        		System.out.println("getUsersForTag retorno lista vacia");
 	        	} else {

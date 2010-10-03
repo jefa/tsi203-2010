@@ -5,7 +5,7 @@ public class DatatypeContent {
 	
 	public String url;
 	
-	public DatatypeContent(String url) {
-		this.url = url;
+	public DatatypeContent() {
+		
 	}
 }
