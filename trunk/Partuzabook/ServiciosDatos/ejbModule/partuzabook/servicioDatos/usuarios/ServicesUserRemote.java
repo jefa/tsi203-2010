@@ -12,10 +12,11 @@ import partuzabook.datos.persistencia.beans.Notification;
 @Remote
 public interface ServicesUserRemote {
 
-	public DatatypeUser createUser(String username, String password, String mail);
-	public boolean existsUser(String username);
+	public DatatypeUser createNormalUser(String username, String password, String mail);
+	public boolean existsNormalUser(String username);
+	public String getNormalUserPassword(String username);
 	
     public List<Event> getEventSummaryByUser(String user);
     public List<DatatypeNotification> getUpdateNotifications(String user);
-
+    
 }
