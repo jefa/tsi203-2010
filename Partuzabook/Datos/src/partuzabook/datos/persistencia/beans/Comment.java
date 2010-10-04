@@ -29,14 +29,14 @@ public class Comment implements Serializable {
 	//bi-directional many-to-one association to Content
     @ManyToOne
 	@JoinColumns({
-		@JoinColumn(name="cnt_id", referencedColumnName="cnt_id_auto"),
-		@JoinColumn(name="evt_id", referencedColumnName="evt_id")
+		@JoinColumn(name="cnt_id", referencedColumnName="cnt_id_auto", insertable=false, updatable=false),
+		@JoinColumn(name="evt_id", referencedColumnName="evt_id", insertable=false, updatable=false)
 		})
 	private Content content;
 
 	//bi-directional many-to-one association to User
     @ManyToOne
-	@JoinColumn(name="usr_id")
+	@JoinColumn(name="usr_id", insertable=false, updatable=false)
 	private NormalUser user;
 
     public Comment() {

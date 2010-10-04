@@ -28,7 +28,7 @@ import javax.persistence.OneToMany;
 @DiscriminatorColumn(name = "flags", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
 	@NamedQuery(name = "Content.findByIDInEvent",
-			query = "SELECT c FROM Content c WHERE c.event = :event AND c.cntIdAuto = :content")
+			query = "SELECT c FROM Content c WHERE c.event = :event AND c.id = :content")
 })
 public abstract class Content implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -49,7 +49,7 @@ public abstract class Content implements Serializable {
 
 	//bi-directional many-to-one association to Event
     @ManyToOne
-	@JoinColumn(name="evt_id")
+	@JoinColumn(name="evt_id", insertable=false, updatable=false)
 	private Event event;
 
 	//bi-directional many-to-one association to User

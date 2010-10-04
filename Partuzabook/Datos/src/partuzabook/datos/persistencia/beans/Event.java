@@ -44,7 +44,7 @@ import javax.persistence.TemporalType;
 	@NamedQuery(name = "Event.findAllAfterDate",
 			query = "SELECT o FROM Event o WHERE o.date >= :after"),
 	@NamedQuery(name = "Event.findContentById",
-			query = "SELECT c FROM Content c WHERE c.date >= :after")
+			query = "SELECT c FROM Content c WHERE c.id = :content")
 })
 public class Event implements Serializable {
 	private static final long serialVersionUID = 1L;
