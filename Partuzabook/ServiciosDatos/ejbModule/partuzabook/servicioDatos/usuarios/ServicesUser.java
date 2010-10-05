@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-import javax.ejb.PostActivate;
-import javax.ejb.PrePassivate;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -39,8 +39,8 @@ public class ServicesUser implements ServicesUserRemote {
 
     }
     
-    @PostActivate
-    public void postActivate() {
+    @PostConstruct
+    public void postConstruct() {
         try {
         	Properties properties = new Properties();
 	        properties.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
@@ -58,8 +58,8 @@ public class ServicesUser implements ServicesUserRemote {
 		}
     }
     
-    @PrePassivate
-    public void prePassivate() {
+    @PreDestroy
+    public void preDestroy() {
     	nUserDao = null;
 //    	notifDao = null;
     }

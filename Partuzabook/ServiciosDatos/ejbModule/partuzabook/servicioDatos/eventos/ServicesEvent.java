@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.PostActivate;
 import javax.ejb.PrePassivate;
 import javax.ejb.Stateless;
@@ -48,18 +50,6 @@ public class ServicesEvent implements ServicesEventRemote {
     	
     }
     
-    @PostActivate
-    public void postActivate() {
-        try {
-			Context ctx = getContext();
-	        evDao = (EventDAO) ctx.lookup("EventDAOBean/local");  
-		}
-        catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
-
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
 		properties.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
@@ -69,33 +59,25 @@ public class ServicesEvent implements ServicesEventRemote {
 		return ctx;
 	}
 
-    @PrePassivate
-    public void prePassivate() {
+	@PostConstruct
+    public void postConstruct() {
+        try {
+			Context ctx = getContext();
+	        evDao = (EventDAO) ctx.lookup("EventDAOBean/local");  
+    		contDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
+    		nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
+		}
+        catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
+    @PreDestroy
+    public void preDestroy() {
     	evDao = null;
     	contDao = null;
     	nUserDao = null;
-    }
-    
-    private void initContentDAO() {
-    	try {
-    		Context ctx = getContext();
-    		contDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
-    	}
-    	catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
-    
-    private void initNormalUserDAO() {
-    	try {
-    		Context ctx = getContext();
-    		nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
-    	}
-    	catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
     
     /**
@@ -111,7 +93,10 @@ public class ServicesEvent implements ServicesEventRemote {
 		Date afterDate = new Date(after.getTimeInMillis());
 		
 		// Take the first maxEvents and translate to the datatype
-		List<Event> list =  evDao.findAllAfterDate(afterDate).subList(0, maxEvents);
+		List<Event> list =  evDao.findAllAfterDate(afterDate);
+		if (maxEvents < list.size()) {
+			list = list.subList(0, maxEvents);
+		}
 		List<DatatypeEventSummary> listDatatypes = TranslatorCollection.translateEventSummary(list);
 		
 		// add to the datatype the contents and translate them
@@ -119,7 +104,10 @@ public class ServicesEvent implements ServicesEventRemote {
 		Iterator<DatatypeEventSummary> itDatatype = listDatatypes.iterator();
 		while (itEvent.hasNext()){
 			Event ev = (Event) itEvent.next();
-			List<Content> contents = ev.getContents().subList(0, maxContentPerEvent);
+			List<Content> contents = ev.getContents();
+			if (maxContentPerEvent < list.size()) {
+				list = list.subList(0, maxContentPerEvent);
+			}
 			itDatatype.next().contents = TranslatorCollection.translateContent(contents);
 		}
 		return listDatatypes;
@@ -161,7 +149,6 @@ public class ServicesEvent implements ServicesEventRemote {
 			throw new EventNotFoundException();
 		}
 		// Verify existence of content
-		initContentDAO();
 		Content cont = (Content) contDao.findByIDInEvent(event, contentID);
 		if (cont == null) {
 			throw new ContentNotFoundException();
@@ -208,13 +195,11 @@ public class ServicesEvent implements ServicesEventRemote {
 			throw new EventNotFoundException();
 		}
 		// Verify existence of content
-		initContentDAO();
 		Content cont = (Content) contDao.findByIDInEvent(event, contentID);
 		if (cont == null) {
 			throw new ContentNotFoundException();
 		}
 		// Verify existence of user who is tagging and user who will be tagged
-		initNormalUserDAO();
 		User tagger = (User) nUserDao.findByID(userTagger);
 		if (tagger == null || (!(tagger instanceof NormalUser))) {
 			throw new UserNotFoundException();

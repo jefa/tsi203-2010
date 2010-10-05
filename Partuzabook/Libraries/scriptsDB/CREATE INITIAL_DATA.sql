@@ -29,7 +29,7 @@ INSERT INTO events(
             evt_name, date, duration, description, address, creator, flags, 
             reg_date, evt_id_auto)
     VALUES ('Vero se recibe', '2010-11-15', '200', 'Vengan todos', 'Mi dire', 'admin',
- 	    	'U','2010/10/02 10:30'::timestamp, '0');
+ 	    	'E','2010/10/02 10:30'::timestamp, '0');
 
 INSERT INTO events(
             evt_name, date, duration, description, address, creator, flags, 
@@ -41,7 +41,7 @@ INSERT INTO events(
             evt_name, date, duration, description, address, creator, flags, 
             reg_date, evt_id_auto)
     VALUES ('SUMO.UY', '2010-09-25', '100', 'Vengan todos', 'Aulario', 'admin',
- 	    	'U','2010/10/02 17:30'::timestamp, '2');
+ 	    	'E','2010/10/02 17:30'::timestamp, '2');
 
 INSERT INTO events(
             evt_name, date, duration, description, address, creator, flags, 
