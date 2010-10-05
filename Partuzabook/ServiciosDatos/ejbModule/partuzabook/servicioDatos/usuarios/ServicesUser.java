@@ -1,8 +1,6 @@
 package partuzabook.servicioDatos.usuarios;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -12,16 +10,17 @@ import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
-//import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.entityTranslators.TranslatorUser;
 import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
+import partuzabook.utils.TranslatorCollection;
 
 /**
  * Session Bean implementation class Usuario
@@ -29,14 +28,14 @@ import partuzabook.servicioDatos.exception.UserNotFoundException;
 @Stateless
 public class ServicesUser implements ServicesUserRemote {
 
-	private NormalUserDAO nUserDao;
+	private NormalUserDAO normalUserDAO;
 //	private NotificationDAO notifDao;
 		
     /**
      * Default constructor. 
      */
     public ServicesUser() {
-
+    	
     }
     
     @PostConstruct
@@ -48,7 +47,7 @@ public class ServicesUser implements ServicesUserRemote {
 	        properties.put("java.naming.provider.url", "jnp://localhost:1099");
 	        Context ctx = new InitialContext(properties);
 	        System.out.println("Got context!!");
-	        nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");  
+	        normalUserDAO = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");  
 //	        notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
 	        System.out.println("Lookup worked!"); 
 		}
@@ -60,7 +59,7 @@ public class ServicesUser implements ServicesUserRemote {
     
     @PreDestroy
     public void preDestroy() {
-    	nUserDao = null;
+    	normalUserDAO = null;
 //    	notifDao = null;
     }
 
@@ -74,53 +73,39 @@ public class ServicesUser implements ServicesUserRemote {
 		//TODO newUser.setMail(mail);
 		newUser.setRegDate(new Timestamp(new java.util.Date().getTime()));
 		
-		nUserDao.persist(newUser);
+		normalUserDAO.persist(newUser);
 		
 		return (DatatypeUser)new TranslatorUser().translate(newUser);
 	}
 	
 	public boolean existsNormalUser(String username) {
-		return nUserDao.findByID(username) !=null;
+		return normalUserDAO.findByID(username) !=null;
 	}
 	
-	private NormalUser getNormalUser(String username) {
-		NormalUser user = nUserDao.findByID(username);
+	/**
+	 * 
+	 * @param username
+	 * @return
+	 * @throws UserNotFoundException
+	 */
+	private NormalUser getNormalUser(String username) throws UserNotFoundException {
+		NormalUser user = normalUserDAO.findByID(username);
 		if (user == null) {
 			throw new UserNotFoundException();
 		}
 		return user;
 	}
 
-    public List<Event> getEventSummaryByUser(String user) {
-    	NormalUser nUser = (NormalUser) nUserDao.findByID(user);   	
-    	if (nUser == null) {
-    		return null;
-    	}
+    public List<DatatypeEventSummary> getEventSummaryByUser(String user) {
+    	NormalUser nUser = getNormalUser(user);   	
     	List<Event> ret = nUser.getMyEvents();
-    	if (ret.isEmpty()){
-    		return null;
-    	} 
-    	return ret;
+    	return TranslatorCollection.translateEventSummary(ret);
     }
 
     public List<DatatypeNotification> getUpdateNotifications(String user) {
-    	NormalUser nUser = (NormalUser) nUserDao.findByID(user);  
+    	NormalUser nUser = getNormalUser(user);  
     	List<Notification> notif = nUser.getNotificationsReceived();
-    	List<DatatypeNotification> dataList = new ArrayList<DatatypeNotification>();
-    	Iterator<Notification> it = notif.iterator();
-    	while (it.hasNext()) {
-    		Notification ntf = it.next();
-        	DatatypeNotification dataNtf = new DatatypeNotification();
-        	dataNtf.notDate = ntf.getNotDate();
-        	dataNtf.read = ntf.getRead();
-        	dataNtf.reference = ntf.getReference();
-        	dataNtf.text = ntf.getText();
-        	dataNtf.type = ntf.getType();
-        	dataNtf.userFrom = ntf.getUserFrom().getUsername();
-        	dataNtf.userTo = ntf.getUserTo().getUsername();
-        	dataList.add(dataNtf);
-    	}
-    	return dataList;
+    	return TranslatorCollection.translateNotification(notif);
     }
 
 	public String getNormalUserPassword(String username) {

@@ -9,7 +9,6 @@ import javax.naming.InitialContext;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
-import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
@@ -40,7 +39,7 @@ public class Main {
 		        	System.out.println("El tamaño de lo devuelto es: " + list.size());
 		        }
 		        // Invocar getEventsSummary
-		        List<Event> setEv = usr.getEventSummaryByUser("vero");
+		        List<DatatypeEventSummary> setEv = usr.getEventSummaryByUser("vero");
 		        if (setEv == null){
 		        	System.out.println("SET DE EVENTS ES NULL !!");
 		        } else {

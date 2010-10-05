@@ -21,9 +21,10 @@ public class ContentDAOBean extends JpaDao<ContentPK, Content> implements Conten
 	@Resource
 	SessionContext sc;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Content> findAll() {
-		Query namedQuery = em.createNamedQuery("ExternalContent.findAll");
+		Query namedQuery = em.createNamedQuery("Content.findAll");
 		return (List<Content>)namedQuery.getResultList();
 	}
 	
