@@ -1,6 +1,8 @@
 package partuzabook.datatypes;
 
-public class DataTypeFile {
+import java.io.Serializable;
+
+public class DataTypeFile implements Serializable{
 
 	private String name;
 	private String mime;

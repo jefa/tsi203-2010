@@ -1,6 +1,8 @@
 package partuzabook.datatypes;
 
-public class DatatypeUser {
+import java.io.Serializable;
+
+public class DatatypeUser implements Serializable{
 	public String username;
 	public String name;
 	

@@ -1,8 +1,9 @@
 package partuzabook.datatypes;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DatatypeContent {
+public class DatatypeContent implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public String url;

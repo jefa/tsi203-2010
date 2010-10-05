@@ -1,6 +1,8 @@
 package partuzabook.datatypes;
 
-public class DatatypeRating {
+import java.io.Serializable;
+
+public class DatatypeRating implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	public Integer score;
