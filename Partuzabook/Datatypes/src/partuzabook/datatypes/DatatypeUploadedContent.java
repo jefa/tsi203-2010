@@ -1,6 +1,8 @@
 package partuzabook.datatypes;
 
-public class DatatypeUploadedContent {
+import java.io.Serializable;
+
+public class DatatypeUploadedContent implements Serializable{
 	public byte[] data;
 	
 	public DatatypeUploadedContent() {

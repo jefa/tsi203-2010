@@ -1,6 +1,8 @@
 package partuzabook.datatypes;
 
-public class DatatypeTag {
+import java.io.Serializable;
+
+public class DatatypeTag implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	public Integer posX;
