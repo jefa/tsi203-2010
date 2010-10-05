@@ -40,28 +40,14 @@ import partuzabook.utils.TranslatorCollection;
 @Stateless
 public class ServicesEvent implements ServicesEventRemote {
 
-	private EventDAO eventDAO;
-	private ContentDAO contentDAO;
-	private NormalUserDAO normalUserDAO;
+	private EventDAO evDao;
+	private ContentDAO contDao;
+	private NormalUserDAO nUserDao;
 	
     public ServicesEvent() {
     	
     }
     
-    @PostConstruct
-    public void postConstruct() {
-        try {
-			Context ctx = getContext();
-	        eventDAO = (EventDAO) ctx.lookup("EventDAOBean/local");  
-    		contentDAO = (ContentDAO) ctx.lookup("ContentDAOBean/local");
-    		normalUserDAO = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
-		}
-        catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
-
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
 		properties.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
@@ -71,13 +57,32 @@ public class ServicesEvent implements ServicesEventRemote {
 		return ctx;
 	}
 
+	@PostConstruct
+    public void postConstruct() {
+        try {
+			Context ctx = getContext();
+	        evDao = (EventDAO) ctx.lookup("EventDAOBean/local");  
+    		contDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
+    		nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
+		}
+        catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
     @PreDestroy
     public void preDestroy() {
-    	eventDAO = null;
-    	contentDAO = null;
-    	normalUserDAO = null;
+    	evDao = null;
+    	contDao = null;
+    	nUserDao = null;
     }
     
+    /**
+     * Returns a list of Events of interest (Eg: Events from this week)
+     * @param maxEvents - Max number of events to return 
+     * @param maxContentPerEvent - Max number of content to return for each event
+     */ 
 	public List<DatatypeEventSummary> getSummaryEvents(int maxEvents,
 			int maxContentPerEvent) {
 		// Calculate one week before date
@@ -86,7 +91,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		Date afterDate = new Date(after.getTimeInMillis());
 		
 		// Take the first maxEvents and translate to the datatype
-		List<Event> list =  eventDAO.findAllAfterDate(afterDate);
+		List<Event> list =  evDao.findAllAfterDate(afterDate);
 		if (maxEvents < list.size()) {
 			list = list.subList(0, maxEvents);
 		}
@@ -106,12 +111,17 @@ public class ServicesEvent implements ServicesEventRemote {
 		return listDatatypes;
 	}
 		
+	/**
+	 * Returns true if the User exists, and is related to the Event
+	 * @param eventName - Name of the event
+	 * @param user - Identifier of the user  
+	 */
 	public boolean isUserRelatedToEvent(String eventName, String user){
-		Event ev = eventDAO.findByName(eventName);
+		Event ev = evDao.findByName(eventName);
 		if (ev == null) {
 			throw new EventNotFoundException();
 		}
-		NormalUser nUser = normalUserDAO.findByID(user);
+		NormalUser nUser = nUserDao.findByID(user);
 		if (nUser == null) {
 			throw new UserNotFoundException();
 		}
@@ -124,14 +134,20 @@ public class ServicesEvent implements ServicesEventRemote {
 		return null;
 	}
 	
+	//    
+	/**
+	 * Returns a list of candidate Users for Tagging -participants of the event, who have not already been tagged in the content-
+	 * @param eventID - Identifier of the event
+	 * @param contentID - Identifier of the content 
+	 */
 	public List<DatatypeUser> getUsersForTag(String eventID, int contentID){
 		// Verify existence of Event
-		Event event = (Event) eventDAO.findByName(eventID);
+		Event event = (Event) evDao.findByName(eventID);
 		if (event == null) {
 			throw new EventNotFoundException();
 		}
 		// Verify existence of content
-		Content cont = (Content) contentDAO.findByIDInEvent(event, contentID);
+		Content cont = (Content) contDao.findByIDInEvent(event, contentID);
 		if (cont == null) {
 			throw new ContentNotFoundException();
 		}
@@ -159,27 +175,36 @@ public class ServicesEvent implements ServicesEventRemote {
     	allUsersInEvent.removeAll(usersAlreadyTagged);
     	
     	return TranslatorCollection.translateNormalUser(allUsersInEvent);
-	}
+	} 
 	
+	/**
+	 * Create a new instance of Tag associated to the content, user that was tagged, and the tagger
+	 * @param eventID - Identifier of the event
+	 * @param contentID - Identifier of the content within the event
+	 * @param userTagger - Identifier of the user who is tagging
+	 * @param userToTag - User tagged -may be a registered user or not- 
+	 * @param posX - Position of the tag in the X axis within the content
+	 * @param posY - Position of the tag in the Y axis within the content 
+	 */
 	public void tagUserInContent(String eventID, int contentID, String userTagger, String userToTag, int posX, int posY) throws Exception {
 		// Verify existence of Event
-		Event event = (Event) eventDAO.findByName(eventID);
+		Event event = (Event) evDao.findByName(eventID);
 		if (event == null) {
 			throw new EventNotFoundException();
 		}
 		// Verify existence of content
-		Content cont = (Content) contentDAO.findByIDInEvent(event, contentID);
+		Content cont = (Content) contDao.findByIDInEvent(event, contentID);
 		if (cont == null) {
 			throw new ContentNotFoundException();
 		}
 		// Verify existence of user who is tagging and user who will be tagged
-		User tagger = (User) normalUserDAO.findByID(userTagger);
+		User tagger = (User) nUserDao.findByID(userTagger);
 		if (tagger == null || (!(tagger instanceof NormalUser))) {
 			throw new UserNotFoundException();
 		}
 		NormalUser nUserTagger = (NormalUser) tagger;
 		// Check if user to tag is registered 
-		User tagged = (User) normalUserDAO.findByID(userToTag);
+		User tagged = (User) nUserDao.findByID(userToTag);
 		Tag tag;
 		if (tagged == null) {
 			// Unregistered user was tagged

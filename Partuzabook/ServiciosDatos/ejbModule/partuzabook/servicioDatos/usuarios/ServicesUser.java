@@ -1,6 +1,8 @@
 package partuzabook.servicioDatos.usuarios;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -14,6 +16,7 @@ import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
+//import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
@@ -28,14 +31,14 @@ import partuzabook.utils.TranslatorCollection;
 @Stateless
 public class ServicesUser implements ServicesUserRemote {
 
-	private NormalUserDAO normalUserDAO;
+	private NormalUserDAO nUserDao;
 //	private NotificationDAO notifDao;
 		
     /**
      * Default constructor. 
      */
     public ServicesUser() {
-    	
+
     }
     
     @PostConstruct
@@ -47,7 +50,7 @@ public class ServicesUser implements ServicesUserRemote {
 	        properties.put("java.naming.provider.url", "jnp://localhost:1099");
 	        Context ctx = new InitialContext(properties);
 	        System.out.println("Got context!!");
-	        normalUserDAO = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");  
+	        nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");  
 //	        notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
 	        System.out.println("Lookup worked!"); 
 		}
@@ -59,7 +62,7 @@ public class ServicesUser implements ServicesUserRemote {
     
     @PreDestroy
     public void preDestroy() {
-    	normalUserDAO = null;
+    	nUserDao = null;
 //    	notifDao = null;
     }
 
@@ -73,23 +76,17 @@ public class ServicesUser implements ServicesUserRemote {
 		//TODO newUser.setMail(mail);
 		newUser.setRegDate(new Timestamp(new java.util.Date().getTime()));
 		
-		normalUserDAO.persist(newUser);
+		nUserDao.persist(newUser);
 		
 		return (DatatypeUser)new TranslatorUser().translate(newUser);
 	}
 	
 	public boolean existsNormalUser(String username) {
-		return normalUserDAO.findByID(username) !=null;
+		return nUserDao.findByID(username) !=null;
 	}
 	
-	/**
-	 * 
-	 * @param username
-	 * @return
-	 * @throws UserNotFoundException
-	 */
-	private NormalUser getNormalUser(String username) throws UserNotFoundException {
-		NormalUser user = normalUserDAO.findByID(username);
+	private NormalUser getNormalUser(String username) {
+		NormalUser user = nUserDao.findByID(username);
 		if (user == null) {
 			throw new UserNotFoundException();
 		}
