@@ -74,7 +74,7 @@ public class Main {
 	        	// Invocar tagUserInContent
 	        	evt.tagUserInContent("Cumple Vero", 0, "vero", "gonzalo", 1, 1);	        		        	
 	        	System.out.println("termine");
-	        	usr.getUpdateNotifications("gonzalo");
+	        	usr.getUpdateNotifications("gonza");
 	        } else {
 	        	System.out.println("ServicesEventRemote was not found");    	
 	        }
