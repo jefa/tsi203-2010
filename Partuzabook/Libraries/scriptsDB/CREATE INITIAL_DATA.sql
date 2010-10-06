@@ -90,3 +90,29 @@ INSERT INTO "content"(
     VALUES ('1', 'vero', 'Video sacado por vero', '100', 'miurl', 'V', '2010/10/02 17:30'::timestamp, 
             '100', 'false', '1');
 
+
+
+--Insertar usuarios administradores
+--INSERT INTO USERS(username, password, name, email, flags, reg_date) VALUES ('ggadmin', 'ggadmin', 'Administrador Gonzalo', 'gegismero@gmail.com', 'A', now()::timestamp);
+--INSERT INTO USERS(username, password, name, email, flags, reg_date) VALUES ('vmadmin', 'vmadmin', 'Administrador Veronica', 'veromanduk@gmail.com','A',  now()::timestamp);
+--INSERT INTO USERS(username, password, name, email, flags, reg_date) VALUES ('rradmin', 'rradmin', 'Administrador Rodrigo', 'rrivem@gmail.com','A',  now()::timestamp);
+--INSERT INTO USERS(username, password, name, email, flags, reg_date) VALUES ('jfadmin', 'jfadmin', 'Administrador Javier', 'jefa55@yahoo.com','A',  now()::timestamp);
+--INSERT INTO USERS(username, password, name, email, flags, reg_date) VALUES ('anadmin', 'anadmin', 'Administrador Andres', 'aenavcam@gmail.com','A',  now()::timestamp);
+
+--Insertar usuarios normales
+--INSERT INTO USERS(username, password, name, email, flags, reg_date) VALUES ('ggismero', 'Gonzalo Gismero', 'gegismero@gmail.com', 'ggismero', 'A', now()::timestamp);
+--INSERT INTO USERS(username, password, name, email, flags, reg_date) VALUES ('veromnaduk', 'veromnaduk', 'Veronica Manduca', 'veromanduk@gmail.com', 'A', now()::timestamp);
+--INSERT INTO USERS(username, password, name, email, flags, reg_date) VALUES ('rrivem', 'rrivem', 'Rodrigo Rivera', 'rrivem@gmail.com', 'A', now()::timestamp);
+--INSERT INTO USERS(username, password, name, email, flags, reg_date) VALUES ('jefa55', 'jefa55', 'Javier Fradiletti', 'jefa55@yahoo.com', 'A', now()::timestamp);
+--INSERT INTO USERS(username, password, name, email, flags, reg_date) VALUES ('aenavcam', 'aenavcam', 'Andres Navarro', 'aenavcam@yahoo.com', 'A', now()::timestamp);
+
+--Insertar eventos
+--INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1, 'Cumpleaños de quince de Manuela Carolo', '2011-11-15', 240,'', 'Tomás de la Fuente 1845', 'ggadmin','M',now()::timestamp);
+
+--INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(2, 'Despedida de soltero de Lorenzo Lamas', '2011-11-28', 300,'', 'Victoria Celeste 940', 'vmadmin','M',now()::timestamp);
+
+--INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(3, 'Fiesta de Halloween del grupo de TSI2', '2011-10-31', 180,'', 'Armando Esteban Quito 666', 'rradmin','U',now()::timestamp);
+
+--INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(4, 'Fiesta de Halloween del grupo de TSI2', '2011-10-31', 180,'', 'Armando Esteban Quito 666', 'rradmin','U',now()::timestamp);
+
+--INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(5, 'Previa del Perry vs Juventus', '2011-10-28', 180,'', 'Aquiles Baeza 1025', 'anadmin','M',now()::timestamp);
