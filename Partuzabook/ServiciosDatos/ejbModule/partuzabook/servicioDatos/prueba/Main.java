@@ -9,6 +9,7 @@ import javax.naming.InitialContext;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
+import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
@@ -70,9 +71,9 @@ public class Main {
 	        		System.out.println("getUsersForTag retorno lista vacia");
 	        	} else {
 	        		System.out.println("El tamaño de la lista de users para taggear es: " + users.size());
-	        	}
+	        	}	        	
 	        	// Invocar tagUserInContent
-	        	evt.tagUserInContent("Cumple Vero", 0, "vero", "gonzalo", 1, 1);	        		        	
+	        	evt.tagUserInContent("Cumple Vero", 0, "vero", "gonza", 1, 1);	        		        	
 	        	System.out.println("termine");
 	        	usr.getUpdateNotifications("gonza");
 	        } else {

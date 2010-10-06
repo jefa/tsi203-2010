@@ -22,8 +22,31 @@ public abstract class Tag implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private TagPK id;
 
+/*	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="tag_id_auto")
+	private Integer tagIdAuto;
+
+	@Id
+	@Column(name="cnt_id")
+	private Integer cntId;
+
+	@Id
+	@Column(name="evt_id")
+	private Integer evtId;
+
+	public void setCntId(int cntId) {
+		this.cntId = cntId;
+	}
+	public void setEvtId(int evtId) {
+		this.evtId = evtId;
+	}
+	
+*/	
+	
 	@Column(name="\"posX\"")
 	private Integer _posX_;
 
@@ -57,7 +80,7 @@ public abstract class Tag implements Serializable {
 	public void setId(TagPK id) {
 		this.id = id;
 	}
-	
+
 	public Integer get_posX_() {
 		return this._posX_;
 	}

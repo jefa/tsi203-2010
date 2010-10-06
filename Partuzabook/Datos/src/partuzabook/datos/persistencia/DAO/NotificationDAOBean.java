@@ -38,5 +38,5 @@ public class NotificationDAOBean extends JpaDao<Integer, Notification> implement
 		return (List<Notification>) namedQuery.getResultList();
 	}
 
-
+	
 }
