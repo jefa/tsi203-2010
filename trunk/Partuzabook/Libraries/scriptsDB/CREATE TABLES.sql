@@ -7,9 +7,12 @@
 CREATE TABLE users
 (
   username character varying(30) NOT NULL,
-  "password" character varying(50) NOT NULL,
+  password character varying(50) NOT NULL,
   flags character varying(1) NOT NULL,
   reg_date timestamp without time zone NOT NULL,
+  name character varying(100) NOT NULL,
+  img_path character varying(100),
+  email character varying(75) NOT NULL,
   CONSTRAINT "PK_USERS" PRIMARY KEY (username)
 )
 WITH (
@@ -102,7 +105,7 @@ CREATE TABLE "comment"
 (
   usr_id character varying(30) NOT NULL,
   cnt_id integer NOT NULL,
-  "text" character varying(500) NOT NULL,
+  text character varying(500) NOT NULL,
   date date NOT NULL,
   reg_date timestamp without time zone NOT NULL,
   evt_id integer NOT NULL,
@@ -151,13 +154,13 @@ CREATE TABLE notifications
 (
   not_id_auto integer NOT NULL,
   usr_frm_id character varying(30) NOT NULL,
-  "text" character varying(100) NOT NULL,
+  text character varying(100) NOT NULL,
   reference character varying(50),
   not_date date NOT NULL,
-  "read" boolean NOT NULL,
+  read boolean NOT NULL,
   reg_date timestamp without time zone NOT NULL,
   usr_to_id character varying(30) NOT NULL,
-  "type" integer NOT NULL,
+  type integer NOT NULL,
   CONSTRAINT "PK_NOTIFICATIONS" PRIMARY KEY (not_id_auto),
   CONSTRAINT "FK_NOT_USR" FOREIGN KEY (usr_frm_id)
       REFERENCES users (username) MATCH SIMPLE
@@ -228,8 +231,8 @@ CREATE TABLE tags
 (
   creator character varying(30) NOT NULL,
   cnt_id integer NOT NULL,
-  "posX" integer,
-  "posY" integer,
+  posX integer,
+  posY integer,
   usr_tag_custom character varying(30),
   usr_tag character varying(30),
   tag_id_auto integer NOT NULL,
