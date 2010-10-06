@@ -9,6 +9,5 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ServiciosDatos"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Datatypes"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
