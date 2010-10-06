@@ -10,10 +10,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.TagForUser;
-import partuzabook.datos.persistencia.beans.TagPK;
 
 @Stateless
-public class TagForUserDAOBean extends JpaDao<TagPK, TagForUser> implements TagForUserDAO {
+public class TagForUserDAOBean extends JpaDao<Integer, TagForUser> implements TagForUserDAO {
 	
 	@PersistenceContext
 	EntityManager em;
