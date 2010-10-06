@@ -31,7 +31,6 @@ import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.datos.persistencia.beans.Tag;
 import partuzabook.datos.persistencia.beans.TagForNotUser;
 import partuzabook.datos.persistencia.beans.TagForUser;
-import partuzabook.datos.persistencia.beans.TagPK;
 import partuzabook.datos.persistencia.beans.User;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
@@ -245,11 +244,11 @@ public class ServicesEvent implements ServicesEventRemote {
 			notifDao.persist(ntfTagged);
 		}
 		// Set primary key for Tag
-		TagPK tagPk = new TagPK();
-		tagPk.setCntId(cont.getId().getCntIdAuto());
-		tagPk.setEvtId(cont.getId().getEvtId());
+		//TagPK tagPk = new TagPK();
+		//tagPk.setCntId(cont.getId().getCntIdAuto());
+		//tagPk.setEvtId(cont.getId().getEvtId());
 		//tagPk.setTagIdAuto(0); //TODO hay que cambiar para que el TagIdAuto se genere solo
-		tag.setId(tagPk);
+		//tag.setId(tagPk);
 
 	/*	tag.setCntId(cont.getId().getCntIdAuto());
 		tag.setEvtId(cont.getId().getEvtId());
