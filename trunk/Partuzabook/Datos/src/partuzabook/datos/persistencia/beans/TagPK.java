@@ -12,6 +12,7 @@ public class TagPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="tag_id_auto")
 	private Integer tagIdAuto;
 

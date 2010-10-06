@@ -1,6 +1,7 @@
 package partuzabook.servicioDatos.eventos;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -21,6 +22,8 @@ import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.ContentDAO;
 import partuzabook.datos.persistencia.DAO.EventDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
+import partuzabook.datos.persistencia.DAO.NotificationDAO;
+import partuzabook.datos.persistencia.DAO.TagDAO;
 import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
@@ -28,6 +31,7 @@ import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.datos.persistencia.beans.Tag;
 import partuzabook.datos.persistencia.beans.TagForNotUser;
 import partuzabook.datos.persistencia.beans.TagForUser;
+import partuzabook.datos.persistencia.beans.TagPK;
 import partuzabook.datos.persistencia.beans.User;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
@@ -43,6 +47,8 @@ public class ServicesEvent implements ServicesEventRemote {
 	private EventDAO evDao;
 	private ContentDAO contDao;
 	private NormalUserDAO nUserDao;
+	private TagDAO tagDao;
+	private NotificationDAO notifDao;
 	
     public ServicesEvent() {
     	
@@ -64,6 +70,8 @@ public class ServicesEvent implements ServicesEventRemote {
 	        evDao = (EventDAO) ctx.lookup("EventDAOBean/local");  
     		contDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
     		nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
+    		tagDao = (TagDAO) ctx.lookup("TagDAOBean/local");    		
+    		notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
 		}
         catch (NamingException e) {
 			// TODO Auto-generated catch block
@@ -76,6 +84,8 @@ public class ServicesEvent implements ServicesEventRemote {
     	evDao = null;
     	contDao = null;
     	nUserDao = null;
+    	tagDao = null;
+    	notifDao = null;
     }
     
     /**
@@ -216,34 +226,52 @@ public class ServicesEvent implements ServicesEventRemote {
 			NormalUser nUserTagged = (NormalUser) tagged;
 			tag = new TagForUser();
 			TagForUser tagUser = (TagForUser) tag;
+
 			tagUser.setUserTagged(nUserTagged);
 			//TODO Averiguar si es necesario setear ademas el tag al userTagged, ya setee el userTagged al tag
-			nUserTagged.getMyTags().add(tagUser);
+			//nUserTagged.getMyTags().add(tagUser);
 			
 			// Notify the existing user that has been tagged
 			Notification ntfTagged = new Notification();
+			ntfTagged.setNotDate(new java.util.Date());
 			ntfTagged.setRead(false);
+			ntfTagged.setReference("La referencia va aca");
+			ntfTagged.setRegDate(new Timestamp(new java.util.Date().getTime()));
 			ntfTagged.setText("Has sido etiquetado");
+			ntfTagged.setType(0);
+			ntfTagged.setUserFrom(nUserTagger);	
 			ntfTagged.setUserTo(nUserTagged);
+			
+			notifDao.persist(ntfTagged);
 		}
+		// Set primary key for Tag
+		TagPK tagPk = new TagPK();
+		tagPk.setCntId(cont.getId().getCntIdAuto());
+		tagPk.setEvtId(cont.getId().getEvtId());
+		//tagPk.setTagIdAuto(0); //TODO hay que cambiar para que el TagIdAuto se genere solo
+		tag.setId(tagPk);
+
+	/*	tag.setCntId(cont.getId().getCntIdAuto());
+		tag.setEvtId(cont.getId().getEvtId());
+		*/
+		
 		tag.setContent(cont);
 		//TODO Averiguar si es necesario setear ademas el tag al content, ya setee el content al tag
-		cont.getTags().add(tag);
-
+		//cont.getTags().add(tag);
+	
 		tag.setCreator(nUserTagger);
 		//TODO Averiguar si es necesario setear ademas el tag a los users, ya setee los users al tag
-		nUserTagger.getTagsCreated().add(tag);
+		//nUserTagger.getTagsCreated().add(tag);
 		
 		tag.set_posX_(posX);
 		tag.set_posY_(posY);
 		
-		// Create a new notification once the tag has been created
-		Notification ntfToCreator = new Notification();
-		ntfToCreator.setRead(false);
-		ntfToCreator.setText("La etiqueta ha sido creada de forma exitosa");
-		ntfToCreator.setUserTo(nUserTagger);
+		tag.setRegDate(new Timestamp(new java.util.Date().getTime()));
 		
-	}
+		tagDao.persist(tag);
+			
+}
+
 
 	public void confirmUploadContent(List<Content> list) {
 		// TODO Auto-generated method stub	
