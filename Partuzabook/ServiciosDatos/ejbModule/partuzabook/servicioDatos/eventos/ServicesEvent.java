@@ -243,20 +243,13 @@ public class ServicesEvent implements ServicesEventRemote {
 			
 			notifDao.persist(ntfTagged);
 		}
-		// Set primary key for Tag
-		//TagPK tagPk = new TagPK();
-		//tagPk.setCntId(cont.getId().getCntIdAuto());
-		//tagPk.setEvtId(cont.getId().getEvtId());
-		//tagPk.setTagIdAuto(0); //TODO hay que cambiar para que el TagIdAuto se genere solo
-		//tag.setId(tagPk);
-
-	/*	tag.setCntId(cont.getId().getCntIdAuto());
-		tag.setEvtId(cont.getId().getEvtId());
-		*/
 		
-		tag.setContent(cont);
+		//tag.setCntId(cont.getId().getCntIdAuto());
+		//tag.setEvtId(cont.getId().getEvtId());
+		
+		tag.setContent(cont); 
 		//TODO Averiguar si es necesario setear ademas el tag al content, ya setee el content al tag
-		//cont.getTags().add(tag);
+		cont.getTags().add(tag);
 	
 		tag.setCreator(nUserTagger);
 		//TODO Averiguar si es necesario setear ademas el tag a los users, ya setee los users al tag
@@ -267,8 +260,11 @@ public class ServicesEvent implements ServicesEventRemote {
 		
 		tag.setRegDate(new Timestamp(new java.util.Date().getTime()));
 		
+		try {
 		tagDao.persist(tag);
-			
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 }
 
 
