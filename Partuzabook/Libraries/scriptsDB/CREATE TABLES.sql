@@ -97,32 +97,6 @@ WITH (
 ALTER TABLE album OWNER TO postgres;
 
 
--- Table: "comment"
-
--- DROP TABLE "comment";
-
-CREATE TABLE "comment"
-(
-  usr_id character varying(30) NOT NULL,
-  cnt_id integer NOT NULL,
-  text character varying(500) NOT NULL,
-  date date NOT NULL,
-  reg_date timestamp without time zone NOT NULL,
-  evt_id integer NOT NULL,
-  CONSTRAINT "PK_COMMENT" PRIMARY KEY (usr_id, cnt_id, evt_id, date),
-  CONSTRAINT "FK_CMN_CNT" FOREIGN KEY (cnt_id, evt_id)
-      REFERENCES "content" (cnt_id_auto, evt_id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT "FK_CMN_USR" FOREIGN KEY (usr_id)
-      REFERENCES users (username) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE "comment" OWNER TO postgres;
-
-
 -- Table: mods
 
 -- DROP TABLE mods;
@@ -231,15 +205,15 @@ CREATE TABLE tags
 (
   creator character varying(30) NOT NULL,
   cnt_id integer NOT NULL,
-  posX integer,
-  posY integer,
+  "posX" integer,
+  "posY" integer,
   usr_tag_custom character varying(30),
   usr_tag character varying(30),
   tag_id_auto integer NOT NULL,
   reg_date timestamp without time zone NOT NULL,
   evt_id integer NOT NULL,
   flags character(1) NOT NULL,
-  CONSTRAINT "PK_TAGS" PRIMARY KEY (tag_id_auto, cnt_id, evt_id),
+  CONSTRAINT "PK_TAGS" PRIMARY KEY (tag_id_auto),
   CONSTRAINT "FK_TAG_CNT" FOREIGN KEY (cnt_id, evt_id)
       REFERENCES "content" (cnt_id_auto, evt_id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
