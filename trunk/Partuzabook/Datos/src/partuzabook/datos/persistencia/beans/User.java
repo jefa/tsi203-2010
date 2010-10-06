@@ -36,6 +36,13 @@ public class User implements Serializable {
 	private String username;
 
 	private String password;
+	
+	private String name;
+	
+	@Column(name="img_path")
+	private String imgPath;
+	
+	private String email;
 
 	@Column(name="reg_date")
 	private Timestamp regDate;
@@ -68,6 +75,30 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getImgPath() {
+		return this.imgPath;
+	}
+
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
+	}
+	
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 	public Timestamp getRegDate() {
 		return this.regDate;
 	}
