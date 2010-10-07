@@ -8,6 +8,12 @@
 		<param-name>org.ajax4jsf.VIEW_HANDLERS</param-name>
 		<param-value>com.sun.facelets.FaceletViewHandler</param-value>
 	</context-param>
+	
+	<context-param>
+		<param-name>facelets.BUILD_BEFORE_RESTORE</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
 
 	<context-param>
 		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
