@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:richx="http://richfaces.org/richx">
+
+<br clear="all"/>
+		<h:panelGroup id="mainImage" layout="block" styleClass="mainImage-div">
+			<table cellpadding="0" class="mainImage-table">
+				<tr>
+					<td class="mainImage-table-col1" rowspan="2">
+						<a4j:mediaOutput id="img" element="img"
+										 styleClass="main-image"
+										 createContent="#{imageLoader.paintImage}"
+										 style="border : 3px solid #808080;"
+										 value="#{image.path}">
+						</a4j:mediaOutput>
+					</td>
+					<td valign="top">
+						<h:panelGroup layout="block"
+									  styleClass="buttons-body"
+									  style="margin : 26px 0px 0px 0px;">
+						<h:graphicImage value="/img/shell/button.png"
+										width="103"
+										height="28" alt=""
+										styleClass="buttons-body-image"/>
+					</h:panelGroup></td>
+				</tr>
+			</table>
+		</h:panelGroup>
+<h:outputText styleClass="additional-info-text"
+					  value="Camera: "/>
+		<h:outputText value="#{controller.selectedImage.cameraModel}"/>
+		<br/>
+		<h:outputText styleClass="additional-info-text"
+					  value="Captured at: "/>
+		<h:outputText value="#{controller.selectedImage.created}"/>
+		<br/>
+		<h:outputText styleClass="additional-info-text"
+					  value="#{messages['uploaded']}: "/>
+		<h:outputText value="#{controller.selectedImage.uploaded}" />
+		<br/>
+		<br/>
+		<br/>
+</ui:composition>
