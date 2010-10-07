@@ -232,7 +232,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			
 			// Notify the existing user that has been tagged
 			Notification ntfTagged = new Notification();
-			ntfTagged.setNotDate(new java.util.Date());
+			ntfTagged.setNotDate(new Timestamp(new java.util.Date().getTime()));
 			ntfTagged.setRead(false);
 			ntfTagged.setReference("La referencia va aca");
 			ntfTagged.setRegDate(new Timestamp(new java.util.Date().getTime()));
