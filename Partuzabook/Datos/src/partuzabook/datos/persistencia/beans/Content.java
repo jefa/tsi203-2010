@@ -8,8 +8,10 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -35,8 +37,10 @@ import javax.persistence.OneToMany;
 public abstract class Content implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private ContentPK id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="cnt_id_auto")
+	private Integer cntIdAuto;
 
 	private Boolean album;
 
@@ -51,7 +55,7 @@ public abstract class Content implements Serializable {
 
 	//bi-directional many-to-one association to Event
     @ManyToOne
-	@JoinColumn(name="evt_id", insertable=false, updatable=false)
+	@JoinColumn(name="evt_id")
 	private Event event;
 
 	//bi-directional many-to-one association to User
@@ -70,12 +74,12 @@ public abstract class Content implements Serializable {
     public Content() {
     }
 
-	public ContentPK getId() {
-		return this.id;
+	public Integer getCntIdAuto() {
+		return this.cntIdAuto;
 	}
 
-	public void setId(ContentPK id) {
-		this.id = id;
+	public void setCntIdAuto(Integer cntIdAuto) {
+		this.cntIdAuto = cntIdAuto;
 	}
 	
 	public Boolean getAlbum() {

@@ -1,9 +1,7 @@
 package partuzabook.datos.persistencia.beans;
 
-
 import java.io.Serializable;
 import javax.persistence.*;
-
 import java.sql.Timestamp;
 
 
@@ -19,9 +17,9 @@ public class Album implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	//@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="evt_id")
-	private Integer evtId;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="alb_id_auto")
+	private Integer albIdAuto;
 
 	@Column(name="album_url")
 	private String albumUrl;
@@ -37,12 +35,12 @@ public class Album implements Serializable {
     public Album() {
     }
 
-	public Integer getEvtId() {
-		return this.evtId;
+	public Integer getAlbIdAuto() {
+		return this.albIdAuto;
 	}
 
-	public void setEvtId(Integer evtId) {
-		this.evtId = evtId;
+	public void setAlbIdAuto(Integer albIdAuto) {
+		this.albIdAuto = albIdAuto;
 	}
 
 	public String getAlbumUrl() {

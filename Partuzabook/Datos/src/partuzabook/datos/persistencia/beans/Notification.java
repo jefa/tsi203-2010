@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 
 /**
@@ -32,9 +31,9 @@ public class Notification implements Serializable {
 	@Column(name="type")
 	private Integer type;
 	
-    @Temporal( TemporalType.DATE)
+    @Temporal( TemporalType.TIMESTAMP)
 	@Column(name="not_date")
-	private Date notDate;
+	private Timestamp notDate;
 
 	private Boolean read;
 
@@ -74,11 +73,11 @@ public class Notification implements Serializable {
 		this.type = t;
 	}
 	
-	public Date getNotDate() {
+	public Timestamp getNotDate() {
 		return this.notDate;
 	}
 
-	public void setNotDate(Date notDate) {
+	public void setNotDate(Timestamp notDate) {
 		this.notDate = notDate;
 	}
 

@@ -1,6 +1,5 @@
 package partuzabook.datos.persistencia.beans;
 
-
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -19,10 +18,7 @@ public class CommentPK implements Serializable {
 	@Column(name="cnt_id")
 	private Integer cntId;
 
-	@Column(name="evt_id")
-	private Integer evtId;
-
-    @Temporal( TemporalType.DATE)
+    @Temporal( TemporalType.TIMESTAMP)
 	private java.util.Date date;
 
     public CommentPK() {
@@ -38,12 +34,6 @@ public class CommentPK implements Serializable {
 	}
 	public void setCntId(Integer cntId) {
 		this.cntId = cntId;
-	}
-	public Integer getEvtId() {
-		return this.evtId;
-	}
-	public void setEvtId(Integer evtId) {
-		this.evtId = evtId;
 	}
 	public java.util.Date getDate() {
 		return this.date;
@@ -63,7 +53,6 @@ public class CommentPK implements Serializable {
 		return 
 			this.usrId.equals(castOther.usrId)
 			&& this.cntId.equals(castOther.cntId)
-			&& this.evtId.equals(castOther.evtId)
 			&& this.date.equals(castOther.date);
 
     }
@@ -73,7 +62,6 @@ public class CommentPK implements Serializable {
 		int hash = 17;
 		hash = hash * prime + this.usrId.hashCode();
 		hash = hash * prime + this.cntId.hashCode();
-		hash = hash * prime + this.evtId.hashCode();
 		hash = hash * prime + this.date.hashCode();
 		
 		return hash;

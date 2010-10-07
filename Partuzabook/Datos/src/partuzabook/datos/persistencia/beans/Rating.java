@@ -29,10 +29,7 @@ public class Rating implements Serializable {
 
 	//bi-directional many-to-one association to Content
     @ManyToOne
-	@JoinColumns({
-		@JoinColumn(name="cnt_id", referencedColumnName="cnt_id_auto", insertable=false, updatable=false),
-		@JoinColumn(name="evt_id", referencedColumnName="evt_id", insertable=false, updatable=false)
-		})
+	@JoinColumn(name="cnt_id", referencedColumnName="cnt_id_auto", insertable=false, updatable=false)
 	private Content content;
 
 	//bi-directional many-to-one association to User

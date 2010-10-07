@@ -3,7 +3,6 @@ package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -56,8 +55,8 @@ public class Event implements Serializable {
 
 	private String address;
 
-    @Temporal( TemporalType.DATE)
-	private Date date;
+    @Temporal( TemporalType.TIMESTAMP)
+	private Timestamp date;
 
 	private String description;
 
@@ -108,11 +107,11 @@ public class Event implements Serializable {
 		this.address = address;
 	}
 
-	public Date getDate() {
+	public Timestamp getDate() {
 		return this.date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(Timestamp date) {
 		this.date = date;
 	}
 

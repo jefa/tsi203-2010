@@ -37,10 +37,7 @@ public abstract class Tag implements Serializable {
 
 	//bi-directional many-to-one association to Content
     @ManyToOne
-	@JoinColumns({
-		@JoinColumn(name="cnt_id", referencedColumnName="cnt_id_auto"),
-		@JoinColumn(name="evt_id", referencedColumnName="evt_id")
-		})
+	@JoinColumn(name="cnt_id", referencedColumnName="cnt_id_auto")
 	private Content content;
 
 	//bi-directional many-to-one association to User
