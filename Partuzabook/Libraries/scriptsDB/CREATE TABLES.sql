@@ -7,10 +7,10 @@
 CREATE TABLE users
 (
   username character varying(30) NOT NULL,
-  password character varying(50) NOT NULL,
+  "password" character varying(50) NOT NULL,
   flags character varying(1) NOT NULL,
   reg_date timestamp without time zone NOT NULL,
-  name character varying(100) NOT NULL,
+  "name" character varying(100) NOT NULL,
   img_path character varying(100),
   email character varying(75) NOT NULL,
   CONSTRAINT "PK_USERS" PRIMARY KEY (username)
@@ -27,8 +27,8 @@ ALTER TABLE users OWNER TO postgres;
 
 CREATE TABLE events
 (
-  evt_name character varying(30) NOT NULL,
-  date date,
+  evt_name character varying(100) NOT NULL,
+  date timestamp without time zone,
   duration integer,
   description character varying(200),
   address character varying(50),
@@ -63,8 +63,11 @@ CREATE TABLE "content"
   duration character varying(10),
   album boolean,
   evt_id integer NOT NULL,
-  CONSTRAINT "PK_CONTENT" PRIMARY KEY (cnt_id_auto, evt_id),
+  CONSTRAINT "PK_CONTENT" PRIMARY KEY (cnt_id_auto),
   CONSTRAINT "FK_ALB_EVT" FOREIGN KEY (evt_id)
+      REFERENCES events (evt_id_auto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT "FK_CNT_EVT" FOREIGN KEY (evt_id)
       REFERENCES events (evt_id_auto) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT "FK_CNT_USR" FOREIGN KEY (creator)
@@ -86,7 +89,8 @@ CREATE TABLE album
   reg_date timestamp without time zone NOT NULL,
   album_url character varying(50),
   evt_id integer NOT NULL,
-  CONSTRAINT "PK_ALBUM" PRIMARY KEY (evt_id),
+  alb_id_auto integer NOT NULL,
+  CONSTRAINT "PK_ALBUM" PRIMARY KEY (alb_id_auto),
   CONSTRAINT "FK_ALB_EVT" FOREIGN KEY (evt_id)
       REFERENCES events (evt_id_auto) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
@@ -95,6 +99,31 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE album OWNER TO postgres;
+
+
+-- Table: "comment"
+
+-- DROP TABLE "comment";
+
+CREATE TABLE "comment"
+(
+  usr_id character varying(30) NOT NULL,
+  cnt_id integer NOT NULL,
+  "text" character varying(500) NOT NULL,
+  date timestamp without time zone NOT NULL,
+  reg_date timestamp without time zone NOT NULL,
+  CONSTRAINT "PK_COMMENT" PRIMARY KEY (usr_id, cnt_id, date),
+  CONSTRAINT "FK_CMN_CNT" FOREIGN KEY (cnt_id)
+      REFERENCES "content" (cnt_id_auto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT "FK_CMN_USR" FOREIGN KEY (usr_id)
+      REFERENCES users (username) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE "comment" OWNER TO postgres;
 
 
 -- Table: mods
@@ -128,13 +157,13 @@ CREATE TABLE notifications
 (
   not_id_auto integer NOT NULL,
   usr_frm_id character varying(30) NOT NULL,
-  text character varying(100) NOT NULL,
+  "text" character varying(100) NOT NULL,
   reference character varying(50),
-  not_date date NOT NULL,
-  read boolean NOT NULL,
+  not_date timestamp without time zone NOT NULL,
+  "read" boolean NOT NULL,
   reg_date timestamp without time zone NOT NULL,
   usr_to_id character varying(30) NOT NULL,
-  type integer NOT NULL,
+  "type" integer NOT NULL,
   CONSTRAINT "PK_NOTIFICATIONS" PRIMARY KEY (not_id_auto),
   CONSTRAINT "FK_NOT_USR" FOREIGN KEY (usr_frm_id)
       REFERENCES users (username) MATCH SIMPLE
@@ -182,10 +211,9 @@ CREATE TABLE ratings
   cnt_id integer NOT NULL,
   score integer NOT NULL,
   reg_date timestamp without time zone NOT NULL,
-  evt_id integer NOT NULL,
-  CONSTRAINT "PK_RATINGS" PRIMARY KEY (usr_id, cnt_id, evt_id),
-  CONSTRAINT "FK_RTN_CNT" FOREIGN KEY (cnt_id, evt_id)
-      REFERENCES "content" (cnt_id_auto, evt_id) MATCH SIMPLE
+  CONSTRAINT "PK_RATINGS" PRIMARY KEY (usr_id, cnt_id),
+  CONSTRAINT "FK_RTN_CNT" FOREIGN KEY (cnt_id)
+      REFERENCES "content" (cnt_id_auto) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT "FK_RTN_USR" FOREIGN KEY (usr_id)
       REFERENCES users (username) MATCH SIMPLE
@@ -211,11 +239,10 @@ CREATE TABLE tags
   usr_tag character varying(30),
   tag_id_auto integer NOT NULL,
   reg_date timestamp without time zone NOT NULL,
-  evt_id integer NOT NULL,
   flags character(1) NOT NULL,
   CONSTRAINT "PK_TAGS" PRIMARY KEY (tag_id_auto),
-  CONSTRAINT "FK_TAG_CNT" FOREIGN KEY (cnt_id, evt_id)
-      REFERENCES "content" (cnt_id_auto, evt_id) MATCH SIMPLE
+  CONSTRAINT "FK_TAG_CNT" FOREIGN KEY (cnt_id)
+      REFERENCES "content" (cnt_id_auto) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT "FK_TAG_CRT" FOREIGN KEY (creator)
       REFERENCES users (username) MATCH SIMPLE
