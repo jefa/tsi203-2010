@@ -55,7 +55,7 @@ public class Event implements Serializable {
 
 	private String address;
 
-    @Temporal( TemporalType.TIMESTAMP)
+  //  @Temporal( TemporalType.TIMESTAMP)
 	private Timestamp date;
 
 	private String description;

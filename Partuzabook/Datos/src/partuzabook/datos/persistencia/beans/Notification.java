@@ -31,7 +31,7 @@ public class Notification implements Serializable {
 	@Column(name="type")
 	private Integer type;
 	
-    @Temporal( TemporalType.TIMESTAMP)
+  //  @Temporal( TemporalType.TIMESTAMP)
 	@Column(name="not_date")
 	private Timestamp notDate;
 

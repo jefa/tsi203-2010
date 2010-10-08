@@ -32,7 +32,7 @@ import javax.persistence.OneToMany;
 	@NamedQuery(name = "Content.findAll",
 			query = "SELECT c FROM Content c"),
 	@NamedQuery(name = "Content.findByIDInEvent",
-			query = "SELECT c FROM Content c WHERE c.event = :event AND c.id.cntIdAuto = :content AND c.id.evtId = c.event.evtIdAuto")
+			query = "SELECT c FROM Content c WHERE c.event = :event AND c.cntIdAuto = :content")
 })
 public abstract class Content implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -49,6 +49,9 @@ public abstract class Content implements Serializable {
 
 	private String url;
 
+	@Column(name="pos")
+	private int pos;
+	
 	//bi-directional many-to-one association to Comment
 	@OneToMany(mappedBy="content")
 	private List<Comment> comments;
@@ -146,5 +149,12 @@ public abstract class Content implements Serializable {
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
+
+	public int getPos() {
+		return this.pos;
+	}
 	
+	public void setPos(int pos) {
+		this.pos = pos;
+	}
 }
