@@ -25,7 +25,6 @@ public class ServicesUpload implements ServicesUploadRemote {
      * Default constructor. 
      */
     public ServicesUpload() {
-        // TODO Auto-generated constructor stub
     }
 
     @PostConstruct
@@ -35,7 +34,6 @@ public class ServicesUpload implements ServicesUploadRemote {
 			servicesEvent = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");  
 		}
         catch (NamingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }

@@ -36,7 +36,6 @@ public class ServicesAutenticacion implements ServicesAutenticacionRemote {
 	        System.out.println("Lookup worked!"); 
 		}
         catch (NamingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }

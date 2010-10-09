@@ -38,7 +38,6 @@ public class ServicesMultimedia implements ServicesMultimediaRemote {
 	        servEvent = (ServicesEvent) ctx.lookup("ServicesEvent/remote");  
 		}
         catch (NamingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
