@@ -8,4 +8,5 @@ import partuzabook.datatypes.DatatypeUploadedContent;
 @Remote
 public interface ServicesMultimediaRemote {
 
+	
 }
