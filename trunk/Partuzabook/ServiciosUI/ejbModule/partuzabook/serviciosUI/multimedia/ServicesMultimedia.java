@@ -12,6 +12,7 @@ import javax.naming.NamingException;
 
 import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeContent;
+import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.eventos.ServicesEvent;
 
@@ -61,8 +62,8 @@ public class ServicesMultimedia implements ServicesMultimediaRemote {
 	}
 	
 	
-	public List<DatatypeUser> getMostTagged() {
-		return servEvent.getMostTagged();
+	public List<DatatypeMostTagged> getMostTagged(int length) {
+		return servEvent.getMostTagged(length);
 	}
     
 }
