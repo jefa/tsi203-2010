@@ -5,10 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import javax.ejb.Stateless;
+
+import partuzabook.utils.CreateThumbnail;
 
 /**
  * Session Bean implementation class FileSystem
@@ -27,22 +27,17 @@ public class FileSystem implements FileSystemLocal {
 		return new java.io.File(".").getCanonicalPath() + "/Partuzabook/";
     }
     
-    public String writeFile(byte[] data, String mimeType, String dir, String prefix) {
-    	MessageDigest md;
+    public String writeFile(byte[] data, String mimeType, String dir) {
 		try {
-			md = MessageDigest.getInstance("MD5");
-	    	String md5 = byteArrayToHexString(md.digest(data));
+	    	String uuid = java.util.UUID.randomUUID().toString();
 	    	String path = getBasePath(); 
 	    	String extension = "." + mimeType.split("/")[1];
 	    	extension.replace("unknown", "jpeg");
 	    	new File(path + dir).mkdirs();
-	    	FileOutputStream fstream = new FileOutputStream(path + dir + prefix + md5 + extension);
+	    	FileOutputStream fstream = new FileOutputStream(path + dir + uuid + extension);
 	    	fstream.write(data);
 	    	fstream.close();
-	    	return dir + prefix + md5 + extension;
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	    	return dir + uuid + extension;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -73,12 +68,34 @@ public class FileSystem implements FileSystemLocal {
 		}
 		return null;
     }
-
-    private String byteArrayToHexString(byte[] input) {
-    	String output = "";
-    	for (int i = 0; i < input.length; i++) {
-    		output += Integer.toHexString(input[i] & 0xF0) + Integer.toHexString(input[i] & 0x0F);
+    
+    public byte[] getThumbnail(String filename) {
+		try {
+			int lastSlash = filename.lastIndexOf("/") + 1;
+			String prefix = filename.substring(0, lastSlash);
+			String postfix = filename.substring(lastSlash, filename.length());
+			File f = new File(getBasePath() + prefix + "thb_" + postfix);
+			if (!f.exists()) {
+				CreateThumbnail ct = new CreateThumbnail(getBasePath() + filename);
+				ct.getThumbnail(100, CreateThumbnail.HORIZONTAL);
+				ct.saveThumbnail(new File(getBasePath() + prefix + "thb_" + postfix), CreateThumbnail.IMAGE_JPG);
+			}
+			f = new File(getBasePath() + prefix + "thb_" + postfix);
+	    	int len = (int)f.length();
+	    	FileInputStream fstream = new FileInputStream(f);
+	    	byte[] data = new byte[len]; 
+	    	fstream.read(data, 0, len);
+	    	fstream.close();
+	    	return data;
 		}
-    	return output;
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
     }
 }

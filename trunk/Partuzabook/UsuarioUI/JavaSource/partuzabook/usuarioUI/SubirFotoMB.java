@@ -76,7 +76,7 @@ public class SubirFotoMB{
     public ServicesUploadRemote getServicesUpload() {
         try {
 			Context ctx = getContext();
-			return (ServicesUploadRemote)ctx.lookup("ServicesUpload/remote");
+			return (ServicesUploadRemote)ctx.lookup("PartuzabookEAR/ServicesUpload/remote");
 		}
         catch (NamingException e) {
 			// TODO Auto-generated catch block

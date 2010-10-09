@@ -54,5 +54,6 @@ public interface ServicesEventRemote {
 	public void tagUserInContent(int eventID, int contentID, String userTagger, String userToTag, int posX, int posY) throws Exception;
 
 	public List<String> uploadContent(int eventID, String username, List<DataTypeFile> list); 
-	
+	public byte[] getContent(int eventID, String username, int contentID);
+	public byte[] getContentThumbnail(int eventID, String username, int contentID);
 }

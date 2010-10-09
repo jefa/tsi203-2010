@@ -32,7 +32,7 @@ public class ServicesUpload implements ServicesUploadRemote {
     public void postConstruct() {
         try {
 			Context ctx = getContext();
-			servicesEvent = (ServicesEventRemote) ctx.lookup("ServicesEvent/remote");  
+			servicesEvent = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");  
 		}
         catch (NamingException e) {
 			// TODO Auto-generated catch block
@@ -58,4 +58,12 @@ public class ServicesUpload implements ServicesUploadRemote {
 		return servicesEvent.uploadContent(eventID, username, files);
 	}
 
+	public byte[] getMultimedia(int eventID, String username, int contentID) {
+		return servicesEvent.getContent(eventID, username, contentID);
+	}
+	
+	public byte[] getMultimediaThumbnail(int eventID, String username, int contentID) {
+		return servicesEvent.getContentThumbnail(eventID, username, contentID);
+	}
+	
 }
