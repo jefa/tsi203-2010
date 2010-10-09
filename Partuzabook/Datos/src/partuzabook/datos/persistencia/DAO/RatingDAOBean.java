@@ -29,7 +29,7 @@ public class RatingDAOBean extends JpaDao<RatingPK, Rating> implements RatingDAO
 	public int getAverageRatingOfContent(int contentID) {
 		Query namedQuery = em.createNamedQuery("Rating.avgRating");
 		namedQuery.setParameter("cntId", contentID);
-		return (Integer)namedQuery.getSingleResult();
+		return ((Double)namedQuery.getSingleResult()).intValue();
 	}
 
 
