@@ -17,6 +17,9 @@ import partuzabook.datos.persistencia.beans.Video;
 public class TranslatorContent implements ITranslatable {
 	
 	public Object translate(Object iEnt) {
+		if(!(iEnt instanceof Content)){
+			//TODO: throw exception			
+		}			
 		Content ent = (Content)iEnt;
 		DatatypeContent dat = new DatatypeContent();
 		dat.contId = ent.getCntIdAuto();
@@ -49,6 +52,7 @@ public class TranslatorContent implements ITranslatable {
 		} else {
 			dat.type = DatatypeContent.EXTERNAL;
 		}
+		dat.pos = ent.getPos();
 		return dat;
 	}
 }
