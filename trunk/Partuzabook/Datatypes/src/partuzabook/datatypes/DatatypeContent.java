@@ -12,6 +12,8 @@ public class DatatypeContent implements Serializable {
 	
 	public Integer contId;
 	
+	public Integer avgScore;
+	
 	public List<DatatypeComment> comments;
 	
 	public List<DatatypeRating> ratings;
