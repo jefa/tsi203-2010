@@ -354,6 +354,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	private List<DatatypeContent> orderContentByInt(List<DatatypeContent> list, Content contenido, HashMap<Integer,Integer> vals) {
 			
 		DatatypeContent newContent = (DatatypeContent)(new TranslatorContent().translate(contenido));
+		newContent.avgScore = vals.get(newContent.contId);
 		int index = 0;
 		for (Iterator<DatatypeContent> it = list.iterator(); it.hasNext(); ) {
 			DatatypeContent dc = it.next();
@@ -377,13 +378,15 @@ public class ServicesEvent implements ServicesEventRemote {
 		for(Iterator<Event> it = allEvents.iterator(); it.hasNext(); ) {
 			Event e = it.next();
 			Photo photo = photoDao.findBestRatedInEvent(e);
-			ratingsByPhotoId.put(photo.getCntIdAuto(), ratingDao.getAverageRatingOfContent(photo.getCntIdAuto()));
-			orderContentByInt(res, photo, ratingsByPhotoId);
+			if(photo != null) {
+				ratingsByPhotoId.put(photo.getCntIdAuto(), ratingDao.getAverageRatingOfContent(photo.getCntIdAuto()));
+				orderContentByInt(res, photo, ratingsByPhotoId);
+			}
 		}
-		
-		res.subList(0, length+1);
-		
-		return res;
+		if(res.size() > length)
+			return res.subList(0, length);
+		else 
+			return res;
 	}
 
 	public List<DatatypeContent> getMostCommentedPictures(int length) {
