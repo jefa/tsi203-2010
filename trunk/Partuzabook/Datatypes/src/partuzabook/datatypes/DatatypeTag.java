@@ -9,9 +9,9 @@ public class DatatypeTag implements Serializable{
 
 	public Integer posY;
 
-	public DatatypeContent content;
+	public Integer contentId;
 	
-	public DatatypeUser user;
+	public String userName;
 
 	
 	public DatatypeTag() {

@@ -7,10 +7,9 @@ public class DatatypeRating implements Serializable{
 	
 	public Integer score;
 
-	public DatatypeContent content;
+	public Integer contentId;
 	
-	public DatatypeUser user;
-
+	public String userName;
 	
 	public DatatypeRating() {
 		
