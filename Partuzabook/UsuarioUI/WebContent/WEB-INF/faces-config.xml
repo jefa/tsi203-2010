@@ -5,7 +5,12 @@
  <managed-bean>
   <managed-bean-name>subirFotoMB</managed-bean-name>
   <managed-bean-class>partuzabook.usuarioUI.SubirFotoMB</managed-bean-class>
-  <managed-bean-scope>session</managed-bean-scope>
+  <managed-bean-scope>request</managed-bean-scope>
+ </managed-bean>
+ <managed-bean>
+  <managed-bean-name>paginaInicioMB</managed-bean-name>
+  <managed-bean-class>partuzabook.usuarioUI.PaginaInicioMB</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
  </managed-bean>
  <managed-bean>
   <managed-bean-name>imageLoader</managed-bean-name>
@@ -22,6 +27,72 @@
   <managed-bean-class>partuzabook.usuarioUI.Controller</managed-bean-class>
   <managed-bean-scope>session</managed-bean-scope>
  </managed-bean>
+ <!-- Navegacion Principal -->
+ <navigation-rule>
+  <display-name>Home</display-name>
+  <from-view-id>*</from-view-id>
+  <navigation-case>
+   <from-outcome>gotoHome</from-outcome>
+   <to-view-id>/paginaInicio.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <display-name>Login</display-name>
+  <from-view-id>*</from-view-id>
+  <navigation-case>
+   <from-outcome>gotoLogin</from-outcome>
+   <to-view-id>/login.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <display-name>Logout</display-name>
+  <from-view-id>*</from-view-id>
+  <navigation-case>
+   <from-outcome>gotoLogout</from-outcome>
+   <to-view-id>/paginaInicio.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <display-name>verEvento</display-name>
+  <from-view-id>*</from-view-id>
+  <navigation-case>
+   <from-outcome>verEvento</from-outcome>
+   <to-view-id>/evento.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <display-name>subirContenido</display-name>
+  <from-view-id>/evento.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>subirContenido</from-outcome>
+   <to-view-id>/subirFoto.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <display-name>verGaleria</display-name>
+  <from-view-id>*</from-view-id>
+  <navigation-case>
+   <from-outcome>verGaleria</from-outcome>
+   <to-view-id>/galeria.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <display-name>loginSuccess</display-name>
+  <from-view-id>login.html</from-view-id>
+  <navigation-case>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/paginaInicio.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <display-name>loginFailed</display-name>
+  <from-view-id>login.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>failed</from-outcome>
+   <to-view-id>/login.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <!-- Navegacion ver Galeria -->
  <navigation-rule>
   <display-name>Album List</display-name>
   <from-view-id>/userAlbums.xhtml</from-view-id>

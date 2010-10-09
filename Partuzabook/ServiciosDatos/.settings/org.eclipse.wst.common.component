@@ -5,9 +5,6 @@
         <dependent-module archiveName="EntityTranslators.jar" deploy-path="/" handle="module:/resource/EntityTranslators/EntityTranslators">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="Datatypes.jar" deploy-path="/" handle="module:/resource/Datatypes/Datatypes">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="java-output-path" value="/ServicioDatos/build/classes"/>
     </wb-module>
 </project-modules>

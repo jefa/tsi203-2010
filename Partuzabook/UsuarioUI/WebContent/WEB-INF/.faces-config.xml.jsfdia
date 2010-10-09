@@ -1,2 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<PROCESS model-entity="JSFProcess"/>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#userAlbums.xhtml" PATH="/userAlbums.xhtml"
+  SHAPE="32,32,50,57" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#userAlbums.xhtml:0" NAME="item"
+   PATH="/userAlbums.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="showAlbum::#album.xhtml" NAME="output"
+    PATH="/album.xhtml" TARGET="rules:#album.xhtml" TITLE="showAlbum" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#album.xhtml" PATH="/album.xhtml"
+  SHAPE="240,33,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#album.xhtml:0" NAME="item"
+   PATH="/album.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="showImage::#image.xhtml" NAME="output"
+    PATH="/image.xhtml" TARGET="rules:#image.xhtml" TITLE="showImage" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#image.xhtml" PATH="/image.xhtml"
+  SHAPE="448,17,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:*" PATH="*" SHAPE="32,129,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:0" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="gotoHome::#paginaInicio.xhtml" NAME="output"
+    PATH="/paginaInicio.xhtml" TARGET="rules:#paginaInicio.xhtml"
+    TITLE="gotoHome" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#paginaInicio.xhtml"
+  PATH="/paginaInicio.xhtml" SHAPE="312,144,50,25" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:*:1" PATH="*" SHAPE="32,241,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:1" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="gotoLogin::#login.xhtml" NAME="output"
+    PATH="/login.xhtml" TARGET="rules:#login.xhtml" TITLE="gotoLogin" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*:2" PATH="*" SHAPE="32,353,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:2" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="gotoLogout::#paginaInicio.xhtml"
+    NAME="output" PATH="/paginaInicio.xhtml"
+    TARGET="rules:#paginaInicio.xhtml" TITLE="gotoLogout" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*:3" PATH="*" SHAPE="32,689,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:3" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="verEvento::#evento.xhtml" NAME="output"
+    PATH="/evento.xhtml" TARGET="rules:#evento.xhtml" TITLE="verEvento" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#evento.xhtml" PATH="/evento.xhtml"
+  SHAPE="240,705,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#evento.xhtml:0" NAME="item"
+   PATH="/evento.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="subirContenido::#subirFoto.xhtml"
+    NAME="output" PATH="/subirFoto.xhtml"
+    TARGET="rules:#subirFoto.xhtml" TITLE="subirContenido" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*:4" PATH="*" SHAPE="32,801,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:4" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="verGaleria::#galeria.xhtml" NAME="output"
+    PATH="/galeria.xhtml" TARGET="rules:#galeria.xhtml"
+    TITLE="verGaleria" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:login.html" PATH="login.html"
+  SHAPE="32,465,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:login.html:0" NAME="item" PATH="login.html" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="success::#paginaInicio.xhtml" NAME="output"
+    PATH="/paginaInicio.xhtml" TARGET="rules:#paginaInicio.xhtml"
+    TITLE="success" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:login.xhtml" PATH="login.xhtml"
+  SHAPE="32,577,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:login.xhtml:0" NAME="item" PATH="login.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="failed::#login.xhtml" NAME="output"
+    PATH="/login.xhtml" TARGET="rules:#login.xhtml" TITLE="failed" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#subirFoto.xhtml" PATH="/subirFoto.xhtml"
+  SHAPE="448,689,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#login.xhtml" PATH="/login.xhtml"
+  SHAPE="256,593,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#galeria.xhtml" PATH="/galeria.xhtml"
+  SHAPE="240,817,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

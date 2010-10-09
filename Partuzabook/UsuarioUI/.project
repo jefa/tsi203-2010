@@ -3,7 +3,6 @@
 	<name>UsuarioUI</name>
 	<comment></comment>
 	<projects>
-		<project>Datatypes</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

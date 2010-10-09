@@ -3,7 +3,6 @@
 	<name>ServiciosDatos</name>
 	<comment></comment>
 	<projects>
-		<project>Datatypes</project>
 		<project>EntityTranslators</project>
 	</projects>
 	<buildSpec>
