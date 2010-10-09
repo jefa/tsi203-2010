@@ -185,9 +185,9 @@ public class ServicesEvent implements ServicesEventRemote {
 		return nUser.getMyEvents().contains(ev);
   	}
 
-	public DatatypeContent getGalleryPhotoAtPos(String eventName, int pos) {
+	public DatatypeContent getGalleryPhotoAtPos(int eventID, int pos) {
 		// Verify existence of Event
-		Event event = (Event) evDao.findByName(eventName);
+		Event event = (Event) evDao.findByID(eventID);
 		if (event == null) {
 			throw new EventNotFoundException();
 		}

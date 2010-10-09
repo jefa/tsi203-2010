@@ -25,7 +25,7 @@ public interface ServicesEventRemote {
 	 * @param eventName - Name of the Event 
 	 * @param pos - Position of content from Photo Gallery of the event
 	 */
-	public DatatypeContent getGalleryPhotoAtPos(String eventName, int pos);
+	public DatatypeContent getGalleryPhotoAtPos(int eventID, int pos);
 	
 	/**
 	 * Returns true if the User exists, and is related to the Event
