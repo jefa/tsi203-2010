@@ -13,7 +13,5 @@ public interface PhotoDAO extends Dao<Integer, Photo>{
 	
 	public Photo findMostCommentedInEvent(Event event);
 	
-	//TODO: Preguntar si quieren que la creacion de la entidad sea en el DAO o que la haga la logica
-	//Comment create(String username, String password);
 	
 }
