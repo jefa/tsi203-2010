@@ -29,15 +29,24 @@ public class PhotoDAOBean extends JpaDao<Integer, Photo> implements PhotoDAO {
 	
 	@Override
 	public Photo findBestRatedInEvent(Event event) {
-		Query namedQuery = em.createNamedQuery("Photo.findBestRatedInEvent");		
-		return (Photo)namedQuery.getResultList().get(0);
+		Query namedQuery = em.createNamedQuery("Photo.findBestRatedInEvent");
+		namedQuery.setParameter("event", event);
+		List<Photo> list = (List<Photo>)namedQuery.getResultList();
+		if(list != null && list.size() > 0)
+			return list.get(0);
+		else
+			return null;
 	}
 
 	@Override
 	public Photo findMostCommentedInEvent(Event event) {
 		Query namedQuery = em.createNamedQuery("Photo.findMostCommentedInEvent");
 		namedQuery.setParameter("event", event);
-		return (Photo)namedQuery.getResultList().get(0);
+		List<Photo> list = (List<Photo>)namedQuery.getResultList();
+		if(list != null && list.size() > 0)
+			return list.get(0);
+		else
+			return null;
 	}
 
 
