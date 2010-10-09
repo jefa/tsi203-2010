@@ -1,5 +1,11 @@
 -- LA BASE DE DATOS DEBE LLAMARSE Partuzabook
 
+-- El album debe tener un ID autogenerado
+
+ALTER TABLE album ADD COLUMN alb_id_auto INTEGER;
+
+ALTER TABLE album ALTER COLUMN alb_id_auto SET NOT NULL;
+
 -- Agregado por Gonzalo el 5/10. Al user le faltaban estos campos de info personal.
 
 ALTER TABLE users ADD COLUMN name CHARACTER VARYING (100) ;
