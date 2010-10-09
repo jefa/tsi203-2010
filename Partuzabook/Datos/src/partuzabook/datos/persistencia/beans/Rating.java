@@ -14,7 +14,9 @@ import java.sql.Timestamp;
 @Entity
 @Table(name="ratings")
 @NamedQueries({
-	@NamedQuery(name = "Rating", query = "SELECT o FROM Rating o")
+	@NamedQuery(name = "Rating", query = "SELECT o FROM Rating o"),
+	@NamedQuery(name = "Rating.avgRating",
+			query = "SELECT avg(score) FROM Rating r WHERE r.content = :content")
 	})
 public class Rating implements Serializable {
 	private static final long serialVersionUID = 1L;
