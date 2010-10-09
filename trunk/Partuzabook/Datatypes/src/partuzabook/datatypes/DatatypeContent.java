@@ -4,6 +4,78 @@ import java.io.Serializable;
 import java.util.List;
 
 public class DatatypeContent implements Serializable {
+	public Integer getContId() {
+		return contId;
+	}
+
+	public void setContId(Integer contId) {
+		this.contId = contId;
+	}
+
+	public Integer getAvgScore() {
+		return avgScore;
+	}
+
+	public void setAvgScore(Integer avgScore) {
+		this.avgScore = avgScore;
+	}
+
+	public List<DatatypeComment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<DatatypeComment> comments) {
+		this.comments = comments;
+	}
+
+	public List<DatatypeRating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(List<DatatypeRating> ratings) {
+		this.ratings = ratings;
+	}
+
+	public List<DatatypeTag> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<DatatypeTag> tags) {
+		this.tags = tags;
+	}
+
+	public short getType() {
+		return type;
+	}
+
+	public void setType(short type) {
+		this.type = type;
+	}
+
+	public int getPos() {
+		return pos;
+	}
+
+	public void setPos(int pos) {
+		this.pos = pos;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public static short getPhoto() {
+		return PHOTO;
+	}
+
+	public static short getVideo() {
+		return VIDEO;
+	}
+
+	public static short getExternal() {
+		return EXTERNAL;
+	}
+
 	private static final long serialVersionUID = 1L;
 	
 	public static final short PHOTO = 0;
