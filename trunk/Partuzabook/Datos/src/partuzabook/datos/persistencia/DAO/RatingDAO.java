@@ -8,6 +8,8 @@ import partuzabook.datos.persistencia.beans.RatingPK;
 @Local
 public interface RatingDAO extends Dao<RatingPK, Rating>{
 	
+	public int getAverageRatingOfContent(int contentID);
+	
 	//TODO: Preguntar si quieren que la creacion de la entidad sea en el DAO o que la haga la logica
 	//Comment create(String username, String password);
 	
