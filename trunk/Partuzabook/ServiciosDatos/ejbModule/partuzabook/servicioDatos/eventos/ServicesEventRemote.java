@@ -8,6 +8,7 @@ import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.beans.Content;
+import partuzabook.datos.persistencia.beans.Photo;
 
 @Remote
 public interface ServicesEventRemote {
@@ -56,4 +57,19 @@ public interface ServicesEventRemote {
 	public List<String> uploadContent(int eventID, String username, List<DataTypeFile> list); 
 	public byte[] getContent(int eventID, String username, int contentID);
 	public byte[] getContentThumbnail(int eventID, String username, int contentID);
+	
+	/**
+	 * Returns a list of the best picture for each event, ordered by rating
+	 */
+	public List<DatatypeContent> getBestQualifiedPictures(int length);
+	
+	/**
+	 * Returns  a list of the best qualified pictures in all the server
+	 */
+	public List<DatatypeContent> getMostCommentedPictures(int length);
+	
+	/**
+	 * Returns  a list of the best qualified pictures in all the server
+	 */
+	public List<DatatypeUser> getMostTagged();
 }
