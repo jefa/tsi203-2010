@@ -32,4 +32,5 @@ public class RatingDAOBean extends JpaDao<RatingPK, Rating> implements RatingDAO
 		return (Integer)namedQuery.getSingleResult();
 	}
 
+
 }
