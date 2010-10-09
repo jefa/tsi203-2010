@@ -4,10 +4,20 @@ import java.io.Serializable;
 
 public class DataTypeFile implements Serializable{
 
+	private String id;
 	private String name;
 	private String mime;
 	private long length;
 	private byte[] data;
+	
+	public String getId() {
+		return id;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	public byte[] getData() {
 		return data;
 	}
@@ -34,6 +44,12 @@ public class DataTypeFile implements Serializable{
 				mime = "image/unknown";
 			}
 		}
+	}
+	public boolean isImage() {
+		return mime.contains("image");
+	}
+	public boolean isVideo() {
+		return mime.contains("ocstream");
 	}
 	public long getLength() {
 		return length;

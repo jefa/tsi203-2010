@@ -3,6 +3,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
+import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeUser;
@@ -32,14 +33,14 @@ public interface ServicesEventRemote {
 	 * @param eventName				- Name of the event
 	 * @param user					- Identifier of the user  
 	 */
-	public boolean isUserRelatedToEvent(String eventName, String user);
+	public boolean isUserRelatedToEvent(int eventID, String user);
 	
 	/**
 	 * Returns a list of candidate Users for Tagging -participants of the event, who have not already been tagged in the content-
 	 * @param eventID				- Identifier of the event
 	 * @param contentID				- Identifier of the content 
 	 */
-	public List<DatatypeUser> getUsersForTag(String eventName, int contentID);	
+	public List<DatatypeUser> getUsersForTag(int eventID, int contentID);	
 	
 	/**
 	 * Create a new instance of Tag associated to the content, user that was tagged, and the tagger
@@ -50,12 +51,8 @@ public interface ServicesEventRemote {
 	 * @param posX					- Position of the tag in the X axis within the content
 	 * @param posY					- Position of the tag in the Y axis within the content 
 	 */
-	public void tagUserInContent(String eventName, int contentID, String userTagger, String userToTag, int posX, int posY) throws Exception;
+	public void tagUserInContent(int eventID, int contentID, String userTagger, String userToTag, int posX, int posY) throws Exception;
 
-	/**
-	 * Confirms the contents uploaded and makes them public
-	 * @param list					-
-	 */
-	public void confirmUploadContent(List<Content> list); 
+	public List<String> uploadContent(int eventID, String username, List<DataTypeFile> list); 
 	
 }

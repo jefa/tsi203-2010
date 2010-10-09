@@ -1,0 +1,10 @@
+DROP TABLE "comment";
+DROP TABLE tags;
+DROP TABLE ratings;
+DROP TABLE album;
+DROP TABLE "content";
+DROP TABLE mods;
+DROP TABLE participants;
+DROP TABLE notifications;
+DROP TABLE events;
+DROP TABLE users;

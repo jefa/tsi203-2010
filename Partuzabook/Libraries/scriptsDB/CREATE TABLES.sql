@@ -63,6 +63,7 @@ CREATE TABLE "content"
   duration character varying(10),
   album boolean,
   evt_id integer NOT NULL,
+  pos integer NOT NULL,
   CONSTRAINT "PK_CONTENT" PRIMARY KEY (cnt_id_auto),
   CONSTRAINT "FK_ALB_EVT" FOREIGN KEY (evt_id)
       REFERENCES events (evt_id_auto) MATCH SIMPLE

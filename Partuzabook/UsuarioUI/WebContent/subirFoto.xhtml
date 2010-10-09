@@ -45,6 +45,8 @@
 							</rich:panel>
 						</rich:dataGrid>
 					</rich:panel>
+					<a4j:commandButton action="#{subirFotoMB.confirmUpload}"
+						reRender="info, upload" value="Confirm" />
 					<rich:spacer height="3" />
 					<br />
 					<a4j:commandButton action="#{subirFotoMB.clearUploadData}"

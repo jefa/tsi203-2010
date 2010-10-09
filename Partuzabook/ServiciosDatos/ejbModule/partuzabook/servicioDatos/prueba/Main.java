@@ -53,7 +53,7 @@ public class Main {
 	        ServicesEventRemote evt = (ServicesEventRemote) ctx.lookup("ServicesEvent/remote");
 	        if (evt != null) {
 	        	// Invocar isUserRelatedToEvent
-	        	if (evt.isUserRelatedToEvent("Cumple Vero", "vero")) {
+	        	if (evt.isUserRelatedToEvent(1, "vero")) {
 	        		System.out.println("El user 'vero' es participante de 'Cumple Vero'");
 	        	} else {
 	        		System.out.println("No estan asociados 'vero' y 'Cumple Vero'");
@@ -66,14 +66,14 @@ public class Main {
 	        		System.out.println("El tamaño de la lista de events es: " + list.size());
 	        	}
 	        	// Invocar getUsersForTag
-	        	List<DatatypeUser> users = evt.getUsersForTag("Cumple Vero",0);
+	        	List<DatatypeUser> users = evt.getUsersForTag(1,0);
 	        	if (users == null){
 	        		System.out.println("getUsersForTag retorno lista vacia");
 	        	} else {
 	        		System.out.println("El tamaño de la lista de users para taggear es: " + users.size());
 	        	}	        	
 	        	// Invocar tagUserInContent
-	        	evt.tagUserInContent("Cumple Vero", 0, "vero", "gonza", 1, 1);	        		        	
+	        	evt.tagUserInContent(1, 0, "vero", "gonza", 1, 1);	        		        	
 	        	System.out.println("termine");
 	        	usr.getUpdateNotifications("gonza");
 	        } else {
