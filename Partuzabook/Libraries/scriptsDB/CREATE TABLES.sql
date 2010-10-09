@@ -57,6 +57,7 @@ CREATE TABLE "content"
   creator character varying(30) NOT NULL,
   description character varying(100),
   size integer,
+  pos integer NOT NULL,
   url character varying(50),
   flags character(1) NOT NULL,
   reg_date timestamp without time zone NOT NULL,
