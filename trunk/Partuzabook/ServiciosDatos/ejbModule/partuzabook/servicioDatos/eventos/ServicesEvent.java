@@ -36,6 +36,7 @@ import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.utils.TranslatorCollection;
+import partuzabook.entityTranslators.TranslatorContent;
 
 /**
  * Session Bean implementation class Event
@@ -137,10 +138,23 @@ public class ServicesEvent implements ServicesEventRemote {
 		return nUser.getMyEvents().contains(ev);
   	}
 
-	
-	public DatatypeContent getGalleryMultimediaAtPos(String eventID, int pos) {
-		//TODO getGalleryMultimediaAtPos
-		return null;
+	/**
+	 * Returns the photo at position in the photo gallery associated to the event
+	 * @param eventName - Name of the Event 
+	 * @param pos - Position of content from Photo Gallery of the event
+	 */
+	public DatatypeContent getGalleryPhotoAtPos(String eventName, int pos) {
+		// Verify existence of Event
+		Event event = (Event) evDao.findByName(eventName);
+		if (event == null) {
+			throw new EventNotFoundException();
+		}
+		Content c = contDao.findByPosInGalleryEvent(event, pos);
+		if (c == null) {
+			throw new ContentNotFoundException();
+		}
+		TranslatorContent trans = new TranslatorContent();
+		return (DatatypeContent) trans.translate(c);
 	}
 	
 	//    

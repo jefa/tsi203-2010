@@ -7,7 +7,11 @@ import partuzabook.datos.persistencia.beans.Event;
 
 @Local
 public interface ContentDAO extends Dao<Integer, Content>{
-	Content findByIDInEvent(Event event, int contentID);
+	
+	public Content findByIDInEvent(Event event, int contentID);
+	
+	public Content findByPosInGalleryEvent(Event event, int pos);
+
 	//TODO: Preguntar si quieren que la creacion de la entidad sea en el DAO o que la haga la logica
 	//Comment create(String username, String password);
 	
