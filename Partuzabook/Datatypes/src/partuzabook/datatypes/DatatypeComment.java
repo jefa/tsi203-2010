@@ -7,10 +7,9 @@ public class DatatypeComment implements Serializable{
 	
 	public String text;
 
-	public DatatypeContent content;
+	public Integer contentId;
 	
-	public DatatypeUser user;
-	
+	public String userName;
 	
 	public DatatypeComment() {
 		
