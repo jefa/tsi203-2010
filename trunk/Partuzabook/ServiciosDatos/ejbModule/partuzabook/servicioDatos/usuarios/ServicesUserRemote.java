@@ -17,9 +17,10 @@ public interface ServicesUserRemote {
      * @param username						- New user's username for the account
      * @param password						- New user's password
      * @param mail							- New user's email
+     * @param name							- New user's full name
      * @return								- A datatype containing the new user's info
      */
-	public DatatypeUser createNormalUser(String username, String password, String mail);
+	public DatatypeUser createNormalUser(String username, String password, String mail, String name);
 	
 	/**
 	 * Returns true if exists a normal user with id username

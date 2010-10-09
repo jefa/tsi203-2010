@@ -6,9 +6,8 @@ import javax.ejb.Remote;
 import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeUser;
-import partuzabook.datos.persistencia.beans.Content;
-import partuzabook.datos.persistencia.beans.Photo;
 
 @Remote
 public interface ServicesEventRemote {
@@ -22,10 +21,9 @@ public interface ServicesEventRemote {
 			int maxContentsPerEvent);
 	
 	/**
-	 * Returns the content details 
-	 * @param eventName				-
-	 * @param pos					-
-	 * @return						-
+	 * Returns the photo at position in the photo gallery associated to the event
+	 * @param eventName - Name of the Event 
+	 * @param pos - Position of content from Photo Gallery of the event
 	 */
 	public DatatypeContent getGalleryPhotoAtPos(String eventName, int pos);
 	
@@ -59,17 +57,29 @@ public interface ServicesEventRemote {
 	public byte[] getContentThumbnail(int eventID, String username, int contentID);
 	
 	/**
+     * Returns a list of Events that match the name provided
+     * @param name				- Name to search  
+     * @param maxEvents			- Max number of events to return in the list
+     */ 
+	public List<DatatypeEventSummary> searchForEvent(String name, int maxEvents);
+	
+	
+	/**
 	 * Returns a list of the best picture for each event, ordered by rating
+	 * @param lenght - lenght of the list to return 
 	 */
 	public List<DatatypeContent> getBestQualifiedPictures(int length);
 	
 	/**
 	 * Returns  a list of the best qualified pictures in all the server
+	 * @param lenght - lenght of the list to return
 	 */
 	public List<DatatypeContent> getMostCommentedPictures(int length);
 	
 	/**
 	 * Returns  a list of the best qualified pictures in all the server
+	 * @param lenght - lenght of the list to return
 	 */
-	public List<DatatypeUser> getMostTagged();
+	public List<DatatypeMostTagged> getMostTagged(int lenght);
+	
 }

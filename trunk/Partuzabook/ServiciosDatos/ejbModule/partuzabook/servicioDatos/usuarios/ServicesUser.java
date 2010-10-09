@@ -53,7 +53,6 @@ public class ServicesUser implements ServicesUserRemote {
 	        System.out.println("Lookup worked!"); 
 		}
         catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -64,14 +63,16 @@ public class ServicesUser implements ServicesUserRemote {
 //    	notifDao = null;
     }
 
-	public DatatypeUser createNormalUser(String username, String password, String mail) {
+	public DatatypeUser createNormalUser(String username, String password, String mail, String name) {
 		if (existsNormalUser(username)) {
 			throw new UserAlreadyExistsException();
 		}
 		NormalUser newUser = new NormalUser();
 		newUser.setUsername(username);
 		newUser.setPassword(password);
-		//TODO newUser.setMail(mail);
+		newUser.setEmail(mail);
+		newUser.setName(name);
+		newUser.setImgPath("");
 		newUser.setRegDate(new Timestamp(new java.util.Date().getTime()));
 		
 		nUserDao.persist(newUser);
@@ -87,7 +88,7 @@ public class ServicesUser implements ServicesUserRemote {
 		NormalUser user = nUserDao.findByID(username);
 		if (user == null) {
 			throw new UserNotFoundException();
-		}
+		} 
 		return user;
 	}
 

@@ -22,6 +22,7 @@ import javax.naming.NamingException;
 import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeRating;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.ContentDAO;
@@ -44,6 +45,7 @@ import partuzabook.datos.persistencia.beans.User;
 import partuzabook.datos.persistencia.beans.Video;
 import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
 import partuzabook.entityTranslators.TranslatorContent;
+import partuzabook.entityTranslators.TranslatorUser;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
 import partuzabook.servicioDatos.exception.UnrecognizedFileTypeException;
@@ -93,7 +95,6 @@ public class ServicesEvent implements ServicesEventRemote {
     		ratingDao = (RatingDAO) ctx.lookup("RatingDAOBean/local");
 		}
         catch (NamingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -144,7 +145,37 @@ public class ServicesEvent implements ServicesEventRemote {
 		}
 		return listDatatypes;
 	}
+	
+	public List<DatatypeEventSummary> searchForEvent(String name, int maxEvents){
+		// First search by full name entered
+		List<Event> list =  evDao.findBySimilarName(name);
+		if (list.size() > maxEvents) {
+			list = list.subList(0, maxEvents);
+			return TranslatorCollection.translateEventSummary(list);
+		} else if (list.size() < maxEvents) {
+			int cant = list.size();
+			// Try searching for substrings of the entered name
+			String[] substr = name.split(" ");
+			int i = 0;
+			while (i < substr.length && cant < maxEvents) {
+				List<Event> listSubstr = evDao.findBySimilarName(substr[i]); 
+				cant += listSubstr.size();
+				list.addAll(listSubstr);
+				i++;
+			}
+			if (list.size() == 0){
+				throw new EventNotFoundException();
+			} else if (list.size() > maxEvents) {
+				list = list.subList(0, maxEvents);					
+			} 
+			return TranslatorCollection.translateEventSummary(list);			
+		}
+
 		
+		return null;
+	}
+
+	
 	public boolean isUserRelatedToEvent(int eventID, String user) {
 		Event ev = getEvent(eventID);
 		NormalUser nUser = nUserDao.findByID(user);
@@ -154,11 +185,6 @@ public class ServicesEvent implements ServicesEventRemote {
 		return nUser.getMyEvents().contains(ev);
   	}
 
-	/**
-	 * Returns the photo at position in the photo gallery associated to the event
-	 * @param eventName - Name of the Event 
-	 * @param pos - Position of content from Photo Gallery of the event
-	 */
 	public DatatypeContent getGalleryPhotoAtPos(String eventName, int pos) {
 		// Verify existence of Event
 		Event event = (Event) evDao.findByName(eventName);
@@ -352,7 +378,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	
 	
 	private List<DatatypeContent> orderContentByInt(List<DatatypeContent> list, Content contenido, HashMap<Integer,Integer> vals) {
-			
+
 		DatatypeContent newContent = (DatatypeContent)(new TranslatorContent().translate(contenido));
 		newContent.avgScore = vals.get(newContent.contId);
 		int index = 0;
@@ -368,7 +394,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			
 		return list;
 	}
-	
+
 	public List<DatatypeContent> getBestQualifiedPictures(int length) {
 		List<Event> allEvents = evDao.findAll();
 		List<DatatypeContent> res = new ArrayList<DatatypeContent>();
@@ -410,11 +436,48 @@ public class ServicesEvent implements ServicesEventRemote {
 			return res;		
 	}
 
-	public List<DatatypeUser> getMostTagged() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<DatatypeMostTagged> getMostTagged(int length) {
+		List<DatatypeMostTagged> dataMostTagged = new ArrayList<DatatypeMostTagged>();
+		List<Event> allEvents = evDao.findAll();
+		Iterator<Event> itEv = allEvents.iterator();
+		while (itEv.hasNext()) {
+			Event ev = itEv.next();
+			NormalUser mostTagged = null;
+			int maxTags = 0;
+			List<NormalUser> participants = ev.getMyParticipants();
+			Iterator<NormalUser> itUser = participants.iterator();
+			while (itUser.hasNext()) {
+				NormalUser currentUser = itUser.next();
+				int size = currentUser.getMyTags().size();
+				if (size > maxTags) {
+					maxTags = size;
+					mostTagged = currentUser; 
+				}
+			}
+			DatatypeMostTagged data = new DatatypeMostTagged();
+			data.eventName = ev.getEvtName();
+			TranslatorUser transUser = new TranslatorUser();
+			data.user = (DatatypeUser) transUser.translate(mostTagged);
+			data.cantTags = maxTags;
+			// Add to collection
+			insertOrderedMostTagged(dataMostTagged,data);
+		}
+		if (dataMostTagged.size() > length) {
+			return dataMostTagged.subList(0, length);
+		} else {
+			return dataMostTagged;
+		}		
 	}
 	
-	
+	private List<DatatypeMostTagged> insertOrderedMostTagged(List<DatatypeMostTagged> orderedList, DatatypeMostTagged dataMostTagged) {		
+		int index = 0;
+		Iterator<DatatypeMostTagged> it = orderedList.iterator();
+		while (it.hasNext() && it.next().cantTags < dataMostTagged.cantTags ) {
+			index++;
+		}
+		orderedList.add(index, dataMostTagged);
+		return orderedList;
+	}
+
 	
 }
