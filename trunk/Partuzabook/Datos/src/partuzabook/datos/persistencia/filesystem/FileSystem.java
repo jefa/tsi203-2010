@@ -20,7 +20,6 @@ public class FileSystem implements FileSystemLocal {
      * Default constructor. 
      */
     public FileSystem() {
-        // TODO Auto-generated constructor stub
     }
     
     private String getBasePath() throws IOException {
@@ -59,11 +58,9 @@ public class FileSystem implements FileSystemLocal {
 	    	return data;
 		}
 		catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -89,11 +86,9 @@ public class FileSystem implements FileSystemLocal {
 	    	return data;
 		}
 		catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
