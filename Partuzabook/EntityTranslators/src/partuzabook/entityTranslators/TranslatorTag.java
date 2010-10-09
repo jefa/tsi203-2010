@@ -14,6 +14,7 @@ public class TranslatorTag implements ITranslatable {
 		dat.posX = tag.get_posX_();
 		dat.posY = tag.get_posY_();
 		dat.userName = "";
+		// Translate name of user tagged, depending if tag is TagForUser or not
 		if (tag instanceof TagForNotUser) {
 			TagForNotUser tagNU = (TagForNotUser) tag;
 			dat.userName = tagNU.getUsrTagCustom();
