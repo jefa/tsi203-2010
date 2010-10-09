@@ -73,5 +73,15 @@
 		<auth-method>BASIC</auth-method>
 	</login-config>
 
+	<servlet>
+	  <description></description>
+	  <display-name>ContentFeeder</display-name>
+	  <servlet-name>ContentFeeder</servlet-name>
+	  <servlet-class>partuzabook.usuarioUI.ContentFeeder</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	  <servlet-name>ContentFeeder</servlet-name>
+	  <url-pattern>/ContentFeeder</url-pattern>
+	</servlet-mapping>
 
 </web-app>

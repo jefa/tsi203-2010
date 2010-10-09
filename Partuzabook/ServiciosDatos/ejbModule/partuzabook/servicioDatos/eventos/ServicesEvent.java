@@ -75,12 +75,12 @@ public class ServicesEvent implements ServicesEventRemote {
     public void postConstruct() {
         try {
 			Context ctx = getContext();
-	        evDao = (EventDAO) ctx.lookup("EventDAOBean/local");  
-    		contDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
-    		nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
-    		tagDao = (TagDAO) ctx.lookup("TagDAOBean/local");    		
-    		notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
-    		fileSystem = (FileSystemLocal) ctx.lookup("FileSystem/local");
+	        evDao = (EventDAO) ctx.lookup("PartuzabookEAR/EventDAOBean/local");  
+    		contDao = (ContentDAO) ctx.lookup("PartuzabookEAR/ContentDAOBean/local");
+    		nUserDao = (NormalUserDAO) ctx.lookup("PartuzabookEAR/NormalUserDAOBean/local");
+    		tagDao = (TagDAO) ctx.lookup("PartuzabookEAR/TagDAOBean/local");    		
+    		notifDao = (NotificationDAO) ctx.lookup("PartuzabookEAR/NotificationDAOBean/local");
+    		fileSystem = (FileSystemLocal) ctx.lookup("PartuzabookEAR/FileSystem/local");
 		}
         catch (NamingException e) {
 			// TODO Auto-generated catch block
@@ -294,13 +294,11 @@ public class ServicesEvent implements ServicesEventRemote {
 				throw new UnrecognizedFileTypeException();
 			}
 			//TODO initMultimediaManager();
-			Timestamp t = new Timestamp(new java.util.Date().getTime());
-			String tstring = t.toString().replace(':', '-').replace('.', '-');
-			String url = fileSystem.writeFile(file.getData(), file.getMime(), eventID + "/", tstring + "-");
+			String url = fileSystem.writeFile(file.getData(), file.getMime(), eventID + "/");
 			content.setAlbum(false);
 			content.setEvent(event);
 			content.setUser(user);
-			content.setRegDate(t);
+			content.setRegDate(new Timestamp(new java.util.Date().getTime()));
 			content.setSize((int) file.getLength());
 			content.setUrl(url);
 			
@@ -310,7 +308,10 @@ public class ServicesEvent implements ServicesEventRemote {
 	    return result;
 	}
 	
-	public byte[] getContent(int eventID, int contentID) {
+	public byte[] getContent(int eventID, String username, int contentID) {
+		if (!isUserRelatedToEvent(eventID, username)) {
+			throw new UserNotRelatedToEventException();
+		}
 		Event event = getEvent(eventID);
 		Content content = contDao.findByIDInEvent(event, contentID);
 		if (content == null) {
@@ -318,6 +319,21 @@ public class ServicesEvent implements ServicesEventRemote {
 		}
 		if (content instanceof Photo) {
 			return fileSystem.readFile(content.getUrl());
+		}
+		return null;
+	}
+	
+	public byte[] getContentThumbnail(int eventID, String username, int contentID) {
+		if (!isUserRelatedToEvent(eventID, username)) {
+			throw new UserNotRelatedToEventException();
+		}
+		Event event = getEvent(eventID);
+		Content content = contDao.findByIDInEvent(event, contentID);
+		if (content == null) {
+			throw new ContentNotFoundException();
+		}
+		if (content instanceof Photo) {
+			return fileSystem.getThumbnail(content.getUrl());
 		}
 		return null;
 	}

@@ -13,6 +13,7 @@
 		<project>Datatypes</project>
 		<project>UsuarioUI</project>
 		<project>ServiciosNotificaciones</project>
+		<project>Utils</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
