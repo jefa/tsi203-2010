@@ -8,6 +8,8 @@ public class DatatypeEventSummary implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	public String evtName;
+	
+	public int evtId;
 
 	public Date date;
 
@@ -22,6 +24,15 @@ public class DatatypeEventSummary implements Serializable{
 		this.evtName = evtName;
 	}
 
+	public int getEvtId() {
+		return evtId;
+	}
+
+
+	public void setEvtId(int evtId) {
+		this.evtId = evtId;
+	}
+	
 
 	public Date getDate() {
 		return date;
