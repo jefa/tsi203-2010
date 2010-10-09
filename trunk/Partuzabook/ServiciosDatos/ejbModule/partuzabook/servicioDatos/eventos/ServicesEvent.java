@@ -5,9 +5,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -19,11 +22,14 @@ import javax.naming.NamingException;
 import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeRating;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.ContentDAO;
 import partuzabook.datos.persistencia.DAO.EventDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.DAO.NotificationDAO;
+import partuzabook.datos.persistencia.DAO.PhotoDAO;
+import partuzabook.datos.persistencia.DAO.RatingDAO;
 import partuzabook.datos.persistencia.DAO.TagDAO;
 import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
@@ -37,13 +43,13 @@ import partuzabook.datos.persistencia.beans.TagForUser;
 import partuzabook.datos.persistencia.beans.User;
 import partuzabook.datos.persistencia.beans.Video;
 import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
+import partuzabook.entityTranslators.TranslatorContent;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
 import partuzabook.servicioDatos.exception.UnrecognizedFileTypeException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.servicioDatos.exception.UserNotRelatedToEventException;
 import partuzabook.utils.TranslatorCollection;
-import partuzabook.entityTranslators.TranslatorContent;
 
 /**
  * Session Bean implementation class Event
@@ -57,6 +63,8 @@ public class ServicesEvent implements ServicesEventRemote {
 	private TagDAO tagDao;
 	private NotificationDAO notifDao;
 	private FileSystemLocal fileSystem;
+	private PhotoDAO photoDao;
+	private RatingDAO ratingDao;
 	
     public ServicesEvent() {
     	
@@ -81,6 +89,8 @@ public class ServicesEvent implements ServicesEventRemote {
     		tagDao = (TagDAO) ctx.lookup("PartuzabookEAR/TagDAOBean/local");    		
     		notifDao = (NotificationDAO) ctx.lookup("PartuzabookEAR/NotificationDAOBean/local");
     		fileSystem = (FileSystemLocal) ctx.lookup("PartuzabookEAR/FileSystem/local");
+    		photoDao = (PhotoDAO) ctx.lookup("PhotoDAOBean/local");
+    		ratingDao = (RatingDAO) ctx.lookup("RatingDAOBean/local");
 		}
         catch (NamingException e) {
 			// TODO Auto-generated catch block
@@ -95,6 +105,8 @@ public class ServicesEvent implements ServicesEventRemote {
     	nUserDao = null;
     	tagDao = null;
     	notifDao = null;
+    	ratingDao = null;
+    	photoDao = null;
     }
     
     private Event getEvent(int eventID) throws EventNotFoundException { 
@@ -337,4 +349,67 @@ public class ServicesEvent implements ServicesEventRemote {
 		}
 		return null;
 	}
+	
+	
+	private List<DatatypeContent> orderContentByInt(List<DatatypeContent> list, Content contenido, HashMap<Integer,Integer> vals) {
+			
+		DatatypeContent newContent = (DatatypeContent)(new TranslatorContent().translate(contenido));
+		int index = 0;
+		for (Iterator<DatatypeContent> it = list.iterator(); it.hasNext(); ) {
+			DatatypeContent dc = it.next();
+			if(vals.get(dc.contId) < vals.get(newContent.contId)) {
+				break;
+			}
+			index++;
+		}
+		
+		list.add(index, newContent);
+			
+		return list;
+	}
+	
+	public List<DatatypeContent> getBestQualifiedPictures(int length) {
+		List<Event> allEvents = evDao.findAll();
+		List<DatatypeContent> res = new ArrayList<DatatypeContent>();
+		
+		HashMap<Integer, Integer> ratingsByPhotoId = new HashMap<Integer, Integer>();
+		
+		for(Iterator<Event> it = allEvents.iterator(); it.hasNext(); ) {
+			Event e = it.next();
+			Photo photo = photoDao.findBestRatedInEvent(e);
+			ratingsByPhotoId.put(photo.getCntIdAuto(), ratingDao.getAverageRatingOfContent(photo.getCntIdAuto()));
+			orderContentByInt(res, photo, ratingsByPhotoId);
+		}
+		
+		res.subList(0, length+1);
+		
+		return res;
+	}
+
+	public List<DatatypeContent> getMostCommentedPictures(int length) {
+		
+		List<Event> allEvents = evDao.findAll();
+		List<DatatypeContent> res = new ArrayList<DatatypeContent>();
+		
+		HashMap<Integer, Integer> cantCommentsByPhotoId = new HashMap<Integer, Integer>();
+		
+		for(Iterator<Event> it = allEvents.iterator(); it.hasNext(); ) {
+			Event e = it.next();
+			Photo photo = photoDao.findMostCommentedInEvent(e);
+			cantCommentsByPhotoId.put(photo.getCntIdAuto(), photo.getComments().size());
+			orderContentByInt(res, photo, cantCommentsByPhotoId);
+		}
+		
+		res.subList(0, length+1);
+		
+		return res;		
+	}
+
+	public List<DatatypeUser> getMostTagged() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+	
 }
