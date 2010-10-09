@@ -11,8 +11,10 @@ import javax.persistence.NamedQuery;
 	@NamedQuery(name = "Photo.findAll", query = "SELECT o FROM Photo o"),
 	@NamedQuery(name = "Photo.findBestRatedInEvent", query = "SELECT o FROM Photo o"),
 	@NamedQuery(name = "Photo.findMostCommentedInEvent", 
-			query = "SELECT c FROM Comment cmt, Event e, Content c WHERE " +
-					"c.Event = e AND cmt.Content = c GROUP BY cmt.cnt_id ORDER BY COUNT(*)")			
+			query = "SELECT p FROM Comment cmt, Photo p WHERE " +
+					"p.event = :event AND cmt.content = p GROUP BY " +
+					"p.cntIdAuto, p.album, p.event, p.pos, p.regDate, p.url, p.user, p.description, p.size" +
+					" ORDER BY COUNT(*)")
 	})
 public class Photo extends SelfContent {
 	private static final long serialVersionUID = 1L;
