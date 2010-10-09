@@ -22,6 +22,7 @@ public class DatatypeContent implements Serializable {
 	
 	public short type;
 
+	public int pos;
 	
 	public DatatypeContent() {
 		
