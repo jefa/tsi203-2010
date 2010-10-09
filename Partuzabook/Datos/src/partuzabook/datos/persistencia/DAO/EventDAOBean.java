@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.Event;
+import partuzabook.datos.persistencia.beans.NormalUser;
 
 @Stateless
 public class EventDAOBean extends JpaDao<Integer, Event> implements EventDAO {
@@ -26,6 +27,13 @@ public class EventDAOBean extends JpaDao<Integer, Event> implements EventDAO {
 		namedQuery.setParameter("name", name);
 		return (Event)namedQuery.getSingleResult();
 	}
+
+	public List<Event> findBySimilarName(String name) {
+		Query namedQuery = em.createNamedQuery("Event.findBySimilarName");
+		namedQuery.setParameter("name", "%"+name+"%");
+		return (List<Event>)namedQuery.getResultList();	
+	}
+
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -39,6 +47,12 @@ public class EventDAOBean extends JpaDao<Integer, Event> implements EventDAO {
 	public List<Event> findAllAfterDate(Date after) {
 		return (List<Event>)em.createNamedQuery("Event.findAllAfterDate")
 			.setParameter("after", after).getResultList();
+	}
+
+	
+	public NormalUser findMostTagged() {
+		Query namedQuery = em.createNamedQuery("Event.findMostTagged");
+		return (NormalUser) namedQuery.getSingleResult();	
 	}
 
 

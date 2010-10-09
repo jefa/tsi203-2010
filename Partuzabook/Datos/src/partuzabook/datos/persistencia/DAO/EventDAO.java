@@ -6,14 +6,19 @@ import java.util.List;
 import javax.ejb.Local;
 
 import partuzabook.datos.persistencia.beans.Event;
+import partuzabook.datos.persistencia.beans.NormalUser;
 
 @Local
 public interface EventDAO extends Dao<Integer, Event>{
 
 	public Event findByName(String name);
-	List<Event> findAll();
-	List<Event> findAllAfterDate(Date after);
-	//TODO: Preguntar si quieren que la creacion de la entidad sea en el DAO o que la haga la logica
-	//ModeratedEvent create();
+
+	public List<Event> findBySimilarName(String name);
+
+	public List<Event> findAll();
 	
+	public List<Event> findAllAfterDate(Date after);
+
+	public NormalUser findMostTagged();
+
 }
