@@ -83,12 +83,12 @@ public class ServicesEvent implements ServicesEventRemote {
     public void postConstruct() {
         try {
 			Context ctx = getContext();
-	        evDao = (EventDAO) ctx.lookup("PartuzabookEAR/EventDAOBean/local");  
-    		contDao = (ContentDAO) ctx.lookup("PartuzabookEAR/ContentDAOBean/local");
-    		nUserDao = (NormalUserDAO) ctx.lookup("PartuzabookEAR/NormalUserDAOBean/local");
-    		tagDao = (TagDAO) ctx.lookup("PartuzabookEAR/TagDAOBean/local");    		
-    		notifDao = (NotificationDAO) ctx.lookup("PartuzabookEAR/NotificationDAOBean/local");
-    		fileSystem = (FileSystemLocal) ctx.lookup("PartuzabookEAR/FileSystem/local");
+	        evDao = (EventDAO) ctx.lookup("EventDAOBean/local");  
+    		contDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
+    		nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
+    		tagDao = (TagDAO) ctx.lookup("TagDAOBean/local");    		
+    		notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
+    		fileSystem = (FileSystemLocal) ctx.lookup("FileSystem/local");
     		photoDao = (PhotoDAO) ctx.lookup("PhotoDAOBean/local");
     		ratingDao = (RatingDAO) ctx.lookup("RatingDAOBean/local");
 		}
@@ -396,13 +396,15 @@ public class ServicesEvent implements ServicesEventRemote {
 		for(Iterator<Event> it = allEvents.iterator(); it.hasNext(); ) {
 			Event e = it.next();
 			Photo photo = photoDao.findMostCommentedInEvent(e);
-			cantCommentsByPhotoId.put(photo.getCntIdAuto(), photo.getComments().size());
-			orderContentByInt(res, photo, cantCommentsByPhotoId);
+			if(photo != null) {
+				cantCommentsByPhotoId.put(photo.getCntIdAuto(), photo.getComments().size());
+				orderContentByInt(res, photo, cantCommentsByPhotoId);	
+			}		
 		}
-		
-		res.subList(0, length+1);
-		
-		return res;		
+		if(res.size() > length)
+			return res.subList(0, length);
+		else 
+			return res;		
 	}
 
 	public List<DatatypeUser> getMostTagged() {
