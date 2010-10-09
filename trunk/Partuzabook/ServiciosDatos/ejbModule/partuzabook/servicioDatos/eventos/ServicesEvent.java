@@ -16,6 +16,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeUser;
@@ -28,13 +29,19 @@ import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
+import partuzabook.datos.persistencia.beans.Photo;
+import partuzabook.datos.persistencia.beans.SelfContent;
 import partuzabook.datos.persistencia.beans.Tag;
 import partuzabook.datos.persistencia.beans.TagForNotUser;
 import partuzabook.datos.persistencia.beans.TagForUser;
 import partuzabook.datos.persistencia.beans.User;
+import partuzabook.datos.persistencia.beans.Video;
+import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
+import partuzabook.servicioDatos.exception.UnrecognizedFileTypeException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
+import partuzabook.servicioDatos.exception.UserNotRelatedToEventException;
 import partuzabook.utils.TranslatorCollection;
 import partuzabook.entityTranslators.TranslatorContent;
 
@@ -49,6 +56,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	private NormalUserDAO nUserDao;
 	private TagDAO tagDao;
 	private NotificationDAO notifDao;
+	private FileSystemLocal fileSystem;
 	
     public ServicesEvent() {
     	
@@ -72,6 +80,7 @@ public class ServicesEvent implements ServicesEventRemote {
     		nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
     		tagDao = (TagDAO) ctx.lookup("TagDAOBean/local");    		
     		notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
+    		fileSystem = (FileSystemLocal) ctx.lookup("FileSystem/local");
 		}
         catch (NamingException e) {
 			// TODO Auto-generated catch block
@@ -88,11 +97,14 @@ public class ServicesEvent implements ServicesEventRemote {
     	notifDao = null;
     }
     
-    /**
-     * Returns a list of Events of interest (Eg: Events from this week)
-     * @param maxEvents - Max number of events to return 
-     * @param maxContentPerEvent - Max number of content to return for each event
-     */ 
+    private Event getEvent(int eventID) throws EventNotFoundException { 
+    	Event event = evDao.findByID(eventID);
+    	if (event == null) {
+			throw new EventNotFoundException();
+		}
+    	return event;
+    }
+    
 	public List<DatatypeEventSummary> getSummaryEvents(int maxEvents,
 			int maxContentPerEvent) {
 		// Calculate one week before date
@@ -121,16 +133,8 @@ public class ServicesEvent implements ServicesEventRemote {
 		return listDatatypes;
 	}
 		
-	/**
-	 * Returns true if the User exists, and is related to the Event
-	 * @param eventName - Name of the event
-	 * @param user - Identifier of the user  
-	 */
-	public boolean isUserRelatedToEvent(String eventName, String user){
-		Event ev = evDao.findByName(eventName);
-		if (ev == null) {
-			throw new EventNotFoundException();
-		}
+	public boolean isUserRelatedToEvent(int eventID, String user) {
+		Event ev = getEvent(eventID);
 		NormalUser nUser = nUserDao.findByID(user);
 		if (nUser == null) {
 			throw new UserNotFoundException();
@@ -157,18 +161,9 @@ public class ServicesEvent implements ServicesEventRemote {
 		return (DatatypeContent) trans.translate(c);
 	}
 	
-	//    
-	/**
-	 * Returns a list of candidate Users for Tagging -participants of the event, who have not already been tagged in the content-
-	 * @param eventID - Identifier of the event
-	 * @param contentID - Identifier of the content 
-	 */
-	public List<DatatypeUser> getUsersForTag(String eventID, int contentID){
+	public List<DatatypeUser> getUsersForTag(int eventID, int contentID){
 		// Verify existence of Event
-		Event event = (Event) evDao.findByName(eventID);
-		if (event == null) {
-			throw new EventNotFoundException();
-		}
+		Event event = getEvent(eventID);
 		// Verify existence of content
 		Content cont = (Content) contDao.findByIDInEvent(event, contentID);
 		if (cont == null) {
@@ -200,21 +195,10 @@ public class ServicesEvent implements ServicesEventRemote {
     	return TranslatorCollection.translateNormalUser(allUsersInEvent);
 	} 
 	
-	/**
-	 * Create a new instance of Tag associated to the content, user that was tagged, and the tagger
-	 * @param eventID - Identifier of the event
-	 * @param contentID - Identifier of the content within the event
-	 * @param userTagger - Identifier of the user who is tagging
-	 * @param userToTag - User tagged -may be a registered user or not- 
-	 * @param posX - Position of the tag in the X axis within the content
-	 * @param posY - Position of the tag in the Y axis within the content 
-	 */
-	public void tagUserInContent(String eventID, int contentID, String userTagger, String userToTag, int posX, int posY) throws Exception {
+	public void tagUserInContent(int eventID, int contentID, String userTagger, String userToTag,
+			int posX, int posY) throws EventNotFoundException, ContentNotFoundException, UserNotFoundException {
 		// Verify existence of Event
-		Event event = (Event) evDao.findByName(eventID);
-		if (event == null) {
-			throw new EventNotFoundException();
-		}
+		Event event = getEvent(eventID);
 		// Verify existence of content
 		Content cont = (Content) contDao.findByIDInEvent(event, contentID);
 		if (cont == null) {
@@ -234,7 +218,8 @@ public class ServicesEvent implements ServicesEventRemote {
 			tag = new TagForNotUser();
 			TagForNotUser tagNotUser = (TagForNotUser) tag;
 			tagNotUser.setUsrTagCustom(userToTag);
-		} else {
+		} 
+		else {
 			// Registered user was tagged
 			NormalUser nUserTagged = (NormalUser) tagged;
 			tag = new TagForUser();
@@ -255,7 +240,12 @@ public class ServicesEvent implements ServicesEventRemote {
 			ntfTagged.setUserFrom(nUserTagger);	
 			ntfTagged.setUserTo(nUserTagged);
 			
-			notifDao.persist(ntfTagged);
+			try {
+				notifDao.persist(ntfTagged);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		//tag.setCntId(cont.getId().getCntIdAuto());
@@ -282,8 +272,53 @@ public class ServicesEvent implements ServicesEventRemote {
 }
 
 
-	public void confirmUploadContent(List<Content> list) {
-		// TODO Auto-generated method stub	
+	public List<String> uploadContent(int eventID, String username, List<DataTypeFile> files) {
+		if (!isUserRelatedToEvent(eventID, username)) {
+			throw new UserNotRelatedToEventException();
+		}
+		List<String> result = new ArrayList<String>();
+		Event event = getEvent(eventID);
+		NormalUser user = nUserDao.findByID(username);
+		Iterator<DataTypeFile> it = files.iterator();
+		while (it.hasNext()) {
+			DataTypeFile file = (DataTypeFile) it.next();
+			SelfContent content;
+			if (file.isImage()) {
+				content = new Photo();
+			}
+			else if (file.isVideo()) {
+				content = new Video();
+				//TODO setVideoDuration
+			}
+			else {
+				throw new UnrecognizedFileTypeException();
+			}
+			//TODO initMultimediaManager();
+			Timestamp t = new Timestamp(new java.util.Date().getTime());
+			String tstring = t.toString().replace(':', '-').replace('.', '-');
+			String url = fileSystem.writeFile(file.getData(), file.getMime(), eventID + "/", tstring + "-");
+			content.setAlbum(false);
+			content.setEvent(event);
+			content.setUser(user);
+			content.setRegDate(t);
+			content.setSize((int) file.getLength());
+			content.setUrl(url);
+			
+			contDao.persist(content);
+			result.add(content.getCntIdAuto() + "");
+		}
+	    return result;
 	}
-    
+	
+	public byte[] getContent(int eventID, int contentID) {
+		Event event = getEvent(eventID);
+		Content content = contDao.findByIDInEvent(event, contentID);
+		if (content == null) {
+			throw new ContentNotFoundException();
+		}
+		if (content instanceof Photo) {
+			return fileSystem.readFile(content.getUrl());
+		}
+		return null;
+	}
 }

@@ -1,0 +1,10 @@
+DELETE FROM "comment";
+DELETE FROM tags;
+DELETE FROM ratings;
+DELETE FROM album;
+DELETE FROM "content";
+DELETE FROM mods;
+DELETE FROM participants;
+DELETE FROM notifications;
+DELETE FROM events;
+DELETE FROM users;

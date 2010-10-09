@@ -8,5 +8,4 @@ import partuzabook.datatypes.DatatypeUploadedContent;
 @Remote
 public interface ServicesMultimediaRemote {
 
-	boolean uploadContent(String eventID, List<DatatypeUploadedContent> pics);
 }

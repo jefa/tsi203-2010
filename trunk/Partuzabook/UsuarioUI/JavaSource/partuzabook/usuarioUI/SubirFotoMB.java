@@ -3,11 +3,17 @@ package partuzabook.usuarioUI;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Properties;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.richfaces.event.UploadEvent;
 import org.richfaces.model.UploadItem;
 
 import partuzabook.datatypes.DataTypeFile;
+import partuzabook.serviciosUI.multimedia.ServicesUploadRemote;
 
 public class SubirFotoMB{
 	
@@ -47,6 +53,37 @@ public class SubirFotoMB{
 		setUploadsAvailable(5);
 		return null;
 	}
+	
+	public String confirmUpload() {
+		ServicesUploadRemote servUpload = getServicesUpload();
+		if (servUpload != null) {
+			int eventID = 1;
+			String username = "rodri";
+			servUpload.uploadMultimedia(eventID, username, files);
+		}
+		return null;
+	}
+	
+	private Context getContext() throws NamingException {
+		Properties properties = new Properties();
+		properties.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
+		properties.put("java.naming.factory.url.pkgs", "org.jboss.naming rg.jnp.interfaces");
+		properties.put("java.naming.provider.url", "jnp://localhost:1099");
+		Context ctx = new InitialContext(properties);
+		return ctx;
+	}
+
+    public ServicesUploadRemote getServicesUpload() {
+        try {
+			Context ctx = getContext();
+			return (ServicesUploadRemote)ctx.lookup("ServicesUpload/remote");
+		}
+        catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+    }
 	
 	public long getTimeStamp(){
 		return System.currentTimeMillis();

@@ -10,5 +10,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre6"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Datatypes"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ServiciosUI"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

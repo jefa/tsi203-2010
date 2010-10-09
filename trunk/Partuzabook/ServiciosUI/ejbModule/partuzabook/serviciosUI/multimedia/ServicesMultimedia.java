@@ -10,9 +10,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import partuzabook.datatypes.DatatypeUploadedContent;
+import partuzabook.datatypes.DataTypeFile;
 import partuzabook.servicioDatos.eventos.ServicesEvent;
-import partuzabook.servicioDatos.usuarios.ServicesUser;
 
 /**
  * Session Bean implementation class ServicesMultimedia
@@ -49,12 +48,4 @@ public class ServicesMultimedia implements ServicesMultimediaRemote {
     	servEvent = null;
     }
 
-	public boolean uploadContent(String eventID,
-			List<DatatypeUploadedContent> contents) {
-		//servEvent.getEvent(eventID)
-		
-		return false;
-	}
-    
-    
 }

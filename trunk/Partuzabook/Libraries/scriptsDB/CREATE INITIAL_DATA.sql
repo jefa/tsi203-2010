@@ -1,26 +1,26 @@
 -- Insert Admin and regular users
 INSERT INTO users(
-            username, "password", flags, reg_date)
-    VALUES ('admin', 'admin', 'A', '2010/10/02 10:30'::timestamp);
+            username, "password", flags, reg_date, name, email)
+    VALUES ('admin', 'admin', 'A', '2010/10/02 10:30'::timestamp, 'Administrador', 'admin@partuzabook.com');
 
 INSERT INTO users(
-            username, "password", flags, reg_date)
-    VALUES ('robi', '10101', 'N', '2010/10/02 10:30'::timestamp);
-
-
-INSERT INTO users(
-            username, "password", flags, reg_date)
-    VALUES ('vero', 'vero', 'N', '2010/10/02 10:30'::timestamp);
+            username, "password", flags, reg_date, name, email)
+    VALUES ('robi', '10101', 'N', '2010/10/02 10:30'::timestamp, 'Robinho', 'robi@partuzabook.com');
 
 
 INSERT INTO users(
-            username, "password", flags, reg_date)
-    VALUES ('rodri', 'rodri', 'N', '2010/10/02 10:30'::timestamp);
+            username, "password", flags, reg_date, name, email)
+    VALUES ('vero', 'vero', 'N', '2010/10/02 10:30'::timestamp, 'Veronica Manduca', 'veromanduk@gmail.com');
 
 
 INSERT INTO users(
-            username, "password", flags, reg_date)
-    VALUES ('gonza', 'gonza', 'N', '2010/10/02 10:30'::timestamp);
+            username, "password", flags, reg_date, name, email)
+    VALUES ('rodri', 'rodri', 'N', '2010/10/02 10:30'::timestamp, 'Rodrigo Rivera', 'rrivem@gmail.com');
+
+
+INSERT INTO users(
+            username, "password", flags, reg_date, name, email)
+    VALUES ('gonza', 'gonza', 'N', '2010/10/02 10:30'::timestamp, 'Gonzalo Gismero', 'gegismero@gmail.com');
 
 
 
