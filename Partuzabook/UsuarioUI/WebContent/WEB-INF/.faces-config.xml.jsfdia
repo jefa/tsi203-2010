@@ -62,25 +62,22 @@
     TITLE="verGaleria" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
- <PROCESS-ITEM NAME="rules:login.html" PATH="login.html"
-  SHAPE="32,465,0,0" model-entity="JSFProcessGroup">
-  <PROCESS-ITEM ID="rules:login.html:0" NAME="item" PATH="login.html" model-entity="JSFProcessItem">
+ <PROCESS-ITEM NAME="rules:#subirFoto.xhtml" PATH="/subirFoto.xhtml"
+  SHAPE="448,689,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#login.xhtml" PATH="/login.xhtml"
+  SHAPE="256,593,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#login.xhtml:0" NAME="item"
+   PATH="/login.xhtml" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="success::#paginaInicio.xhtml" NAME="output"
     PATH="/paginaInicio.xhtml" TARGET="rules:#paginaInicio.xhtml"
     TITLE="success" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
- </PROCESS-ITEM>
- <PROCESS-ITEM NAME="rules:login.xhtml" PATH="login.xhtml"
-  SHAPE="32,577,0,0" model-entity="JSFProcessGroup">
-  <PROCESS-ITEM ID="rules:login.xhtml:0" NAME="item" PATH="login.xhtml" model-entity="JSFProcessItem">
+  <PROCESS-ITEM ID="rules:#login.xhtml:1" NAME="item1"
+   PATH="/login.xhtml" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="failed::#login.xhtml" NAME="output"
     PATH="/login.xhtml" TARGET="rules:#login.xhtml" TITLE="failed" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
- <PROCESS-ITEM NAME="rules:#subirFoto.xhtml" PATH="/subirFoto.xhtml"
-  SHAPE="448,689,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM NAME="rules:#login.xhtml" PATH="/login.xhtml"
-  SHAPE="256,593,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#galeria.xhtml" PATH="/galeria.xhtml"
   SHAPE="240,817,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

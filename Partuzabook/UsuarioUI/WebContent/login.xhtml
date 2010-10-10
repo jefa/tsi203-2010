@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:composition template="templates/usuarioUI.xhtml">
+	<ui:define name="title">Pagina Inicio</ui:define>
+	<ui:define name="body">
+		<h:form id="eventosRecientes">
+			<rich:dataList var="evento"
+				value="#{paginaInicioMB.eventosRecientes}" rows="10">
+				
+				<strong><h:commandLink value="#{evento.evtName}"
+					action="verEvento">
+					<f:setPropertyActionListener value="#{evento.evtName}"
+								target="#{eventoMB.idEvento}" /></h:commandLink>
+					</strong>
+				<br />
+				<h:outputText value="Fecha:" styleClass="label"></h:outputText>
+				<h:outputText value="#{evento.date} " />
+				<div style="border: thin solid black; margin-bottom: 10px"><rich:dataList
+					var="contenido" value="#{evento.contents}">
+					<h:graphicImage
+						value="/ContentFeeder?eventID=1&#38;username=rodri&#38;id=#{contenido.contId}&#38;thb=1" />
+				</rich:dataList></div>
+			</rich:dataList>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
