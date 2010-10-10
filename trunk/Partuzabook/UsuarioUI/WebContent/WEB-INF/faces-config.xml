@@ -12,12 +12,11 @@
   <managed-bean-class>partuzabook.usuarioUI.PaginaInicioMB</managed-bean-class>
   <managed-bean-scope>request</managed-bean-scope>
  </managed-bean>
-  <managed-bean>
+ <managed-bean>
   <managed-bean-name>eventoMB</managed-bean-name>
   <managed-bean-class>partuzabook.usuarioUI.EventoMB</managed-bean-class>
   <managed-bean-scope>request</managed-bean-scope>
  </managed-bean>
- 
  <managed-bean>
   <managed-bean-name>imageLoader</managed-bean-name>
   <managed-bean-class>partuzabook.usuarioUI.ImageLoader</managed-bean-class>
@@ -84,7 +83,7 @@
  </navigation-rule>
  <navigation-rule>
   <display-name>loginSuccess</display-name>
-  <from-view-id>login.html</from-view-id>
+  <from-view-id>/login.xhtml</from-view-id>
   <navigation-case>
    <from-outcome>success</from-outcome>
    <to-view-id>/paginaInicio.xhtml</to-view-id>
@@ -92,7 +91,7 @@
  </navigation-rule>
  <navigation-rule>
   <display-name>loginFailed</display-name>
-  <from-view-id>login.xhtml</from-view-id>
+  <from-view-id>/login.xhtml</from-view-id>
   <navigation-case>
    <from-outcome>failed</from-outcome>
    <to-view-id>/login.xhtml</to-view-id>
