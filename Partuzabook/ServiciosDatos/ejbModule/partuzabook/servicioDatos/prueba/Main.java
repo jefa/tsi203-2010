@@ -6,7 +6,9 @@ import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.beans.Event;
@@ -19,8 +21,6 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 		System.out.println("Invoking the remote bean");
 	    
         try {
@@ -30,58 +30,126 @@ public class Main {
 	        properties.put("java.naming.provider.url", "jnp://localhost:1099");
 	        Context ctx = new InitialContext(properties);
 	        System.out.println("Got context - Main");
-	        ServicesUserRemote usr = (ServicesUserRemote) ctx.lookup("ServicesUser/remote");
+	        ServicesUserRemote usr = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");
 	        if (usr != null) {
-		        // Invocar getUpdateNotifications
-	        	List<DatatypeNotification> list = usr.getUpdateNotifications("vero");
+	        	System.out.println("**** Testeando CU Ver pagina de Inicio ****");
+	        	String usuario = "vero";
+	        	System.out.println("1. Invocando getUpdateNotifications para " + usuario);
+	        	List<DatatypeNotification> list = usr.getUpdateNotifications(usuario);
 		        if (list == null){
-		        	System.out.println("LIST DE NOTIF ES NULL !!");
+		        	System.out.println("   Result: NULL");
 		        } else {
-		        	System.out.println("El tamaño de lo devuelto es: " + list.size());
+		        	System.out.println("   Result: " + list.size() + " notificationes");
+		        	for (int i = 0; i < list.size(); i++) {
+		        		System.out.println("   " + list.get(i).text + " - From: " + list.get(i).userFrom);
+		        	}
 		        }
-		        // Invocar getEventsSummary
-		        List<DatatypeEventSummary> setEv = usr.getEventSummaryByUser("vero");
+		        System.out.println("2. Invocando getEventsSummary");
+		        List<DatatypeEventSummary> setEv = usr.getEventSummaryByUser(usuario);
 		        if (setEv == null){
-		        	System.out.println("SET DE EVENTS ES NULL !!");
+		        	System.out.println("   Result: NULL");
 		        } else {
-		        	System.out.println("El tamaño del set de evs es: " + setEv.size());
+		        	System.out.println("   Result: " + setEv.size() + " eventos");
+		        	for (int i = 0; i < setEv.size(); i++) {
+		        		System.out.println("   " + setEv.get(i).evtName + " - Descr: " + setEv.get(i).description);
+		        	}
 		        }
 		    } else {
 		        System.out.println("ServicesUserRemote was not found");    	
 	        }
 	        
-	        ServicesEventRemote evt = (ServicesEventRemote) ctx.lookup("ServicesEvent/remote");
+	        ServicesEventRemote evt = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");
 	        if (evt != null) {
-	        	// Invocar isUserRelatedToEvent
-	        	if (evt.isUserRelatedToEvent(1, "vero")) {
-	        		System.out.println("El user 'vero' es participante de 'Cumple Vero'");
+	        	System.out.println("3. Invocando getSummaryEvents");
+	        	int maxEvents = 10;
+	        	int maxContentsPerEvent = 4;
+	        	List<DatatypeEventSummary> eventSummary = evt.getSummaryEvents(maxEvents, maxContentsPerEvent);
+	        	if (eventSummary == null){
+	        		System.out.println("   Result: NULL");
 	        	} else {
-	        		System.out.println("No estan asociados 'vero' y 'Cumple Vero'");
-	        	}
-	        	// Invocar getSummaryEvents
-	        	List<DatatypeEventSummary> list = evt.getSummaryEvents(10, 4);
-	        	if (list == null){
-	        		System.out.println("getSummaryEvents retorno lista vacia");
-	        	} else {
-	        		System.out.println("El tamaño de la lista de events es: " + list.size());
-	        	}
-	        	// Invocar getUsersForTag
-	        	List<DatatypeUser> users = evt.getUsersForTag(1,0);
-	        	if (users == null){
-	        		System.out.println("getUsersForTag retorno lista vacia");
-	        	} else {
-	        		System.out.println("El tamaño de la lista de users para taggear es: " + users.size());
+	        		for (int i = 0; i < eventSummary.size(); i++) {
+		        		System.out.println("   Evento " + i + " : " + eventSummary.get(i).evtName);
+		        	}
 	        	}	        	
-	        	// Invocar tagUserInContent
-	        	evt.tagUserInContent(1, 0, "vero", "gonza", 1, 1);	        		        	
-	        	System.out.println("termine");
-	        	usr.getUpdateNotifications("gonza");
+	        	System.out.println("4. Invocando getMostTagged");
+	        	List<DatatypeMostTagged> masTaggeados = evt.getMostTagged(5);
+	        	if (masTaggeados == null) {
+		        	System.out.println("   Result: NULL");
+		        } else {
+		        	for (int i = 0; i < masTaggeados.size(); i++) {
+		        		System.out.println("   Para el evento " + masTaggeados.get(i).eventName + " el mas taggeado es:  " 
+		        				+ masTaggeados.get(i).user.username + " con " + masTaggeados.get(i).cantTags + " tags");
+		        	}	        		
+	        	}	
+	        	System.out.println("5. Invocando getMostCommentedPictures");
+	        	List<DatatypeContent> masComentadas = evt.getMostCommentedPictures(5);
+	        	if (masComentadas == null) {
+		        	System.out.println("   Result: NULL");
+		        } else {
+		        	for (int i = 0; i < masComentadas.size(); i++) {
+		        		System.out.println("   El contenido con ID " + masComentadas.get(i).contId + " tiene " 
+		        				+ masComentadas.get(i).comments.size() + " comentarios");
+		        	}	        		
+	        	}	
+	        	System.out.println("6. Invocando getBestQualifiedPictures");
+	        	List<DatatypeContent> mayorRating = evt.getBestQualifiedPictures(5);
+	        	if (mayorRating == null) {
+		        	System.out.println("   Result: NULL");
+		        } else {
+		        	for (int i = 0; i < mayorRating.size(); i++) {
+		        		System.out.println("   El contenido con ID " + mayorRating.get(i).contId + " tiene rating promedio de " 
+		        				+ mayorRating.get(i).avgScore);
+		        	}	        		
+	        	}
+	        	System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - ");
+	        	System.out.println("**** Testeando CU Navegar Galería de Fotos ****");
+	        	String usuario = "vero";
+	        	int eventID = 1;
+	        	int pos = 0;
+	        	System.out.println("1. Invocando isUserRelatedToEvent para el event con ID = 1 y user vero");
+	        	if (!evt.isUserRelatedToEvent(eventID, usuario)) {
+	        		System.out.println("   El user no es participante del evento - No puede navegar la galería");
+	        	} else {
+	        		System.out.println("   El user es participante del evento");
+	        		System.out.println("2. Invocando getGalleryPhotoAtPos - Obteniendo imagen en pos " + pos);
+	        		DatatypeContent cont = evt.getGalleryPhotoAtPos(eventID, pos);	
+	        		if (cont == null) {
+	        			System.out.println("   Result: NULL");
+			        } else {
+			        	System.out.println("   Galería de fotos - Posicion " + pos + " - Contenido con ID: " +  cont.contId);	        			
+	        			System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - ");
+			        	System.out.println("**** Testeando CU Etiquetar Usuario En Foto ****");
+		        		System.out.println("1. Invocando getUsersForTag");
+		        		List<DatatypeUser> users = evt.getUsersForTag(eventID,cont.contId);
+			        	if (users == null){
+		        			System.out.println("   Result: NULL");
+			        	} else {
+				        	for (int i = 0; i < users.size(); i++) {
+				        		System.out.println("  Usuario: " + users.get(i).username );
+				        	}	
+				        	System.out.println("2. Invocando tagUserInContent");				        	
+				        	evt.tagUserInContent(eventID, cont.contId, usuario, users.get(pos).username, 1, 1);	        		        	
+				        	System.out.println("3. Invocando nuevamente getGalleryPhotoAtPos para ver si quedo el tag");				        	
+				        	cont = evt.getGalleryPhotoAtPos(eventID, pos);	
+					        System.out.println("   Tags para el contenido con ID " +  cont.contId);
+					        for (int i = 0; i < cont.tags.size(); i++) {
+					        	System.out.println("   " + cont.tags.get(i).userName);
+					        }			        	
+			        	}	        	
+		
+			        	// Invocar searchEvents
+			        	List<DatatypeEventSummary> searchReturn = evt.searchForEvent("lala Cumple SUMO", 6); 
+			        	if (searchReturn == null){
+			        		System.out.println("No se encontró el evento buscado");
+			        	}
+	        		}
+	        	}
+	        
 	        } else {
 	        	System.out.println("ServicesEventRemote was not found");    	
 	        }
 
 	    } catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    

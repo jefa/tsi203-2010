@@ -191,10 +191,11 @@ public class ServicesEvent implements ServicesEventRemote {
 		if (event == null) {
 			throw new EventNotFoundException();
 		}
-		Content c = contDao.findByPosInGalleryEvent(event, pos);
-		if (c == null) {
+		List<Content> listC = contDao.findByPosInGalleryEvent(event, pos);
+		if (listC == null) {
 			throw new ContentNotFoundException();
-		}
+		} 
+		Content c = listC.get(0);
 		TranslatorContent trans = new TranslatorContent();
 		return (DatatypeContent) trans.translate(c);
 	}
@@ -448,19 +449,23 @@ public class ServicesEvent implements ServicesEventRemote {
 			Iterator<NormalUser> itUser = participants.iterator();
 			while (itUser.hasNext()) {
 				NormalUser currentUser = itUser.next();
-				int size = currentUser.getMyTags().size();
-				if (size > maxTags) {
-					maxTags = size;
-					mostTagged = currentUser; 
+				if (currentUser.getMyTags() != null) {
+					int size = currentUser.getMyTags().size();
+					if (size > maxTags) {
+						maxTags = size;
+						mostTagged = currentUser; 
+					}
 				}
 			}
-			DatatypeMostTagged data = new DatatypeMostTagged();
-			data.eventName = ev.getEvtName();
-			TranslatorUser transUser = new TranslatorUser();
-			data.user = (DatatypeUser) transUser.translate(mostTagged);
-			data.cantTags = maxTags;
-			// Add to collection
-			insertOrderedMostTagged(dataMostTagged,data);
+			if (mostTagged != null) {
+				DatatypeMostTagged data = new DatatypeMostTagged();
+				data.eventName = ev.getEvtName();
+				TranslatorUser transUser = new TranslatorUser();
+				data.user = (DatatypeUser) transUser.translate(mostTagged);
+				data.cantTags = maxTags;
+				// Add to collection
+				insertOrderedMostTagged(dataMostTagged,data);
+			}
 		}
 		if (dataMostTagged.size() > length) {
 			return dataMostTagged.subList(0, length);
