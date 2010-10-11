@@ -5,9 +5,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import javax.faces.context.FacesContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.http.HttpSession;
 
 import org.richfaces.event.UploadEvent;
 import org.richfaces.model.UploadItem;
@@ -67,7 +69,10 @@ public class SubirFotoMB{
 	public String confirmUpload() {
 		ServicesUploadRemote servUpload = getServicesUpload();
 		if (servUpload != null) {
-			String username = "rodri";
+			FacesContext context = FacesContext.getCurrentInstance();
+			HttpSession session = (HttpSession) context.getExternalContext()
+					.getSession(true);
+			String username = (String) session.getAttribute("username");
 			servUpload.uploadMultimedia(idEvento, username, files);
 		}
 		return null;
