@@ -11,7 +11,16 @@
 	<ui:define name="title">Ver Evento</ui:define>
 	<ui:define name="body">
 		<h:form id="evento">
-		<h:outputText value="#{eventoMB.idEvento} " />
+		<strong><h:outputText value="#{eventoMB.evento.evtName} " /></strong>
+		<br/>
+		<h:outputText value="Fecha Evento: #{eventoMB.evento.formattedDate} " /><br/>
+		<h:outputText value="Descripcion: #{eventoMB.evento.description} " /><br/>
+		<br/>
+		
+		<h:commandLink value="Añadir contenido al evento"
+					action="subirContenido">
+					<f:setPropertyActionListener value="#{eventoMB.evento.evtId}"
+								target="#{subirFotoMB.idEvento}" /></h:commandLink>
 		</h:form>
 	</ui:define>
 </ui:composition>

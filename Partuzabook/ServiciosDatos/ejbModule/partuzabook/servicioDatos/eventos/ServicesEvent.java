@@ -177,12 +177,15 @@ public class ServicesEvent implements ServicesEventRemote {
 
 	
 	public boolean isUserRelatedToEvent(int eventID, String user) {
+		
 		Event ev = getEvent(eventID);
 		NormalUser nUser = nUserDao.findByID(user);
 		if (nUser == null) {
 			throw new UserNotFoundException();
 		}
 		return nUser.getMyEvents().contains(ev);
+		//TODO: para probar si tener que asociar usuarios a eventos 
+		//return true;
   	}
 
 	public DatatypeContent getGalleryPhotoAtPos(int eventID, int pos) {

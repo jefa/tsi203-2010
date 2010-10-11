@@ -274,5 +274,18 @@ ul{
 	color:#0B0B0B; background-color:#EFEBDE; text-decoration:none;
 	font:normal 12px/19px "Trebuchet MS", Arial, Helvetica, sans-serif;}
 
+.rich-list-item img
+{
+	display:inline;
+	padding:10px;
+}
 
+.horizontal .rich-list-item 
+{
+	display:inline;
+	padding:10px;
+}
 
+.rich-list-item .label{
+	background-color:#FFFFFF; color:#0B0B0B; margin:0 0 8px 0; float:left;
+	font:bold 10px/28px Arial, Helvetica, sans-serif; text-transform:uppercase;}

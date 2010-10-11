@@ -21,7 +21,17 @@ public class SubirFotoMB{
 	private int uploadsAvailable = 5;
 	private boolean autoUpload = false;
 	private boolean useFlash = true;
+	private int idEvento;
 	
+	public int getIdEvento() {
+		return idEvento;
+	}
+
+	public void setIdEvento(int idEvento) {
+		this.idEvento = idEvento;
+		clearUploadData();
+	}
+
 	public int getSize() {
 		if (getFiles().size()>0){
 			return getFiles().size();
@@ -57,9 +67,8 @@ public class SubirFotoMB{
 	public String confirmUpload() {
 		ServicesUploadRemote servUpload = getServicesUpload();
 		if (servUpload != null) {
-			int eventID = 1;
 			String username = "rodri";
-			servUpload.uploadMultimedia(eventID, username, files);
+			servUpload.uploadMultimedia(idEvento, username, files);
 		}
 		return null;
 	}

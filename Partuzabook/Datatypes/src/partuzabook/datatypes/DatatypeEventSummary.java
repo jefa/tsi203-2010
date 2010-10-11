@@ -1,6 +1,7 @@
 package partuzabook.datatypes;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,18 @@ public class DatatypeEventSummary implements Serializable{
 	public int evtId;
 
 	public Date date;
+	public String formattedDate;
+
+	public String getFormattedDate() {
+		SimpleDateFormat df = new SimpleDateFormat("d MMM yyyy"); 
+		return df.format(date);
+	}
+
+
+	public void setFormattedDate(String formattedDate) {
+		this.formattedDate = formattedDate;
+	}
+
 
 	public String description;
 
