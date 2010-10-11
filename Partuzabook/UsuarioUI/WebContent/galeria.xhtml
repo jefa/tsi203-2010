@@ -25,7 +25,7 @@
 				<div style="border: thin solid black; margin-bottom: 10px"><rich:dataList
 					var="contenido" value="#{evento.contents}">
 					<h:graphicImage
-						value="/ContentFeeder?eventID=1&#38;username=rodri&#38;id=#{contenido.contId}&#38;thb=1" />
+						value="/ContentFeeder?eventID=1&#38;username=#{loginMB.userName}&#38;id=#{contenido.contId}&#38;thb=1" />
 				</rich:dataList></div>
 			</rich:dataList>
 		</h:form>

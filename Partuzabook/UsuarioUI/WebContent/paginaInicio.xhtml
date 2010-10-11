@@ -27,7 +27,7 @@
 				<div style="margin-bottom: 20px" class="horizontal"> 
 				<rich:dataList var="contenido" value="#{evento.contents}">
 					<h:graphicImage 
-						value="/ContentFeeder?eventID=#{evento.evtId}&#38;username=rodri&#38;id=#{contenido.contId}&#38;thb=1" />
+						value="/ContentFeeder?eventID=#{evento.evtId}&#38;username=#{loginMB.userName}&#38;id=#{contenido.contId}&#38;thb=1" />
 						
 				</rich:dataList></div> 
 				<hr/> 
