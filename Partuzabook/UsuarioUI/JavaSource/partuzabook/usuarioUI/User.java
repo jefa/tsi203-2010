@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -6377385701609824121L;
@@ -41,6 +43,7 @@ public class User implements Serializable {
 		loadAlbums();
 	}
 	
+	@PostConstruct
 	private void loadAlbums(){
 		int imgCount = 0;
 		for (int i=0; i<6; i++){

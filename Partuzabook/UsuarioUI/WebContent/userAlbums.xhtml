@@ -6,54 +6,25 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
-	
-<head>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-    <title>galeria demo</title>
-    <link href="stylesheet/photoalbum.css" rel="stylesheet" type="text/css"/>
-    <script src="scripts/photoalbum.js" type="text/javascript" ></script>
-</head>
 
-<body class="main-body" style="position: relative;">
-<div style="position: relative; height: auto; overflow: hidden; min-height: 100%; zoom: 1;" class="main-panel">
-    <div style="padding-bottom: 82px; padding-top: 116px; left: 0px; zoom: 1;">
-		<div style="position: relative; zoom: 1;">
-			<h:form id="mainform" style="margin: 0;">
-				<rich:panel id="bodyPanel" styleClass="body-main-panel" headerClass="body-main-panel-header"
-							bodyClass="body-main-panel-body">
+<ui:composition template="/templates/usuarioUI.xhtml">
+	<ui:define name="title">Galeria Evento</ui:define>
+	<ui:define name="body">
+		<h:form id="mainform" style="margin: 0;">
+			<rich:panel id="bodyPanel" styleClass="body-main-panel" headerClass="body-main-panel-header"
+						bodyClass="body-main-panel-body">
 
-					<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-						xmlns:ui="http://java.sun.com/jsf/facelets"
-						xmlns:h="http://java.sun.com/jsf/html"
-						xmlns:f="http://java.sun.com/jsf/core"
-						xmlns:a4j="http://richfaces.org/a4j"
-						xmlns:rich="http://richfaces.org/rich">
-					
-						<h:panelGroup styleClass="album-header-table" layout="block">
-							<h:outputText value="Albumes de #{userBean.firstName} #{userBean.secondName}" styleClass="h1-style"/>
-						</h:panelGroup>
-						<ui:include src="/templates/album/albumsList.xhtml" >
-							<ui:param name="albums" value="#{userBean.albums}" />
-							<ui:param name="controller" value="#{controller}" />
-						</ui:include>
-					</ui:composition>
+					<h:panelGroup styleClass="album-header-table" layout="block">
+						<h:outputText value="Albumes de #{userBean.firstName} #{userBean.secondName}" styleClass="h1-style"/>
+					</h:panelGroup>
+					<ui:include src="/templates/album/albumsList.xhtml" >
+						<ui:param name="albums" value="#{userBean.albums}" />
+						<ui:param name="controller" value="#{controller}" />
+					</ui:include>
 
-				</rich:panel>
-			</h:form>
-		</div>
-		<div style="position: absolute; height: 30000px; right: 0px; top: 0px; width: 5px;"
-			 class="body-main-bg">
-		</div>
-    </div>
-</div>
+			</rich:panel>
+		</h:form>
+</ui:define>
+</ui:composition>
 
-<script type="text/javascript" src="http://www.google-analytics.com/urchin.js"></script>
-
-<script type="text/javascript">
-    if (window.location.hostname.indexOf("livedemo.exadel.com") != -1) {
-        _uacct = "UA-7306415-2";
-        urchinTracker();
-    }
-</script>
-</body>
 </html>

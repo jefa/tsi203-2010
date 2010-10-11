@@ -15,7 +15,7 @@
  <managed-bean>
   <managed-bean-name>eventoMB</managed-bean-name>
   <managed-bean-class>partuzabook.usuarioUI.EventoMB</managed-bean-class>
-  <managed-bean-scope>request</managed-bean-scope>
+  <managed-bean-scope>session</managed-bean-scope>
  </managed-bean>
  <managed-bean>
   <managed-bean-name>imageLoader</managed-bean-name>
