@@ -6,11 +6,11 @@ INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('jfa
 INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('anadmin', 'anadmin', 'Administrador Andres', 'aenavcam@gmail.com', 'A', now()::timestamp);
 
 --Insertamos los usuarios normales
-INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('ggismero', 'ggismero', 'Gonzalo Gismero', 'gegismero@gmail.com', 'U', now()::timestamp);
-INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('veromanduk', 'veromanduk', 'Veronica Manduca', 'veromanduk@gmail.com', 'U', now()::timestamp);
-INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('rrivem', 'rrivem', 'Rodrigo Rivera', 'rrivem@gmail.com', 'U', now()::timestamp);
-INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('jefa55', 'jefa55', 'Javier Fradiletti', 'jefa55@yahoo.com', 'U', now()::timestamp);
-INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('aenavcam', 'aenavcam', 'Andres Navarro', 'aenavcam@yahoo.com', 'U', now()::timestamp);
+INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('ggismero', 'ggismero', 'Gonzalo Gismero', 'gegismero@gmail.com', 'C', now()::timestamp);
+INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('veromanduk', 'veromanduk', 'Veronica Manduca', 'veromanduk@gmail.com', 'C', now()::timestamp);
+INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('rrivem', 'rrivem', 'Rodrigo Rivera', 'rrivem@gmail.com', 'C', now()::timestamp);
+INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('jefa55', 'jefa55', 'Javier Fradiletti', 'jefa55@yahoo.com', 'N', now()::timestamp);
+INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('aenavcam', 'aenavcam', 'Andres Navarro', 'aenavcam@yahoo.com', 'N', now()::timestamp);
 
 --Insertamos los eventos
 INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1001, 'Cumpleaños de quince de Valentina Rosas', '2011-11-15', 240,'', '8 de Octubre 1845', 'ggadmin','M',now()::timestamp);
