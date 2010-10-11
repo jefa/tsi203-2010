@@ -2,6 +2,7 @@ package partuzabook.entityTranslators;
 
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datos.persistencia.beans.Event;
+import partuzabook.utils.TranslatorCollection;
 
 public class TranslatorEventSummary implements ITranslatable {
 	
@@ -12,6 +13,7 @@ public class TranslatorEventSummary implements ITranslatable {
 		dat.evtId = ent.getEvtIdAuto();
 		dat.date = ent.getDate();
 		dat.description = ent.getDescription();
+		dat.contents = TranslatorCollection.translateContent(ent.getContents());
 		return dat;
 	}
 }

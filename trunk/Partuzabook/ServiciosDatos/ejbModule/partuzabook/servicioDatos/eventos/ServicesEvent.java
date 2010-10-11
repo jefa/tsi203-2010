@@ -156,12 +156,14 @@ public class ServicesEvent implements ServicesEventRemote {
 			int cant = list.size();
 			// Try searching for substrings of the entered name
 			String[] substr = name.split(" ");
-			int i = 0;
-			while (i < substr.length && cant < maxEvents) {
-				List<Event> listSubstr = evDao.findBySimilarName(substr[i]); 
-				cant += listSubstr.size();
-				list.addAll(listSubstr);
-				i++;
+			if (substr.length > 1) {
+				int i = 0;
+				while (i < substr.length && cant < maxEvents) {
+					List<Event> listSubstr = evDao.findBySimilarName(substr[i]); 
+					cant += listSubstr.size();
+					list.addAll(listSubstr);
+					i++;
+				}
 			}
 			if (list.size() == 0){
 				throw new EventNotFoundException();
@@ -177,15 +179,12 @@ public class ServicesEvent implements ServicesEventRemote {
 
 	
 	public boolean isUserRelatedToEvent(int eventID, String user) {
-		
 		Event ev = getEvent(eventID);
 		NormalUser nUser = nUserDao.findByID(user);
 		if (nUser == null) {
 			throw new UserNotFoundException();
 		}
 		return nUser.getMyEvents().contains(ev);
-		//TODO: para probar si tener que asociar usuarios a eventos 
-		//return true;
   	}
 
 	public DatatypeContent getGalleryPhotoAtPos(int eventID, int pos) {
