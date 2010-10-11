@@ -15,9 +15,9 @@ INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('aen
 --Insertamos los eventos
 INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1001, 'Cumpleaños de quince de Valentina Rosas', '2011-11-15', 240,'', '8 de Octubre 1845', 'ggadmin','M',now()::timestamp);
 INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1002, 'Despedida de soltero de Lorenzo Lamas', '2011-11-28', 300,'', '18 de Julio 1221', 'vmadmin','M',now()::timestamp);
-INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1003, 'Fiesta de Halloween del grupo de TSI2', '2011-10-31', 180,'', 'Armando Esteban Quito 665', 'rradmin','U',now()::timestamp);
+INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1003, 'Fiesta de Halloween del grupo de TSI2', '2011-10-31', 180,'', 'Armando Esteban Quito 665', 'rradmin','E',now()::timestamp);
 INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1004, 'Previa de Perry vs Juventus', '2011-10-28', 180,'', 'Aquiles Baeza 1025', 'anadmin','M',now()::timestamp);
-INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1005, 'Fiesta Rave de fin de año', '2010-12-31', 300,'', 'Tunel de 8 de Octubre', 'jfadmin','U',now()::timestamp);
+INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1005, 'Fiesta Rave de fin de año', '2010-12-31', 300,'', 'Tunel de 8 de Octubre', 'jfadmin','E',now()::timestamp);
 
 --Insertamos los moderadores de los eventos	
 INSERT INTO MODS(USR_ID, EVT_ID, REG_DATE) VALUES('ggismero', 1001, now()::timestamp);
