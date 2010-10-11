@@ -21,6 +21,12 @@
 					action="subirContenido">
 					<f:setPropertyActionListener value="#{eventoMB.evento.evtId}"
 								target="#{subirFotoMB.idEvento}" /></h:commandLink>
+		<div>
+			<br />
+			<h:panelGroup id="contentArea">
+				<ui:include src="/templates/content.xhtml"/>
+			</h:panelGroup>
+		</div>
 		</h:form>
 	</ui:define>
 </ui:composition>
