@@ -18,6 +18,10 @@ public class LoginMB {
 	private String password;
 
 	public String getUserName() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+		if (session != null)
+			userName = (String) session.getAttribute("username");
 		return userName;
 	}
 
