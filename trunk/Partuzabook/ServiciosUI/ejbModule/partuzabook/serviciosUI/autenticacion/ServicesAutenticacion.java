@@ -2,6 +2,8 @@ package partuzabook.serviciosUI.autenticacion;
 
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.PostActivate;
 import javax.ejb.PrePassivate;
 import javax.ejb.Stateless;
@@ -11,19 +13,20 @@ import javax.naming.NamingException;
 import javax.security.auth.login.LoginException;
 
 import partuzabook.servicioDatos.usuarios.ServicesUser;
+import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
 /**
  * Session Bean implementation class Autenticacion
  */
 @Stateless
 public class ServicesAutenticacion implements ServicesAutenticacionRemote {
-	private ServicesUser servUser;
+	private ServicesUserRemote servUser;
 
     public ServicesAutenticacion() {
         
     }
     
-    @PostActivate
+    @PostConstruct
     public void postActivate() {
         try {
 			Properties properties = new Properties();
@@ -31,31 +34,29 @@ public class ServicesAutenticacion implements ServicesAutenticacionRemote {
 	        properties.put("java.naming.factory.url.pkgs", "org.jboss.naming rg.jnp.interfaces");
 	        properties.put("java.naming.provider.url", "jnp://localhost:1099");
 	        Context ctx = new InitialContext(properties);
-	        System.out.println("Got context");
-	        servUser = (ServicesUser) ctx.lookup("ServicesUser/remote");  
-	        System.out.println("Lookup worked!"); 
+	        servUser = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");  
 		}
         catch (NamingException e) {
 			e.printStackTrace();
 		}
     }
     
-    @PrePassivate
+    @PreDestroy
     public void prePassivate() {
     	servUser = null;
     }
 
-    public boolean verifyUserAndPassword(String username, String password) throws LoginException {
+    public boolean verifyUserAndPassword(String username, String password) {
     	if (servUser.existsNormalUser(username)) {
     		if (servUser.getNormalUserPassword(username).equals(password)) {
-    			throw new LoginException("Incorrect password.");
+    			return true;
     		}
     		else {
-    			return true;
+    			return false;
     		}
     	}
     	else {
-    		throw new LoginException("User doesn't exists.");
+    		return false;
     	}
     }
 }
