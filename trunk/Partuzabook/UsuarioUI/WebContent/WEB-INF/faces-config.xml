@@ -65,4 +65,4 @@
    <to-view-id>/login.jsf</to-view-id>
   </navigation-case>
  </navigation-rule>
- /faces-config>
+</faces-config>
