@@ -18,6 +18,8 @@ import partuzabook.utils.CreateThumbnail;
  */
 @Stateless
 public class FileSystem implements FileSystemLocal {
+	
+	private String basePath = null;
 
     /**
      * Default constructor. 
@@ -27,20 +29,26 @@ public class FileSystem implements FileSystemLocal {
     
     private String getBasePath() throws IOException {
     	
-    	Properties config = new Properties();
-    	config.load(this.getClass().getClassLoader().getResourceAsStream("/my_config.properties")); 
+    	if (basePath == null){
+        	Properties config = new Properties();
+        	config.load(this.getClass().getClassLoader().getResourceAsStream("/settings.properties")); 
+        	
+        	//Configuration config = new PropertiesConfiguration("settings.properties");
+        	if (SystemUtils.IS_OS_WINDOWS)
+    			//return config.getString("imagesPathWindows") + "/Partuzabook/";
+        		this.basePath = config.getProperty("imagesPathWindows") + "/Partuzabook/";
+        	
+        	if (SystemUtils.IS_OS_LINUX)
+        		//return config.getString("imagesPathLinux") + "/Partuzabook/";
+        		this.basePath = config.getProperty("imagesPathLinux") + "/Partuzabook/";
+        	
+        	// TODO: aca seria mas prolijo tirar un excepcion
+        	
+        	//System.out.println("FileSystem.getBasePath(): Base path is "+this.basePath);
+    	}
     	
-    	//Configuration config = new PropertiesConfiguration("settings.properties");
-    	if (SystemUtils.IS_OS_WINDOWS)
-			//return config.getString("imagesPathWindows") + "/Partuzabook/";
-    		return config.getProperty("imagesPathWindows") + "/Partuzabook/";
-    	
-    	if (SystemUtils.IS_OS_LINUX)
-    		//return config.getString("imagesPathLinux") + "/Partuzabook/";
-    		return config.getProperty("imagesPathLinux") + "/Partuzabook/";
-    	
-    	// TODO: aca seria mas prolijo tirar un excepcion
-    	return null;
+		return basePath;
+		
     }
     
     public String writeFile(byte[] data, String mimeType, String dir) {
