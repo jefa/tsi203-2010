@@ -42,7 +42,10 @@ public class TranslatorContent implements ITranslatable {
 			
 		}
 		//Add average score of the content
-		dat.avgScore = avg_score / ent.getRatings().size();
+		if(ent.getRatings()!= null && ent.getRatings().size() > 0)
+			dat.avgScore = avg_score / ent.getRatings().size();
+		else
+			dat.avgScore = 0;
 		
 		// Translate list of Tags
 		dat.tags=  new ArrayList<DatatypeTag>();
