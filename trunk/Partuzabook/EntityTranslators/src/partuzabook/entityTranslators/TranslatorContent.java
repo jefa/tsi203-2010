@@ -34,9 +34,16 @@ public class TranslatorContent implements ITranslatable {
 		dat.ratings = new ArrayList<DatatypeRating>();
 		Iterator<Rating> itRat = ent.getRatings().iterator();
 		TranslatorRating transRat = new TranslatorRating();
+		int avg_score = 0;
 		while (itRat.hasNext()) {
-			dat.ratings.add((DatatypeRating) transRat.translate(itRat.next()));		
+			Rating r = itRat.next();
+			dat.ratings.add((DatatypeRating) transRat.translate(r));
+			avg_score += r.getScore();
+			
 		}
+		//Add average score of the content
+		dat.avgScore = avg_score / ent.getRatings().size();
+		
 		// Translate list of Tags
 		dat.tags=  new ArrayList<DatatypeTag>();
 		Iterator<Tag> itTag = ent.getTags().iterator();
