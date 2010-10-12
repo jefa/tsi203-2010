@@ -3,6 +3,7 @@ package partuzabook.usuarioUI;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.faces.context.FacesContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -11,6 +12,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import partuzabook.serviciosUI.multimedia.ServicesUploadRemote;
 
@@ -43,6 +45,9 @@ public class ContentFeeder extends HttpServlet {
 	throws ServletException, IOException {
 		int id = 0;
 		int eventID = 0;
+		HttpSession session = (HttpSession) request.getSession(true);
+
+		String username = (String) session.getAttribute("username");
 		try {
 			id = Integer.parseInt(request.getParameter("id"));
 			eventID = Integer.parseInt(request.getParameter("eventID"));
@@ -53,12 +58,10 @@ public class ContentFeeder extends HttpServlet {
 
 		byte[] data;
 		if (request.getParameter("thb") == null) {
-			data = getServicesUpload().getMultimedia(eventID,
-					request.getParameter("username"), id);
+			data = getServicesUpload().getMultimedia(eventID,username, id);
 		}
 		else {
-			data = getServicesUpload().getMultimediaThumbnail(eventID,
-					request.getParameter("username"), id);
+			data = getServicesUpload().getMultimediaThumbnail(eventID,username, id);
 		}
 				 
 		ServletOutputStream stream = response.getOutputStream();
