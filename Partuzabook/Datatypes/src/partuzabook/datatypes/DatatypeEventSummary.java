@@ -20,11 +20,25 @@ public class DatatypeEventSummary implements Serializable{
 
 	public List<DatatypeContent> contents;
 
+	public int columnsToDisplay;
 	
     public DatatypeEventSummary() {
     	
     }
 
+    public int getColumnsToDisplay(){
+    	int size = contents.size();
+    	if (size < 4) {
+    		return size;
+    	} else {
+    		return 4;
+    	}
+    }
+    
+    public void setColumnsToDisplay(int cols) {
+    	this.columnsToDisplay = cols;
+    }
+    
 	public String getEvtName() {
 		return evtName;
 	}

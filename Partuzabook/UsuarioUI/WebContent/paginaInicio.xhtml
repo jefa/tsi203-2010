@@ -11,28 +11,77 @@
 	<ui:define name="title">Pagina Inicio</ui:define>
 	<ui:define name="body">
 		<h:form id="eventosRecientes">
-			<rich:dataList var="evento"
-				value="#{paginaInicioMB.eventosRecientes}" rows="10">
-				
-				<strong><h:commandLink value="#{evento.evtName}"
-					action="verEvento">
-					<f:setPropertyActionListener value="#{evento}"
-								target="#{eventoMB.evento}" /></h:commandLink>
-					</strong>
-				<br />
-
-				<h:outputText styleClass="label" value="Fecha: #{evento.formattedDate} " />
-				<br />
-				
-				<div style="margin-bottom: 20px" class="horizontal"> 
-				<rich:dataList var="contenido" value="#{evento.contents}">
-					<h:graphicImage 
-						value="/ContentFeeder?eventID=#{evento.evtId}&#38;username=#{loginMB.userName}&#38;id=#{contenido.contId}&#38;thb=1" />
-						
-				</rich:dataList></div> 
-				<hr/> 
-			</rich:dataList>
+			<rich:dataGrid var="evento" columns="1" elements ="8" width="100%"
+				value="#{paginaInicioMB.eventosRecientes}">
+				<f:facet name="header">
+					<h:outputText value="Eventos Recientes"></h:outputText>
+				</f:facet>
+				<rich:panel>
+					<f:facet name="header">
+						<h:commandLink value="#{evento.evtName}" action="verEvento">
+						<f:setPropertyActionListener value="#{evento}"
+								target="#{eventoMB.evento}" />
+						</h:commandLink>
+					</f:facet>
+						<b><h:outputText value="Descripcion: " styleClass="label"></h:outputText></b>
+						<h:outputText value="#{evento.description}" />
+						<br></br>
+						<b><h:outputText value="Fecha: " styleClass="label"></h:outputText></b>
+						<h:outputText value="#{evento.formattedDate}" />
+							<rich:dataGrid var="contenido" columns="#{evento.columnsToDisplay}" elements="8" value="#{evento.contents}" width="100%" style="text-align:center;">
+								<h:graphicImage value="/ContentFeeder?eventID=#{evento.evtId}&#38;username=vero&#38;id=#{contenido.contId}&#38;thb=1" />
+							</rich:dataGrid>
+				</rich:panel>
+			</rich:dataGrid>
 		</h:form>
+
+		<br/>
+
+		<h:form id="fotosMejorCalificadas">
+			<rich:dataGrid var="contenido" columns="#{paginaInicioMB.cantFotosMejorCalificadas}" elements ="8" width="100%"
+				value="#{paginaInicioMB.fotosMejorCalificadas}">
+				<f:facet name="header">
+					<h:outputText value="Fotos Mejor Calificadas"></h:outputText>
+				</f:facet>
+				<rich:panel>
+					<f:facet name="header">
+						<h:commandLink value="#{contenido.eventName}" action="verEvento">
+						<f:setPropertyActionListener value="#{evento}"
+								target="#{eventoMB.evento}" />
+						</h:commandLink>
+					</f:facet>
+						<b><h:outputText value="Calificacion: " styleClass="label"></h:outputText></b>
+						<h:outputText value="#{contenido.avgScore}" />
+						<br/>
+						<h:graphicImage value="/ContentFeeder?eventID=#{contenido.eventId}&#38;username=vero&#38;id=#{contenido.contId}&#38;thb=1" />
+				</rich:panel>
+			</rich:dataGrid>
+		</h:form>
+
+		<br/>
+
+		<h:form id="fotosMasComentadas">
+			<rich:dataGrid var="contenido" columns="#{paginaInicioMB.cantFotosMasComentadas}" elements ="8" width="100%"
+				value="#{paginaInicioMB.fotosMasComentadas}">
+				<f:facet name="header">
+					<h:outputText value="Fotos Mas Comentadas"></h:outputText>
+				</f:facet>
+				<rich:panel>
+					<f:facet name="header">
+						<h:commandLink value="#{contenido.eventName}" action="verEvento">
+						<f:setPropertyActionListener value="#{evento}"
+								target="#{eventoMB.evento}" />
+						</h:commandLink>
+					</f:facet>
+						<h:graphicImage value="/ContentFeeder?eventID=#{contenido.eventId}&#38;username=vero&#38;id=#{contenido.contId}&#38;thb=1" />
+						<rich:dataList var="comentario" value="#{contenido.comments}" rows="5" title="Comentarios:">
+							<b><h:outputText value="#{comentario.userName}: "></h:outputText></b>
+							<h:outputText value="#{comentario.text}: "></h:outputText>
+						</rich:dataList>
+				</rich:panel>
+			</rich:dataGrid>
+		</h:form>
+
 	</ui:define>
 </ui:composition>
 </html>

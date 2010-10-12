@@ -75,7 +75,23 @@ public class DatatypeContent implements Serializable {
 	public static short getExternal() {
 		return EXTERNAL;
 	}
-
+	
+	public String getEventName() {
+		return this.eventName;
+	}
+	
+	public void setEventName(String name){
+		this.eventName = name;
+	}
+	
+	public Integer getEventId() {
+		return this.eventId;
+	}
+	
+	public void setEventId(Integer id){
+		this.eventId = id;
+	}
+	
 	private static final long serialVersionUID = 1L;
 	
 	public static final short PHOTO = 0;
@@ -83,6 +99,10 @@ public class DatatypeContent implements Serializable {
 	public static final short EXTERNAL = 2;
 	
 	public Integer contId;
+	
+	public String eventName;
+	
+	public Integer eventId;  
 	
 	public Integer avgScore;
 	

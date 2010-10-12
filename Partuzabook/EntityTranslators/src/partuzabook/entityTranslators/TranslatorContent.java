@@ -23,6 +23,8 @@ public class TranslatorContent implements ITranslatable {
 		Content ent = (Content)iEnt;
 		DatatypeContent dat = new DatatypeContent();
 		dat.contId = ent.getCntIdAuto();
+		dat.eventName = ent.getEvent().getEvtName();
+		dat.eventId = ent.getEvent().getEvtIdAuto();
 		// Translate list of Comments
 		dat.comments = new ArrayList<DatatypeComment>();
 		Iterator<Comment> itCom = ent.getComments().iterator();
