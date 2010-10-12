@@ -24,7 +24,7 @@
 				</h:panelGroup>
 				<a4j:support event="onclick" 
 					rendered="#{eventoMB.content != content}"
-					reRender="mainImage" >
+					reRender="mainImage, commentPanel, contentArea" >
 					<f:setPropertyActionListener value="#{content}"
 						target="#{eventoMB.content}" />
 				</a4j:support>
@@ -33,7 +33,7 @@
 		</h:panelGrid>
 		
 		<rich:datascroller page="#{eventMB.page}" styleClass="image-scroller" lastPageMode="full"
-			for="repeat" reRender="imagesTable" boundaryControls="hide" stepControls="hide">
+			for="repeat" reRender="imagesTable,contentArea" boundaryControls="hide" stepControls="hide">
 			<f:facet name="pages">
 				<h:outputText />
 			</f:facet>
