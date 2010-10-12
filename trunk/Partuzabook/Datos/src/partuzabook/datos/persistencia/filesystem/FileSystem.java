@@ -5,14 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.SystemUtils;
 
-import com.sun.tools.ws.wsdl.document.jaxws.Exception;
-
- 
+import java.util.Properties;
 
 import javax.ejb.Stateless;
 
@@ -30,13 +25,19 @@ public class FileSystem implements FileSystemLocal {
     public FileSystem() {
     }
     
-    private String getBasePath() throws ConfigurationException {
-    	Configuration config = new PropertiesConfiguration("settings.properties");
+    private String getBasePath() throws IOException {
+    	
+    	Properties config = new Properties();
+    	config.load(this.getClass().getClassLoader().getResourceAsStream("/my_config.properties")); 
+    	
+    	//Configuration config = new PropertiesConfiguration("settings.properties");
     	if (SystemUtils.IS_OS_WINDOWS)
-    			return config.getString("imagesPathWindows") + "/Partuzabook/";
+			//return config.getString("imagesPathWindows") + "/Partuzabook/";
+    		return config.getProperty("imagesPathWindows") + "/Partuzabook/";
     	
     	if (SystemUtils.IS_OS_LINUX)
-    		return config.getString("imagesPathLinux") + "/Partuzabook/";
+    		//return config.getString("imagesPathLinux") + "/Partuzabook/";
+    		return config.getProperty("imagesPathLinux") + "/Partuzabook/";
     	
     	// TODO: aca seria mas prolijo tirar un excepcion
     	return null;
@@ -54,9 +55,6 @@ public class FileSystem implements FileSystemLocal {
 	    	fstream.close();
 	    	return dir + uuid + extension;
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -80,9 +78,6 @@ public class FileSystem implements FileSystemLocal {
 			e.printStackTrace();
 		}
 		catch (IOException e) {
-			e.printStackTrace();
-		} catch (ConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -112,9 +107,6 @@ public class FileSystem implements FileSystemLocal {
 		}
 		catch (IOException e) {
 			//e.printStackTrace();
-		} catch (ConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return null;
     }
