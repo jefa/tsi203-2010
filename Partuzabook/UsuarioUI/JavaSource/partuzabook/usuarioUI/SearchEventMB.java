@@ -17,6 +17,7 @@ public class SearchEventMB {
 
 	private List<DatatypeEventSummary> eventResults;
 	
+	private String mensaje ="";
 	
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
@@ -27,6 +28,14 @@ public class SearchEventMB {
 		properties.put("java.naming.provider.url", "jnp://localhost:1099");
 		Context ctx = new InitialContext(properties);
 		return ctx;
+	}
+
+	public String getMensaje() {
+		return this.mensaje;
+	}
+
+	public void setMensaje(String msj) {
+		this.mensaje = msj;
 	}
 
 	public String getEventNameSearched() {
@@ -45,12 +54,15 @@ public class SearchEventMB {
 		try {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			eventResults = service.searchForEvent(eventNameSearched, 10);
-			return eventResults;
+			this.eventResults = service.searchForEvent(eventNameSearched, 10);
+			if (this.eventResults == null){
+				this.mensaje = "No se han encontrado resultados";
+			}
+			return this.eventResults;
 		} catch (NamingException e) {
 			e.printStackTrace();
 			return null;
-		}
+		} 
 	}
 
 	public void setEventResults(ArrayList<DatatypeEventSummary> events) {

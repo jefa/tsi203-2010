@@ -29,10 +29,10 @@
 	</managed-bean>
 	
 	 <managed-bean>
-  <managed-bean-name>SearchEventMB</managed-bean-name>
-  <managed-bean-class>partuzabook.usuarioUI.SearchEventMB</managed-bean-class>
-  <managed-bean-scope>request</managed-bean-scope>
- </managed-bean>
+	  <managed-bean-name>SearchEventMB</managed-bean-name>
+	  <managed-bean-class>partuzabook.usuarioUI.SearchEventMB</managed-bean-class>
+	  <managed-bean-scope>session</managed-bean-scope>
+	 </managed-bean>
 	<!-- Navegacion Principal -->
 	<navigation-rule>
 		<display-name>verEvento</display-name>

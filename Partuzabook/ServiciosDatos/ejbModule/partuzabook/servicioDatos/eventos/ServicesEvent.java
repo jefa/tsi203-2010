@@ -45,6 +45,7 @@ import partuzabook.datos.persistencia.beans.User;
 import partuzabook.datos.persistencia.beans.Video;
 import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
 import partuzabook.entityTranslators.TranslatorContent;
+import partuzabook.entityTranslators.TranslatorEventSummary;
 import partuzabook.entityTranslators.TranslatorUser;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
@@ -166,7 +167,7 @@ public class ServicesEvent implements ServicesEventRemote {
 				}
 			}
 			if (list.size() == 0){
-				throw new EventNotFoundException();
+				return null;
 			} else if (list.size() > maxEvents) {
 				list = list.subList(0, maxEvents);					
 			} 
@@ -486,5 +487,14 @@ public class ServicesEvent implements ServicesEventRemote {
 		return orderedList;
 	}
 
+	public DatatypeEventSummary findEventById(int eventId) {
+		Event ev = evDao.findByID(eventId);
+		if (ev != null) {
+			TranslatorEventSummary transEv = new TranslatorEventSummary();
+			return (DatatypeEventSummary) transEv.translate(ev); 
+		} 
+		return null;
+	}
+	
 	
 }
