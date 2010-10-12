@@ -366,14 +366,17 @@ public class ServicesEvent implements ServicesEventRemote {
 	}
 	
 	public byte[] getContentThumbnail(int eventID, String username, int contentID) {
-		if (!isUserRelatedToEvent(eventID, username)) {
-			throw new UserNotRelatedToEventException();
-		}
 		Event event = getEvent(eventID);
 		Content content = contDao.findByIDInEvent(event, contentID);
 		if (content == null) {
 			throw new ContentNotFoundException();
 		}
+		
+		// Si la imagen es la primera del album, la dejo ver
+		if (content.getPos() !=0 && !isUserRelatedToEvent(eventID, username)) {
+			throw new UserNotRelatedToEventException();
+		}
+
 		if (content instanceof Photo) {
 			return fileSystem.getThumbnail(content.getUrl());
 		}
