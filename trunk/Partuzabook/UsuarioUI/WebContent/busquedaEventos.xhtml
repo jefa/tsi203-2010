@@ -11,30 +11,38 @@
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Busqueda de Eventos</ui:define>
 	<ui:define name="body">
-		<h:form id="busqueda">
-			<h:inputText id="searchedName" value="#{SearchEventMB.eventNameSearched}" required="true"/>
-			<h:commandButton action="#{SearchEventMB.searchEvents}" value="Search" />
-		</h:form>
-		<c:if cond="#{SearchEventMB.eventResults != null}">
+	<h:form id="busqueda">
+		<h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" required="true"/>
+		<rich:hotKey selector="##{rich:clientId('searchField')}" key="return" 
+                           handler="#{rich:element('search')}.onclick();return false;"/>
+		<a4j:commandButton action="#{SearchEventMB.searchEvents}" value="Search" 
+		    reRender="output" id="search"/>
+	</h:form>
+
+	<a4j:outputPanel id="output">
 		<h:form id="resultados">
-			<rich:dataList var="resultado"
+			<rich:dataList var="resultado" rendered="#{not empty SearchEventMB.eventResults}"
 				value="#{SearchEventMB.eventResults}" rows="10">				
 				<strong><h:commandLink value="#{resultado.evtName}"
 					action="verEvento">
-					<f:setPropertyActionListener value="#{resultado.evtId}"
-								target="#{eventoMB.idEvento}" /></h:commandLink>
-					</strong>
+					<f:setPropertyActionListener value="#{resultado}"
+								target="#{eventoMB.evento}" />
+				</h:commandLink></strong>
 				<br />
 				<h:outputText value="Fecha:" styleClass="label"></h:outputText>
-				<h:outputText value="#{resultado.date} " />
+				<h:outputText value="#{resultado.formattedDate} " />
 				<div style="border: thin solid black; margin-bottom: 10px"><rich:dataList
 					var="contenido" value="#{resultado.contents}">
 					<h:graphicImage
-						value="/ContentFeeder?eventID=1&#38;username=vero&#38;id=#{contenido.contId}&#38;thb=1" />
+						value="/ContentFeeder?eventID=#{contenido.eventId}&#38;username=#{loginMB.userName}&#38;id=#{contenido.contId}&#38;thb=1" />
 				</rich:dataList></div>
 			</rich:dataList>		
+		<h:outputText value="No active search results." 
+			style="font-style:italic" rendered="#{empty SearchEventMB.eventResults}"/>
 		</h:form>
-		</c:if>
+	</a4j:outputPanel>
+		
+		
 	</ui:define>
 </ui:composition>
 </html>

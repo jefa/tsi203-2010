@@ -1,13 +1,20 @@
 package partuzabook.usuarioUI;
 
+import java.util.Properties;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 
 public class EventoMB {
 
 	private DatatypeEventSummary evento;
 	private DatatypeContent content;
-	
+	private Integer eventId; 
 	
 	
 	public void setEvento(DatatypeEventSummary evento) {
@@ -32,6 +39,26 @@ public class EventoMB {
 		this.content = con;
 	}
 
+	public Integer getEventId() {
+		return this.eventId; 
+	}
+	
+	public void setEventId(Integer evtId){
+		this.eventId = evtId;
+		// Also set the Event
+		try {
+			Context ctx = getContext();
+			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
+			DatatypeEventSummary ev = service.findEventById(evtId);
+			if (ev != null) {
+				this.evento = ev;
+			}
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
 	public Integer getPage(){
         final Integer index = this.evento.contents.indexOf(this.content);
         return index / 5 + 1;
@@ -45,7 +72,7 @@ public class EventoMB {
 		return evento.contents.get(position);
 	}*/
 
-	/*private Context getContext() throws NamingException {
+	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
 		properties.put("java.naming.factory.initial",
 				"org.jnp.interfaces.NamingContextFactory");
@@ -56,7 +83,7 @@ public class EventoMB {
 		return ctx;
 	}
 
-	public List<DatatypeEventSummary> getEventosRecientes() {
+/*	public List<DatatypeEventSummary> getEventosRecientes() {
 
 		try {
 			Context ctx = getContext();

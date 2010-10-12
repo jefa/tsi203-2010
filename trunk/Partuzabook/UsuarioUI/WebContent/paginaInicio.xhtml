@@ -46,14 +46,14 @@
 				<rich:panel>
 					<f:facet name="header">
 						<h:commandLink value="#{contenido.eventName}" action="verEvento">
-						<f:setPropertyActionListener value="#{evento}"
-								target="#{eventoMB.evento}" />
+						<f:setPropertyActionListener value="#{contenido.eventId}"
+								target="#{eventoMB.eventId}" />
 						</h:commandLink>
 					</f:facet>
 						<b><h:outputText value="Calificacion: " styleClass="label"></h:outputText></b>
 						<h:outputText value="#{contenido.avgScore}" />
 						<br/>
-						<h:graphicImage value="/ContentFeeder?eventID=#{contenido.eventId}&#38;id=#{contenido.contId}&#38;thb=1" />
+						<h:graphicImage value="/ContentFeeder?eventID=#{contenido.eventId}&#38;username=#{loginMB.userName}&#38;id=#{contenido.contId}&#38;thb=1" />
 				</rich:panel>
 			</rich:dataGrid>
 		</h:form>
@@ -69,11 +69,11 @@
 				<rich:panel>
 					<f:facet name="header">
 						<h:commandLink value="#{contenido.eventName}" action="verEvento">
-						<f:setPropertyActionListener value="#{evento}"
-								target="#{eventoMB.evento}" />
+						<f:setPropertyActionListener value="#{contenido.eventId}"
+								target="#{eventoMB.eventId}" />
 						</h:commandLink>
 					</f:facet>
-						<h:graphicImage value="/ContentFeeder?eventID=#{contenido.eventId}&#38;id=#{contenido.contId}&#38;thb=1" />
+						<h:graphicImage value="/ContentFeeder?eventID=#{contenido.eventId}&#38;username=#{loginMB.userName}&#38;id=#{contenido.contId}&#38;thb=1" />
 						<rich:dataList var="comentario" value="#{contenido.comments}" rows="5" title="Comentarios:">
 							<b><h:outputText value="#{comentario.userName}: "></h:outputText></b>
 							<h:outputText value="#{comentario.text}: "></h:outputText>

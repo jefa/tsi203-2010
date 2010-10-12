@@ -82,4 +82,6 @@ public interface ServicesEventRemote {
 	 */
 	public List<DatatypeMostTagged> getMostTagged(int lenght);
 	
+	public DatatypeEventSummary findEventById(int eventId);
+	
 }
