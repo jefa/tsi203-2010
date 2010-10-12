@@ -5,24 +5,15 @@ import partuzabook.datatypes.DatatypeEventSummary;
 
 public class EventoMB {
 
-	private String idEvento;
-	private String userName;
 	private DatatypeEventSummary evento;
 	private DatatypeContent content;
 	
 	
-	public String getIdEvento() {
-		return idEvento;
-	}
-
-	public void setIdEvento(String idEvento) {
-		System.out.println("EventoMB.setIdEvento():: EventId="+idEvento);
-		this.idEvento = idEvento;
-	}
 	
 	public void setEvento(DatatypeEventSummary evento) {
-		System.out.println("EventoMB.setEvento():: Event="+evento);
+		System.out.println("EventoMB.setEvento():: Event="+evento.evtId);
 		this.evento = evento;
+		
 		if (this.evento != null && this.evento.contents.size() > 0){
 			this.content = this.evento.contents.get(0);
 		}
@@ -40,15 +31,7 @@ public class EventoMB {
 		System.out.println("EventoMB.setContent():: new Content="+con);
 		this.content = con;
 	}
-	
-	public void setUserName(String userName){
-		this.userName = userName;
-	}
-	
-	public String getUserName(){
-		return this.userName;
-	}
-		
+
 	public Integer getPage(){
         final Integer index = this.evento.contents.indexOf(this.content);
         return index / 5 + 1;
