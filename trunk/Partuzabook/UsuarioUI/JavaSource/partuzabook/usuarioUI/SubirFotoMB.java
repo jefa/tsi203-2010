@@ -30,8 +30,10 @@ public class SubirFotoMB{
 	}
 
 	public void setIdEvento(int idEvento) {
+		if (this.idEvento != idEvento)
+			clearUploadData();	
 		this.idEvento = idEvento;
-		clearUploadData();
+		System.out.println("subirFotomb.setEvento():: Event="+idEvento);
 	}
 
 	public int getSize() {
