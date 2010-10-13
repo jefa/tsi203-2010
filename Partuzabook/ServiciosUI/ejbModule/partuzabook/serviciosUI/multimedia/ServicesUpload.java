@@ -12,6 +12,7 @@ import javax.naming.NamingException;
 
 import partuzabook.datatypes.DataTypeFile;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
+import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
 /**
  * Session Bean implementation class ServicesUpload
@@ -20,6 +21,7 @@ import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 public class ServicesUpload implements ServicesUploadRemote {
 	
 	private ServicesEventRemote servicesEvent;
+	private ServicesUserRemote servicesUser;
 	
     /**
      * Default constructor. 
@@ -32,6 +34,7 @@ public class ServicesUpload implements ServicesUploadRemote {
         try {
 			Context ctx = getContext();
 			servicesEvent = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");  
+			servicesUser = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");
 		}
         catch (NamingException e) {
 			e.printStackTrace();
@@ -62,6 +65,10 @@ public class ServicesUpload implements ServicesUploadRemote {
 	
 	public byte[] getMultimediaThumbnail(int eventID, String username, int contentID) {
 		return servicesEvent.getContentThumbnail(eventID, username, contentID);
+	}
+	
+	public byte[] getUserAvatar(String userID) {
+		return servicesUser.getUserAvatar(userID);
 	}
 	
 }
