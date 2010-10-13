@@ -5,8 +5,6 @@ import javax.ejb.Remote;
 
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeMostTagged;
-import partuzabook.datatypes.DatatypeUploadedContent;
-import partuzabook.datatypes.DatatypeUser;
 
 @Remote
 public interface ServicesMultimediaRemote {
@@ -25,4 +23,7 @@ public interface ServicesMultimediaRemote {
 	 * Returns  a list of the best qualified pictures in all the server
 	 */
 	public List<DatatypeMostTagged> getMostTagged(int length);
+	
+	public boolean isUserRelatedToEvent(int eventID, String user);
+	
 }
