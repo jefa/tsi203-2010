@@ -21,9 +21,19 @@ public class EventoMB {
 	private String userName;
 
 	private ServicesMultimediaRemote servicesMultimedia;
-	private ServicesEventRemote servicesEvent;	
+	private ServicesEventRemote servicesEvent;
+	private boolean validUserForContext;	
+
+	public boolean isValidUserForContext() {
+		return validUserForContext;
+	}
+
+	/*public void setValidUserForContext(boolean validUserForContext) {
+		this.validUserForContext = validUserForContext;
+	}*/
 
 	public void setUserName(String userName) {
+		System.out.println("EventoMB.setUserName(): "+userName);
 		this.userName = userName;
 	}
 
@@ -34,6 +44,9 @@ public class EventoMB {
 	public void setEvento(DatatypeEventSummary evento) {
 		System.out.println("EventoMB.setEvento():: Event="+evento.evtId);
 		this.evento = evento;
+		//this.validUserForContext = getServicesMultimedia().isUserRelatedToEvent(this.evento.evtId, this.userName);
+		this.validUserForContext = calcValidUserForContent();
+		System.out.println("EventoMB.setEvento():: validUserForContext="+this.validUserForContext);
 	}
 	
 	public DatatypeEventSummary getEvento() {
@@ -74,12 +87,18 @@ public class EventoMB {
 		return servicesEvent;
 	}
 	
-	private ServicesMultimediaRemote getServicesMultimedia() throws NamingException {
-		if (servicesMultimedia == null){
-			Context ctx = getContext();
-			this.servicesMultimedia = (ServicesMultimediaRemote) ctx.lookup("PartuzabookEAR/ServicesMultimedia/remote");
+	private ServicesMultimediaRemote getServicesMultimedia() {
+		try {
+			if (servicesMultimedia == null){
+				Context ctx = getContext();
+				this.servicesMultimedia = (ServicesMultimediaRemote) ctx.lookup("PartuzabookEAR/ServicesMultimedia/remote");
+			}
+			return servicesMultimedia;
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return servicesMultimedia;
+		return null;
 	}
 
 	public Integer getPage(){
@@ -125,11 +144,10 @@ public class EventoMB {
 		this.eventosRecientes = eventosRecientes;
 	}*/
 	
-	public boolean isValidUserForContent() throws NamingException{
+	private Boolean calcValidUserForContent() {
     	FacesContext context = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
 		String username = (String) session.getAttribute("username");		
 		return getServicesMultimedia().isUserRelatedToEvent(this.evento.evtId, username);
 	}
-
 }

@@ -23,8 +23,15 @@
 								target="#{subirFotoMB.idEvento}" /></h:commandLink>
 		<div>
 			<br />
-			<h:panelGroup id="contentArea">
+			<h:panelGroup id="contentArea" rendered="#{eventoMB.validUserForContext}">
 				<ui:include src="/templates/content.xhtml"/>
+			</h:panelGroup>
+			<h:panelGroup id="notAuthorizedContent" rendered="#{!eventoMB.validUserForContext}">
+				<h:outputText>Usted no esta autorizado a ver el contenido de este evento.</h:outputText>
+					<br/>
+				<h:outputText>Puede solicitar autorizacion enviando un mensaje al moderador.</h:outputText>
+					<br/>
+				<h:commandButton value="Enviar solicitud" />
 			</h:panelGroup>
 		</div>
 		</h:form>
