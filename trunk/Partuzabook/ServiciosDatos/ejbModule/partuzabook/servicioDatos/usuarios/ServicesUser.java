@@ -14,11 +14,15 @@ import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
-//import partuzabook.datos.persistencia.DAO.NotificationDAO;
+import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
+import partuzabook.datos.persistencia.beans.Photo;
+import partuzabook.datos.persistencia.beans.User;
+import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
 import partuzabook.entityTranslators.TranslatorUser;
+import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.utils.TranslatorCollection;
@@ -29,7 +33,10 @@ import partuzabook.utils.TranslatorCollection;
 @Stateless
 public class ServicesUser implements ServicesUserRemote {
 
+	private static final String DEFAULT_IMAGE = "profile/avatar_default.png";
+	
 	private NormalUserDAO nUserDao;
+	private FileSystemLocal fileSystem;
 //	private NotificationDAO notifDao;
 		
     /**
@@ -48,7 +55,8 @@ public class ServicesUser implements ServicesUserRemote {
 	        properties.put("java.naming.provider.url", "jnp://localhost:1099");
 	        Context ctx = new InitialContext(properties);
 	        System.out.println("Got context!!");
-	        nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");  
+	        nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local"); 
+    		fileSystem = (FileSystemLocal) ctx.lookup("FileSystem/local");
 //	        notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
 	        System.out.println("Lookup worked!"); 
 		}
@@ -91,6 +99,10 @@ public class ServicesUser implements ServicesUserRemote {
 		} 
 		return user;
 	}
+	
+	public DatatypeUser getUserForPublicProfile(String username) {
+		return (DatatypeUser)new TranslatorUser().translate(getNormalUser(username));
+	}
 
     public List<DatatypeEventSummary> getEventSummaryByUser(String user) {
     	NormalUser nUser = getNormalUser(user);   	
@@ -108,4 +120,11 @@ public class ServicesUser implements ServicesUserRemote {
 		return getNormalUser(username).getPassword();
 	}
 
+	public byte[] getUserAvatar(String username) {
+		NormalUser user = getNormalUser(username);
+		if(user.getImgPath() != null && !user.getImgPath().equals(""))
+			return fileSystem.readFile(user.getImgPath());
+		else
+			return fileSystem.readFile(DEFAULT_IMAGE);
+	}
 }
