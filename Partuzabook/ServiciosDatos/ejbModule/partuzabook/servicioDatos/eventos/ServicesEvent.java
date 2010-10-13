@@ -343,7 +343,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			content.setRegDate(new Timestamp(new java.util.Date().getTime()));
 			content.setSize((int) file.getLength());
 			content.setUrl(url);
-			
+			content.setPos(contDao.findNextPosInGalleryEvent(event));
 			contDao.persist(content);
 			result.add(content.getCntIdAuto() + "");
 		}
@@ -366,6 +366,9 @@ public class ServicesEvent implements ServicesEventRemote {
 	}
 	
 	public byte[] getContentThumbnail(int eventID, String username, int contentID) {
+		if (!isUserRelatedToEvent(eventID, username)) {
+			throw new UserNotRelatedToEventException();
+		}
 		Event event = getEvent(eventID);
 		Content content = contDao.findByIDInEvent(event, contentID);
 		if (content == null) {
