@@ -26,10 +26,7 @@
   <param-name>org.richfaces.SKIN</param-name>
   <param-value>classic</param-value>
  </context-param>
- 
-
-  
-  <filter>
+ <filter>
   <display-name>RichFaces Filter</display-name>
   <filter-name>richfaces</filter-name>
   <filter-class>org.ajax4jsf.Filter</filter-class>
@@ -38,28 +35,22 @@
    <param-value>false</param-value>
   </init-param>
  </filter>
-  <filter-mapping>
+ <filter>
+  <display-name>Authentication</display-name>
+  <filter-name>Authentication</filter-name>
+  <filter-class>partuzabook.usuarioUI.Authentication</filter-class>
+ </filter>
+ <filter-mapping>
   <filter-name>richfaces</filter-name>
   <servlet-name>Faces Servlet</servlet-name>
   <dispatcher>REQUEST</dispatcher>
   <dispatcher>FORWARD</dispatcher>
   <dispatcher>INCLUDE</dispatcher>
  </filter-mapping>
- 
- <filter>
-  <display-name>Authentication</display-name>
-  <filter-name>Authentication</filter-name>
-  <filter-class>partuzabook.usuarioUI.Authentication</filter-class>
- </filter>
-
  <filter-mapping>
   <filter-name>Authentication</filter-name>
   <url-pattern>/*</url-pattern>
  </filter-mapping>
- 
- 
- 
- 
  <listener>
   <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
  </listener>
@@ -73,6 +64,11 @@
   <servlet-name>ContentFeeder</servlet-name>
   <servlet-class>partuzabook.usuarioUI.ContentFeeder</servlet-class>
  </servlet>
+ <servlet>
+  <display-name>UserImageFeeder</display-name>
+  <servlet-name>UserImageFeeder</servlet-name>
+  <servlet-class>partuzabook.usuarioUI.UserImageFeeder</servlet-class>
+ </servlet>
  <servlet-mapping>
   <servlet-name>Faces Servlet</servlet-name>
   <url-pattern>*.jsf</url-pattern>
@@ -80,6 +76,10 @@
  <servlet-mapping>
   <servlet-name>ContentFeeder</servlet-name>
   <url-pattern>/ContentFeeder</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>UserImageFeeder</servlet-name>
+  <url-pattern>/UserImageFeeder</url-pattern>
  </servlet-mapping>
  <welcome-file-list>
   <welcome-file>/index.jsp</welcome-file>
