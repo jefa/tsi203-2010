@@ -5,25 +5,21 @@ import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.PostActivate;
-import javax.ejb.PrePassivate;
 import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeMostTagged;
-import partuzabook.datatypes.DatatypeUser;
-import partuzabook.servicioDatos.eventos.ServicesEvent;
+import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 
 /**
  * Session Bean implementation class ServicesMultimedia
  */
 @Stateless
 public class ServicesMultimedia implements ServicesMultimediaRemote {
-	private ServicesEvent servEvent;
+	private ServicesEventRemote servEvent;
 	
     /**
      * Default constructor. 
@@ -40,7 +36,7 @@ public class ServicesMultimedia implements ServicesMultimediaRemote {
 	        properties.put("java.naming.factory.url.pkgs", "org.jboss.naming rg.jnp.interfaces");
 	        properties.put("java.naming.provider.url", "jnp://localhost:1099");
 	        Context ctx = new InitialContext(properties);
-	        servEvent = (ServicesEvent) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");  
+	        servEvent = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");  
 		}
         catch (NamingException e) {
 			// TODO Auto-generated catch block
