@@ -50,4 +50,17 @@ public interface ServicesUserRemote {
      */
     public List<DatatypeNotification> getUpdateNotifications(String username);
     
+    /**
+     * Returns a user by from his username.
+     * @param username		- Id for the user
+     * @return				- A datatype containing the user's info
+     */
+    public DatatypeUser getUserForPublicProfile(String username);
+    
+    /**
+     * Return the user image
+     * @param username		- Id for the user
+     * @return				- The image avatar of the specified user
+     * */
+    public byte[] getUserAvatar(String username);
 }
