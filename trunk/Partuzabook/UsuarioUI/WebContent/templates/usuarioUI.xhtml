@@ -15,15 +15,19 @@
 </head>
 
 <body>
+	<h:form>
 	<div id="topNav">
 		<a href="paginaInicio.jsf" title="Partuza Book"><img src="images/logo_text.gif" alt="Partuza Book" width="178" height="78" border="0" /></a>
 		<ul>
 			<li><a href="paginaInicio.jsf" title="Home" >Home</a></li>
 			<li><a href="busquedaEventos.jsf" title="Busqueda">Busqueda</a></li>
-			<li><a href="publicProfile.jsf" title="Perfil">Perfil</a></li>
+			<li><h:commandLink value="Mi perfil" action="verPerfil">
+				<f:setPropertyActionListener value="#{loginMB.userName}" target="#{PublicProfile.userId}" />
+			</h:commandLink></li>	
 			<li><h:form><h:commandLink value="Logout" action="#{loginMB.logout}"></h:commandLink></h:form></li>
 		</ul>
 	</div>
+	</h:form>
 <div id="body">
 
 		<div id="topShadow"></div>
