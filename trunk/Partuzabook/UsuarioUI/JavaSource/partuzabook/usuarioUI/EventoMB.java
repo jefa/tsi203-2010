@@ -8,13 +8,24 @@ import javax.naming.NamingException;
 
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
+import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
 public class EventoMB {
 
 	private DatatypeEventSummary evento;
 	private DatatypeContent content;
 	private Integer eventId; 
+	private String userName;
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
+	public String getUserName() {
+		return this.userName;
+	}
 	
 	
 	public void setEvento(DatatypeEventSummary evento) {
