@@ -10,6 +10,7 @@ public class DatatypeComment implements Serializable{
 	public Integer contentId;
 	
 	public String userName;
+	public String userId;
 	
 	public DatatypeComment() {
 		
@@ -31,7 +32,6 @@ public class DatatypeComment implements Serializable{
 		this.contentId = id;
 	}
 
-	
 	public String getUserName() {
 		return this.userName;
 	}
@@ -40,5 +40,11 @@ public class DatatypeComment implements Serializable{
 		this.userName = user;
 	}
 
-
+	public String getUserId() {
+		return this.userId;
+	}
+	
+	public void setUserId(String userId){
+		this.userId = userId;
+	}
 }
