@@ -65,7 +65,7 @@ public class Authentication implements Filter {
 		 * resp.sendRedirect("index.jsf"); return; } } } else {
 		 */
 		if (!isPublic && (session == null || session.getAttribute("username") == null)) {
-			System.out.println("ACCESO NO AUTORIZADO");
+			System.out.println("Authentication.doFilter(): ACCESO NO AUTORIZADO");
 			resp.sendRedirect("login.jsf");
 			
 			return;
