@@ -3,6 +3,8 @@ package partuzabook.serviciosUI.multimedia;
 import java.util.List;
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.PostActivate;
 import javax.ejb.PrePassivate;
 import javax.ejb.Stateless;
@@ -30,7 +32,7 @@ public class ServicesMultimedia implements ServicesMultimediaRemote {
     	
     }
     
-    @PostActivate
+    @PostConstruct
     public void postActivate() {
         try {
 			Properties properties = new Properties();
@@ -46,7 +48,7 @@ public class ServicesMultimedia implements ServicesMultimediaRemote {
 		}
     }
     
-    @PrePassivate
+    @PreDestroy
     public void prePassivate() {
     	servEvent = null;
     }
@@ -64,6 +66,10 @@ public class ServicesMultimedia implements ServicesMultimediaRemote {
 	
 	public List<DatatypeMostTagged> getMostTagged(int length) {
 		return servEvent.getMostTagged(length);
+	}
+	
+	public boolean isUserRelatedToEvent(int eventID, String user){
+		return servEvent.isUserRelatedToEvent(eventID, user);
 	}
     
 }
