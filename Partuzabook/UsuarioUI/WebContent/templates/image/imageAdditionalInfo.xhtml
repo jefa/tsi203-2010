@@ -24,8 +24,9 @@
 					<h:panelGrid cellpadding="0">
 						<h:panelGroup>
 							<h:commandLink value="#{comment.userName}" action="verPerfil">
-								<f:setPropertyActionListener value="#{comment.userName}" target="#{eventoMB.userName}" />
-								<h:graphicImage value="/images/avatar_default.png" width="80" height="80" alt="" style="border:none"/>
+								<!-- <f:setPropertyActionListener value="#{comment.userName}" target="#{eventoMB.userName}" /> -->
+								<f:setPropertyActionListener value="#{comment.userId}" target="#{PublicProfile.userId}" />
+								<h:graphicImage value="/UserImageFeeder?username=#{comment.userId}" width="80" height="80" alt="" style="border:none"/>
 							</h:commandLink>	
 							<br/>
 						</h:panelGroup>

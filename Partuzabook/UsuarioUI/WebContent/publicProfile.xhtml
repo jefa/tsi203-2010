@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<ui:composition template="templates/usuarioUI.xhtml">
+	<ui:define name="title">Public Profile</ui:define>
+	<ui:define name="body">
+	<h:form id="publicProfile">
+		<f:view>
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Perfil"></h:outputText>
+					</f:facet>						
+						<div>
+							<div >
+								<h:graphicImage value="/UserImageFeeder?username=#{PublicProfile.userId}" />
+								<rich:spacer width="20" />
+								<br/>
+								<h:commandLink value="Enviar PM a #{PublicProfile.user.name}" action="#{PublicProfile.enviarPM}"></h:commandLink>
+							</div>
+							<div style="position:absolute; left:200px; top:80px">
+								<rich:panel>
+									<f:facet name="header">
+										<h:outputText value="#{PublicProfile.user.name}"></h:outputText>
+									</f:facet>
+									<h:outputText value="email: #{PublicProfile.user.email}"></h:outputText>
+								</rich:panel>
+							</div>
+						</div>
+						<rich:dataGrid var="evento" columns="1" elements="#{PublicProfile.cantEventosDelUsuario}" width="100%" value="#{PublicProfile.eventosDelUsuario}">
+							<f:facet name="header">
+								<h:outputText value="Eventos a los que #{PublicProfile.user.name} pertenece"></h:outputText>
+							</f:facet>
+							<h:outputText value="#{evento.evtName}"></h:outputText>
+						</rich:dataGrid>											
+				</rich:panel>
+		</f:view>
+	</h:form>
+	</ui:define>
+</ui:composition>
+</html>
