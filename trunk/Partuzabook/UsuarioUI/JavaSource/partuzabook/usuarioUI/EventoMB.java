@@ -2,15 +2,16 @@ package partuzabook.usuarioUI;
 
 import java.util.Properties;
 
+import javax.faces.context.FacesContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.http.HttpSession;
 
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
-import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
-import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
+import partuzabook.serviciosUI.multimedia.ServicesMultimediaRemote;
 
 public class EventoMB {
 
@@ -19,22 +20,20 @@ public class EventoMB {
 	private Integer eventId; 
 	private String userName;
 
+	private ServicesMultimediaRemote servicesMultimedia;
+	private ServicesEventRemote servicesEvent;	
+
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	
+
 	public String getUserName() {
 		return this.userName;
 	}
 	
-	
 	public void setEvento(DatatypeEventSummary evento) {
 		System.out.println("EventoMB.setEvento():: Event="+evento.evtId);
 		this.evento = evento;
-		
-		if (this.evento != null && this.evento.contents.size() > 0){
-			this.content = this.evento.contents.get(0);
-		}
 	}
 	
 	public DatatypeEventSummary getEvento() {
@@ -58,18 +57,31 @@ public class EventoMB {
 		this.eventId = evtId;
 		// Also set the Event
 		try {
-			Context ctx = getContext();
-			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			DatatypeEventSummary ev = service.findEventById(evtId);
+			DatatypeEventSummary ev = getServicesEevnt().findEventById(evtId);
 			if (ev != null) {
 				this.evento = ev;
 			}
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
+	}
 
+	private ServicesEventRemote getServicesEevnt() throws NamingException {
+		if (servicesEvent == null) {
+			Context ctx = getContext();
+			this.servicesEvent = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");
+		}
+		return servicesEvent;
 	}
 	
+	private ServicesMultimediaRemote getServicesMultimedia() throws NamingException {
+		if (servicesMultimedia == null){
+			Context ctx = getContext();
+			this.servicesMultimedia = (ServicesMultimediaRemote) ctx.lookup("PartuzabookEAR/ServicesMultimedia/remote");
+		}
+		return servicesMultimedia;
+	}
+
 	public Integer getPage(){
         final Integer index = this.evento.contents.indexOf(this.content);
         return index / 5 + 1;
@@ -93,7 +105,7 @@ public class EventoMB {
 		Context ctx = new InitialContext(properties);
 		return ctx;
 	}
-
+	
 /*	public List<DatatypeEventSummary> getEventosRecientes() {
 
 		try {
@@ -112,5 +124,12 @@ public class EventoMB {
 			ArrayList<DatatypeEventSummary> eventosRecientes) {
 		this.eventosRecientes = eventosRecientes;
 	}*/
+	
+	public boolean isValidUserForContent() throws NamingException{
+    	FacesContext context = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+		String username = (String) session.getAttribute("username");		
+		return getServicesMultimedia().isUserRelatedToEvent(this.evento.evtId, username);
+	}
 
 }
