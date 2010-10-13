@@ -20,6 +20,8 @@ public class TranslatorUser implements ITranslatable {
 		} else {
 			dat.type  = DatatypeUser.NORMALUSER;
 		}
+		dat.email = ent.getEmail();
+		dat.imagePath = ent.getImgPath();
 		return dat;
 	}
 }
