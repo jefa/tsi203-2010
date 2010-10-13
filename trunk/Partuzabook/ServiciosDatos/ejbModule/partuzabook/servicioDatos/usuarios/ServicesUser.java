@@ -54,11 +54,9 @@ public class ServicesUser implements ServicesUserRemote {
 	        properties.put("java.naming.factory.url.pkgs", "org.jboss.naming rg.jnp.interfaces");
 	        properties.put("java.naming.provider.url", "jnp://localhost:1099");
 	        Context ctx = new InitialContext(properties);
-	        System.out.println("Got context!!");
 	        nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local"); 
     		fileSystem = (FileSystemLocal) ctx.lookup("FileSystem/local");
 //	        notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
-	        System.out.println("Lookup worked!"); 
 		}
         catch (Exception e) {
 			e.printStackTrace();
