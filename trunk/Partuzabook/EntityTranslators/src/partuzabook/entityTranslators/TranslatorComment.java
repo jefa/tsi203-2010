@@ -11,6 +11,7 @@ public class TranslatorComment implements ITranslatable {
 		dat.contentId = com.getContent().getCntIdAuto();
 		dat.text = com.getText();
 		dat.userName = com.getUser().getName();
+		dat.userId = com.getUser().getUsername();
 		return dat;
 	}
 }
