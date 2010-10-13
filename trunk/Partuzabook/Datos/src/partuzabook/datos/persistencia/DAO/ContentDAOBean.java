@@ -41,4 +41,10 @@ public class ContentDAOBean extends JpaDao<Integer, Content> implements ContentD
 		return (List<Content>)namedQuery.getResultList();	
 	}
 
+	public Integer findNextPosInGalleryEvent(Event event) {
+		Query namedQuery = em.createNamedQuery("Content.findNextPosInGalleryEvent");
+		namedQuery.setParameter("event", event);
+		return (Integer)namedQuery.getResultList().size();	
+	}
+	
 }

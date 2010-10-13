@@ -34,7 +34,9 @@ import javax.persistence.OneToMany;
 	@NamedQuery(name = "Content.findByIDInEvent",
 			query = "SELECT c FROM Content c WHERE c.event = :event AND c.cntIdAuto = :content"),
 	@NamedQuery(name = "Content.findByPosInGalleryEvent",
-			query = "SELECT c FROM Content c WHERE c.event = :event AND c.pos = :pos")
+			query = "SELECT c FROM Content c WHERE c.event = :event AND c.pos = :pos"),
+	@NamedQuery(name = "Content.findNextPosInGalleryEvent",
+			query = "SELECT c FROM Content c WHERE c.event = :event")
 })
 public abstract class Content implements Serializable {
 	private static final long serialVersionUID = 1L;
