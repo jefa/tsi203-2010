@@ -366,9 +366,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	}
 	
 	public byte[] getContentThumbnail(int eventID, String username, int contentID) {
-		if (!isUserRelatedToEvent(eventID, username)) {
-			throw new UserNotRelatedToEventException();
-		}
+
 		Event event = getEvent(eventID);
 		Content content = contDao.findByIDInEvent(event, contentID);
 		if (content == null) {
