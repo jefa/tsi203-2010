@@ -43,8 +43,8 @@ public class EventoMB {
 	
 	public void setEvento(DatatypeEventSummary evento) {
 		System.out.println("EventoMB.setEvento():: Event="+evento.evtId);
-		this.evento = evento;
-		//this.validUserForContext = getServicesMultimedia().isUserRelatedToEvent(this.evento.evtId, this.userName);
+		//this.evento = evento;
+		setEventId(evento.evtId);
 		this.validUserForContext = calcValidUserForContent();
 		System.out.println("EventoMB.setEvento():: validUserForContext="+this.validUserForContext);
 	}
