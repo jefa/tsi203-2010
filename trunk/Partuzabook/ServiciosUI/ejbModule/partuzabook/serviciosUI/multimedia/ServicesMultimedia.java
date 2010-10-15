@@ -29,7 +29,7 @@ public class ServicesMultimedia implements ServicesMultimediaRemote {
     }
     
     @PostConstruct
-    public void postActivate() {
+    public void postConstruct() {
         try {
 			Properties properties = new Properties();
 	        properties.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
@@ -45,7 +45,7 @@ public class ServicesMultimedia implements ServicesMultimediaRemote {
     }
     
     @PreDestroy
-    public void prePassivate() {
+    public void preDestroy() {
     	servEvent = null;
     }
 

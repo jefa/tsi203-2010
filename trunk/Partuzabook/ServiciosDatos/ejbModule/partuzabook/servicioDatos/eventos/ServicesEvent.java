@@ -148,6 +148,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	}
 	
 	public List<DatatypeEventSummary> searchForEvent(String name, int maxEvents){
+		name = name.toLowerCase();
 		// First search by full name entered
 		List<Event> list =  evDao.findBySimilarName(name);
 		if (list.size() > maxEvents) {
@@ -221,7 +222,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			TagForUser currentCast;
 			if (current instanceof TagForUser) {
 				currentCast = (TagForUser) current;
-				usersAlreadyTagged.add(currentCast.getCreator());
+				usersAlreadyTagged.add(currentCast.getUserTagged());
 			}
 		}
 			
