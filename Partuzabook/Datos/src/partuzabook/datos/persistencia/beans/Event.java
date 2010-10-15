@@ -40,7 +40,7 @@ import javax.persistence.TemporalType;
 @NamedQueries({
 	@NamedQuery(name = "Event.findAll", query = "SELECT o FROM Event o"),
 	@NamedQuery(name = "Event.findByName", query = "SELECT o FROM Event o WHERE o.evtName = :name"),
-	@NamedQuery(name = "Event.findBySimilarName", query = "SELECT DISTINCT o FROM Event o WHERE o.evtName LIKE :name"),
+	@NamedQuery(name = "Event.findBySimilarName", query = "SELECT DISTINCT o FROM Event o WHERE LOWER(o.evtName) LIKE :name"),
 	@NamedQuery(name = "Event.findAllAfterDate",
 			query = "SELECT o FROM Event o WHERE o.date >= :after"),
 	@NamedQuery(name = "Event.findContentById",

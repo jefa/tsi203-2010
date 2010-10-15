@@ -66,19 +66,19 @@ public interface ServicesEventRemote {
 	
 	/**
 	 * Returns a list of the best picture for each event, ordered by rating
-	 * @param lenght - lenght of the list to return 
+	 * @param lenght - length of the list to return 
 	 */
 	public List<DatatypeContent> getBestQualifiedPictures(int length);
 	
 	/**
 	 * Returns  a list of the best qualified pictures in all the server
-	 * @param lenght - lenght of the list to return
+	 * @param lenght - length of the list to return
 	 */
 	public List<DatatypeContent> getMostCommentedPictures(int length);
 	
 	/**
 	 * Returns  a list of the best qualified pictures in all the server
-	 * @param lenght - lenght of the list to return
+	 * @param lenght - length of the list to return
 	 */
 	public List<DatatypeMostTagged> getMostTagged(int lenght);
 	
