@@ -36,15 +36,20 @@ CREATE TABLE events
   flags character varying(1) NOT NULL,
   reg_date timestamp without time zone NOT NULL,
   evt_id_auto integer NOT NULL,
+  category character varying(50),
   CONSTRAINT "PK_EVENTS" PRIMARY KEY (evt_id_auto),
   CONSTRAINT "FK_CREATOR" FOREIGN KEY (creator)
       REFERENCES users (username) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT "FK_EVTCATEGORY" FOREIGN KEY (category)
+      REFERENCES "evtCategory" (category) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (
   OIDS=FALSE
 );
 ALTER TABLE events OWNER TO postgres;
+
 
 
 -- Table: "content"
@@ -257,3 +262,60 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE tags OWNER TO postgres;
+
+
+-- Table: "cntCategory"
+
+-- DROP TABLE "cntCategory";
+
+CREATE TABLE "cntCategory"
+(
+  evt_id integer NOT NULL,
+  category character varying(100) NOT NULL,
+  cat_id_auto integer NOT NULL,
+  CONSTRAINT "PK_CNTCATEGORY" PRIMARY KEY (cat_id_auto),
+  CONSTRAINT "FK_CNTCATEGORY_EVT" FOREIGN KEY (evt_id)
+      REFERENCES events (evt_id_auto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE "cntCategory" OWNER TO postgres;
+
+
+-- Table: "evtCategory"
+
+-- DROP TABLE "evtCategory";
+
+CREATE TABLE "evtCategory"
+(
+  category character varying(100) NOT NULL,
+  CONSTRAINT "PK_EVTCATEGORY" PRIMARY KEY (category)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE "evtCategory" OWNER TO postgres;
+
+
+-- Table: "contentCntCategory"
+
+-- DROP TABLE "contentCntCategory";
+
+CREATE TABLE "contentCntCategory"
+(
+  cnt_id integer NOT NULL,
+  cat_id integer NOT NULL,
+  CONSTRAINT "PK_CONTENTCNTCATEGORY" PRIMARY KEY (cnt_id, cat_id),
+  CONSTRAINT "FK_CONTENTCNTCATEGORY_CNTCATEGORY" FOREIGN KEY (cat_id)
+      REFERENCES "cntCategory" (cat_id_auto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT "FK_CONTENTCNTCATEGORY_CONTENT" FOREIGN KEY (cnt_id)
+      REFERENCES "content" (cnt_id_auto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE "contentCntCategory" OWNER TO postgres;
