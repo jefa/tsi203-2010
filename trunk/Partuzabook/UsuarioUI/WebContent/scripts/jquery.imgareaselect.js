@@ -22,7 +22,7 @@ function div() {
     return $('<div/>');
 }
 
-$.imgAreaSelect = function (img, options) {
+$.imgAreaSelect = function (img, options, txt) {
     var
 
         $img = $(img),
@@ -64,7 +64,7 @@ $.imgAreaSelect = function (img, options) {
         aspectRatio,
 
         shown,
-
+        ix1 = txt,
         x1, y1, x2, y2,
 
         selection = { x1: 0, y1: 0, x2: 0, y2: 0, width: 0, height: 0 },
@@ -257,7 +257,11 @@ $.imgAreaSelect = function (img, options) {
             hide($box.add($outer), function () { $(this).hide(); });
 
         options.onSelectEnd(img, getSelection());
-
+        document.getElementById(options.idx1).value = selX(x1);
+        document.getElementById(options.idy1).value = selY(y1);
+        document.getElementById(options.idx2).value = selX(x2);
+        document.getElementById(options.idy2).value = selY(y2);
+        
         $(document).unbind('mousemove', selectingMouseMove);
         $box.mousemove(areaMouseMove);
     }
