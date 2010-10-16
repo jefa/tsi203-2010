@@ -4,6 +4,7 @@ package partuzabook.datos.persistencia.beans;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -77,6 +79,10 @@ public abstract class Content implements Serializable {
 	//bi-directional many-to-one association to Tag
 	@OneToMany(mappedBy="content")
 	private List<Tag> tags;
+	
+	//bi-directional many-to-many association to CntCategory
+	@ManyToMany(mappedBy="contents")
+	private Set<CntCategory> cntCategories;
 
     public Content() {
     }
@@ -161,4 +167,13 @@ public abstract class Content implements Serializable {
 	public void setPos(int pos) {
 		this.pos = pos;
 	}
+	
+	public Set<CntCategory> getCntCategories() {
+		return this.cntCategories;
+	}
+
+	public void setCntCategories(Set<CntCategory> cntCategories) {
+		this.cntCategories = cntCategories;
+	}
+	
 }
