@@ -51,6 +51,13 @@ public interface ServicesUserRemote {
     public List<DatatypeNotification> getUpdateNotifications(String username);
     
     /**
+     * Returns a list of unread notifications for the user
+     * @param username		- Id for the user
+     * @return				- List of notifications for the user
+     */
+    public List<DatatypeNotification> getUpdateNotificationsUnread(String username);
+
+    /**
      * Returns a user by from his username.
      * @param username		- Id for the user
      * @return				- A datatype containing the user's info
