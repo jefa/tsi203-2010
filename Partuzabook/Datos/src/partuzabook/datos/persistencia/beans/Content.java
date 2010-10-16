@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -80,7 +81,10 @@ public abstract class Content implements Serializable {
 	private List<Tag> tags;
 	
 	//bi-directional many-to-many association to CntCategory
-	@ManyToMany(mappedBy="contents")
+	@ManyToMany(mappedBy="contents") 
+	@JoinTable(name="\"contentCntCategory\"", 
+          joinColumns=@JoinColumn(name="cat_id"),
+          inverseJoinColumns=@JoinColumn(name="cnt_id"))
 	private List<CntCategory> cntCategories;
 
     public Content() {
