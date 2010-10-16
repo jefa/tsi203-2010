@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,7 +18,7 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name="cntCategory")
+@Table(name="\"cntCategory\"")
 public class CntCategory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -34,7 +35,9 @@ public class CntCategory implements Serializable {
     
 	//bi-directional many-to-many association to Content
     @ManyToMany
-	@JoinColumn(name="cat_id_auto")
+    @JoinTable(name="\"contentCntCategory\"",
+    		joinColumns=@JoinColumn(name="cat_id"),
+	        inverseJoinColumns=@JoinColumn(name="cnt_id"))
 	private List<Content> contents;
 
     public CntCategory() {
