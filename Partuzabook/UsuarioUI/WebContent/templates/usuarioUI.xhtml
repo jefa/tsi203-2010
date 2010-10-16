@@ -1,6 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -8,34 +7,121 @@
 	xmlns:rich="http://richfaces.org/rich">
 
 <head>
-<link href="styles/style.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="css/imgareaselect-default.css" />
-<meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8" />
+
+<link rel="stylesheet" id="comfeed-css" href="styles/comfeed.css" type="text/css" media="all"/>
+<link rel="stylesheet" id="wp-pagenavi-css" href="styles/pagenavi-css.css" type="text/css" media="all"/>
+<link rel="stylesheet" href="styles/default.css" type="text/css" media="screen,projection"/>
+<link rel="stylesheet" href="styles/2c-r-fixed.css" type="text/css"/>
+
 <title>PartuzaBook - <ui:insert name="title" /></title>
+<link rel="stylesheet" type="text/css" href="styles/imgareaselect-default.css" />
+
+<link rel="shortcut icon" href="images/favicon.ico"/>
+<meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8" />
+
+
+
+
+<script type="text/javascript" src="scripts/jquery.js"></script>
+
+<style type="text/css">
+	.posts-default li  { width: 205px; height: 190px; }
+	.posts-default img, .posts-default .entry-thumbnails-link { width: 195px; height: 110px; }
+	.posts-default .entry-meta { width: 195px; }
+	.posts-default .entry-thumbnails { width: 205px; height: 120px; }
+			.posts-quick .entry-thumbnails img { width: 115px; height: 115px; }
+		.posts-quick .entry-meta { width: 115px; }
+			.featured { height: 260px; }
+	.featured-article { width: 640px; height: 250px; }
+	.featured-article img { width: 640px; height: 250px; }
+	#controls { width: 610px; top: 110px; }
+	#controls .next { left: 610px; }
+	.featured-entry { height: 84px; top: -84px; }
+	.featured-slideshow-inner { height: 250px }
+		.featured-stories-summary  { margin-left: 51px; }
+	.single .post .entry-photo img, .single-post .entry-photo img  { width: 620px; height: 250px; }
+		.footer-sidebar  { width: 230px; }
+</style>
+
+<script type="text/javascript">
+/*	jQuery(document).ready(function($) {
+	$('.multi-sidebar').tabs();
+	$('.sf-menu').superfish({autoArrows: true, speed: 'fast', dropShadows: 'true'});
+	});*/	
+</script>
+
+
 </head>
 
-<body>
-	<h:form>
-	<div id="topNav">
-		<a href="paginaInicio.jsf" title="Partuza Book"><img src="images/logo_text.gif" alt="Partuza Book" width="178" height="78" border="0" /></a>
-		<ul>
-			<li><a href="paginaInicio.jsf" title="Home" >Home</a></li>
-			<li><a href="busquedaEventos.jsf" title="Busqueda">Busqueda</a></li>
-			<li><h:commandLink value="Mi perfil" action="verPerfil">
+<body class="home blog layout-2c-r-fixed js style-default">
+<script type="text/javascript">
+//<![CDATA[
+(function(){
+var c = document.body.className;
+c = c.replace(/no-js/, 'js');
+document.body.className = c;
+})();
+//]]>
+</script>
+<div id="header">
+	<div id="branding" class="clearfix">
+	<div class="logo">
+				<h1 class="blog-name"><a href="paginaInicio.jsf">Partuzabook</a></h1>
+		<h2 class="blog-description">Porque todas las fiestas terminan en eso...</h2>
+			</div>
+	<div id="searchbar"><form method="get" class="searchform clearfix" action="#">
+ <input type="text" value="Buscar..." name="s" class="s" onfocus="this.value=&#39;&#39;"/>
+ <input type="submit" class="searchsubmit" value="Search" title="Buscar evento"/>
+</form>
+</div>
+	</div><!-- #branding -->
+</div><!-- #header -->
+
+<div id="nav">
+	<div id="nav-content" class="clearfix">
+	<div class="menu-main-menu-container"><ul id="menu-main-menu" class="sf-menu menu clearfix sf-js-enabled sf-shadow">
+<li class="menu-item menu-item-type-taxonomy"><a href="paginaInicio.jsf">Home</a></li>
+<li class="menu-item menu-item-type-taxonomy"><a href="busquedaEventos.jsf">Busqueda</a></li>
+<li class="menu-item menu-item-type-taxonomy"><a href="register.jsf">Registrarse</a></li>
+
+			<li class="menu-item menu-item-type-taxonomy"><h:form><h:commandLink value="Mi perfil" action="verPerfil">
 				<f:setPropertyActionListener value="#{loginMB.userName}" target="#{PublicProfile.userId}" />
-			</h:commandLink></li>	
-			<li><h:form><h:commandLink value="Logout" action="#{loginMB.logout}"></h:commandLink></h:form></li>
-		</ul>
+			</h:commandLink></h:form></li>	
+			<li class="menu-item menu-item-type-taxonomy"><h:form><h:commandLink value="Logout" action="#{loginMB.logout}"></h:commandLink></h:form></li>
+</ul></div>		
+	</div><!-- #nav-content -->
+</div><!-- #nav -->
+
+<div id="wrapper">
+	
+	  
+	<div id="main" class="clearfix">
+    <div id="container" class="clearfix">
+    <div id="content" class="section"  >
+	<ui:insert name="body">Body</ui:insert>
+	<div id="bottom-content-1">
+		<ul class="clearfix xoxo">
+    			<li></li>
+        	</ul>
 	</div>
-	</h:form>
-<div id="body">
 
-		<div id="topShadow"></div>
-		<div id="bodyPannel">
-<ui:insert name="body">Body</ui:insert>
+<div id="bottom-content-2">
+		<ul class="clearfix xoxo">
+    			<li></li>
+        	</ul>
+	</div>
+	</div>
 </div>
-<div id="bottomShadow"></div><br class="spacer" />
+</div>	
+   <div id="footer">
+
+		
+		<div class="footer-message">
+		<p class="floatright"><a class="arras" href="mailto:partuzabook@gmail.com"><strong>Contactenos</strong></a></p>
+		<p>Copyright TSI Grupo 3. Todos los derechos reservados.</p>		
+		</div><!-- .footer-message -->
+    </div>
 </div>
+
 </body>
-
 </html>
