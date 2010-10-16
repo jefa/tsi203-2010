@@ -22,6 +22,8 @@ public class DatatypeEventSummary implements Serializable{
 
 	public int columnsToDisplay;
 	
+	public String category;
+	
     public DatatypeEventSummary() {
     	
     }
@@ -89,6 +91,14 @@ public class DatatypeEventSummary implements Serializable{
 		this.contents = contents;
 	}
 
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
