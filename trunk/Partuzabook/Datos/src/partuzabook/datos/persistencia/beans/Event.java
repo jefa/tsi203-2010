@@ -96,8 +96,8 @@ public class Event implements Serializable {
 	private Set<CntCategory> cntCategories;
 
 	//bi-directional many-to-many association to EvtCategory
-	@ManyToMany(mappedBy="events")
-	private Set<EvtCategory> evtCategories;
+	//@ManyToMany(mappedBy="events")
+	private EvtCategory evtCategories;
 	
     public Event() {
     }
@@ -198,11 +198,11 @@ public class Event implements Serializable {
 		this.cntCategories = cntCategories;
 	}
 	
-	public Set<EvtCategory> getEvtCategories() {
+	public EvtCategory getEvtCategories() {
 		return this.evtCategories;
 	}
 
-	public void setEvtCategories(Set<EvtCategory> evtCategories) {
+	public void setEvtCategories(EvtCategory evtCategories) {
 		this.evtCategories = evtCategories;
 	}
 	
