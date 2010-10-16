@@ -81,6 +81,7 @@ public class Authentication implements Filter {
 	public void init(FilterConfig fConfig) throws ServletException {
 		publicURLs = new ArrayList<String>();
 		publicURLs.add("/login.jsf");
+		publicURLs.add("/register.jsf");
 		publicURLs.add("/images");
 		publicURLs.add("/styles");
 		publicURLs.add("/a4j/");
