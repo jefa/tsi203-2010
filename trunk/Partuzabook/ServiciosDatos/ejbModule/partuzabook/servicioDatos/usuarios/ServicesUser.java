@@ -1,6 +1,8 @@
 package partuzabook.servicioDatos.usuarios;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -112,6 +114,21 @@ public class ServicesUser implements ServicesUserRemote {
     	NormalUser nUser = getNormalUser(user);  
     	List<Notification> notif = nUser.getNotificationsReceived();
     	return TranslatorCollection.translateNotification(notif);
+    }
+
+    public List<DatatypeNotification> getUpdateNotificationsUnread(String user) {
+    	List<Notification> unreadNotif = new ArrayList<Notification>();
+    	NormalUser nUser = getNormalUser(user);  
+    	List<Notification> notif = nUser.getNotificationsReceived();
+    	Iterator<Notification> it = notif.iterator();
+    	while (it.hasNext()) {
+    		Notification ntf = it.next();
+    		if (!ntf.getRead()) {
+    			unreadNotif.add(ntf);
+    			//TODO Aca creo que habria que marcarlas como leídas.... no?
+    		}
+    	}
+    	return TranslatorCollection.translateNotification(unreadNotif);
     }
 
 	public String getNormalUserPassword(String username) {
