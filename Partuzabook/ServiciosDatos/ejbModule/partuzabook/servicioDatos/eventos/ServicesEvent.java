@@ -147,7 +147,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		return listDatatypes;
 	}
 	
-	public List<DatatypeEventSummary> searchForEvent(String name, int maxEvents){
+	public List<DatatypeEventSummary> searchForEventByName(String name, int maxEvents){
 		name = name.toLowerCase();
 		// First search by full name entered
 		List<Event> list =  evDao.findBySimilarName(name);
@@ -177,6 +177,26 @@ public class ServicesEvent implements ServicesEventRemote {
 
 		
 		return null;
+	}
+
+	public List<DatatypeEventSummary> searchForEventByDate(java.util.Date date, int maxEvents){
+/*		String[] composedDate = date.split("/");
+		String day = composedDate[0];
+		String month = composedDate[1];
+		String year = composedDate[2];
+*/				
+		
+		Date sqlDate = new Date(date.getTime());
+		// Search by date entered		
+		List<Event> list =  evDao.findByDate(sqlDate);		
+		if (list.size() > maxEvents) {
+			list = list.subList(0, maxEvents);
+			return TranslatorCollection.translateEventSummary(list);
+		} else if (list.size() == 0){
+				return null;
+		} else { 
+			return TranslatorCollection.translateEventSummary(list);			
+		}
 	}
 
 	
@@ -499,6 +519,23 @@ public class ServicesEvent implements ServicesEventRemote {
 			return (DatatypeEventSummary) transEv.translate(ev); 
 		} 
 		return null;
+	}
+
+	public List<DatatypeEventSummary> filterAllEvents(int maxEvents) {
+		List<Event> allEvents = evDao.findAll();
+		return TranslatorCollection.translateEventSummary(allEvents);
+	}
+
+	public List<DatatypeEventSummary> filterPastEvents(int maxEvents) {
+		Date today = new Date(new java.util.Date().getTime());
+		List<Event> beforeEvents = evDao.findAllBeforeDate(today);
+		return TranslatorCollection.translateEventSummary(beforeEvents);
+	}
+
+	public List<DatatypeEventSummary> filterNextEvents(int maxEvents) {
+		Date today = new Date(new java.util.Date().getTime());
+		List<Event> afterEvents = evDao.findAllAfterDate(today);
+		return TranslatorCollection.translateEventSummary(afterEvents);
 	}
 	
 	

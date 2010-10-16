@@ -14,11 +14,16 @@ public interface EventDAO extends Dao<Integer, Event>{
 	public Event findByName(String name);
 
 	public List<Event> findBySimilarName(String name);
+	
+//	public List<Event> findByDate(String day, String month, String year);
+	public List<Event> findByDate(Date date);
 
 	public List<Event> findAll();
 	
-	public List<Event> findAllAfterDate(Date after);
-
+	public List<Event> findAllAfterDate(Date date);
+	
+	public List<Event> findAllBeforeDate(Date date);
+	
 	public NormalUser findMostTagged();
 
 }

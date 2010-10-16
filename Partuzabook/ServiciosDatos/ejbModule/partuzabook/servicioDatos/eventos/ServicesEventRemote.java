@@ -1,4 +1,5 @@
 package partuzabook.servicioDatos.eventos;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -61,7 +62,14 @@ public interface ServicesEventRemote {
      * @param name				- Name to search  
      * @param maxEvents			- Max number of events to return in the list
      */ 
-	public List<DatatypeEventSummary> searchForEvent(String name, int maxEvents);
+	public List<DatatypeEventSummary> searchForEventByName(String name, int maxEvents);
+	
+	/**
+     * Returns a list of Events taking place on that day
+     * @param date				- Date to search  
+     * @param maxEvents			- Max number of events to return in the list
+     */ 
+	public List<DatatypeEventSummary> searchForEventByDate(Date date, int maxEvents);
 	
 	
 	/**
@@ -81,7 +89,29 @@ public interface ServicesEventRemote {
 	 * @param lenght - length of the list to return
 	 */
 	public List<DatatypeMostTagged> getMostTagged(int lenght);
-	
+
+	/**
+     * Returns information of the Event identified by eventId
+     * @param eventId			- Event identifier
+     */ 
 	public DatatypeEventSummary findEventById(int eventId);
-	
+
+	/**
+     * Returns a list of maxEvents Events with no filter
+     * @param maxEvents				- Max number of events to return 
+     */ 
+	public List<DatatypeEventSummary> filterAllEvents(int maxEvents);
+
+	/**
+     * Returns a list of maxEvents Events that have already occurred
+     * @param maxEvents				- Max number of events to return 
+     */ 
+	public List<DatatypeEventSummary> filterPastEvents(int maxEvents);
+
+	/**
+     * Returns a list of maxEvents upcoming Events 
+     * @param maxEvents				- Max number of events to return 
+     */ 
+	public List<DatatypeEventSummary> filterNextEvents(int maxEvents);
+
 }

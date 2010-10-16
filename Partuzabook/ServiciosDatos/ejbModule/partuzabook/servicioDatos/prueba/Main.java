@@ -138,7 +138,7 @@ public class Main {
 			        	}	        	
 		
 			        	// Invocar searchEvents
-			        	List<DatatypeEventSummary> searchReturn = evt.searchForEvent("lala Cumple SUMO", 6); 
+			        	List<DatatypeEventSummary> searchReturn = evt.searchForEventByName("lala Cumple SUMO", 6); 
 			        	if (searchReturn == null){
 			        		System.out.println("No se encontró el evento buscado");
 			        	}

@@ -40,13 +40,20 @@ import javax.persistence.TemporalType;
 @DiscriminatorColumn(name = "flags", discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("E")
 @NamedQueries({
-	@NamedQuery(name = "Event.findAll", query = "SELECT o FROM Event o"),
-	@NamedQuery(name = "Event.findByName", query = "SELECT o FROM Event o WHERE o.evtName = :name"),
-	@NamedQuery(name = "Event.findBySimilarName", query = "SELECT DISTINCT o FROM Event o WHERE LOWER(o.evtName) LIKE :name"),
+	@NamedQuery(name = "Event.findAll", 
+			query = "SELECT o FROM Event o"),
+	@NamedQuery(name = "Event.findByName", 
+			query = "SELECT o FROM Event o WHERE o.evtName = :name"),
+	@NamedQuery(name = "Event.findBySimilarName", 
+			query = "SELECT DISTINCT o FROM Event o WHERE LOWER(o.evtName) LIKE :name"),
 	@NamedQuery(name = "Event.findAllAfterDate",
 			query = "SELECT o FROM Event o WHERE o.date >= :after"),
+	@NamedQuery(name = "Event.findAllBeforeDate",
+			query = "SELECT o FROM Event o WHERE o.date <= :before"),
 	@NamedQuery(name = "Event.findContentById",
-			query = "SELECT c FROM Content c WHERE c.id = :content")
+			query = "SELECT c FROM Content c WHERE c.id = :content"),
+	@NamedQuery(name = "Event.findByDate",
+			query = "SELECT e FROM Event e WHERE e.date = :date")		
 })
 public class Event implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -96,8 +103,8 @@ public class Event implements Serializable {
 	private Set<CntCategory> cntCategories;
 
 	//bi-directional many-to-many association to EvtCategory
-	//@ManyToMany(mappedBy="events")
-	private EvtCategory evtCategories;
+	@ManyToMany(mappedBy="events")
+	private Set<EvtCategory> evtCategories;
 	
     public Event() {
     }
@@ -198,11 +205,11 @@ public class Event implements Serializable {
 		this.cntCategories = cntCategories;
 	}
 	
-	public EvtCategory getEvtCategories() {
+	public Set<EvtCategory> getEvtCategories() {
 		return this.evtCategories;
 	}
 
-	public void setEvtCategories(EvtCategory evtCategories) {
+	public void setEvtCategories(Set<EvtCategory> evtCategories) {
 		this.evtCategories = evtCategories;
 	}
 	
