@@ -1,9 +1,11 @@
 package partuzabook.datos.persistencia.beans;
 
 
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -89,6 +91,14 @@ public class Event implements Serializable {
           inverseJoinColumns=@JoinColumn(name="usr_id"))
 	private List<NormalUser> myParticipants;
 
+	//bi-directional many-to-one association to CntCategory
+	@OneToMany(mappedBy="event")
+	private Set<CntCategory> cntCategories;
+
+	//bi-directional many-to-many association to EvtCategory
+	@ManyToMany(mappedBy="events")
+	private Set<EvtCategory> evtCategories;
+	
     public Event() {
     }
 
@@ -178,6 +188,22 @@ public class Event implements Serializable {
 
 	public void Participants(List<NormalUser> myParticipants) {
 		this.myParticipants = myParticipants;
+	}
+	
+	public Set<CntCategory> getCntCategories() {
+		return this.cntCategories;
+	}
+
+	public void setCntCategories(Set<CntCategory> cntCategories) {
+		this.cntCategories = cntCategories;
+	}
+	
+	public Set<EvtCategory> getEvtCategories() {
+		return this.evtCategories;
+	}
+
+	public void setEvtCategories(Set<EvtCategory> evtCategories) {
+		this.evtCategories = evtCategories;
 	}
 	
 }
