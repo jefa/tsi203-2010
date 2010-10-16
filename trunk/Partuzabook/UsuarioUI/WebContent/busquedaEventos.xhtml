@@ -11,16 +11,67 @@
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Busqueda de Eventos</ui:define>
 	<ui:define name="body">
-	<h:form id="busqueda">
+
+	<h:form id="formSearchByName">	
+		<strong>Search by Name</strong>
+		<br/>
+		
 		<h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" required="true"/>
 		<rich:hotKey selector="##{rich:clientId('searchField')}" key="return" 
                            handler="#{rich:element('search')}.onclick();return false;"/>
-		<a4j:commandButton action="#{SearchEventMB.searchEvents}" value="Search" 
-		    reRender="output" id="search"/>
+		<a4j:commandButton action="#{SearchEventMB.searchEventsByName}" value="Search" 
+		    reRender="output" id="searchByName"/>
+		<br/>		
 	</h:form>
 
-	<a4j:outputPanel id="output">
-		<h:form id="resultados">
+	<br/>
+	<rich:separator/>
+	<br/>
+	
+	<h:form id="formSearchByDate">	
+		<strong>Search by Date</strong>
+
+		<style type="text/css">
+	        .ecol1 { vertical-align: top; padding-right : 25px }
+	        .ecol2 { vertical-align: top; border-left: #ACBECE 1px solid; padding-left : 10px }
+	        .rich-calendar-tool-btn{
+	            font-family: Arial, Verdana;
+	        } 
+	    </style>	
+ 
+        <a4j:outputPanel id="calendar" layout="block">
+            <rich:calendar value="#{SearchEventMB.eventDateSearched}"
+                    datePattern="d/MMM/y"  showApplyButton="false"  
+                    cellWidth="24px" cellHeight="22px" style="width:200px"/>
+          	<a4j:commandButton action="#{SearchEventMB.searchEventsByDate}" value="Search" 
+		    	reRender="output" id="searchByDate"/>
+        </a4j:outputPanel>
+	</h:form>
+
+	<br/>
+	<rich:separator/>
+	<br/>
+
+	<h:form id="formFilterEventsByDate">	
+		<strong>Filter by Date</strong>
+
+	    <rich:comboBox selectFirstOnUpdate="false"
+	        defaultLabel="Enter value"
+	        value="#{SearchEventMB.eventFilter}" 
+	        suggestionValues="#{SearchEventMB.filterByDateOptions}" >
+	        <a4j:support event="onselect" action="#{SearchEventMB.filterEvents}" reRender="output" />		
+	    </rich:comboBox> 
+	</h:form>
+
+	<br/>
+	<rich:separator/>
+	<br/>
+
+	<h:form id="searchResults">
+		<strong>Results</strong>
+		<br/>
+		
+		<a4j:outputPanel id="output">
 			<rich:dataList var="resultado" rendered="#{not empty SearchEventMB.eventResults}"
 				value="#{SearchEventMB.eventResults}" rows="10">				
 				<strong><h:commandLink value="#{resultado.evtName}"
@@ -37,11 +88,11 @@
 						value="/ContentFeeder?eventID=#{contenido.eventId}&#38;username=#{loginMB.userName}&#38;id=#{contenido.contId}&#38;thb=1" />
 				</rich:dataList></div>
 			</rich:dataList>		
-		<h:outputText value="No active search results." 
+		<h:outputText value="#{SearchEventMB.mensaje}" 
 			style="font-style:italic" rendered="#{empty SearchEventMB.eventResults}"/>
-		</h:form>
-	</a4j:outputPanel>
-		
+		</a4j:outputPanel>
+		<br/>
+	</h:form>			
 		
 	</ui:define>
 </ui:composition>

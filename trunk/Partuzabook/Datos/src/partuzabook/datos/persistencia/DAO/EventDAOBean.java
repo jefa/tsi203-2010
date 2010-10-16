@@ -1,6 +1,8 @@
 package partuzabook.datos.persistencia.DAO;
 
 import java.sql.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -49,10 +51,29 @@ public class EventDAOBean extends JpaDao<Integer, Event> implements EventDAO {
 			.setParameter("after", after).getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Event> findAllBeforeDate(Date date) {
+		return (List<Event>)em.createNamedQuery("Event.findAllBeforeDate")
+			.setParameter("before", date).getResultList();
+	}
+
 	
 	public NormalUser findMostTagged() {
 		Query namedQuery = em.createNamedQuery("Event.findMostTagged");
 		return (NormalUser) namedQuery.getSingleResult();	
+	}
+
+	public List<Event> findByDate(Date date) {
+		// Create date from params
+/*		Calendar cal = new GregorianCalendar();
+		cal.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+		Date date = new Date(cal.getTimeInMillis());
+*/		
+		// Query events
+		Query namedQuery = em.createNamedQuery("Event.findByDate");
+		namedQuery.setParameter("date", date);
+		return (List<Event>)namedQuery.getResultList();		
 	}
 
 

@@ -49,13 +49,4 @@
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#publicProfile.xhtml"
   PATH="/publicProfile.xhtml" SHAPE="240,1073,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM NAME="rules:*:3" PATH="*" SHAPE="32,1169,0,0" model-entity="JSFProcessGroup">
-  <PROCESS-ITEM ID="rules:*:3" NAME="item" PATH="*" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID="registrarUsuario::#register.xhtml"
-    NAME="output2" PATH="/register.xhtml" TARGET="rules:#register.xhtml"
-    TITLE="registrarUsuario" model-entity="JSFProcessItemOutput"/>
-  </PROCESS-ITEM>
- </PROCESS-ITEM>
- <PROCESS-ITEM NAME="rules:#register.xhtml" PATH="/register.xhtml"
-  SHAPE="384,1152,50,25" model-entity="JSFProcessGroup"/>
 </PROCESS>
