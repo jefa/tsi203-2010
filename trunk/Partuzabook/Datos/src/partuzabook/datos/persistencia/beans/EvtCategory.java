@@ -2,7 +2,8 @@ package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.Set;
+
+import java.util.List;
 
 
 /**
@@ -18,9 +19,8 @@ public class EvtCategory implements Serializable {
 	private String category;
 
 	//bi-directional many-to-one association to Event
-    @ManyToOne
-	@JoinColumn(name="category")
-	private Set<Event> events;
+	@OneToMany(mappedBy="evtCategory")
+	private List<Event> events;
 
     public EvtCategory() {
     }
@@ -33,11 +33,11 @@ public class EvtCategory implements Serializable {
 		this.category = category;
 	}
 
-	public Set<Event> getEvents() {
+	public List<Event> getEvents() {
 		return this.events;
 	}
 
-	public void setEvents(Set<Event> events) {
+	public void setEvents(List<Event> events) {
 		this.events = events;
 	}
 	
