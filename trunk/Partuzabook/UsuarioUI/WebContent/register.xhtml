@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:composition template="templates/usuarioUI.xhtml">
+	<ui:define name="title">Registro de Usuario</ui:define>
+	<ui:define name="body">
+		<f:view>
+			<center>
+				<h:outputText value="#{Register.message}"/>
+				<h:panelGrid id="lpg" columns="2" >					
+					<h:outputText value="User Id:"/>
+					<h:inputText id="usernameField" value="#{Register.username}" required="true"/>
+					
+					<h:outputText value="Password:"/>
+					<h:inputSecret id="passwordField" value="#{Register.password}" required="true"/>
+					<h:outputText value="Repita la password:"/>
+					<h:inputSecret id="passwordRepeatedField" value="#{Register.passwordRepeated}" required="true"/>
+					<h:outputText value="Nombre:"/>
+					<h:inputText id="nameField" value="#{Register.name}" required="true"/>
+					<h:outputText value="Email:"/>
+					<h:inputText id="emailField" value="#{Register.email}" required="true"/>
+					<h:outputText value=""/>
+					<h:commandButton value="Registrar Usuario" action="#{Register.userRegistration}"/>
+				</h:panelGrid>
+			</center>
+	</f:view>	
+	</ui:define>
+</ui:composition>
+</html>
