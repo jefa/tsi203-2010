@@ -26,8 +26,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 
 /**
@@ -102,9 +100,10 @@ public class Event implements Serializable {
 	@OneToMany(mappedBy="event")
 	private Set<CntCategory> cntCategories;
 
-	//bi-directional many-to-many association to EvtCategory
-	@ManyToMany(mappedBy="events")
-	private Set<EvtCategory> evtCategories;
+	//bi-directional many-to-one association to EvtCategory
+    @ManyToOne
+	@JoinColumn(name="category")
+	private EvtCategory evtCategory;
 	
     public Event() {
     }
@@ -205,12 +204,12 @@ public class Event implements Serializable {
 		this.cntCategories = cntCategories;
 	}
 	
-	public Set<EvtCategory> getEvtCategories() {
-		return this.evtCategories;
+	public EvtCategory getEvtCategory() {
+		return this.evtCategory;
 	}
 
-	public void setEvtCategories(Set<EvtCategory> evtCategories) {
-		this.evtCategories = evtCategories;
+	public void setEvtCategory(EvtCategory evtCategory) {
+		this.evtCategory = evtCategory;
 	}
 	
 }

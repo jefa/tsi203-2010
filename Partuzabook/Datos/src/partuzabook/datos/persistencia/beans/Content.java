@@ -4,7 +4,6 @@ package partuzabook.datos.persistencia.beans;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -82,7 +81,7 @@ public abstract class Content implements Serializable {
 	
 	//bi-directional many-to-many association to CntCategory
 	@ManyToMany(mappedBy="contents")
-	private Set<CntCategory> cntCategories;
+	private List<CntCategory> cntCategories;
 
     public Content() {
     }
@@ -168,11 +167,11 @@ public abstract class Content implements Serializable {
 		this.pos = pos;
 	}
 	
-	public Set<CntCategory> getCntCategories() {
+	public List<CntCategory> getCntCategories() {
 		return this.cntCategories;
 	}
 
-	public void setCntCategories(Set<CntCategory> cntCategories) {
+	public void setCntCategories(List<CntCategory> cntCategories) {
 		this.cntCategories = cntCategories;
 	}
 	
