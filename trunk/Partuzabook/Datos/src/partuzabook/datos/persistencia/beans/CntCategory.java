@@ -1,7 +1,7 @@
 package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +35,7 @@ public class CntCategory implements Serializable {
 	//bi-directional many-to-many association to Content
     @ManyToMany
 	@JoinColumn(name="cat_id_auto")
-	private Set<Content> contents;
+	private List<Content> contents;
 
     public CntCategory() {
     }
@@ -64,4 +64,11 @@ public class CntCategory implements Serializable {
 		this.event = event;
 	}
 	
+	public List<Content> getContents() {
+		return this.contents;
+	}
+
+	public void setContents(List<Content> contents) {
+		this.contents = contents;
+	}
 }
