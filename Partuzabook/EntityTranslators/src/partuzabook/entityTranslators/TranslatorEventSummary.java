@@ -14,6 +14,7 @@ public class TranslatorEventSummary implements ITranslatable {
 		dat.date = ent.getDate();
 		dat.description = ent.getDescription();
 		dat.contents = TranslatorCollection.translateContent(ent.getContents());
+		dat.category = ent.getEvtCategory().getCategory();
 		return dat;
 	}
 }
