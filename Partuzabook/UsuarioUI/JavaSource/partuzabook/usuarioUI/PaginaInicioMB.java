@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.faces.context.FacesContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.http.HttpSession;
 
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
@@ -30,7 +32,14 @@ public class PaginaInicioMB {
 	private String username;
 	private List<DatatypeEventSummary> misEventosRecientes;
 	private List<DatatypeNotification> misNotificaciones;
+	private List<DatatypeNotification> misNotificacionesNoLeidas;
 	
+	
+	public PaginaInicioMB(){
+    	FacesContext context = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+		this.username = (String) session.getAttribute("username");		
+	}
 	
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
@@ -185,5 +194,20 @@ public class PaginaInicioMB {
 		this.misNotificaciones = list;
 	}
 	
+	public List<DatatypeNotification> getMisNotificacionesNoLeidas() {
+		try {
+			Context ctx = getContext();
+			ServicesUserRemote service = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");	
+			this.misNotificacionesNoLeidas = service.getUpdateNotificationsUnread(username);
+		} catch(NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();	
+		}
+		return this.misNotificacionesNoLeidas;	
+	}
+
+	public void setMisNotificacionesNoLeidas(ArrayList<DatatypeNotification> list) {
+		this.misNotificacionesNoLeidas = list;
+	}
 
 }
