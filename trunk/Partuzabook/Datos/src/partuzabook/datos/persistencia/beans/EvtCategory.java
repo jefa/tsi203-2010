@@ -17,8 +17,8 @@ public class EvtCategory implements Serializable {
 	@Id
 	private String category;
 
-	//bi-directional many-to-many association to Event
-    @ManyToMany
+	//bi-directional many-to-one association to Event
+    @ManyToOne
 	@JoinColumn(name="category")
 	private Set<Event> events;
 
