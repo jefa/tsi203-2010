@@ -71,10 +71,10 @@ public class Register {
 		setMessage("");
 		
 		if(!password.equals(passwordRepeated)) {
-			setMessage("Las contraseñas no son iguales.<br>");
+			setMessage("Las contraseñas no son iguales. ");
 		}
 		if(!validEmail(email)) {
-			setMessage(getMessage() + "El emal ingresado no es válido.<br>");
+			setMessage(getMessage() + "El emal ingresado no es válido. ");
 		}
 		
 		ServicesUserRemote servicesUser = null;
@@ -82,7 +82,7 @@ public class Register {
 			Context ctx = getContext();
 			servicesUser = (ServicesUserRemote)ctx.lookup("PartuzabookEAR/ServicesUser/remote");
 			if(servicesUser.existsNormalUser(username)) {
-				setMessage(getMessage() + "Ya existe el nombre de usuario.<br>");
+				setMessage(getMessage() + "Ya existe el nombre de usuario.");
 			}
 			
 			if(!getMessage().equals("")) {
