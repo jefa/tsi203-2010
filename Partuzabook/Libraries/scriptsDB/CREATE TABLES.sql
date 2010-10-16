@@ -20,6 +20,21 @@ WITH (
 );
 ALTER TABLE users OWNER TO postgres;
 
+-- Table: "evtCategory"
+
+-- DROP TABLE "evtCategory";
+
+CREATE TABLE "evtCategory"
+(
+  category character varying(100) NOT NULL,
+  CONSTRAINT "PK_EVTCATEGORY" PRIMARY KEY (category)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE "evtCategory" OWNER TO postgres;
+
+
 
 -- Table: events
 
@@ -51,6 +66,28 @@ WITH (
 ALTER TABLE events OWNER TO postgres;
 
 
+-- Table: "cntCategory"
+
+-- DROP TABLE "cntCategory";
+
+CREATE TABLE "cntCategory"
+(
+  evt_id integer NOT NULL,
+  category character varying(100) NOT NULL,
+  cat_id_auto integer NOT NULL,
+  CONSTRAINT "PK_CNTCATEGORY" PRIMARY KEY (cat_id_auto),
+  CONSTRAINT "FK_CNTCATEGORY_EVT" FOREIGN KEY (evt_id)
+      REFERENCES events (evt_id_auto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE "cntCategory" OWNER TO postgres;
+
+
+
+
 
 -- Table: "content"
 
@@ -69,7 +106,6 @@ CREATE TABLE "content"
   duration character varying(10),
   album boolean,
   evt_id integer NOT NULL,
-  pos integer NOT NULL,
   CONSTRAINT "PK_CONTENT" PRIMARY KEY (cnt_id_auto),
   CONSTRAINT "FK_ALB_EVT" FOREIGN KEY (evt_id)
       REFERENCES events (evt_id_auto) MATCH SIMPLE
@@ -264,39 +300,6 @@ WITH (
 ALTER TABLE tags OWNER TO postgres;
 
 
--- Table: "cntCategory"
-
--- DROP TABLE "cntCategory";
-
-CREATE TABLE "cntCategory"
-(
-  evt_id integer NOT NULL,
-  category character varying(100) NOT NULL,
-  cat_id_auto integer NOT NULL,
-  CONSTRAINT "PK_CNTCATEGORY" PRIMARY KEY (cat_id_auto),
-  CONSTRAINT "FK_CNTCATEGORY_EVT" FOREIGN KEY (evt_id)
-      REFERENCES events (evt_id_auto) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE "cntCategory" OWNER TO postgres;
-
-
--- Table: "evtCategory"
-
--- DROP TABLE "evtCategory";
-
-CREATE TABLE "evtCategory"
-(
-  category character varying(100) NOT NULL,
-  CONSTRAINT "PK_EVTCATEGORY" PRIMARY KEY (category)
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE "evtCategory" OWNER TO postgres;
 
 
 -- Table: "contentCntCategory"
