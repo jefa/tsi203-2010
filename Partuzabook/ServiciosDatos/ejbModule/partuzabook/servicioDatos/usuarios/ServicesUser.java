@@ -69,7 +69,7 @@ public class ServicesUser implements ServicesUserRemote {
 //    	notifDao = null;
     }
 
-	public DatatypeUser createNormalUser(String username, String password, String mail, String name) {
+	public DatatypeUser createNormalUser(String username, String password, String mail, String name) throws UserAlreadyExistsException{
 		if (existsNormalUser(username)) {
 			throw new UserAlreadyExistsException();
 		}

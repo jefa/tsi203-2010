@@ -20,7 +20,7 @@ public interface ServicesUserRemote {
      * @param name							- New user's full name
      * @return								- A datatype containing the new user's info
      */
-	public DatatypeUser createNormalUser(String username, String password, String mail, String name);
+	public DatatypeUser createNormalUser(String username, String password, String mail, String name) throws UserAlreadyExistsException;
 	
 	/**
 	 * Returns true if exists a normal user with id username
