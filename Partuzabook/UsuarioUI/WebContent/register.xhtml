@@ -12,7 +12,8 @@
 	<ui:define name="body">
 		<f:view>
 			<center>
-				<h:outputText value="#{Register.message}"/>
+				<!-- //TODO: -->
+				<h:outputText value="#{Register.message}" style="color:red"/>
 				<h:panelGrid id="lpg" columns="2" >					
 					<h:outputText value="User Id:"/>
 					<h:inputText id="usernameField" value="#{Register.username}" required="true"/>
