@@ -12,6 +12,9 @@ import java.util.List;
  */
 @Entity
 @Table(name="\"evtCategory\"")
+@NamedQueries({
+	@NamedQuery(name = "EvtCategory.findAll", 
+			query = "SELECT o FROM EvtCategory o")})
 public class EvtCategory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
