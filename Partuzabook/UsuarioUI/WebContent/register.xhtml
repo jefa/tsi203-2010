@@ -12,23 +12,31 @@
 	<ui:define name="body">
 		<f:view>
 			<center>
-				<!-- //TODO: -->
-				<h:outputText value="#{Register.message}" style="color:red"/>
-				<h:panelGrid id="lpg" columns="2" >					
-					<h:outputText value="User Id:"/>
-					<h:inputText id="usernameField" value="#{Register.username}" required="true"/>
-					
-					<h:outputText value="Password:"/>
-					<h:inputSecret id="passwordField" value="#{Register.password}" required="true"/>
-					<h:outputText value="Repita la password:"/>
-					<h:inputSecret id="passwordRepeatedField" value="#{Register.passwordRepeated}" required="true"/>
-					<h:outputText value="Nombre:"/>
-					<h:inputText id="nameField" value="#{Register.name}" required="true"/>
-					<h:outputText value="Email:"/>
-					<h:inputText id="emailField" value="#{Register.email}" required="true"/>
-					<h:outputText value=""/>
-					<h:commandButton value="Registrar Usuario" action="#{Register.userRegistration}"/>
-				</h:panelGrid>
+			<rich:panel header="Registro de Usuario" style="width:380px">
+				<h:form id="LoginForm">
+				<!-- //TODO: -->				
+				<h:outputText value=""/>
+				<!--<h:panelGrid id="lpg" columns="2" >-->					
+					<h:outputText value="User Id:"/> <br/>
+					<h:inputText id="usernameField" value="#{Register.username}"/><br/>
+					<h:outputText value="#{Register.usernameMessage}" style="color:red"/><br/>					
+					<h:outputText value="Contraseña:"/><br/>
+					<h:inputSecret id="passwordField" value="#{Register.password}"/><br/>
+					<h:outputText value="#{Register.passwordMessage}" style="color:red"/><br/>
+					<h:outputText value="Confirmación de contraseña:"/><br/>
+					<h:inputSecret id="passwordRepeatedField" value="#{Register.passwordRepeated}"/><br/>
+					<h:outputText value="#{Register.passwordRepeatedMessage}" style="color:red"/><br/>
+					<h:outputText value="Nombre:"/><br/>
+					<h:inputText id="nameField" value="#{Register.name}"/><br/>
+					<h:outputText value="#{Register.nameMessage}" style="color:red"/><br/>
+					<h:outputText value="Email:"/><br/>
+					<h:inputText id="emailField" value="#{Register.email}"/><br/>
+					<h:outputText value="#{Register.emailMessage}" style="color:red"/><br/>
+				<!--</h:panelGrid>-->
+				<br/>
+				<h:commandButton value="Registrar Usuario" action="#{Register.userRegistration}"/>
+				</h:form>
+			</rich:panel>
 			</center>
 	</f:view>	
 	</ui:define>
