@@ -52,6 +52,7 @@ CREATE TABLE events
   reg_date timestamp without time zone NOT NULL,
   evt_id_auto integer NOT NULL,
   category character varying(50),
+  cover integer,
   CONSTRAINT "PK_EVENTS" PRIMARY KEY (evt_id_auto),
   CONSTRAINT "FK_CREATOR" FOREIGN KEY (creator)
       REFERENCES users (username) MATCH SIMPLE
@@ -64,6 +65,7 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE events OWNER TO postgres;
+
 
 
 -- Table: "cntCategory"
@@ -121,6 +123,13 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE "content" OWNER TO postgres;
+
+
+--Para evitar la referencia circular, la fk de evento hacia content se agrega luego de creadas las 2 tablas
+ALTER TABLE events
+  ADD CONSTRAINT "FK_COVER" FOREIGN KEY (cover)
+      REFERENCES "content" (cnt_id_auto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 
 -- Table: album
