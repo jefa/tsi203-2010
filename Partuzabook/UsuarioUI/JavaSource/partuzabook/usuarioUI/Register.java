@@ -10,13 +10,22 @@ import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
 public class Register {
 
+	private static final String INPUT_OBLIG = "Campo obligatorio";
+	private static final String PASS_NOT_EQUALS = "Las contraseñas no coinciden";
+	private static final String USERNAME_ALREADY_EXISTS = "El nombre de usuario ya existe";
+	private static final String BAD_EMAIL = "El email ingresado no es un email valido";
+	
 	private String username;
 	private String password;
 	private String passwordRepeated;
 	private String name;
 	private String email;
 	
-	private String message;
+	private String usernameMessage;
+	private String passwordMessage;
+	private String passwordRepeatedMessage;
+	private String nameMessage;
+	private String emailMessage;
 		
 	public void setUsername(String username) {
 		this.username = username;
@@ -36,7 +45,7 @@ public class Register {
 	
 	public void setPasswordRepeated(String passwordRepeated) {
 		this.passwordRepeated = passwordRepeated;
-	}
+	} 
 	
 	public String getPasswordRepeated() {
 		return this.passwordRepeated;
@@ -58,51 +67,118 @@ public class Register {
 		return this.email;
 	}
 	
-	public void setMessage(String message) {
-		this.message = message;
+	public void setUsernameMessage(String usernameMessage) {
+		this.usernameMessage = usernameMessage;
 	}
 	
-	public String getMessage() {
-		return this.message;
+	public String getUsernameMessage() {
+		return this.usernameMessage;
 	}
+	
+	public void setPasswordMessage(String passwordMessage) {
+		this.passwordMessage = passwordMessage;
+	}
+	
+	public String getPasswordMessage() {
+		return this.passwordMessage;
+	}
+	
+	public void setPasswordRepeatedMessage(String passwordRepeatedMessage) {
+		this.passwordRepeatedMessage = passwordRepeatedMessage;
+	}
+	
+	public String getPasswordRepeatedMessage() {
+		return this.passwordRepeatedMessage;
+	}
+	
+	public void setNameMessage(String nameMessage) {
+		this.nameMessage = nameMessage;
+	}
+	
+	public String getNameMessage() {
+		return this.nameMessage;
+	}
+	
+	public void setEmailMessage(String emailMessage) {
+		this.emailMessage = emailMessage;
+	}
+	
+	public String getEmailMessage() {
+		return this.emailMessage;
+	}
+	
+	private void clearMessages() {
+		setUsernameMessage("");
+		setPasswordMessage("");
+		setPasswordRepeatedMessage("");
+		setNameMessage("");
+		setEmailMessage("");
+	}
+	
+	private boolean noMessages() {
+		return ((usernameMessage == null || usernameMessage.equals("")) &&
+				(passwordMessage == null || passwordMessage.equals("")) &&
+				(passwordRepeatedMessage == null || passwordRepeatedMessage.equals("")) &&
+				(nameMessage == null || nameMessage.equals("")) &&
+				(emailMessage == null || emailMessage.equals("")));
+	}
+	
 	
 	public String userRegistration(){
 		//Limpiamos los mensajes
-		setMessage("");
+		clearMessages();
+		if(username == null || username.equals(""))
+			usernameMessage = INPUT_OBLIG;
+		if(password == null || password.equals(""))
+			passwordMessage = INPUT_OBLIG;
+		if(passwordRepeated == null || passwordRepeated.equals(""))
+			passwordRepeatedMessage = INPUT_OBLIG;
+		if(name == null || name.equals(""))
+			nameMessage = INPUT_OBLIG;
+		if(email== null || email.equals(""))
+			emailMessage = INPUT_OBLIG;
 		
-		if(!password.equals(passwordRepeated)) {
-			setMessage("Las contraseñas no son iguales. ");
-		}
-		if(!validEmail(email)) {
-			setMessage(getMessage() + "El emal ingresado no es válido. ");
-		}
-		
-		ServicesUserRemote servicesUser = null;
-		try {
-			Context ctx = getContext();
-			servicesUser = (ServicesUserRemote)ctx.lookup("PartuzabookEAR/ServicesUser/remote");
-			if(servicesUser.existsNormalUser(username)) {
-				setMessage(getMessage() + "Ya existe el nombre de usuario.");
+		if(noMessages()) {
+			if(!password.equals(passwordRepeated)) {
+				setPasswordRepeatedMessage(PASS_NOT_EQUALS);
+			}
+			if(!validEmail(email)) {
+				setEmailMessage(BAD_EMAIL);
 			}
 			
-			if(!getMessage().equals("")) {
-				//Hubo errores
+			ServicesUserRemote servicesUser = null;
+			try {
+				Context ctx = getContext();
+				servicesUser = (ServicesUserRemote)ctx.lookup("PartuzabookEAR/ServicesUser/remote");
+				if(servicesUser.existsNormalUser(username)) {
+					setUsernameMessage(USERNAME_ALREADY_EXISTS);
+				}
+				
+				if(!noMessages()) {
+					//Hubo errores
+					setPassword("");
+					setPasswordRepeated("");
+					return "failure";
+				}
+				
+				servicesUser.createNormalUser(username, password, email, name);
+				return "success";
+				
+			} catch (NamingException ne) {
+				//TODO: Redirigir a página de error
+				ne.printStackTrace();
+				setPassword("");
+				setPasswordRepeated("");
+				return "failure";
+			} catch(Exception e) {
+				//TODO: Reedirigir a una página de error
+				e.printStackTrace();
 				setPassword("");
 				setPasswordRepeated("");
 				return "failure";
 			}
-			
-			servicesUser.createNormalUser(username, password, email, name);
-			return "success";
-			
-		} catch (NamingException ne) {
-			setMessage(getMessage() + "Error en la confirmación. Intente nuevamente.");
-			setPassword("");
-			setPasswordRepeated("");
-			return "failure";
-		} catch(Exception e) {
-			//TODO: Reedirigir a una página de error
-			setMessage(getMessage() + "Error en la confirmación. Intente nuevamente luego de unos minutos.");
+		} else {
+			//Hubo errores
 			setPassword("");
 			setPasswordRepeated("");
 			return "failure";
