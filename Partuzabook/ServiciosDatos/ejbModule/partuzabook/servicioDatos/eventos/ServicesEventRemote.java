@@ -57,6 +57,8 @@ public interface ServicesEventRemote {
 	public byte[] getContent(int eventID, String username, int contentID);
 	public byte[] getContentThumbnail(int eventID, String username, int contentID);
 	
+	public DatatypeContent getContentInfo(int eventID, int contentID);
+	
 	/**
      * Returns a list of Events that match the name provided
      * @param name				- Name to search  
@@ -113,5 +115,25 @@ public interface ServicesEventRemote {
      * @param maxEvents				- Max number of events to return 
      */ 
 	public List<DatatypeEventSummary> filterNextEvents(int maxEvents);
+
+	/**
+	 * Create a new Comment associated to the content and to the creator user 
+	 * @param eventID				- Identifier of the event
+	 * @param contentID				- Identifier of the content within the event
+	 * @param textComment			- Comment
+	 * @param userCommenter			- Identifier of the user who is commenting
+	 * @throws Exception 
+	 */
+	public void commentContent(int eventID, int contentID, String textComment, String userCommenter) throws Exception;
+
+	/**
+	 * User rates the content
+	 * @param eventID				- Identifier of the event
+	 * @param contentID				- Identifier of the content within the event
+	 * @param rating				- Score from 1 to 5 
+	 * @param user					- Identifier of the user who is rating
+	 * @throws Exception 
+	 */
+	public void rateContent(int eventID, int contentID, int rating, String user) throws Exception;
 
 }

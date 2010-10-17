@@ -25,6 +25,7 @@ import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeRating;
 import partuzabook.datatypes.DatatypeUser;
+import partuzabook.datos.persistencia.DAO.CommentDAO;
 import partuzabook.datos.persistencia.DAO.ContentDAO;
 import partuzabook.datos.persistencia.DAO.EventDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
@@ -32,11 +33,15 @@ import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.DAO.PhotoDAO;
 import partuzabook.datos.persistencia.DAO.RatingDAO;
 import partuzabook.datos.persistencia.DAO.TagDAO;
+import partuzabook.datos.persistencia.beans.Comment;
+import partuzabook.datos.persistencia.beans.CommentPK;
 import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.datos.persistencia.beans.Photo;
+import partuzabook.datos.persistencia.beans.Rating;
+import partuzabook.datos.persistencia.beans.RatingPK;
 import partuzabook.datos.persistencia.beans.SelfContent;
 import partuzabook.datos.persistencia.beans.Tag;
 import partuzabook.datos.persistencia.beans.TagForNotUser;
@@ -62,6 +67,7 @@ public class ServicesEvent implements ServicesEventRemote {
 
 	private EventDAO evDao;
 	private ContentDAO contDao;
+	private CommentDAO comDao;
 	private NormalUserDAO nUserDao;
 	private TagDAO tagDao;
 	private NotificationDAO notifDao;
@@ -88,6 +94,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			Context ctx = getContext();
 	        evDao = (EventDAO) ctx.lookup("EventDAOBean/local");  
     		contDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
+    		comDao = (CommentDAO) ctx.lookup("CommentDAOBean/local");
     		nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
     		tagDao = (TagDAO) ctx.lookup("TagDAOBean/local");    		
     		notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
@@ -104,6 +111,7 @@ public class ServicesEvent implements ServicesEventRemote {
     public void preDestroy() {
     	evDao = null;
     	contDao = null;
+    	comDao = null;
     	nUserDao = null;
     	tagDao = null;
     	notifDao = null;
@@ -537,6 +545,78 @@ public class ServicesEvent implements ServicesEventRemote {
 		List<Event> afterEvents = evDao.findAllAfterDate(today);
 		return TranslatorCollection.translateEventSummary(afterEvents);
 	}
-	
+
+	public void commentContent(int eventID, int contentID, String textComment,
+								String userCommenter) throws Exception {		
+		// Verify existence of Event
+		Event event = getEvent(eventID);
+		// Verify existence of content
+		Content cont = (Content) contDao.findByIDInEvent(event, contentID);
+		if (cont == null) {
+			throw new ContentNotFoundException();
+		}
+		// Verify existence of user who is commenting
+		User user = (User) nUserDao.findByID(userCommenter);
+		if (user == null || (!(user instanceof NormalUser))) {
+			throw new UserNotFoundException();
+		}
+		NormalUser nUser = (NormalUser) user;
+		// Create Comment
+		Comment com = new Comment();
+		com.setContent(cont);
+		CommentPK pk = new CommentPK();
+		pk.setCntId(contentID);
+		pk.setUsrId(userCommenter);		
+		java.util.Date today = new java.util.Date(); 
+		pk.setDate(today);
+		com.setId(pk);
+		Timestamp now = new Timestamp(today.getTime());
+		com.setRegDate(now);
+		com.setText(textComment);
+		com.setUser(nUser);
+				
+		comDao.persist(com);
+	}
+
+	public void rateContent(int eventID, int contentID, int rating,
+			String userId) throws Exception {
+		// Verify existence of Event
+		Event event = getEvent(eventID);
+		// Verify existence of content
+		Content cont = (Content) contDao.findByIDInEvent(event, contentID);
+		if (cont == null) {
+			throw new ContentNotFoundException();
+		}
+		// Verify existence of user who is commenting
+		User user = (User) nUserDao.findByID(userId);
+		if (user == null || (!(user instanceof NormalUser))) {
+			throw new UserNotFoundException();
+		}
+		NormalUser nUser = (NormalUser) user;
+		// Create Rating
+		Rating rate = new Rating();
+		rate.setContent(cont);
+		RatingPK pk = new RatingPK();
+		pk.setCntId(contentID);
+		pk.setUsrId(userId);		
+		Date today = (Date) new java.util.Date(); 
+		rate.setId(pk);
+		Timestamp now = new Timestamp(today.getTime());
+		rate.setRegDate(now);
+		rate.setScore(rating);
+		rate.setUser(nUser);
+
+		ratingDao.persist(rate);		
+	}
+
+	public DatatypeContent getContentInfo(int eventID, int contentID) {
+		Event event = getEvent(eventID);
+		Content content = contDao.findByIDInEvent(event, contentID);
+		if (content == null) {
+			throw new ContentNotFoundException();
+		}
+		TranslatorContent trans = new TranslatorContent();
+		return (DatatypeContent) trans.translate(content);
+	}
 	
 }
