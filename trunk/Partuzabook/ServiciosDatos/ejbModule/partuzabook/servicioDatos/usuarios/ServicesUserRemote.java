@@ -7,6 +7,7 @@ import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
+import partuzabook.servicioDatos.exception.UserNotFoundException;
 
 @Remote
 public interface ServicesUserRemote {
@@ -21,6 +22,17 @@ public interface ServicesUserRemote {
      * @return								- A datatype containing the new user's info
      */
 	public DatatypeUser createNormalUser(String username, String password, String mail, String name) throws UserAlreadyExistsException;
+	
+	/**
+     * Updates an user account with id username
+     * @throws UserNotFoundException		- if id username doesn't exist
+     * @param username						- User's username for the account
+     * @param password						- User new password
+     * @param mail							- User new email
+     * @param name							- User new full name
+     */
+	public DatatypeUser updateNormalUser(String username, String password, String mail, String name, String img_path) throws UserNotFoundException;
+	
 	
 	/**
 	 * Returns true if exists a normal user with id username
