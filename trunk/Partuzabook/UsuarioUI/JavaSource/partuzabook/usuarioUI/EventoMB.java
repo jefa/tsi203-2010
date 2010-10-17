@@ -19,11 +19,38 @@ public class EventoMB {
 	private DatatypeContent content;
 	private Integer eventId; 
 	private String userName;
+	
+	private String comentario = "";
 
 	private ServicesMultimediaRemote servicesMultimedia;
 	private ServicesEventRemote servicesEvent;
 	private boolean validUserForContext;	
 
+	public String getComentario(){
+		return this.comentario;
+	}
+	
+	public void setComentario(String com){
+		this.comentario = com;
+	}
+	
+	public void comentar() {
+		try {
+			Context ctx = getContext();
+			ServicesEventRemote service = getServicesEevnt();
+			if (this.comentario != ""){
+		    	FacesContext context = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+				String username = (String) session.getAttribute("username");		
+				this.userName = username;
+				service.commentContent(this.evento.getEvtId(), this.content.getContId(), this.comentario, this.userName);
+				this.comentario = "";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public boolean isValidUserForContext() {
 		return validUserForContext;
 	}
@@ -54,6 +81,13 @@ public class EventoMB {
 	}
 	
 	public DatatypeContent getContent(){
+    	FacesContext context = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+		String username = (String) session.getAttribute("username");				
+		// Actualizar el content si ya tenía un valor cargado
+		if (this.content != null ) {
+			this.content = servicesEvent.getContentInfo(this.getEventId(), this.content.getContId());
+		}
 		return this.content;
 	}
 	
