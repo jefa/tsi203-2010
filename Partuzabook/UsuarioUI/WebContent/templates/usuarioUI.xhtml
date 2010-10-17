@@ -86,7 +86,7 @@ jQuery.noConflict();
 <li class="menu-item menu-item-type-taxonomy"><a href="busquedaEventos.jsf">Busqueda</a></li>
 <li class="menu-item menu-item-type-taxonomy"><a href="register.jsf">Registrarse</a></li>
 
-			<li class="menu-item menu-item-type-taxonomy"><h:form><h:commandLink value="Mi perfil" action="verPerfil">
+			<li class="menu-item menu-item-type-taxonomy"><h:form><h:commandLink value="Mi perfil" action="verMiPerfil">
 				<f:setPropertyActionListener value="#{loginMB.userName}" target="#{PublicProfile.userId}" />
 			</h:commandLink></h:form></li>	
 			<li class="menu-item menu-item-type-taxonomy"><h:form><h:commandLink value="Logout" action="#{loginMB.logout}"></h:commandLink></h:form></li>
