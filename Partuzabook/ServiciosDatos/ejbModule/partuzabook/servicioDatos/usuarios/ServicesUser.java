@@ -16,15 +16,11 @@ import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
-import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
-import partuzabook.datos.persistencia.beans.Photo;
-import partuzabook.datos.persistencia.beans.User;
 import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
 import partuzabook.entityTranslators.TranslatorUser;
-import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.utils.TranslatorCollection;
@@ -86,6 +82,19 @@ public class ServicesUser implements ServicesUserRemote {
 		nUserDao.persist(newUser);
 		
 		return (DatatypeUser)new TranslatorUser().translate(newUser);
+	}
+	
+	public DatatypeUser updateNormalUser(String username, String password, String mail, String name, String img_path) throws UserNotFoundException {
+		if(!existsNormalUser(username))
+			throw new UserNotFoundException();
+		
+		NormalUser nu = nUserDao.findByID(username);
+		nu.setPassword(password);
+		nu.setEmail(mail);
+		nu.setName(name);
+		nu.setImgPath(img_path);
+		nUserDao.persist(nu);
+		return (DatatypeUser)new TranslatorUser().translate(nu);
 	}
 	
 	public boolean existsNormalUser(String username) {
