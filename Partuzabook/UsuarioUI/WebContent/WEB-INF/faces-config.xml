@@ -93,11 +93,24 @@
    <to-view-id>/publicProfile.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
- <navigation-rule>
-  <display-name>registrarUsuario</display-name>
+ <navigation-rule>  
+  <display-name>verMiPerfil</display-name>
   <from-view-id>*</from-view-id>
   <navigation-case>
-   <from-outcome>registrarUsuario</from-outcome>
+   <from-outcome>verMiPerfil</from-outcome>
+   <to-view-id>/privateProfile.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+<navigation-rule>
+  <from-view-id>/register.xhtml</from-view-id>
+  <navigation-case>
+   <from-action>#{Register.userRegistration}</from-action>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/login.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-action>#{Register.userRegistration}</from-action>
+   <from-outcome>failure</from-outcome>
    <to-view-id>/register.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
