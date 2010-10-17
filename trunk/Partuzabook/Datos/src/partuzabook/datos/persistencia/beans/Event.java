@@ -105,6 +105,11 @@ public class Event implements Serializable {
 	@JoinColumn(name="category")
 	private EvtCategory evtCategory;
 	
+	//bi-directional many-to-one association to Content
+    @ManyToOne
+	@JoinColumn(name="cover")
+	private Content cover;
+    
     public Event() {
     }
 
@@ -210,6 +215,14 @@ public class Event implements Serializable {
 
 	public void setEvtCategory(EvtCategory evtCategory) {
 		this.evtCategory = evtCategory;
+	}
+	
+	public Content getCover() {
+		return this.cover;
+	}
+
+	public void setCover(Content cover) {
+		this.cover = cover;
 	}
 	
 }
