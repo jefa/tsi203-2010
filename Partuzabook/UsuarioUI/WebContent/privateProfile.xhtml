@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<ui:composition template="templates/usuarioUI.xhtml">
+	<ui:define name="title">Private Profile</ui:define>
+	<ui:define name="body">
+	<h:form id="privateProfile">
+		<f:view>
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Perfil de #{PublicProfile.user.name}"></h:outputText>
+					</f:facet>					
+						<div>
+						<h:panelGrid columns="2" width="100%">
+							<h:graphicImage value="/UserImageFeeder?username=#{PublicProfile.userId}" />
+								<rich:panel style="width:750px">
+									<f:facet name="header">
+										<h:outputText value="Información personal"></h:outputText>
+									</f:facet>
+									<h:outputText value="User id:"></h:outputText><br/>
+									<h:inputText disabled="true" value="#{PublicProfile.user.username}"></h:inputText><br/>
+									<h:outputText value="Nueva contraseña:"></h:outputText><br/>
+									<h:inputSecret value="#{PublicProfile.newPassword}"></h:inputSecret><h:outputText style="color:red" value="#{PublicProfile.newPasswordMessage}"/><br/>
+									<h:outputText value="Confirmación de contraseña:"></h:outputText><br/>
+									<h:inputSecret value="#{PublicProfile.confirmNewPassword}"></h:inputSecret><h:outputText style="color:red" value="#{PublicProfile.confirmNewPasswordMessage}"/><br/>
+									<h:outputText value="Nombre:"></h:outputText><br/>
+									<h:inputText value="#{PublicProfile.user.name}"></h:inputText><h:outputText style="color:red" value="#{PublicProfile.nameMessage}"/><br/>
+									<h:outputText value="Email:"></h:outputText><br/>
+									<h:inputText value="#{PublicProfile.user.email}"></h:inputText><h:outputText style="color:red" value="#{PublicProfile.emailMessage}"/><br/><br/>
+									<h:outputText style="color:red" value="#{PublicProfile.message}"/><br/>
+									<h:commandButton value="Confirmar nuevos datos" action="#{PublicProfile.userModification}"/>
+								</rich:panel>
+							</h:panelGrid>
+						</div>
+						<rich:dataGrid var="evento" columns="1" elements="#{PublicProfile.cantEventosDelUsuario}" width="100%" value="#{PublicProfile.eventosDelUsuario}">
+							<f:facet name="header">
+								<h:outputText value="Eventos a los que #{PublicProfile.user.name} pertenece"></h:outputText>
+							</f:facet>
+							<h:panelGroup>
+								<h:commandLink value="#{evento.evtName}" action="verEvento">
+									<f:setPropertyActionListener value="#{evento}"
+											target="#{eventoMB.evento}" />
+								</h:commandLink>
+							</h:panelGroup>							
+						</rich:dataGrid>											
+				</rich:panel>
+		</f:view>
+	</h:form>
+	</ui:define>
+</ui:composition>
+</html>
