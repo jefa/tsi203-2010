@@ -29,11 +29,40 @@
 				<h:outputText value="Duración:"></h:outputText><br/>
 				<h:inputText value="#{EventMB.duration}"></h:inputText><br/>
 				<h:outputText value="Dirección:"></h:outputText><br/>
-				<h:inputText value="#{EventMB.address}"></h:inputText><br/><br/>
-				Los campos con * son obligatorios<br/>
-				Agregar un combo con las category para que seleccione la categoría a la que pertenece<br/>
-				Agregar un check para ver si es moderado o no y los moderadores<br/>
-				<h:commandButton value="Confirmar nuevos datos" action="#{EventMB.createEvent}"/>
+				<h:inputText value="#{EventMB.address}"></h:inputText><br/>
+				<h:outputText value="Categoría:"/><br/>
+				<h:selectOneMenu value="#{EventMB.category}">
+					<f:selectItems value="#{EventMB.allCats}" />
+				</h:selectOneMenu><br/><br/>
+				<h:outputText value="Evento es moderado:"/>
+				<h:selectBooleanCheckbox value="#{EventMB.moderated}" onclick="toggleVisibility('createEvent:newMod')"/><br/><br/>
+				
+				<h:inputText id="newMod" value="#{EventMB.suggest}" />
+				<h:commandButton value="Agregar como moderador" action="#{EventMB.addMod}"/>
+				<h:commandButton value="Limpiar lista" action="#{EventMB.resetMod}"/>
+				<rich:suggestionbox id="suggestionBoxId" for="newMod" tokens=",["
+					suggestionAction="#{EventMB.autocomplete}" var="result"
+					nothingLabel="No user matches" columnClasses="center">
+					<h:column>
+						<h:outputText value="#{result.username}" />
+					</h:column>
+					<h:column>
+						<h:outputText value="#{result.name}" />
+					</h:column>
+				</rich:suggestionbox>
+				<rich:panel style="width:50%">
+		            <f:facet name="header">
+		                <h:outputText value="Moderadores"/>
+		            </f:facet>
+		            <rich:dataList value="#{EventMB.mods}" var="pickList" rendered="#{EventMB.cantMods>0}">
+		            	<h:outputText value="#{pickList}"/>
+		            </rich:dataList> 
+		        </rich:panel>
+				<br/><br/><br/>
+				
+				<center>
+				<h:commandButton value="Crear el evento" action="#{EventMB.createEvent}"/><br/>
+				</center>
 			</rich:panel>
 		</f:view>
 	</h:form>
