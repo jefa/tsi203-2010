@@ -18,7 +18,8 @@ public class TranslatorEventSummary implements ITranslatable {
 		dat.evtId = ent.getEvtIdAuto();
 		dat.date = ent.getDate();
 		dat.description = ent.getDescription();
-		dat.contents = TranslatorCollection.translateContent(ent.getContents());
+		if(ent.getContents() != null)
+			dat.contents = TranslatorCollection.translateContent(ent.getContents());
 		if(ent.getEvtCategory() != null) {
 			dat.category = ent.getEvtCategory().getCategory();
 		} else {
@@ -26,8 +27,10 @@ public class TranslatorEventSummary implements ITranslatable {
 		}
 		if(ent instanceof ModeratedEvent) {
 			dat.modsUsernames = new ArrayList<String>();
-			for(Iterator<NormalUser> it = ((ModeratedEvent)ent).getMyMods().iterator(); it.hasNext();) {
-				dat.modsUsernames.add(it.next().getUsername());
+			if(((ModeratedEvent)ent).getMyMods() != null){
+				for(Iterator<NormalUser> it = ((ModeratedEvent)ent).getMyMods().iterator(); it.hasNext();) {
+					dat.modsUsernames.add(it.next().getUsername());
+				}
 			}
 		} else {
 			dat.modsUsernames = null;
