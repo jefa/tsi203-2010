@@ -82,4 +82,10 @@ public interface ServicesUserRemote {
      * @return				- The image avatar of the specified user
      * */
     public byte[] getUserAvatar(String username);
+    
+    /**
+     * Returns all the NormalUsers in the server
+     * @return				- All the normal users in the server
+     * */
+    public List<DatatypeUser> findAllNormalUsers();
 }
