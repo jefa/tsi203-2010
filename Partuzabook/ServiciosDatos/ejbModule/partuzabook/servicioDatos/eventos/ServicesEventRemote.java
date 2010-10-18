@@ -9,9 +9,43 @@ import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeUser;
+import partuzabook.servicioDatos.exception.EventNotFoundException;
+import partuzabook.servicioDatos.exception.EventNotModeratedException;
+import partuzabook.servicioDatos.exception.EvtCategoryNotFoundException;
+import partuzabook.servicioDatos.exception.UserNotFoundException;
 
 @Remote
 public interface ServicesEventRemote {
+	
+	/**
+	 * Creates a new Event in the database and returns a datatype which represents the event.
+	 * @param name				- Name of the new event
+	 * @param description		- The description of the new event
+	 * @param date				- Date of the event
+	 * @param duration			- Duration of the event in minutes
+	 * @param address 			- Address of the new event
+	 * @param creator			- username of the admin who created the event
+	 * @param moderated			- true if the event is moderated, false otherwise
+	 * @param category			- category for the event
+	 * @return	A Datatype representing the event
+	 */
+	public DatatypeEventSummary createEvent(String name, String description, 
+			Date date, int duration, String address, String creator, boolean moderated, 
+			String category) throws UserNotFoundException, EvtCategoryNotFoundException;
+	
+	/**
+	 * Adds new Users as mods to event with evt_id_auto = evt_id. If the user is only a normal user, it transforms to a client.
+	 * @param evt_id			- id of the event
+	 * @param newMods			- The new mods to add for the event
+	 * */
+	public DatatypeEventSummary addModtoEvent(int evt_id, List<String> newMods) 
+		throws EventNotFoundException, UserNotFoundException, EventNotModeratedException ;
+	
+	/**
+	 * Returns a list of all the categories for events
+	 * @return	A list of all the categories for events
+	 * */
+	public List<String> findAllEvtCategories();
 	
     /**
      * Returns a list of Events of interest (Eg: Events from this week)
