@@ -41,5 +41,9 @@
         <dependent-module archiveName="Utils.jar" deploy-path="/lib" handle="module:/resource/Utils/Utils">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="SuperusuarioUI.war" deploy-path="/" handle="module:/resource/SuperusuarioUI/SuperusuarioUI">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
     </wb-module>
 </project-modules>
