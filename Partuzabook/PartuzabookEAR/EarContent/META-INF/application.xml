@@ -22,4 +22,10 @@
   <module>
     <ejb>ServiciosNotificaciones.jar</ejb>
   </module>
+  <module>
+    <web>
+      <web-uri>SuperusuarioUI.war</web-uri>
+      <context-root>SuperusuarioUI</context-root>
+    </web>
+  </module>
 </application>
