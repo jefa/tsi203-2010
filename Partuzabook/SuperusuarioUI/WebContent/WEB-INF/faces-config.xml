@@ -2,9 +2,25 @@
 <faces-config version="1.2" xmlns="http://java.sun.com/xml/ns/javaee"
  xmlns:xi="http://www.w3.org/2001/XInclude"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
- <application>
-  <locale-config/>
- </application>
- <factory/>
- <lifecycle/>
-</faces-config>
+<managed-bean>
+  <managed-bean-name>EventMB</managed-bean-name>
+  <managed-bean-class>partuzabook.superusuarioUI.EventMB</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+ </managed-bean>
+ 
+<!-- Navegación -->
+<navigation-rule>
+  <from-view-id>/event.xhtml</from-view-id>
+  <navigation-case>
+   <from-action>#{EventMB.createEvent}</from-action>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/paginaInicio.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-action>#{EventMB.createEvent}</from-action>
+   <from-outcome>failure</from-outcome>
+   <to-view-id>/event.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ 
+ </faces-config>
