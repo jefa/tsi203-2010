@@ -24,6 +24,8 @@ public class DatatypeEventSummary implements Serializable{
 	
 	public String category;
 	
+	public List<String> modsUsernames;
+	
     public DatatypeEventSummary() {
     	
     }
@@ -103,5 +105,11 @@ public class DatatypeEventSummary implements Serializable{
 		return serialVersionUID;
 	}
 	
-
+	public void setModsUsernames(List<String> modsUsernames) {
+		this.modsUsernames = modsUsernames;
+	}
+	
+	public List<String> getModsUsernames() {
+		return modsUsernames;
+	}
 }
