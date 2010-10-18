@@ -47,6 +47,13 @@ public class NormalUser extends User {
           inverseJoinColumns=@JoinColumn(name="evt_id"))
 	private List<Event> myEvents;
 	
+	//bi-directional many-to-many association to Event
+    @ManyToMany
+	@JoinTable(name="Mods", 
+	          joinColumns=@JoinColumn(name="usr_id"),
+	          inverseJoinColumns=@JoinColumn(name="evt_id"))
+	private List<ModeratedEvent> myModeratedEvents;
+
 	public List<Comment> getComments() {
 		return this.comments;
 	}
@@ -93,6 +100,14 @@ public class NormalUser extends User {
 	public void setMyEvents(List<Event> myEvents) {
 		this.myEvents = myEvents;
 	}	
+
+	public List<ModeratedEvent> getMyModeratedEvents() {
+		return this.myModeratedEvents;
+	}
+
+	public void setMyModeratedEvents(List<ModeratedEvent> myModeratedEvents) {
+		this.myModeratedEvents = myModeratedEvents;
+	}
 
 
 }
