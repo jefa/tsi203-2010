@@ -28,6 +28,8 @@ import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.CommentDAO;
 import partuzabook.datos.persistencia.DAO.ContentDAO;
 import partuzabook.datos.persistencia.DAO.EventDAO;
+import partuzabook.datos.persistencia.DAO.AdminDAO;
+import partuzabook.datos.persistencia.DAO.EvtCategoryDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.DAO.PhotoDAO;
@@ -37,6 +39,9 @@ import partuzabook.datos.persistencia.beans.Comment;
 import partuzabook.datos.persistencia.beans.CommentPK;
 import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
+import partuzabook.datos.persistencia.beans.Admin;
+import partuzabook.datos.persistencia.beans.EvtCategory;
+import partuzabook.datos.persistencia.beans.ModeratedEvent;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.datos.persistencia.beans.Photo;
@@ -54,6 +59,8 @@ import partuzabook.entityTranslators.TranslatorEventSummary;
 import partuzabook.entityTranslators.TranslatorUser;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
+import partuzabook.servicioDatos.exception.EventNotModeratedException;
+import partuzabook.servicioDatos.exception.EvtCategoryNotFoundException;
 import partuzabook.servicioDatos.exception.UnrecognizedFileTypeException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.servicioDatos.exception.UserNotRelatedToEventException;
@@ -74,6 +81,8 @@ public class ServicesEvent implements ServicesEventRemote {
 	private FileSystemLocal fileSystem;
 	private PhotoDAO photoDao;
 	private RatingDAO ratingDao;
+	private AdminDAO adminDao;
+	private EvtCategoryDAO evtCatDao;
 	
     public ServicesEvent() {
     	
@@ -101,6 +110,8 @@ public class ServicesEvent implements ServicesEventRemote {
     		fileSystem = (FileSystemLocal) ctx.lookup("FileSystem/local");
     		photoDao = (PhotoDAO) ctx.lookup("PhotoDAOBean/local");
     		ratingDao = (RatingDAO) ctx.lookup("RatingDAOBean/local");
+    		adminDao = (AdminDAO) ctx.lookup("AdminDAOBean/local");
+    		evtCatDao = (EvtCategoryDAO) ctx.lookup("EvtCategoryDAOBean/local");
 		}
         catch (NamingException e) {
 			e.printStackTrace();
@@ -117,6 +128,8 @@ public class ServicesEvent implements ServicesEventRemote {
     	notifDao = null;
     	ratingDao = null;
     	photoDao = null;
+    	adminDao = null;
+    	evtCatDao = null;
     }
     
     private Event getEvent(int eventID) throws EventNotFoundException { 
@@ -546,8 +559,9 @@ public class ServicesEvent implements ServicesEventRemote {
 		return TranslatorCollection.translateEventSummary(afterEvents);
 	}
 
+	
 	public void commentContent(int eventID, int contentID, String textComment,
-								String userCommenter) throws Exception {		
+			String userCommenter) throws Exception {		
 		// Verify existence of Event
 		Event event = getEvent(eventID);
 		// Verify existence of content
@@ -574,12 +588,12 @@ public class ServicesEvent implements ServicesEventRemote {
 		com.setRegDate(now);
 		com.setText(textComment);
 		com.setUser(nUser);
-				
+		
 		comDao.persist(com);
 	}
 
 	public void rateContent(int eventID, int contentID, int rating,
-			String userId) throws Exception {
+		String userId) throws Exception {
 		// Verify existence of Event
 		Event event = getEvent(eventID);
 		// Verify existence of content
@@ -605,7 +619,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		rate.setRegDate(now);
 		rate.setScore(rating);
 		rate.setUser(nUser);
-
+		
 		ratingDao.persist(rate);		
 	}
 
@@ -618,5 +632,83 @@ public class ServicesEvent implements ServicesEventRemote {
 		TranslatorContent trans = new TranslatorContent();
 		return (DatatypeContent) trans.translate(content);
 	}
+	
+	
+	public DatatypeEventSummary createEvent(String name, String description,
+			java.util.Date date, int duration, String address, String creator,
+			boolean moderated, String category) throws UserNotFoundException, EvtCategoryNotFoundException{
+		
+		Admin a = adminDao.findByID(creator);
+		if(a == null) {
+			throw new UserNotFoundException();
+		}
+		
+		EvtCategory eCat = evtCatDao.findByID(category);
+		if(eCat == null) {
+			throw new EvtCategoryNotFoundException();
+		}
+		
+		Event evt;
+		if(moderated) {
+			evt = new ModeratedEvent();
+		} else {
+			evt = new Event();
+		}
+		
+		evt.setEvtName(name);
+		evt.setDescription(description);
+		evt.setDate(new Timestamp(date.getTime()));
+		evt.setDuration(duration);
+		evt.setAddress(address);
+		evt.setCreator(a);
+		evt.setEvtCategory(eCat);
+		evt.setRegDate(new Timestamp(new java.util.Date().getTime()));
+
+		evDao.persist(evt);
+		
+		return (DatatypeEventSummary)new TranslatorEventSummary().translate(evt);
+	}
+
+	public DatatypeEventSummary addModtoEvent(int evt_id, List<String> newMods)
+			throws EventNotFoundException, UserNotFoundException, EventNotModeratedException {
+		
+		//No es necesario el control de null, porque ya se hace en getEvent
+		Event event = getEvent(evt_id);
+		if(!(event instanceof ModeratedEvent))
+			throw new EventNotModeratedException();
+		ModeratedEvent mEvent = (ModeratedEvent)event;
+		
+		//Verificamos que existan todos los usuarios
+		List<NormalUser> newUsers = new ArrayList<NormalUser>();
+		for(Iterator<String> it = newMods.iterator(); it.hasNext(); ) {
+			String username = it.next();
+			NormalUser user = nUserDao.findByID(username);
+			if(user == null)
+				throw new UserNotFoundException();
+			newUsers.add(user);
+		}
+		//Generamos una lista con los nombres de los moderados viejos
+		List<String> actualMods = new ArrayList<String>();
+		for(Iterator<NormalUser> it = mEvent.getMyMods().iterator(); it.hasNext(); ) {
+			actualMods.add(it.next().getUsername());
+		}
+		//Agregamos los nuevos moderadores que no existian
+		for(Iterator<NormalUser> it = newUsers.iterator(); it.hasNext(); ) {
+			NormalUser newMod = it.next();
+			if(!actualMods.contains(newMod.getUsername())){
+				mEvent.getMyMods().add(newMod);
+			}
+		}
+		return (DatatypeEventSummary)new TranslatorEventSummary().translate(mEvent);
+	}
+
+	public List<String> findAllEvtCategories() {
+		List<String> res = new ArrayList<String>();
+		for(Iterator<EvtCategory> it = evtCatDao.findAll().iterator(); it.hasNext(); ) {
+			res.add(it.next().getCategory());
+		}
+		return res;
+	}
+	
 	
 }
