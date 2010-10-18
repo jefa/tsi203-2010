@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:composition template="templates/superusuarioUI.xhtml">
+	<ui:define name="title">Crear un Evento</ui:define>
+	<ui:define name="body">
+	<h:form id="createEvent">
+		<f:view>
+			<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Nuevo Evento"></h:outputText>
+				</f:facet>
+				<h:outputText value="Nombre del evento:"></h:outputText><br/>
+				<h:inputText value="#{EventMB.name}"></h:inputText>*<br/>
+				<h:outputText value="Descripción:"></h:outputText><br/>
+				<h:inputText value="#{EventMB.description}"></h:inputText><br/>
+				<h:outputText value="Fecha:"></h:outputText><br/>
+				
+				<rich:calendar value="#{EventMB.date}"
+                    datePattern="d/MMM/y"  showApplyButton="false"  
+                    cellWidth="24px" cellHeight="22px" style="width:200px"/><br/>
+
+				<h:outputText value="Duración:"></h:outputText><br/>
+				<h:inputText value="#{EventMB.duration}"></h:inputText><br/>
+				<h:outputText value="Dirección:"></h:outputText><br/>
+				<h:inputText value="#{EventMB.address}"></h:inputText><br/><br/>
+				Los campos con * son obligatorios<br/>
+				Agregar un combo con las category para que seleccione la categoría a la que pertenece<br/>
+				Agregar un check para ver si es moderado o no y los moderadores<br/>
+				<h:commandButton value="Confirmar nuevos datos" action="#{EventMB.createEvent}"/>
+			</rich:panel>
+		</f:view>
+	</h:form>
+	</ui:define>
+</ui:composition>
+</html>
