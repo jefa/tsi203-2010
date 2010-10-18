@@ -14,6 +14,7 @@
 		<project>UsuarioUI</project>
 		<project>ServiciosNotificaciones</project>
 		<project>Utils</project>
+		<project>SuperusuarioUI</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
