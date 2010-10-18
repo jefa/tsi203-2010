@@ -1,7 +1,12 @@
 package partuzabook.entityTranslators;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datos.persistencia.beans.Event;
+import partuzabook.datos.persistencia.beans.ModeratedEvent;
+import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.utils.TranslatorCollection;
 
 public class TranslatorEventSummary implements ITranslatable {
@@ -18,6 +23,14 @@ public class TranslatorEventSummary implements ITranslatable {
 			dat.category = ent.getEvtCategory().getCategory();
 		} else {
 			dat.category = "";
+		}
+		if(ent instanceof ModeratedEvent) {
+			dat.modsUsernames = new ArrayList<String>();
+			for(Iterator<NormalUser> it = ((ModeratedEvent)ent).getMyMods().iterator(); it.hasNext();) {
+				dat.modsUsernames.add(it.next().getUsername());
+			}
+		} else {
+			dat.modsUsernames = null;
 		}
 		return dat;
 	}
