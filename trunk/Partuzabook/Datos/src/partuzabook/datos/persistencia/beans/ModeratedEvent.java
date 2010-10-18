@@ -23,13 +23,13 @@ public class ModeratedEvent extends Event {
 	@JoinTable(name="Mods", 
           joinColumns=@JoinColumn(name="evt_id"),
           inverseJoinColumns=@JoinColumn(name="usr_id"))
-	private List<Client> myMods;
+	private List<NormalUser> myMods;
 
-	public List<Client> getMyMods() {
+	public List<NormalUser> getMyMods() {
 		return this.myMods;
 	}
 
-	public void setMyMods(List<Client> myMods) {
+	public void setMyMods(List<NormalUser> myMods) {
 		this.myMods = myMods;
 	}
 

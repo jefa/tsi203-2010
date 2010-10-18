@@ -9,9 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import partuzabook.datos.persistencia.beans.Client;
 import partuzabook.datos.persistencia.beans.ModeratedEvent;
-import partuzabook.datos.persistencia.beans.Notification;
 
 @Stateless
 public class ModeratedEventDAOBean extends JpaDao<Integer, ModeratedEvent> implements ModeratedEventDAO {
