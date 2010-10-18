@@ -12,12 +12,18 @@ INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('rri
 INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('jefa55', 'jefa55', 'Javier Fradiletti', 'jefa55@yahoo.com', 'N', now()::timestamp);
 INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('aenavcam', 'aenavcam', 'Andres Navarro', 'aenavcam@yahoo.com', 'N', now()::timestamp);
 
+--Insertamos las categorias
+insert into "evtCategory" values('Casamiento');
+insert into "evtCategory" values('Cumpleaños de quince');
+insert into "evtCategory" values('Aniversario');
+insert into "evtCategory" values('Otro')
+
 --Insertamos los eventos
-INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1001, 'Cumpleaños de quince de Valentina Rosas', '2011-11-15', 240,'', '8 de Octubre 1845', 'ggadmin','M',now()::timestamp);
-INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1002, 'Despedida de soltero de Lorenzo Lamas', '2011-11-28', 300,'', '18 de Julio 1221', 'vmadmin','M',now()::timestamp);
-INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1003, 'Fiesta de Halloween del grupo de TSI2', '2011-10-31', 180,'', 'Armando Esteban Quito 665', 'rradmin','E',now()::timestamp);
-INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1004, 'Previa de Perry vs Juventus', '2011-10-28', 180,'', 'Aquiles Baeza 1025', 'anadmin','M',now()::timestamp);
-INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE) VALUES(1005, 'Fiesta Rave de fin de año', '2010-12-31', 300,'', 'Tunel de 8 de Octubre', 'jfadmin','E',now()::timestamp);
+INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1001, 'Cumpleaños de quince de Valentina Rosas', '2011-11-15', 240,'', '8 de Octubre 1845', 'ggadmin','M',now()::timestamp, 'Cumpleaños de quince');
+INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1002, 'Despedida de soltero de Lorenzo Lamas', '2011-11-28', 300,'', '18 de Julio 1221', 'vmadmin','M',now()::timestamp, 'Otro');
+INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1003, 'Fiesta de Halloween del grupo de TSI2', '2011-10-31', 180,'', 'Armando Esteban Quito 665', 'rradmin','E',now()::timestamp, 'Otro');
+INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1004, 'Previa de Perry vs Juventus', '2011-10-28', 180,'', 'Aquiles Baeza 1025', 'anadmin','M',now()::timestamp, 'Otro');
+INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1005, 'Fiesta Rave de fin de año', '2010-12-31', 300,'', 'Tunel de 8 de Octubre', 'jfadmin','E',now()::timestamp, 'Otro');
 
 --Insertamos los moderadores de los eventos	
 INSERT INTO MODS(USR_ID, EVT_ID, REG_DATE) VALUES('ggismero', 1001, now()::timestamp);
@@ -103,3 +109,4 @@ INSERT INTO TAGS(TAG_ID_AUTO, CNT_ID, CREATOR, "posX", "posY", USR_TAG_CUSTOM, U
 INSERT INTO TAGS(TAG_ID_AUTO, CNT_ID, CREATOR, "posX", "posY", USR_TAG_CUSTOM, USR_TAG, FLAGS, REG_DATE) VALUES(1008, 1008, 'ggismero', NULL, NULL, 'usuario_externo_3', NULL,'N', now()::timestamp);
 INSERT INTO TAGS(TAG_ID_AUTO, CNT_ID, CREATOR, "posX", "posY", USR_TAG_CUSTOM, USR_TAG, FLAGS, REG_DATE) VALUES(1009, 1009, 'jefa55', NULL, NULL, 'usuario_externo_4', NULL,'N', now()::timestamp);
 INSERT INTO TAGS(TAG_ID_AUTO, CNT_ID, CREATOR, "posX", "posY", USR_TAG_CUSTOM, USR_TAG, FLAGS, REG_DATE) VALUES(1010, 1010, 'veromanduk', NULL, NULL, 'usuario_externo_5', NULL,'N', now()::timestamp);
+
