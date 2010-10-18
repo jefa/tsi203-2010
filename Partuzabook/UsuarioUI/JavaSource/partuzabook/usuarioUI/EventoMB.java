@@ -43,7 +43,15 @@ public class EventoMB {
 				HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
 				String username = (String) session.getAttribute("username");		
 				this.userName = username;
-				service.commentContent(this.evento.getEvtId(), this.content.getContId(), this.comentario, this.userName);
+				// Remover tags <p> y </p> del comentario
+				String comment = this.comentario;
+				if (comment.contains("<p>")) {
+					comment = comment.substring(3);
+				}
+				if (comment.contains("</p>")) {
+					comment = comment.substring(0,comment.length()-4);
+				} 
+				service.commentContent(this.evento.getEvtId(), this.content.getContId(), comment, this.userName);
 				this.comentario = "";
 			}
 		} catch (Exception e) {
