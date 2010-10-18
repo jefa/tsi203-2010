@@ -151,4 +151,8 @@ public class ServicesUser implements ServicesUserRemote {
 		else
 			return fileSystem.readFile(DEFAULT_IMAGE);
 	}
+
+	public List<DatatypeUser> findAllNormalUsers() {		
+		return TranslatorCollection.translateNormalUser(nUserDao.findAll());
+	}
 }
