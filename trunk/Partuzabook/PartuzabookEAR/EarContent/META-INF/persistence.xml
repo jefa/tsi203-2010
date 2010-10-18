@@ -5,7 +5,6 @@
 	<class>partuzabook.datos.persistencia.beans.Admin</class>
 	<class>partuzabook.datos.persistencia.beans.Album</class>
 	<class>partuzabook.datos.persistencia.beans.CntCategory</class>
-	<class>partuzabook.datos.persistencia.beans.Client</class>
 	<class>partuzabook.datos.persistencia.beans.Comment</class>
 	<class>partuzabook.datos.persistencia.beans.CommentPK</class>
 	<class>partuzabook.datos.persistencia.beans.Content</class>
