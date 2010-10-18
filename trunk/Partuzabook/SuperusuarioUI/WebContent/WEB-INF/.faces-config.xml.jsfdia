@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#event.xhtml" PATH="/event.xhtml"
+  SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#event.xhtml:0" NAME="item"
+   PATH="/event.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="success:#{EventMB.createEvent}:#paginaInicio.xhtml"
+    NAME="output" PATH="/paginaInicio.xhtml"
+    TARGET="rules:#paginaInicio.xhtml"
+    TITLE="#{EventMB.createEvent}:success" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="failure:#{EventMB.createEvent}:#event.xhtml"
+    NAME="output1" PATH="/event.xhtml" TARGET="rules:#event.xhtml"
+    TITLE="#{EventMB.createEvent}:failure" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#paginaInicio.xhtml"
+  PATH="/paginaInicio.xhtml" SHAPE="256,33,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>
