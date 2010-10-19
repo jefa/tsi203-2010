@@ -57,7 +57,7 @@ public class EventMB {
 			ServicesEventRemote serviceEvent = (ServicesEventRemote)ctx.lookup(SERVICE_EVENT);
 			DatatypeEventSummary event = serviceEvent.createEvent(name, description, date, duration, address, "ggadmin", moderated, category);
 			//Preguntar si es moderado o no primero
-			serviceEvent.addModtoEvent(event.evtId, mods);
+			serviceEvent.addModtoEvent(event.getEvtId(), mods);
 			mods = null;			
 			return "success";
 		} catch (NamingException e) {
@@ -140,7 +140,7 @@ public class EventMB {
 					allCats.put(entry, entry);
 				}
 			} catch (NamingException e) {
-				//TODO: Redirigir a una página de error
+				//TODO: Redirigir a una pï¿½gina de error
 				e.printStackTrace();
 			}
 		}

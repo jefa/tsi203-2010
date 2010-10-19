@@ -43,8 +43,8 @@
 				<rich:panel>
 					<f:facet name="header">
 						<h:commandLink value="#{evento.evtName}" action="verEvento">
-						<f:setPropertyActionListener value="#{evento}"
-								target="#{eventoMB.evento}" />
+						<f:setPropertyActionListener value="#{evento.evtId}"
+								target="#{eventoMB.eventId}" />
 						</h:commandLink>
 					</f:facet>
 						<b><h:outputText value="Descripcion: " styleClass="label"></h:outputText></b>
@@ -52,9 +52,7 @@
 						<br></br>
 						<b><h:outputText value="Fecha: " styleClass="label"></h:outputText></b>
 						<h:outputText value="#{evento.formattedDate}" />
-							<rich:dataGrid var="contenido" columns="#{evento.columnsToDisplay}" elements="8" value="#{evento.contents}" width="100%" style="text-align:center;">
-								<h:graphicImage value="/ContentFeeder?eventID=#{evento.evtId}&#38;id=#{contenido.contId}&#38;thb=1" />
-							</rich:dataGrid>
+						<h:graphicImage value="/ContentFeeder?id=#{evento.coverId}&#38;thb=1" />
 				</rich:panel>
 			</rich:dataGrid>
 		</h:form>
@@ -77,7 +75,7 @@
 						<b><h:outputText value="Calificacion: " styleClass="label"></h:outputText></b>
 						<h:outputText value="#{contenido.avgScore}" />
 						<br/>
-						<h:graphicImage value="/ContentFeeder?eventID=#{contenido.eventId}&#38;username=#{loginMB.userName}&#38;id=#{contenido.contId}&#38;thb=1" />
+						<h:graphicImage value="/ContentFeeder?id=#{contenido.contId}&#38;thb=1" />
 				</rich:panel>
 			</rich:dataGrid>
 		</h:form>
@@ -93,11 +91,11 @@
 				<rich:panel>
 					<f:facet name="header">
 						<h:commandLink value="#{contenido.eventName}" action="verEvento">
-						<f:setPropertyActionListener value="#{contenido.eventId}"
+							<f:setPropertyActionListener value="#{contenido.eventId}"
 								target="#{eventoMB.eventId}" />
 						</h:commandLink>
 					</f:facet>
-						<h:graphicImage value="/ContentFeeder?eventID=#{contenido.eventId}&#38;username=#{loginMB.userName}&#38;id=#{contenido.contId}&#38;thb=1" />
+						<h:graphicImage value="/ContentFeeder?id=#{contenido.contId}&#38;thb=1" />
 						<rich:dataList var="comentario" value="#{contenido.comments}" rows="5" title="Comentarios:">
 							<b><h:outputText value="#{comentario.userName}: "></h:outputText></b>
 							<h:outputText value="#{comentario.text}: "></h:outputText>

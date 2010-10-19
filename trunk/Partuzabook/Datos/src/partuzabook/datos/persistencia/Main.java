@@ -11,11 +11,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import partuzabook.datos.persistencia.DAO.AdminDAO;
-import partuzabook.datos.persistencia.DAO.ClientDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.beans.Admin;
-import partuzabook.datos.persistencia.beans.Client;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
 
@@ -149,18 +147,18 @@ public class Main {
     }
     
     static String TestClientDAOBean() {
-    	try {
-    		ClientDAO cliDAO=(ClientDAO) c.lookup("PruebaDeploy/ClientDAOBean/remote");
-    		Client cli = new Client();
-			cli.setUsername("client1");
-			cli.setPassword("my pass");
-			cli.setRegDate(new Timestamp((new java.util.Date()).getTime()));
-			cliDAO.persist(cli);
+//    	try {
+//    		ClientDAO cliDAO=(ClientDAO) c.lookup("PruebaDeploy/ClientDAOBean/remote");
+//    		Client cli = new Client();
+//			cli.setUsername("client1");
+//			cli.setPassword("my pass");
+//			cli.setRegDate(new Timestamp((new java.util.Date()).getTime()));
+//			cliDAO.persist(cli);
 			return "OK";
-		} catch (NamingException e) {			
-			e.printStackTrace();
-			return "ERROR";
-		}
+//		} catch (NamingException e) {			
+//			e.printStackTrace();
+//			return "ERROR";
+//		}
     	
     }
     

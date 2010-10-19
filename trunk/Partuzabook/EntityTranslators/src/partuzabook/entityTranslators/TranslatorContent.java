@@ -3,16 +3,13 @@ package partuzabook.entityTranslators;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import partuzabook.datatypes.DatatypeComment;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeRating;
-import partuzabook.datatypes.DatatypeTag;
 import partuzabook.datos.persistencia.beans.Content;
-import partuzabook.datos.persistencia.beans.Comment;
 import partuzabook.datos.persistencia.beans.Photo;
 import partuzabook.datos.persistencia.beans.Rating;
-import partuzabook.datos.persistencia.beans.Tag;
 import partuzabook.datos.persistencia.beans.Video;
+import partuzabook.utils.TranslatorCollection;
 
 public class TranslatorContent implements ITranslatable {
 	
@@ -26,12 +23,8 @@ public class TranslatorContent implements ITranslatable {
 		dat.eventName = ent.getEvent().getEvtName();
 		dat.eventId = ent.getEvent().getEvtIdAuto();
 		// Translate list of Comments
-		dat.comments = new ArrayList<DatatypeComment>();
-		Iterator<Comment> itCom = ent.getComments().iterator();
-		TranslatorComment transCom = new TranslatorComment();
-		while (itCom.hasNext()) {
-			dat.comments.add((DatatypeComment) transCom.translate(itCom.next()));		
-		}
+		dat.comments = TranslatorCollection.translateComments(ent.getComments());
+		
 		// Translate list of Ratings
 		dat.ratings = new ArrayList<DatatypeRating>();
 		Iterator<Rating> itRat = ent.getRatings().iterator();
@@ -44,18 +37,15 @@ public class TranslatorContent implements ITranslatable {
 			
 		}
 		//Add average score of the content
-		if(ent.getRatings()!= null && ent.getRatings().size() > 0)
+		if(ent.getRatings()!= null && ent.getRatings().size() > 0) {
 			dat.avgScore = avg_score / ent.getRatings().size();
-		else
-			dat.avgScore = 0;
-		
-		// Translate list of Tags
-		dat.tags=  new ArrayList<DatatypeTag>();
-		Iterator<Tag> itTag = ent.getTags().iterator();
-		TranslatorTag transTag = new TranslatorTag();
-		while (itTag.hasNext()) {
-			dat.tags.add((DatatypeTag) transTag.translate(itTag.next()));		
 		}
+		else {
+			dat.avgScore = 0;
+		}
+		
+		dat.tags = TranslatorCollection.translateTag(ent.getTags());
+		
 		// Set type
 		if (ent instanceof Photo){
 			dat.type  = DatatypeContent.PHOTO;
@@ -65,6 +55,7 @@ public class TranslatorContent implements ITranslatable {
 			dat.type = DatatypeContent.EXTERNAL;
 		}
 		dat.pos = ent.getPos();
+		
 		return dat;
 	}
 }

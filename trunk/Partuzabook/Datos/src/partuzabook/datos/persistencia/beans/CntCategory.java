@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 
@@ -19,6 +21,12 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="\"cntCategory\"")
+@NamedQueries({
+	@NamedQuery(name = "CntCategory.findAll",
+			query = "SELECT c FROM CntCategory c"),
+	@NamedQuery(name = "CntCategory.findByIDInEvent",
+			query = "SELECT c FROM CntCategory c WHERE c.event = :event AND c.catIdAuto = :category"),
+})
 public class CntCategory implements Serializable {
 	private static final long serialVersionUID = 1L;
 

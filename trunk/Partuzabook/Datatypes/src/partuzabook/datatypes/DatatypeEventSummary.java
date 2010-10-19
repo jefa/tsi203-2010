@@ -8,21 +8,17 @@ import java.util.List;
 public class DatatypeEventSummary implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	public String evtName;
+	private String evtName;
 	
-	public int evtId;
+	private int evtId;
 
-	public Date date;
+	private Date date;
 
-	public String formattedDate;
+	private String description;
 
-	public String description;
-
-	public List<DatatypeContent> contents;
-
-	public int columnsToDisplay;
+	private String eventCategory;
 	
-	public String category;
+	private int coverId;
 	
 	public List<String> modsUsernames;
 	
@@ -30,19 +26,15 @@ public class DatatypeEventSummary implements Serializable{
     	
     }
 
-    public int getColumnsToDisplay(){
-    	int size = contents.size();
-    	if (size < 4) {
-    		return size;
-    	} else {
-    		return 4;
-    	}
-    }
-    
-    public void setColumnsToDisplay(int cols) {
-    	this.columnsToDisplay = cols;
-    }
-    
+	public DatatypeEventSummary(DatatypeEventSummary datSummary) {
+		evtName = datSummary.getEvtName();
+		evtId = datSummary.getEvtId();
+		date = datSummary.getDate();
+		description = datSummary.getDescription();
+		eventCategory = datSummary.getEventCategory();
+		coverId = datSummary.getCoverId();
+	}
+
 	public String getEvtName() {
 		return evtName;
 	}
@@ -72,11 +64,6 @@ public class DatatypeEventSummary implements Serializable{
 		return df.format(date);
 	}
 
-
-	public void setFormattedDate(String formattedDate) {
-		this.formattedDate = formattedDate;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -85,25 +72,26 @@ public class DatatypeEventSummary implements Serializable{
 		this.description = description;
 	}
 
-	public List<DatatypeContent> getContents() {
-		return contents;
+	public String getEventCategory() {
+		return eventCategory;
 	}
 
-	public void setContents(List<DatatypeContent> contents) {
-		this.contents = contents;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
+	public void setEventCategory(String eventCategory) {
+		this.eventCategory = eventCategory;
 	}
 	
-	public static long getSerialversionuid() {
+	public void setCoverId(int coverId) {
+		this.coverId = coverId;
+	}
+
+	public int getCoverId() {
+		return coverId;
+	}
+
+	public static long getSerialVersionUID() {
 		return serialVersionUID;
 	}
+
 	
 	public void setModsUsernames(List<String> modsUsernames) {
 		this.modsUsernames = modsUsernames;

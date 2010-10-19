@@ -51,7 +51,7 @@ public class Main {
 		        } else {
 		        	System.out.println("   Result: " + setEv.size() + " eventos");
 		        	for (int i = 0; i < setEv.size(); i++) {
-		        		System.out.println("   " + setEv.get(i).evtName + " - Descr: " + setEv.get(i).description);
+		        		System.out.println("   " + setEv.get(i).getEvtName() + " - Descr: " + setEv.get(i).getDescription());
 		        	}
 		        }
 		    } else {
@@ -62,13 +62,12 @@ public class Main {
 	        if (evt != null) {
 	        	System.out.println("3. Invocando getSummaryEvents");
 	        	int maxEvents = 10;
-	        	int maxContentsPerEvent = 4;
-	        	List<DatatypeEventSummary> eventSummary = evt.getSummaryEvents(maxEvents, maxContentsPerEvent);
+	        	List<DatatypeEventSummary> eventSummary = evt.getSummaryEvents(maxEvents);
 	        	if (eventSummary == null){
 	        		System.out.println("   Result: NULL");
 	        	} else {
 	        		for (int i = 0; i < eventSummary.size(); i++) {
-		        		System.out.println("   Evento " + i + " : " + eventSummary.get(i).evtName);
+		        		System.out.println("   Evento " + i + " : " + eventSummary.get(i).getEvtName());
 		        	}
 	        	}	        	
 	        	System.out.println("4. Invocando getMostTagged");
@@ -111,8 +110,8 @@ public class Main {
 	        		System.out.println("   El user no es participante del evento - No puede navegar la galería");
 	        	} else {
 	        		System.out.println("   El user es participante del evento");
-	        		System.out.println("2. Invocando getGalleryPhotoAtPos - Obteniendo imagen en pos " + pos);
-	        		DatatypeContent cont = evt.getGalleryPhotoAtPos(eventID, pos);	
+	        		System.out.println("2. Invocando getContentDetails - Obteniendo imagen en pos " + pos);
+	        		DatatypeContent cont = evt.getContentDetails(eventID, usuario);	
 	        		if (cont == null) {
 	        			System.out.println("   Result: NULL");
 			        } else {
@@ -129,8 +128,8 @@ public class Main {
 				        	}	
 				        	System.out.println("2. Invocando tagUserInContent");				        	
 				        	evt.tagUserInContent(eventID, cont.contId, usuario, users.get(pos).username, 1, 1);	        		        	
-				        	System.out.println("3. Invocando nuevamente getGalleryPhotoAtPos para ver si quedo el tag");				        	
-				        	cont = evt.getGalleryPhotoAtPos(eventID, pos);	
+				        	System.out.println("3. Invocando nuevamente para ver si quedo el tag");				        	
+				        	cont = evt.getContentDetails(cont.contId, usuario);	
 					        System.out.println("   Tags para el contenido con ID " +  cont.contId);
 					        for (int i = 0; i < cont.tags.size(); i++) {
 					        	System.out.println("   " + cont.tags.get(i).userName);
