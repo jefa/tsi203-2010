@@ -22,7 +22,7 @@ function div() {
     return $('<div/>');
 }
 
-$.imgAreaSelect = function (img, options, txt) {
+$.imgAreaSelect = function (img, options) {
     var
 
         $img = $(img),
@@ -64,7 +64,7 @@ $.imgAreaSelect = function (img, options, txt) {
         aspectRatio,
 
         shown,
-        ix1 = txt,
+        
         x1, y1, x2, y2,
 
         selection = { x1: 0, y1: 0, x2: 0, y2: 0, width: 0, height: 0 },
@@ -253,10 +253,12 @@ $.imgAreaSelect = function (img, options, txt) {
     function docMouseUp(event) {
         $('body').css('cursor', '');
 
-        if (options.autoHide || selection.width * selection.height == 0)
+        if (options.autoHide || selection.width * selection.height == 0) {
             hide($box.add($outer), function () { $(this).hide(); });
+        }
 
         options.onSelectEnd(img, getSelection());
+        options.onClick(img, getSelection());
         document.getElementById(options.idx1).value = selX(x1);
         document.getElementById(options.idy1).value = selY(y1);
         document.getElementById(options.idx2).value = selX(x2);
@@ -290,6 +292,7 @@ $.imgAreaSelect = function (img, options, txt) {
             $(document).mousemove(movingMouseMove)
                 .one('mouseup', function () {
                     options.onSelectEnd(img, getSelection());
+                    options.onClick(img, getSelection());
 
                     $(document).unbind('mousemove', movingMouseMove);
                     $box.mousemove(areaMouseMove);
@@ -430,6 +433,7 @@ $.imgAreaSelect = function (img, options, txt) {
 
         options.onSelectChange(img, getSelection());
         options.onSelectEnd(img, getSelection());
+        options.onClick(img, getSelection());
     }
 
     function imgMouseDown(event) {
@@ -458,6 +462,7 @@ $.imgAreaSelect = function (img, options, txt) {
             resizable: true,
             parent: 'body',
             onInit: function () {},
+            onClick: function () {},
             onSelectStart: function () {},
             onSelectChange: function () {},
             onSelectEnd: function () {}

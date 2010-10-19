@@ -18,7 +18,8 @@ public class TranslatorTag implements ITranslatable {
 		if (tag instanceof TagForNotUser) {
 			TagForNotUser tagNU = (TagForNotUser) tag;
 			dat.userName = tagNU.getUsrTagCustom();
-		} else if (tag instanceof TagForUser) {
+		}
+		else if (tag instanceof TagForUser) {
 			TagForUser tagU = (TagForUser) tag;
 			dat.userName = tagU.getUserTagged().getName();
 		} 

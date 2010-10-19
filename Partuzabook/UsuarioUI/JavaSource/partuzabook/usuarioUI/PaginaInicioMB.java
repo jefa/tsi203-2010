@@ -56,7 +56,7 @@ public class PaginaInicioMB {
 		try {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			eventosRecientes = service.getSummaryEvents(10, 1);
+			eventosRecientes = service.getSummaryEvents(10);
 			return eventosRecientes;
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block

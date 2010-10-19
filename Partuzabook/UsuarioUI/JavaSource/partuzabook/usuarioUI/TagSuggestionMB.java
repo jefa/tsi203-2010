@@ -42,15 +42,13 @@ public class TagSuggestionMB  {
 	}
 	
 	private void setCandidates() {
-		if (candidates == null) {
-			try {
-				Context ctx = getContext();
-				ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-				candidates = service.getUsersForTag(1, 33);
-			} catch (NamingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		try {
+			Context ctx = getContext();
+			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
+			candidates = service.getUsersForTag(1, 33);
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -77,7 +75,7 @@ public class TagSuggestionMB  {
 		try {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			service.tagUserInContent(contenido.getEventId(), contenido.getContId(), username, suggest, tagX1, tagY1);
+ 			service.tagUserInContent(contenido.getEventId(), contenido.getContId(), username, suggest, tagX1, tagY1);
 			System.out.println("Usuario taggeado");
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
@@ -116,14 +114,7 @@ public class TagSuggestionMB  {
 	}
 
 	public List<DatatypeTag> getTagged() {
-		try {
-			Context ctx = getContext();
-			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			tagged = service.getGalleryPhotoAtPos(1, 0).tags;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		tagged = contenido.getTags();
 		return tagged;
 	}
 

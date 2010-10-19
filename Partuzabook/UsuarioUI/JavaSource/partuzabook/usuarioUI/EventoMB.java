@@ -8,58 +8,23 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 
-import partuzabook.datatypes.DatatypeContent;
-import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.serviciosUI.multimedia.ServicesMultimediaRemote;
 
 public class EventoMB {
 
-	private DatatypeEventSummary evento;
-	private DatatypeContent content;
+	private DatatypeEvent evento;
 	private Integer eventId; 
 	private String userName;
+	private boolean validUserForContext;	
 	
-	private String comentario = "";
 
 	private ServicesMultimediaRemote servicesMultimedia;
 	private ServicesEventRemote servicesEvent;
-	private boolean validUserForContext;	
 
-	public String getComentario(){
-		return this.comentario;
-	}
-	
-	public void setComentario(String com){
-		this.comentario = com;
-	}
-	
-	public void comentar() {
-		try {
-			Context ctx = getContext();
-			ServicesEventRemote service = getServicesEevnt();
-			if (this.comentario != ""){
-		    	FacesContext context = FacesContext.getCurrentInstance();
-				HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-				String username = (String) session.getAttribute("username");		
-				this.userName = username;
-				// Remover tags <p> y </p> del comentario
-				String comment = this.comentario;
-				if (comment.contains("<p>")) {
-					comment = comment.substring(3);
-				}
-				if (comment.contains("</p>")) {
-					comment = comment.substring(0,comment.length()-4);
-				} 
-				service.commentContent(this.evento.getEvtId(), this.content.getContId(), comment, this.userName);
-				this.comentario = "";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public boolean isValidUserForContext() {
+		validUserForContext = calcValidUserForContent();
 		return validUserForContext;
 	}
 
@@ -75,60 +40,42 @@ public class EventoMB {
 	public String getUserName() {
 		return this.userName;
 	}
-	
-	public void setEvento(DatatypeEventSummary evento) {
-		System.out.println("EventoMB.setEvento():: Event="+evento.evtId);
-		//this.evento = evento;
-		setEventId(evento.evtId);
+
+	public void setEvento(DatatypeEvent evento) {
+		setEventId(evento.getEvtId());
 		this.validUserForContext = calcValidUserForContent();
 		System.out.println("EventoMB.setEvento():: validUserForContext="+this.validUserForContext);
 	}
-	
-	public DatatypeEventSummary getEvento() {
+
+	public DatatypeEvent getEvento() {
 		return this.evento;
 	}
-	
-	public DatatypeContent getContent(){
-    	FacesContext context = FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-		String username = (String) session.getAttribute("username");				
-		// Actualizar el content si ya tenía un valor cargado
-		if (this.content != null ) {
-			this.content = servicesEvent.getContentInfo(this.getEventId(), this.content.getContId());
-		}
-		return this.content;
-	}
-	
-	public void setContent(DatatypeContent con){
-		System.out.println("EventoMB.setContent():: new Content="+con);
-		this.content = con;
-	}
 
+	
 	public Integer getEventId() {
 		return this.eventId; 
 	}
-	
-	public void setEventId(Integer evtId){
-		this.eventId = evtId;
+
+	public void setEventId(Integer eventId){
+		this.eventId = eventId;
 		// Also set the Event
-		try {
-			DatatypeEventSummary ev = getServicesEevnt().findEventById(evtId);
-			if (ev != null) {
-				this.evento = ev;
-			}
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
+		evento = getServicesEvent().getEventDetails(eventId);
 	}
 
-	private ServicesEventRemote getServicesEevnt() throws NamingException {
+	private ServicesEventRemote getServicesEvent() {
 		if (servicesEvent == null) {
-			Context ctx = getContext();
-			this.servicesEvent = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");
+			try {
+				Context ctx;
+				ctx = getContext();
+				this.servicesEvent = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return servicesEvent;
 	}
-	
+
 	private ServicesMultimediaRemote getServicesMultimedia() {
 		try {
 			if (servicesMultimedia == null){
@@ -143,11 +90,6 @@ public class EventoMB {
 		return null;
 	}
 
-	public Integer getPage(){
-        final Integer index = this.evento.contents.indexOf(this.content);
-        return index / 5 + 1;
-    }
-	
 	/*public DatatypeContent getContentAtPosition(){
 		if (evento == null)
 			return null;
@@ -159,15 +101,15 @@ public class EventoMB {
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
 		properties.put("java.naming.factory.initial",
-				"org.jnp.interfaces.NamingContextFactory");
+		"org.jnp.interfaces.NamingContextFactory");
 		properties.put("java.naming.factory.url.pkgs",
-				"org.jboss.naming rg.jnp.interfaces");
+		"org.jboss.naming rg.jnp.interfaces");
 		properties.put("java.naming.provider.url", "jnp://localhost:1099");
 		Context ctx = new InitialContext(properties);
 		return ctx;
 	}
-	
-/*	public List<DatatypeEventSummary> getEventosRecientes() {
+
+	/*	public List<DatatypeEventSummary> getEventosRecientes() {
 
 		try {
 			Context ctx = getContext();
@@ -185,11 +127,11 @@ public class EventoMB {
 			ArrayList<DatatypeEventSummary> eventosRecientes) {
 		this.eventosRecientes = eventosRecientes;
 	}*/
-	
+
 	private Boolean calcValidUserForContent() {
-    	FacesContext context = FacesContext.getCurrentInstance();
+		FacesContext context = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
 		String username = (String) session.getAttribute("username");		
-		return getServicesMultimedia().isUserRelatedToEvent(this.evento.evtId, username);
+		return getServicesMultimedia().isUserRelatedToEvent(this.evento.getEvtId(), username);
 	}
 }

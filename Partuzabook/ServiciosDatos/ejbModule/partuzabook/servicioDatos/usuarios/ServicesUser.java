@@ -147,9 +147,9 @@ public class ServicesUser implements ServicesUserRemote {
 	public byte[] getUserAvatar(String username) {
 		NormalUser user = getNormalUser(username);
 		if(user.getImgPath() != null && !user.getImgPath().equals(""))
-			return fileSystem.readFile(user.getImgPath());
+			return fileSystem.readFile(user.getImgPath(), 0);
 		else
-			return fileSystem.readFile(DEFAULT_IMAGE);
+			return fileSystem.readFile(DEFAULT_IMAGE, 0);
 	}
 
 	public List<DatatypeUser> findAllNormalUsers() {		

@@ -3,7 +3,6 @@ package partuzabook.usuarioUI;
 import java.io.IOException;
 import java.util.Properties;
 
-import javax.faces.context.FacesContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -44,26 +43,30 @@ public class ContentFeeder extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		int id = 0;
-		int eventID = 0;
 		HttpSession session = (HttpSession) request.getSession(true);
 
 		String username = (String) session.getAttribute("username");
 		try {
 			id = Integer.parseInt(request.getParameter("id"));
-			eventID = Integer.parseInt(request.getParameter("eventID"));
 		}
 		catch (NumberFormatException e) {
 			
 		}
 
-		byte[] data;
-		if (request.getParameter("thb") == null) {
-			data = getServicesUpload().getMultimedia(eventID,username, id);
+		int thumbnail = 0;
+		if (request.getParameter("thb") != null) {
+			try {
+				thumbnail = Integer.parseInt(request.getParameter("thb"));
+				if (thumbnail < 50) {
+					thumbnail = 50;
+				}
+			}
+			catch(NumberFormatException e) {
+				
+			}
 		}
-		else {
-			data = getServicesUpload().getMultimediaThumbnail(eventID,username, id);
-		}
-				 
+		byte[] data = getServicesUpload().getContent(username, id, thumbnail);
+		
 		ServletOutputStream stream = response.getOutputStream();
 		stream.write(data);
 	}

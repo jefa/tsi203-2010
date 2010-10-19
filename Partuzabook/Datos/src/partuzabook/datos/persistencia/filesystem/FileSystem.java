@@ -72,12 +72,15 @@ public class FileSystem implements FileSystemLocal {
 		return null;
     }
     
-    public byte[] readFile(String filename) {
+    public byte[] readFile(String filename, int thumbnail) {
+    	if (thumbnail >= 50) {
+			return getThumbnail(filename, thumbnail);
+		}
 		try {
 	    	File f = new File(getBasePath() + filename);
 	    	int len = (int)f.length();
 	    	FileInputStream fstream = new FileInputStream(f);
-	    	byte[] data = new byte[len]; 
+	    	byte[] data = new byte[len];
 	    	fstream.read(data, 0, len);
 	    	fstream.close();
 	    	return data;
@@ -91,18 +94,19 @@ public class FileSystem implements FileSystemLocal {
 		return null;
     }
     
-    public byte[] getThumbnail(String filename) {
+    private byte[] getThumbnail(String filename, int thumbnailSize) {
 		try {
 			int lastSlash = filename.lastIndexOf("/") + 1;
 			String prefix = filename.substring(0, lastSlash);
 			String postfix = filename.substring(lastSlash, filename.length());
-			File f = new File(getBasePath() + prefix + "thb_" + postfix);
+			String thumbFilename = getBasePath() + prefix + "thb_" + thumbnailSize + "_" + postfix;
+			File f = new File(thumbFilename);
 			if (!f.exists()) {
 				CreateThumbnail ct = new CreateThumbnail(getBasePath() + filename);
-				ct.getThumbnail(100, CreateThumbnail.HORIZONTAL);
-				ct.saveThumbnail(new File(getBasePath() + prefix + "thb_" + postfix), CreateThumbnail.IMAGE_JPG);
+				ct.getThumbnail(thumbnailSize, CreateThumbnail.CLIP_AND_SCALE);
+				ct.saveThumbnail(new File(thumbFilename), CreateThumbnail.IMAGE_JPG);
 			}
-			f = new File(getBasePath() + prefix + "thb_" + postfix);
+			f = new File(thumbFilename);
 	    	int len = (int)f.length();
 	    	FileInputStream fstream = new FileInputStream(f);
 	    	byte[] data = new byte[len]; 

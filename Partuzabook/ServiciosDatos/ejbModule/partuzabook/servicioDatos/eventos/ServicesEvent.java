@@ -8,9 +8,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -20,12 +18,14 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import partuzabook.datatypes.DataTypeFile;
+import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeContent;
+import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeMostTagged;
-import partuzabook.datatypes.DatatypeRating;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.CommentDAO;
+import partuzabook.datos.persistencia.DAO.ContentCategoryDAO;
 import partuzabook.datos.persistencia.DAO.ContentDAO;
 import partuzabook.datos.persistencia.DAO.EventDAO;
 import partuzabook.datos.persistencia.DAO.AdminDAO;
@@ -35,6 +35,7 @@ import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.DAO.PhotoDAO;
 import partuzabook.datos.persistencia.DAO.RatingDAO;
 import partuzabook.datos.persistencia.DAO.TagDAO;
+import partuzabook.datos.persistencia.beans.CntCategory;
 import partuzabook.datos.persistencia.beans.Comment;
 import partuzabook.datos.persistencia.beans.CommentPK;
 import partuzabook.datos.persistencia.beans.Content;
@@ -54,7 +55,9 @@ import partuzabook.datos.persistencia.beans.TagForUser;
 import partuzabook.datos.persistencia.beans.User;
 import partuzabook.datos.persistencia.beans.Video;
 import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
+import partuzabook.entityTranslators.TranslatorCategory;
 import partuzabook.entityTranslators.TranslatorContent;
+import partuzabook.entityTranslators.TranslatorEvent;
 import partuzabook.entityTranslators.TranslatorEventSummary;
 import partuzabook.entityTranslators.TranslatorUser;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
@@ -73,6 +76,7 @@ import partuzabook.utils.TranslatorCollection;
 public class ServicesEvent implements ServicesEventRemote {
 
 	private EventDAO evDao;
+	private ContentCategoryDAO contentCategoryDao;
 	private ContentDAO contDao;
 	private CommentDAO comDao;
 	private NormalUserDAO nUserDao;
@@ -102,6 +106,7 @@ public class ServicesEvent implements ServicesEventRemote {
         try {
 			Context ctx = getContext();
 	        evDao = (EventDAO) ctx.lookup("EventDAOBean/local");  
+	        contentCategoryDao = (ContentCategoryDAO) ctx.lookup("ContentCategoryDAOBean/local");  
     		contDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
     		comDao = (CommentDAO) ctx.lookup("CommentDAOBean/local");
     		nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
@@ -140,8 +145,7 @@ public class ServicesEvent implements ServicesEventRemote {
     	return event;
     }
     
-	public List<DatatypeEventSummary> getSummaryEvents(int maxEvents,
-			int maxContentPerEvent) {
+	public List<DatatypeEventSummary> getSummaryEvents(int maxEvents) {
 		// Calculate one week before date
 		Calendar after = new GregorianCalendar();
 		after.set(Calendar.DAY_OF_YEAR, after.get(Calendar.DAY_OF_YEAR) - 7);
@@ -152,21 +156,14 @@ public class ServicesEvent implements ServicesEventRemote {
 		if (maxEvents < list.size()) {
 			list = list.subList(0, maxEvents);
 		}
-		List<DatatypeEventSummary> listDatatypes = TranslatorCollection.translateEventSummary(list);
-		
-		// add to the datatype the contents and translate them
-		Iterator<Event> itEvent = list.iterator();
-		Iterator<DatatypeEventSummary> itDatatype = listDatatypes.iterator();
-		while (itEvent.hasNext()){
-			Event ev = (Event) itEvent.next();
-			List<Content> contents = ev.getContents();
-			if (maxContentPerEvent < contents.size()) {
-				contents = contents.subList(0, maxContentPerEvent);
-			}
-			itDatatype.next().contents = TranslatorCollection.translateContent(contents);
-		}
-		return listDatatypes;
+		return TranslatorCollection.translateEventSummary(list);
 	}
+	
+	public DatatypeEvent getEventDetails(int eventID) {
+		Event event = getEvent(eventID);
+		return (DatatypeEvent)new TranslatorEvent().translate(event);
+	}
+	
 	
 	public List<DatatypeEventSummary> searchForEventByName(String name, int maxEvents){
 		name = name.toLowerCase();
@@ -230,19 +227,33 @@ public class ServicesEvent implements ServicesEventRemote {
 		return nUser.getMyEvents().contains(ev);
   	}
 
-	public DatatypeContent getGalleryPhotoAtPos(int eventID, int pos) {
+	public DatatypeCategory getCategoryContents(int eventID, int categoryID, int startAt, int count) {
 		// Verify existence of Event
-		Event event = (Event) evDao.findByID(eventID);
-		if (event == null) {
-			throw new EventNotFoundException();
+		Event event = getEvent(eventID);
+		CntCategory category = contentCategoryDao.findByIDInEvent(event, categoryID);
+		List<Content> list = category.getContents();
+		if (startAt > 0 && startAt <= list.size()) {
+			list = list.subList(startAt - 1, list.size());
+			if (list.size() > count) {
+				list = list.subList(0, count);
+			}
 		}
-		List<Content> listC = contDao.findByPosInGalleryEvent(event, pos);
-		if (listC == null) {
+		else {
+			list = null;
+		}
+		CntCategory cat = new CntCategory();
+		cat.setCatIdAuto(category.getCatIdAuto());
+		cat.setCategory(category.getCategory());
+		cat.setContents(list);
+		return (DatatypeCategory)new TranslatorCategory().translate(cat);
+	}
+	
+	public DatatypeContent getContentDetails(int contentID, String username) throws ContentNotFoundException {
+		Content content = getContentAndVerifyPermission(username, contentID);
+		if (content == null) {
 			throw new ContentNotFoundException();
-		} 
-		Content c = listC.get(0);
-		TranslatorContent trans = new TranslatorContent();
-		return (DatatypeContent) trans.translate(c);
+		}
+		return (DatatypeContent)new TranslatorContent().translate(content);
 	}
 	
 	public List<DatatypeUser> getUsersForTag(int eventID, int contentID){
@@ -392,41 +403,14 @@ public class ServicesEvent implements ServicesEventRemote {
 	    return result;
 	}
 	
-	public byte[] getContent(int eventID, String username, int contentID) {
-		if (!isUserRelatedToEvent(eventID, username)) {
-			throw new UserNotRelatedToEventException();
-		}
-		Event event = getEvent(eventID);
-		Content content = contDao.findByIDInEvent(event, contentID);
-		if (content == null) {
-			throw new ContentNotFoundException();
-		}
+	public byte[] getContent(String username, int contentID, int thumbnail) {
+		Content content = getContentAndVerifyPermission(username, contentID);
 		if (content instanceof Photo) {
-			return fileSystem.readFile(content.getUrl());
+			return fileSystem.readFile(content.getUrl(), thumbnail);
 		}
 		return null;
 	}
-	
-	public byte[] getContentThumbnail(int eventID, String username, int contentID) {
 
-		Event event = getEvent(eventID);
-		Content content = contDao.findByIDInEvent(event, contentID);
-		if (content == null) {
-			throw new ContentNotFoundException();
-		}
-		
-		// Si la imagen es la primera del album, la dejo ver
-		if (content.getPos() !=0 && !isUserRelatedToEvent(eventID, username)) {
-			throw new UserNotRelatedToEventException();
-		}
-
-		if (content instanceof Photo) {
-			return fileSystem.getThumbnail(content.getUrl());
-		}
-		return null;
-	}
-	
-	
 	private List<DatatypeContent> orderContentByInt(List<DatatypeContent> list, Content contenido, HashMap<Integer,Integer> vals) {
 
 		DatatypeContent newContent = (DatatypeContent)(new TranslatorContent().translate(contenido));
@@ -560,15 +544,14 @@ public class ServicesEvent implements ServicesEventRemote {
 	}
 
 	
-	public void commentContent(int eventID, int contentID, String textComment,
+	public void commentContent(int contentID, String textComment,
 			String userCommenter) throws Exception {		
-		// Verify existence of Event
-		Event event = getEvent(eventID);
 		// Verify existence of content
-		Content cont = (Content) contDao.findByIDInEvent(event, contentID);
+		Content cont = (Content) contDao.findByID(contentID);
 		if (cont == null) {
 			throw new ContentNotFoundException();
 		}
+		//TODO verify that user is related to event?
 		// Verify existence of user who is commenting
 		User user = (User) nUserDao.findByID(userCommenter);
 		if (user == null || (!(user instanceof NormalUser))) {
@@ -592,15 +575,14 @@ public class ServicesEvent implements ServicesEventRemote {
 		comDao.persist(com);
 	}
 
-	public void rateContent(int eventID, int contentID, int rating,
+	public void rateContent(int contentID, int rating,
 		String userId) throws Exception {
-		// Verify existence of Event
-		Event event = getEvent(eventID);
 		// Verify existence of content
-		Content cont = (Content) contDao.findByIDInEvent(event, contentID);
+		Content cont = (Content) contDao.findByID(contentID);
 		if (cont == null) {
 			throw new ContentNotFoundException();
 		}
+		//TODO verify that user is related to event?
 		// Verify existence of user who is commenting
 		User user = (User) nUserDao.findByID(userId);
 		if (user == null || (!(user instanceof NormalUser))) {
@@ -622,17 +604,20 @@ public class ServicesEvent implements ServicesEventRemote {
 		
 		ratingDao.persist(rate);		
 	}
-
-	public DatatypeContent getContentInfo(int eventID, int contentID) {
-		Event event = getEvent(eventID);
-		Content content = contDao.findByIDInEvent(event, contentID);
+	
+	private Content getContentAndVerifyPermission(String username, int contentID) {
+		Content content = contDao.findByID(contentID);
 		if (content == null) {
 			throw new ContentNotFoundException();
 		}
-		TranslatorContent trans = new TranslatorContent();
-		return (DatatypeContent) trans.translate(content);
+		if (content.getEvent().getCover().equals(content)) {
+			return content;
+		}
+		if (!isUserRelatedToEvent(content.getEvent().getEvtIdAuto(), username)) {
+			throw new UserNotRelatedToEventException();
+		}
+		return content;
 	}
-	
 	
 	public DatatypeEventSummary createEvent(String name, String description,
 			java.util.Date date, int duration, String address, String creator,
