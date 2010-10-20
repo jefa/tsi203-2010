@@ -14,7 +14,9 @@ public class TranslatorEventSummary implements ITranslatable {
 		dat.setEvtId(ent.getEvtIdAuto());
 		dat.setDate(ent.getDate());
 		dat.setDescription(ent.getDescription());
-		dat.setCoverId(ent.getCover().getCntIdAuto());
+		if (ent.getCover() != null) {
+			dat.setCoverId(ent.getCover().getCntIdAuto());
+		}
 		if(ent.getEvtCategory() != null) {
 			dat.setEventCategory(ent.getEvtCategory().getCategory());
 		}

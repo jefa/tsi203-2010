@@ -18,7 +18,7 @@
 		
 		<h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" required="true"/>
 		<a4j:commandButton action="#{SearchEventMB.searchEventsByName}" value="Search" 
-		    reRender="output" id="searchByName"/>
+		    reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate" id="searchByName"/> 
 		<br/>		
 	</h:form>
 
@@ -34,7 +34,7 @@
                     datePattern="d/MMM/y"  showApplyButton="false"  
                     cellWidth="24px" cellHeight="22px" style="width:200px"/>
           	<a4j:commandButton action="#{SearchEventMB.searchEventsByDate}" value="Search" 
-		    	reRender="output" id="searchByDate"/>
+		    	reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate" id="searchByDate"/>
 
 	</h:form>
 
@@ -49,7 +49,8 @@
 	        defaultLabel="Enter value"
 	        value="#{SearchEventMB.eventFilter}" 
 	        suggestionValues="#{SearchEventMB.filterByDateOptions}" >
-	        <a4j:support event="onselect" action="#{SearchEventMB.filterEvents}" reRender="output" />		
+	        <a4j:support event="onselect" action="#{SearchEventMB.filterEvents}" 
+	        	reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate" />		
 	    </rich:comboBox> 
 	</h:form>
 
@@ -72,14 +73,10 @@
 				<br />
 				<h:outputText value="Fecha:" styleClass="label"></h:outputText>
 				<h:outputText value="#{resultado.formattedDate} " />
-				<div style="border: thin solid black; margin-bottom: 10px"><rich:dataList
-					var="contenido" value="#{resultado.contents}">
-					<h:graphicImage
-						value="/ContentFeeder?eventID=#{contenido.eventId}&#38;username=#{loginMB.userName}&#38;id=#{contenido.contId}&#38;thb=1" />
-				</rich:dataList></div>
+				<h:graphicImage value="/ContentFeeder?id=#{resultado.coverId}&#38;thb=1" />
 			</rich:dataList>		
-		<h:outputText value="#{SearchEventMB.mensaje}" 
-			style="font-style:italic" rendered="#{empty SearchEventMB.eventResults}"/>
+			<h:outputText value="#{SearchEventMB.mensaje}" 
+				style="font-style:italic" rendered="#{empty SearchEventMB.eventResults}"/>
 		</a4j:outputPanel>
 		<br/>
 	</h:form>			

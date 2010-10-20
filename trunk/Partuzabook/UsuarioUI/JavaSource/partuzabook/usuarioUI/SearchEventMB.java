@@ -101,7 +101,6 @@ public class SearchEventMB {
 	}
 	
 	public List<DatatypeEventSummary> searchEventsByName() {
-		this.eventDateSearched = null;
 		try {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
@@ -109,6 +108,9 @@ public class SearchEventMB {
 			if (this.eventResults == null){
 				this.mensaje = "No se han encontrado resultados";
 			}
+			this.eventDateSearched = null;
+			this.eventFilter = "";
+			this.eventNameSearched = "";
 			return this.eventResults;
 		} catch (NamingException e) {
 			e.printStackTrace();
@@ -125,6 +127,9 @@ public class SearchEventMB {
 			if (this.eventResults == null){
 				this.mensaje = "No se han encontrado resultados";
 			}
+			this.eventDateSearched = null;
+			this.eventFilter = "";
+			this.eventNameSearched = "";
 			return this.eventResults;
 		} catch (NamingException e) {
 			e.printStackTrace();
@@ -149,6 +154,9 @@ public class SearchEventMB {
 			if (this.eventResults == null){
 				this.mensaje = "No se han encontrado resultados";
 			}
+			this.eventDateSearched = null;
+			this.eventFilter = "";
+			this.eventNameSearched = "";
 			return this.eventResults;
 		} catch (NamingException e) {
 			e.printStackTrace();

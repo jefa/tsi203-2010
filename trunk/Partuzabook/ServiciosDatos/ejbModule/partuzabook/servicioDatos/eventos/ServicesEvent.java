@@ -180,8 +180,14 @@ public class ServicesEvent implements ServicesEventRemote {
 				int i = 0;
 				while (i < substr.length && cant < maxEvents) {
 					List<Event> listSubstr = evDao.findBySimilarName(substr[i]); 
-					cant += listSubstr.size();
-					list.addAll(listSubstr);
+					Iterator<Event> it = listSubstr.iterator();
+					while (it.hasNext()) {
+						Event ev = it.next();
+						if (!list.contains(ev)) {
+							list.add(ev);
+						}	
+					}
+					cant = list.size();
 					i++;
 				}
 			}
