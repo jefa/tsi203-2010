@@ -81,6 +81,14 @@
   <servlet-name>UserImageFeeder</servlet-name>
   <url-pattern>/UserImageFeeder</url-pattern>
  </servlet-mapping>
+ <servlet>
+  <servlet-name>MailController</servlet-name>
+  <servlet-class>partuzabook.usuarioUI.MailController</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>MailController</servlet-name>
+  <url-pattern>/sendmail</url-pattern>
+ </servlet-mapping>
  <welcome-file-list>
   <welcome-file>/index.jsp</welcome-file>
  </welcome-file-list>
