@@ -16,4 +16,25 @@
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginaInicio.xhtml"
   PATH="/paginaInicio.xhtml" SHAPE="256,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#login.xhtml" PATH="/login.xhtml"
+  SHAPE="32,161,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#login.xhtml:0" NAME="item"
+   PATH="/login.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="success:#{loginMB.validUser}:#paginaInicio.xhtml" NAME="output"
+    PATH="/paginaInicio.xhtml" TARGET="rules:#paginaInicio.xhtml"
+    TITLE="#{loginMB.validUser}:success" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="failure:#{loginMB.validUser}:#login.xhtml"
+    NAME="output1" PATH="/login.xhtml" TARGET="rules:#login.xhtml"
+    TITLE="#{loginMB.validUser}:failure" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*" PATH="*" SHAPE="48,305,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:0" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="logoutsuccess:#{loginMB.logout}:#login.xhtml" NAME="output"
+    PATH="/login.xhtml" TARGET="rules:#login.xhtml"
+    TITLE="#{loginMB.logout}:logoutsuccess" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
 </PROCESS>
