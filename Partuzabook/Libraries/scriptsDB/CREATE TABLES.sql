@@ -185,7 +185,6 @@ ALTER TABLE "comment" OWNER TO postgres;
 CREATE TABLE mods
 (
   usr_id character varying(30) NOT NULL,
-  reg_date timestamp without time zone NOT NULL,
   evt_id integer NOT NULL,
   CONSTRAINT "PK_MODS" PRIMARY KEY (usr_id, evt_id),
   CONSTRAINT "FK_MODS_USR" FOREIGN KEY (usr_id)
@@ -237,7 +236,6 @@ ALTER TABLE notifications OWNER TO postgres;
 CREATE TABLE participants
 (
   usr_id character varying(30) NOT NULL,
-  reg_date timestamp without time zone NOT NULL,
   evt_id integer NOT NULL,
   CONSTRAINT "PK_PARTICIPANTS" PRIMARY KEY (usr_id, evt_id),
   CONSTRAINT "FK_PRT_EVT" FOREIGN KEY (evt_id)
