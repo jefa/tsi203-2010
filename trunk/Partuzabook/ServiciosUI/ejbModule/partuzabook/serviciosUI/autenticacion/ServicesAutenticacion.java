@@ -59,4 +59,18 @@ public class ServicesAutenticacion implements ServicesAutenticacionRemote {
     		return false;
     	}
     }
+    
+    public boolean verifyAdminUserAndPassword(String username, String password) {
+    	if (servUser.existsAdminUser(username)) {
+    		if (servUser.getAdminUserPassword(username).equals(password)) {
+    			return true;
+    		}
+    		else {
+    			return false;
+    		}
+    	}
+    	else {
+    		return false;
+    	}
+    }
 }

@@ -10,4 +10,11 @@ public interface ServicesAutenticacionRemote {
      * @param password	- Password
      */ 
 	public boolean verifyUserAndPassword(String username, String password) ;
+	
+	/**
+     * Returns true if an admin exists and the password is correct
+     * @param username				- Username
+     * @param password	- Password
+     */ 
+	public boolean verifyAdminUserAndPassword(String username, String password);
 }
