@@ -61,7 +61,12 @@
 				<br/><br/><br/>
 				
 				<center>
-				<h:commandButton value="Crear el evento" action="#{EventMB.createEvent}"/><br/>
+				        <h:outputText value="#{loginMB.userName}"/>
+				<h:commandButton value="Crear el evento" action="#{EventMB.createEvent}">
+					<f:setPropertyActionListener value="#{loginMB.userName}"
+								target="#{EventMB.creator}" />
+				</h:commandButton>
+				<br/>
 				</center>
 			</rich:panel>
 		</f:view>

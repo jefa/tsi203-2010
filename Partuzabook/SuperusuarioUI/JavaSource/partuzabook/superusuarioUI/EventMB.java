@@ -55,7 +55,7 @@ public class EventMB {
 		try {
 			ctx = getContext();
 			ServicesEventRemote serviceEvent = (ServicesEventRemote)ctx.lookup(SERVICE_EVENT);
-			DatatypeEventSummary event = serviceEvent.createEvent(name, description, date, duration, address, "ggadmin", moderated, category);
+			DatatypeEventSummary event = serviceEvent.createEvent(name, description, date, duration, address, creator, moderated, category);
 			//Preguntar si es moderado o no primero
 			serviceEvent.addModtoEvent(event.getEvtId(), mods);
 			mods = null;			

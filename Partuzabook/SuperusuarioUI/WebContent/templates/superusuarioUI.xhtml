@@ -92,13 +92,8 @@ jQuery.noConflict();
 	<div id="nav-content" class="clearfix">
 	<div class="menu-main-menu-container"><ul id="menu-main-menu" class="sf-menu menu clearfix sf-js-enabled sf-shadow">
 <li class="menu-item menu-item-type-taxonomy"><a href="paginaInicio.jsf">Home</a></li>
-<li class="menu-item menu-item-type-taxonomy"><a href="busquedaEventos.jsf">Busqueda</a></li>
 <li class="menu-item menu-item-type-taxonomy"><a href="event.jsf">Crear Evento</a></li>
-
-			<li class="menu-item menu-item-type-taxonomy"><h:form><h:commandLink value="Mi perfil" action="verMiPerfil">
-				<f:setPropertyActionListener value="#{loginMB.userName}" target="#{PublicProfile.userId}" />
-			</h:commandLink></h:form></li>	
-			<li class="menu-item menu-item-type-taxonomy"><h:form><h:commandLink value="Logout" action="#{loginMB.logout}"></h:commandLink></h:form></li>
+<li class="menu-item menu-item-type-taxonomy"><h:form><h:commandLink value="Logout" action="#{loginMB.logout}"></h:commandLink></h:form></li>
 </ul></div>		
 	</div><!-- #nav-content -->
 </div><!-- #nav -->
