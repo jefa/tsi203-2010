@@ -48,6 +48,19 @@ public interface ServicesUserRemote {
 	public String getNormalUserPassword(String username);
 	
 	/**
+	 * Returns true if exists an admin user with id username
+	 * @param username		- Id to search for user
+	 */
+	public boolean existsAdminUser(String username);
+	
+	/**
+	 * Returns the password for the admin with id username
+	 * @param username		- Id for the user
+	 * @return				- User's password
+	 */
+	public String getAdminUserPassword(String username);
+	
+	/**
 	 * Returns a list of the latest X events the user is related to.
 	 * @param username		- Id for the user
 	 * @return				- List of events including a subset of its contents

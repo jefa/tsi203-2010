@@ -15,7 +15,9 @@ import javax.naming.InitialContext;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
+import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
+import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
@@ -34,6 +36,7 @@ public class ServicesUser implements ServicesUserRemote {
 	private static final String DEFAULT_IMAGE = "profile/avatar_default.png";
 	
 	private NormalUserDAO nUserDao;
+	private AdminDAO adminDao;
 	private FileSystemLocal fileSystem;
 //	private NotificationDAO notifDao;
 		
@@ -54,6 +57,7 @@ public class ServicesUser implements ServicesUserRemote {
 	        Context ctx = new InitialContext(properties);
 	        nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local"); 
     		fileSystem = (FileSystemLocal) ctx.lookup("FileSystem/local");
+    		adminDao = (AdminDAO) ctx.lookup("AdminDAOBean/local");
 //	        notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
 		}
         catch (Exception e) {
@@ -109,6 +113,18 @@ public class ServicesUser implements ServicesUserRemote {
 		return user;
 	}
 	
+	public boolean existsAdminUser(String username) {
+		return adminDao.findByID(username) !=null;
+	}
+	
+	private Admin getAdminUser(String username) {
+		Admin user = adminDao.findByID(username);
+		if (user == null) {
+			throw new UserNotFoundException();
+		} 
+		return user;
+	}
+	
 	public DatatypeUser getUserForPublicProfile(String username) {
 		return (DatatypeUser)new TranslatorUser().translate(getNormalUser(username));
 	}
@@ -142,6 +158,10 @@ public class ServicesUser implements ServicesUserRemote {
 
 	public String getNormalUserPassword(String username) {
 		return getNormalUser(username).getPassword();
+	}
+	
+	public String getAdminUserPassword(String username) {
+		return getAdminUser(username).getPassword();
 	}
 
 	public byte[] getUserAvatar(String username) {
