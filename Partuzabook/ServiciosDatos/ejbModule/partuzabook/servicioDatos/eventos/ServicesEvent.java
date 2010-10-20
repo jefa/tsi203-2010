@@ -30,6 +30,7 @@ import partuzabook.datos.persistencia.DAO.ContentDAO;
 import partuzabook.datos.persistencia.DAO.EventDAO;
 import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.DAO.EvtCategoryDAO;
+import partuzabook.datos.persistencia.DAO.ModeratedEventDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.DAO.PhotoDAO;
@@ -76,6 +77,7 @@ import partuzabook.utils.TranslatorCollection;
 public class ServicesEvent implements ServicesEventRemote {
 
 	private EventDAO evDao;
+	private ModeratedEventDAO mevDao;
 	private ContentCategoryDAO contentCategoryDao;
 	private ContentDAO contDao;
 	private CommentDAO comDao;
@@ -106,6 +108,7 @@ public class ServicesEvent implements ServicesEventRemote {
         try {
 			Context ctx = getContext();
 	        evDao = (EventDAO) ctx.lookup("EventDAOBean/local");  
+	        mevDao = (ModeratedEventDAO) ctx.lookup("ModeratedEventDAOBean/local");
 	        contentCategoryDao = (ContentCategoryDAO) ctx.lookup("ContentCategoryDAOBean/local");  
     		contDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
     		comDao = (CommentDAO) ctx.lookup("CommentDAOBean/local");
@@ -688,8 +691,13 @@ public class ServicesEvent implements ServicesEventRemote {
 			NormalUser newMod = it.next();
 			if(!actualMods.contains(newMod.getUsername())){
 				mEvent.getMyMods().add(newMod);
+				newMod.getMyModeratedEvents().add(mEvent);
+				//nUserDao.persist(newMod);
 			}
 		}
+		
+		mevDao.persist(mEvent);
+		
 		return (DatatypeEventSummary)new TranslatorEventSummary().translate(mEvent);
 	}
 
