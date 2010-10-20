@@ -33,6 +33,7 @@ public class PaginaInicioMB {
 	private List<DatatypeEventSummary> misEventosRecientes;
 	private List<DatatypeNotification> misNotificaciones;
 	private List<DatatypeNotification> misNotificacionesNoLeidas;
+	private String toggleState = "closed";
 	
 	
 	public PaginaInicioMB(){
@@ -209,5 +210,12 @@ public class PaginaInicioMB {
 	public void setMisNotificacionesNoLeidas(ArrayList<DatatypeNotification> list) {
 		this.misNotificacionesNoLeidas = list;
 	}
+	
+	public String getToggleState() {
+		return this.toggleState;
+	}
 
+	public void setToggleState(String state){
+		this.toggleState = state;
+	}
 }

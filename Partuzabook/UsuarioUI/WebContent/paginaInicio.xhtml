@@ -12,28 +12,39 @@
 	<ui:define name="body">
 		
 
- 	<a4j:outputPanel id="output">  
- 		<h:form id="notificaciones">
-			<rich:dataList var="resultado"  rendered="#{not empty paginaInicioMB.misNotificacionesNoLeidas}"
-				value="#{paginaInicioMB.misNotificacionesNoLeidas}" rows="10">				
-				<h:outputText value="Fecha:"  ></h:outputText>
-				<h:outputText value="#{resultado.formattedDate}"></h:outputText>
-				<br/>
-				<h:outputText value="Notificacion:" ></h:outputText>
-				<h:outputText value="#{resultado.text } "></h:outputText>
-				<br/>
-			</rich:dataList>		
-		<h:outputText value="No unread notifications" 
-			style="font-style:italic" rendered="#{empty paginaInicioMB.misNotificacionesNoLeidas}"/>
-		</h:form>
-	</a4j:outputPanel> 			
-		
-		<input type="button" onclick="hideDiv({duration:0.7})" value="Hide" />
-		<input type="button" onclick="showDiv()" value="Show" />
-		
-		<rich:effect  name="hideDiv"  for="notificaciones" type="Fade" />
-		<rich:effect  name="showDiv"  for="notificaciones" type="Appear" />
-		
+  	<rich:togglePanel value="#{paginaInicioMB.toggleState}" switchType="client"
+    	stateOrder="closed,opened">
+	 
+ 	<f:facet name="closed">
+            <rich:toggleControl switchToState="opened">
+                <strong>Ver Notificaciones</strong>
+            </rich:toggleControl>
+     </f:facet>
+
+ 	<f:facet name="opened">
+	 	<a4j:outputPanel id="output">  
+	 		<h:form id="notificaciones">
+				<rich:dataList var="resultado"  rendered="#{not empty paginaInicioMB.misNotificacionesNoLeidas}"
+					value="#{paginaInicioMB.misNotificacionesNoLeidas}" rows="10">				
+					<h:outputText value="Fecha:"  ></h:outputText>
+					<h:outputText value="#{resultado.formattedDate}"></h:outputText>
+					<br/>
+					<h:outputText value="Notificacion:" ></h:outputText>
+					<h:outputText value="#{resultado.text } "></h:outputText>
+					<br/>
+				</rich:dataList>		
+			<h:outputText value="No unread notifications" 
+				style="font-style:italic" rendered="#{empty paginaInicioMB.misNotificacionesNoLeidas}"/>
+			</h:form>
+            <rich:toggleControl switchToState="closed">
+                <strong>Cerrar</strong>
+            </rich:toggleControl>
+		</a4j:outputPanel> 			
+     </f:facet>
+	
+	</rich:togglePanel>	
+
+	<br/>		
 		<h:form id="eventosRecientes">
 			<rich:dataGrid var="evento" columns="1" elements ="8" width="100%"
 				value="#{paginaInicioMB.eventosRecientes}">
