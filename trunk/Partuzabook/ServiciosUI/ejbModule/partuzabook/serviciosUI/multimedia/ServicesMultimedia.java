@@ -51,18 +51,14 @@ public class ServicesMultimedia implements ServicesMultimediaRemote {
 
     
 	public List<DatatypeContent> getBestQualifiedPictures(int length) {
-		return servEvent.getBestQualifiedPictures(length);
+		return servEvent.getBestRankedContent(length);
 	}
 	
 	
 	public List<DatatypeContent> getMostCommentedPictures(int length) {
-		return servEvent.getMostCommentedPictures(length);
+		return servEvent.getMostCommentedContent(length);
 	}
 	
-	
-	public List<DatatypeMostTagged> getMostTagged(int length) {
-		return servEvent.getMostTagged(length);
-	}
 	
 	public boolean isUserRelatedToEvent(int eventID, String user){
 		return servEvent.isUserRelatedToEvent(eventID, user);

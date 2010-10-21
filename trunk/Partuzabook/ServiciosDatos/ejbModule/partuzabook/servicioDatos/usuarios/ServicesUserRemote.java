@@ -4,6 +4,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
@@ -94,11 +95,26 @@ public interface ServicesUserRemote {
      * @param username		- Id for the user
      * @return				- The image avatar of the specified user
      * */
-    public byte[] getUserAvatar(String username);
+    public byte[] getUserAvatar(String username, int thumbnail);
     
     /**
      * Returns all the NormalUsers in the server
      * @return				- All the normal users in the server
      * */
     public List<DatatypeUser> findAllNormalUsers();
+	
+	/**
+	 * Returns  a list of the best qualified pictures in all the server
+	 * @param lenght - length of the list to return
+	 */
+	public List<DatatypeMostTagged> getMostTagged(int lenght);
+
+	/**
+	 * Returns the data for the public content
+	 * @param type
+	 * @param pos
+	 * @param thumbnail
+	 * @return
+	 */
+	public byte[] getPublicAvatar(String type, int pos, int thumbnail);
 }

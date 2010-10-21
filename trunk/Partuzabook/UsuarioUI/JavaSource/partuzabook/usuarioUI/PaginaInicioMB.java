@@ -25,8 +25,8 @@ public class PaginaInicioMB {
 	private int cantFotosMejorCalificadas;
 	private List<DatatypeContent> fotosMasComentadas;
 	private int cantFotosMasComentadas;
-	private List<DatatypeMostTagged> fotosMasTaggeadas;
-	private int cantFotosMasTaggeadas;
+	private List<DatatypeMostTagged> usuariosMasTaggeados;
+	private int cantUsuariosMasTaggeados;
 	
 	// Para el usuario logueado
 	private String username;
@@ -74,7 +74,7 @@ public class PaginaInicioMB {
 		try {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			this.fotosMejorCalificadas = service.getBestQualifiedPictures(10);
+			this.fotosMejorCalificadas = service.getBestRankedContent(getCantFotosMejorCalificadas());
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -87,12 +87,12 @@ public class PaginaInicioMB {
 	}
 	
 	public int getCantFotosMejorCalificadas(){
-		int cant = 0;
+		cantFotosMejorCalificadas = 8;
 		if (this.fotosMejorCalificadas != null) {
-			cant = this.fotosMejorCalificadas.size();
+			cantFotosMejorCalificadas = this.fotosMejorCalificadas.size();
 		}
-		if (cant > 4) {
-			this.cantFotosMejorCalificadas = 4;
+		if (cantFotosMejorCalificadas > 8) {
+			cantFotosMejorCalificadas = 8;
 		}
 		return this.cantFotosMejorCalificadas;
 	}
@@ -105,7 +105,7 @@ public class PaginaInicioMB {
 		try {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			this.fotosMasComentadas = service.getMostCommentedPictures(10);
+			this.fotosMasComentadas = service.getMostCommentedContent(getCantFotosMasComentadas());
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -118,12 +118,12 @@ public class PaginaInicioMB {
 	}
 
 	public int getCantFotosMasComentadas(){
-		int cant = 0;
+		cantFotosMasComentadas = 8;
 		if (this.fotosMasComentadas != null) {
-			cant = this.fotosMasComentadas.size();
+			cantFotosMasComentadas = this.fotosMasComentadas.size();
 		}
-		if (cant > 4) {
-			this.cantFotosMasComentadas = 4;
+		if (cantFotosMasComentadas > 8) {
+			this.cantFotosMasComentadas = 8;
 		}
 		return this.cantFotosMasComentadas;
 	}
@@ -132,35 +132,35 @@ public class PaginaInicioMB {
 		this.cantFotosMasComentadas = cant;
 	}
 
-	public List<DatatypeMostTagged> getFotosMasTaggeadas() {
+	public List<DatatypeMostTagged> getUsuariosMasTaggeados() {
 		try {
 			Context ctx = getContext();
-			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			this.fotosMasTaggeadas = service.getMostTagged(10);
+			ServicesUserRemote service = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");	
+			this.usuariosMasTaggeados = service.getMostTagged(getCantUsuariosMasTaggeados());
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
-		return this.fotosMasTaggeadas;	
+		return this.usuariosMasTaggeados;	
 	}
 
-	public void setFotosMasTaggeadas(ArrayList<DatatypeMostTagged> list) {
-		this.fotosMasTaggeadas = list;
+	public void setUsuariosMasTaggeados(ArrayList<DatatypeMostTagged> list) {
+		this.usuariosMasTaggeados = list;
 	}
 
-	public int getCantFotosMasTaggeadas(){
-		int cant = 0;
-		if (this.fotosMasTaggeadas != null) {
-			cant = this.fotosMasTaggeadas.size();
+	public int getCantUsuariosMasTaggeados(){
+		cantUsuariosMasTaggeados = 8;
+		if (this.usuariosMasTaggeados != null) {
+			cantUsuariosMasTaggeados = this.usuariosMasTaggeados.size();
 		}
-		if (cant > 4) {
-			this.cantFotosMasTaggeadas = 4;
+		if (cantUsuariosMasTaggeados > 8) {
+			this.cantUsuariosMasTaggeados = 8;
 		}
-		return this.cantFotosMasTaggeadas;
+		return this.cantUsuariosMasTaggeados;
 	}
 
-	public void setCantFotosMasTaggeadas(int cant){
-		this.cantFotosMasTaggeadas = cant;
+	public void setCantUsuariosMasTaggeados(int cant){
+		this.cantUsuariosMasTaggeados = cant;
 	}
 	
 	public List<DatatypeEventSummary> getMisEventosRecientes() {

@@ -7,11 +7,25 @@ public class DatatypeMostTagged implements Serializable {
 		
 	public DatatypeUser user;
 	
-	public String eventName;
-	
 	public Integer cantTags;
 	
 	public DatatypeMostTagged() {
 		
+	}
+
+	public DatatypeUser getUser() {
+		return user;
+	}
+
+	public void setUser(DatatypeUser user) {
+		this.user = user;
+	}
+
+	public Integer getCantTags() {
+		return cantTags;
+	}
+
+	public void setCantTags(Integer cantTags) {
+		this.cantTags = cantTags;
 	}
 }

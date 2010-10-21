@@ -43,8 +43,36 @@ public class UserImageFeeder extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 
-		byte[] data = getServicesUpload().getUserAvatar(request.getParameter("username"));
-				 
+		int thumbnail = 0;
+		if (request.getParameter("thb") != null) {
+			try {
+				thumbnail = Integer.parseInt(request.getParameter("thb"));
+				if (thumbnail < 50) {
+					thumbnail = 50;
+				}
+			}
+			catch(NumberFormatException e) {
+
+			}
+		}
+		int pos = 1;
+		if (request.getParameter("pos") != null) {
+			try {
+				pos = Integer.parseInt(request.getParameter("pos"));
+			}
+			catch (NumberFormatException e) {
+				
+			}
+		}
+		
+		byte[] data = null;
+		if (request.getParameter("username") != null) {
+			data = getServicesUpload().getUserAvatar(request.getParameter("username"), thumbnail);
+		}
+		else if	(request.getParameter("mostTagged") != null) {
+			data = getServicesUpload().getPublicAvatar("mostTagged", pos, thumbnail);
+		}
+		
 		ServletOutputStream stream = response.getOutputStream();
 		stream.write(data);
 	}

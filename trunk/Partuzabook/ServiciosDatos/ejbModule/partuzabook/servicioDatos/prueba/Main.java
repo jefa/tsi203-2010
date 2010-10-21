@@ -33,7 +33,7 @@ public class Main {
 	        ServicesUserRemote usr = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");
 	        if (usr != null) {
 	        	System.out.println("**** Testeando CU Ver pagina de Inicio ****");
-	        	String usuario = "vero";
+	        	String usuario = "veromanduk";
 	        	System.out.println("1. Invocando getUpdateNotifications para " + usuario);
 	        	List<DatatypeNotification> list = usr.getUpdateNotifications(usuario);
 		        if (list == null){
@@ -71,17 +71,17 @@ public class Main {
 		        	}
 	        	}	        	
 	        	System.out.println("4. Invocando getMostTagged");
-	        	List<DatatypeMostTagged> masTaggeados = evt.getMostTagged(5);
+	        	List<DatatypeMostTagged> masTaggeados = usr.getMostTagged(5);
 	        	if (masTaggeados == null) {
 		        	System.out.println("   Result: NULL");
 		        } else {
 		        	for (int i = 0; i < masTaggeados.size(); i++) {
-		        		System.out.println("   Para el evento " + masTaggeados.get(i).eventName + " el mas taggeado es:  " 
+		        		System.out.println("   El mas taggeado es:  " 
 		        				+ masTaggeados.get(i).user.username + " con " + masTaggeados.get(i).cantTags + " tags");
 		        	}	        		
 	        	}	
 	        	System.out.println("5. Invocando getMostCommentedPictures");
-	        	List<DatatypeContent> masComentadas = evt.getMostCommentedPictures(5);
+	        	List<DatatypeContent> masComentadas = evt.getMostCommentedContent(5);
 	        	if (masComentadas == null) {
 		        	System.out.println("   Result: NULL");
 		        } else {
@@ -91,7 +91,7 @@ public class Main {
 		        	}	        		
 	        	}	
 	        	System.out.println("6. Invocando getBestQualifiedPictures");
-	        	List<DatatypeContent> mayorRating = evt.getBestQualifiedPictures(5);
+	        	List<DatatypeContent> mayorRating = evt.getBestRankedContent(5);
 	        	if (mayorRating == null) {
 		        	System.out.println("   Result: NULL");
 		        } else {
@@ -102,8 +102,8 @@ public class Main {
 	        	}
 	        	System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - ");
 	        	System.out.println("**** Testeando CU Navegar Galería de Fotos ****");
-	        	String usuario = "vero";
-	        	int eventID = 1;
+	        	String usuario = "veromanduk";
+	        	int eventID = 1004;
 	        	int pos = 0;
 	        	System.out.println("1. Invocando isUserRelatedToEvent para el event con ID = 1 y user vero");
 	        	if (!evt.isUserRelatedToEvent(eventID, usuario)) {

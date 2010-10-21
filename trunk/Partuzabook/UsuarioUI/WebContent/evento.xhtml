@@ -30,6 +30,7 @@
 			<h:commandButton value="Enviar solicitud" />
 		</h:panelGroup>
 		<h:panelGroup id="authorizedContent" rendered="#{eventoMB.validUserForContext}">
+			<strong><h:outputText value="Categorías" /></strong>
 			<rich:dataGrid id="categories" var="category" elements="8" value="#{eventoMB.evento.contentCategories}"
 				width="100%" style="text-align:center;">
 				<rich:panel>

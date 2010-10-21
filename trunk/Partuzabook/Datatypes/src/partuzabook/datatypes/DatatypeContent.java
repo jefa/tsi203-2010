@@ -12,11 +12,11 @@ public class DatatypeContent implements Serializable {
 		this.contId = contId;
 	}
 
-	public Integer getAvgScore() {
+	public Double getAvgScore() {
 		return avgScore;
 	}
 
-	public void setAvgScore(Integer avgScore) {
+	public void setAvgScore(Double avgScore) {
 		this.avgScore = avgScore;
 	}
 
@@ -104,7 +104,7 @@ public class DatatypeContent implements Serializable {
 	
 	public Integer eventId;  
 	
-	public Integer avgScore;
+	public Double avgScore;
 	
 	public List<DatatypeComment> comments;
 	

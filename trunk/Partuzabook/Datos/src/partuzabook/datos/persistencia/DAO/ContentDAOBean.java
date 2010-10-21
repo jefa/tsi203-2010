@@ -46,5 +46,18 @@ public class ContentDAOBean extends JpaDao<Integer, Content> implements ContentD
 		namedQuery.setParameter("event", event);
 		return (Integer)namedQuery.getResultList().size();	
 	}
+
+	@Override
+	public List<Integer> getBestRanked() {
+		Query namedQuery = em.createNamedQuery("Content.getBestRanked");
+		return (List<Integer>)namedQuery.getResultList();
+	}
+	
+	@Override
+	public List<Integer> getMostCommented() {
+		Query namedQuery = em.createNamedQuery("Content.getMostCommented");
+		List list = namedQuery.getResultList();
+		return (List<Integer>)list;
+	}
 	
 }

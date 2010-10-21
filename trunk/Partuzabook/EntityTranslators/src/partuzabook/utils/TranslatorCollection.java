@@ -11,6 +11,7 @@ import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeComment;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeTag;
 import partuzabook.datatypes.DatatypeUser;
@@ -22,12 +23,15 @@ import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.datos.persistencia.beans.Tag;
 import partuzabook.entityTranslators.ITranslatable;
+import partuzabook.entityTranslators.TranslatorBestRanked;
 import partuzabook.entityTranslators.TranslatorCategorySummary;
 import partuzabook.entityTranslators.TranslatorComment;
 import partuzabook.entityTranslators.TranslatorContent;
 import partuzabook.entityTranslators.TranslatorContentSummary;
 import partuzabook.entityTranslators.TranslatorEventSummary;
 import partuzabook.entityTranslators.TranslatorModUser;
+import partuzabook.entityTranslators.TranslatorMostCommented;
+import partuzabook.entityTranslators.TranslatorMostTagged;
 import partuzabook.entityTranslators.TranslatorNotification;
 import partuzabook.entityTranslators.TranslatorTag;
 import partuzabook.entityTranslators.TranslatorUser;
@@ -62,6 +66,18 @@ public class TranslatorCollection {
 		return translateList(from, new TranslatorTag());
 	}
 
+	public static List<DatatypeComment> translateComments(List<Comment> from) {
+		return translateList(from, new TranslatorComment());
+	}
+
+	public static List<String> translateModUser(List<NormalUser> from) {
+		return translateList(from, new TranslatorModUser());
+	}
+
+	public static List<DatatypeMostTagged> translateMostTagged(List<NormalUser> from) {
+		return translateList(from, new TranslatorMostTagged());
+	}
+
 	private static List translateList(List from,
 			ITranslatable translator) {
 		List to = new ArrayList();
@@ -83,14 +99,6 @@ public class TranslatorCollection {
 			}
 		}
 		return to;
-	}
-
-	public static List<DatatypeComment> translateComments(List<Comment> from) {
-		return translateList(from, new TranslatorComment());
-	}
-
-	public static List<String> translateModUser(List<NormalUser> from) {
-		return translateList(from, new TranslatorModUser());
 	}
 
 }

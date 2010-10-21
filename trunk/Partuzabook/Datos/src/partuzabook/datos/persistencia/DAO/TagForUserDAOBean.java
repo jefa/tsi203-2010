@@ -1,7 +1,6 @@
 package partuzabook.datos.persistencia.DAO;
 
 import java.util.List;
-
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
@@ -23,6 +22,13 @@ public class TagForUserDAOBean extends JpaDao<Integer, TagForUser> implements Ta
 	public List<TagForUser> findAll() {
 		Query namedQuery = em.createNamedQuery("TagForUser.findAll");
 		return (List<TagForUser>)namedQuery.getResultList();
+	}
+
+	@Override
+	public List<String> getMostTagged() {
+		Query q = em.createNamedQuery("TagForUser.getMostTagged");
+		List list = q.getResultList();
+		return (List<String>)list;
 	}
 
 
