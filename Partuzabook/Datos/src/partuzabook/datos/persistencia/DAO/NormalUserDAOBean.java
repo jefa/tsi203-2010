@@ -26,5 +26,4 @@ public class NormalUserDAOBean extends JpaDao<String, NormalUser> implements Nor
 		return (List<NormalUser>)namedQuery.getResultList();
 	}
 
-
 }

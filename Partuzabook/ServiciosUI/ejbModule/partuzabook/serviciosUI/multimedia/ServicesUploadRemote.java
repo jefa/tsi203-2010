@@ -8,6 +8,8 @@ import partuzabook.datatypes.DataTypeFile;
 @Remote
 public interface ServicesUploadRemote {
 	public List<String> uploadMultimedia(int eventID, String username, List<DataTypeFile> files);
-	byte[] getContent(String username, int contentID, int thumbnail);
-	byte[] getUserAvatar(String usrID);
+	public byte[] getContent(String username, int contentID, int thumbnail);
+	public byte[] getUserAvatar(String usrID, int thumbnail);
+	public byte[] getPublicContent(String type, int pos, int thumbnail);
+	public byte[] getPublicAvatar(String type, int pos, int thumbnail);
 }

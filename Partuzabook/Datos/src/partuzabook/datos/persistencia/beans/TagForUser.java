@@ -10,7 +10,10 @@ import javax.persistence.NamedQuery;
 @Entity
 @DiscriminatorValue("U")
 @NamedQueries({
-	@NamedQuery(name = "TagForUser.findAll", query = "SELECT o FROM TagForUser o")
+	@NamedQuery(name = "TagForUser.findAll", query = "SELECT o FROM TagForUser o"),
+	@NamedQuery(name = "TagForUser.getMostTagged",
+			query = "SELECT u.username FROM TagForUser t, IN(t.userTagged) u "
+				+ "GROUP BY u.username ORDER BY COUNT(*) DESC")
 })
 public class TagForUser extends Tag{
 	private static final long serialVersionUID = 1L;

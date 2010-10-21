@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "flags", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
-	@NamedQuery(name = "Tag.findAll", query = "SELECT o FROM Tag o")
+	@NamedQuery(name = "Tag.findAll", query = "SELECT o FROM Tag o"),
 	})
 public abstract class Tag implements Serializable {
 	private static final long serialVersionUID = 1L;

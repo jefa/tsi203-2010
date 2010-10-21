@@ -15,5 +15,8 @@ public interface ContentDAO extends Dao<Integer, Content>{
 	public List<Content> findByPosInGalleryEvent(Event event, int pos);
 	
 	public Integer findNextPosInGalleryEvent(Event event);
-		
+
+	public List<Integer> getBestRanked();
+	
+	public List<Integer> getMostCommented();
 }

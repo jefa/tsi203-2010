@@ -19,11 +19,6 @@ public interface ServicesMultimediaRemote {
 	 */
 	public List<DatatypeContent> getMostCommentedPictures(int length);
 	
-	/**
-	 * Returns  a list of the best qualified pictures in all the server
-	 */
-	public List<DatatypeMostTagged> getMostTagged(int length);
-	
 	public boolean isUserRelatedToEvent(int eventID, String user);
 	
 }

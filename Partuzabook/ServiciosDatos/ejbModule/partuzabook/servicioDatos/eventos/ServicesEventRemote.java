@@ -144,19 +144,13 @@ public interface ServicesEventRemote {
 	 * Returns a list of the best picture for each event, ordered by rating
 	 * @param lenght - length of the list to return 
 	 */
-	public List<DatatypeContent> getBestQualifiedPictures(int length);
+	public List<DatatypeContent> getBestRankedContent(int length);
 	
 	/**
 	 * Returns  a list of the best qualified pictures in all the server
 	 * @param lenght - length of the list to return
 	 */
-	public List<DatatypeContent> getMostCommentedPictures(int length);
-	
-	/**
-	 * Returns  a list of the best qualified pictures in all the server
-	 * @param lenght - length of the list to return
-	 */
-	public List<DatatypeMostTagged> getMostTagged(int lenght);
+	public List<DatatypeContent> getMostCommentedContent(int length);
 
 	/**
      * Returns information of the Event identified by eventId
@@ -199,5 +193,7 @@ public interface ServicesEventRemote {
 	 * @throws Exception 
 	 */
 	public void rateContent(int contentID, int rating, String user) throws Exception;
+
+	public byte[] getPublicContent(String type, int pos, int thumbnail);
 
 }

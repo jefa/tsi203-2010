@@ -12,11 +12,14 @@ import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
+import partuzabook.datos.persistencia.DAO.TagForUserDAO;
 import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
@@ -38,6 +41,7 @@ public class ServicesUser implements ServicesUserRemote {
 	private NormalUserDAO nUserDao;
 	private AdminDAO adminDao;
 	private FileSystemLocal fileSystem;
+	private TagForUserDAO tagForUserDao;
 //	private NotificationDAO notifDao;
 		
     /**
@@ -57,7 +61,7 @@ public class ServicesUser implements ServicesUserRemote {
 	        Context ctx = new InitialContext(properties);
 	        nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local"); 
     		fileSystem = (FileSystemLocal) ctx.lookup("FileSystem/local");
-    		adminDao = (AdminDAO) ctx.lookup("AdminDAOBean/local");
+    		tagForUserDao = (TagForUserDAO) ctx.lookup("TagForUserDAOBean/local");    		
 //	        notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
 		}
         catch (Exception e) {
@@ -68,6 +72,8 @@ public class ServicesUser implements ServicesUserRemote {
     @PreDestroy
     public void preDestroy() {
     	nUserDao = null;
+    	fileSystem = null;
+    	tagForUserDao = null;
 //    	notifDao = null;
     }
 
@@ -164,15 +170,46 @@ public class ServicesUser implements ServicesUserRemote {
 		return getAdminUser(username).getPassword();
 	}
 
-	public byte[] getUserAvatar(String username) {
+	public byte[] getUserAvatar(String username, int thumbnail) {
 		NormalUser user = getNormalUser(username);
 		if(user.getImgPath() != null && !user.getImgPath().equals(""))
-			return fileSystem.readFile(user.getImgPath(), 0);
+			return fileSystem.readFile(user.getImgPath(), thumbnail);
 		else
-			return fileSystem.readFile(DEFAULT_IMAGE, 0);
+			return fileSystem.readFile(DEFAULT_IMAGE, thumbnail);
 	}
 
 	public List<DatatypeUser> findAllNormalUsers() {		
 		return TranslatorCollection.translateNormalUser(nUserDao.findAll());
 	}
+	
+	private List<String> getMostTaggedUsernames() {
+		List<String> list = tagForUserDao.getMostTagged();
+		return list;
+	}
+	
+	public List<DatatypeMostTagged> getMostTagged(int length) {
+		List<String> list = getMostTaggedUsernames();
+		if (list.size() > length) {
+			list = list.subList(0, length);
+		}
+		List<NormalUser> users = new ArrayList<NormalUser>();
+		Iterator<String> it = list.iterator();
+		while (it.hasNext()) {
+			String username = (String) it.next();
+			users.add(getNormalUser(username));
+		}
+		return TranslatorCollection.translateMostTagged(users);
+	}
+
+	public byte[] getPublicAvatar(String type, int pos, int thumbnail) {
+		List<String> usernames = null;
+		if (type.equals("mostTagged")) {
+			usernames = getMostTaggedUsernames();
+		}
+		if (usernames.size() >= pos) {
+			return getUserAvatar(usernames.get(pos - 1), thumbnail);
+		}
+		return null;
+	}
+	
 }

@@ -38,7 +38,13 @@ import javax.persistence.OneToMany;
 	@NamedQuery(name = "Content.findByPosInGalleryEvent",
 			query = "SELECT c FROM Content c WHERE c.event = :event AND c.pos = :pos"),
 	@NamedQuery(name = "Content.findNextPosInGalleryEvent",
-			query = "SELECT c FROM Content c WHERE c.event = :event")
+			query = "SELECT c FROM Content c WHERE c.event = :event"),
+	@NamedQuery(name = "Content.getBestRanked",
+			query = "SELECT c.cntIdAuto FROM Content c, IN(c.ratings) r "
+				+"GROUP BY c.cntIdAuto ORDER BY AVG(r.score) DESC"),
+	@NamedQuery(name = "Content.getMostCommented",
+			query = "SELECT c.cntIdAuto FROM Content c, IN(c.comments) m "
+				+"GROUP BY c.cntIdAuto ORDER BY COUNT(*) DESC")
 })
 public abstract class Content implements Serializable {
 	private static final long serialVersionUID = 1L;

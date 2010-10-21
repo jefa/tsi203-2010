@@ -27,31 +27,23 @@ public class ContentFeeder extends HttpServlet {
 		Context ctx = new InitialContext(properties);
 		return ctx;
 	}
-	
-    public ServicesUploadRemote getServicesUpload() {
-        try {
+
+	public ServicesUploadRemote getServicesUpload() {
+		try {
 			Context ctx = getContext();
 			return (ServicesUploadRemote)ctx.lookup("PartuzabookEAR/ServicesUpload/remote");
 		}
-        catch (NamingException e) {
+		catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
-    }
-    
+	}
+
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		int id = 0;
 		HttpSession session = (HttpSession) request.getSession(true);
-
-		String username = (String) session.getAttribute("username");
-		try {
-			id = Integer.parseInt(request.getParameter("id"));
-		}
-		catch (NumberFormatException e) {
-			
-		}
 
 		int thumbnail = 0;
 		if (request.getParameter("thb") != null) {
@@ -62,11 +54,40 @@ public class ContentFeeder extends HttpServlet {
 				}
 			}
 			catch(NumberFormatException e) {
+
+			}
+		}
+		int pos = 1;
+		if (request.getParameter("pos") != null) {
+			try {
+				pos = Integer.parseInt(request.getParameter("pos"));
+			}
+			catch (NumberFormatException e) {
 				
 			}
 		}
-		byte[] data = getServicesUpload().getContent(username, id, thumbnail);
-		
+		byte[] data = null; 
+		if (request.getParameter("id") != null) {
+			String username = (String) session.getAttribute("username");
+			try {
+				id = Integer.parseInt(request.getParameter("id"));
+			}
+			catch (NumberFormatException e) {
+
+			}
+
+			data = getServicesUpload().getContent(username, id, thumbnail);
+		}
+		else if (request.getParameter("bestRanked") != null) {
+			data = getServicesUpload().getPublicContent("bestRanked", pos, thumbnail);
+		}
+		else if (request.getParameter("mostCommented") != null) {
+			data = getServicesUpload().getPublicContent("mostCommented", pos, thumbnail);
+		}
+		else {
+			return;
+		}
+
 		ServletOutputStream stream = response.getOutputStream();
 		stream.write(data);
 	}

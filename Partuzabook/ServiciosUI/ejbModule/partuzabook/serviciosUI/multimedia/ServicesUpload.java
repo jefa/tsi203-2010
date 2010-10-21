@@ -63,8 +63,15 @@ public class ServicesUpload implements ServicesUploadRemote {
 		return servicesEvent.getContent(username, contentID, thumbnail);
 	}
 	
-	public byte[] getUserAvatar(String userID) {
-		return servicesUser.getUserAvatar(userID);
+	public byte[] getUserAvatar(String userID, int thumbnail) {
+		return servicesUser.getUserAvatar(userID, thumbnail);
+	}
+
+	public byte[] getPublicContent(String type, int pos, int thumbnail) {
+		return servicesEvent.getPublicContent(type, pos, thumbnail);
 	}
 	
+	public byte[] getPublicAvatar(String type, int pos, int thumbnail) {
+		return servicesUser.getPublicAvatar(type, pos, thumbnail);
+	}
 }

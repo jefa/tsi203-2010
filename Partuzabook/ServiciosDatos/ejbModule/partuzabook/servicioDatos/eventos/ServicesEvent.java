@@ -24,11 +24,11 @@ import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeUser;
+import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.DAO.CommentDAO;
 import partuzabook.datos.persistencia.DAO.ContentCategoryDAO;
 import partuzabook.datos.persistencia.DAO.ContentDAO;
 import partuzabook.datos.persistencia.DAO.EventDAO;
-import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.DAO.EvtCategoryDAO;
 import partuzabook.datos.persistencia.DAO.ModeratedEventDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
@@ -36,12 +36,12 @@ import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.DAO.PhotoDAO;
 import partuzabook.datos.persistencia.DAO.RatingDAO;
 import partuzabook.datos.persistencia.DAO.TagDAO;
+import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.CntCategory;
 import partuzabook.datos.persistencia.beans.Comment;
 import partuzabook.datos.persistencia.beans.CommentPK;
 import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
-import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.EvtCategory;
 import partuzabook.datos.persistencia.beans.ModeratedEvent;
 import partuzabook.datos.persistencia.beans.NormalUser;
@@ -420,110 +420,45 @@ public class ServicesEvent implements ServicesEventRemote {
 		return null;
 	}
 
-	private List<DatatypeContent> orderContentByInt(List<DatatypeContent> list, Content contenido, HashMap<Integer,Integer> vals) {
-
-		DatatypeContent newContent = (DatatypeContent)(new TranslatorContent().translate(contenido));
-		newContent.avgScore = vals.get(newContent.contId);
-		int index = 0;
-		for (Iterator<DatatypeContent> it = list.iterator(); it.hasNext(); ) {
-			DatatypeContent dc = it.next();
-			if(vals.get(dc.contId) < vals.get(newContent.contId)) {
-				break;
-			}
-			index++;
+	public byte[] getPublicContent(String type, int pos, int thumbnail) {
+		List<DatatypeContent> contents = null;
+		if (type.equals("bestRanked")) {
+			contents =  getBestRankedContent(pos);
 		}
-		
-		list.add(index, newContent);
-			
-		return list;
-	}
-
-	public List<DatatypeContent> getBestQualifiedPictures(int length) {
-		List<Event> allEvents = evDao.findAll();
-		List<DatatypeContent> res = new ArrayList<DatatypeContent>();
-		
-		HashMap<Integer, Integer> ratingsByPhotoId = new HashMap<Integer, Integer>();
-		
-		for(Iterator<Event> it = allEvents.iterator(); it.hasNext(); ) {
-			Event e = it.next();
-			Photo photo = photoDao.findBestRatedInEvent(e);
-			if(photo != null) {
-				ratingsByPhotoId.put(photo.getCntIdAuto(), ratingDao.getAverageRatingOfContent(photo.getCntIdAuto()));
-				orderContentByInt(res, photo, ratingsByPhotoId);
-			}
+		else if (type.equals("mostCommented")) {
+			contents = getMostCommentedContent(pos);
 		}
-		if(res.size() > length)
-			return res.subList(0, length);
-		else 
-			return res;
-	}
-
-	public List<DatatypeContent> getMostCommentedPictures(int length) {
-		
-		List<Event> allEvents = evDao.findAll();
-		List<DatatypeContent> res = new ArrayList<DatatypeContent>();
-		
-		HashMap<Integer, Integer> cantCommentsByPhotoId = new HashMap<Integer, Integer>();
-		
-		for(Iterator<Event> it = allEvents.iterator(); it.hasNext(); ) {
-			Event e = it.next();
-			Photo photo = photoDao.findMostCommentedInEvent(e);
-			if(photo != null) {
-				cantCommentsByPhotoId.put(photo.getCntIdAuto(), photo.getComments().size());
-				orderContentByInt(res, photo, cantCommentsByPhotoId);	
-			}		
+		if (contents.size() >= pos) {
+			DatatypeContent content = contents.get(pos - 1);
+			return fileSystem.readFile(contDao.findByID(content.getContId()).getUrl(), thumbnail);
 		}
-		if(res.size() > length)
-			return res.subList(0, length);
-		else 
-			return res;		
-	}
-
-	public List<DatatypeMostTagged> getMostTagged(int length) {
-		List<DatatypeMostTagged> dataMostTagged = new ArrayList<DatatypeMostTagged>();
-		List<Event> allEvents = evDao.findAll();
-		Iterator<Event> itEv = allEvents.iterator();
-		while (itEv.hasNext()) {
-			Event ev = itEv.next();
-			NormalUser mostTagged = null;
-			int maxTags = 0;
-			List<NormalUser> participants = ev.getMyParticipants();
-			Iterator<NormalUser> itUser = participants.iterator();
-			while (itUser.hasNext()) {
-				NormalUser currentUser = itUser.next();
-				if (currentUser.getMyTags() != null) {
-					int size = currentUser.getMyTags().size();
-					if (size > maxTags) {
-						maxTags = size;
-						mostTagged = currentUser; 
-					}
-				}
-			}
-			if (mostTagged != null) {
-				DatatypeMostTagged data = new DatatypeMostTagged();
-				data.eventName = ev.getEvtName();
-				TranslatorUser transUser = new TranslatorUser();
-				data.user = (DatatypeUser) transUser.translate(mostTagged);
-				data.cantTags = maxTags;
-				// Add to collection
-				insertOrderedMostTagged(dataMostTagged,data);
-			}
-		}
-		if (dataMostTagged.size() > length) {
-			return dataMostTagged.subList(0, length);
-		} else {
-			return dataMostTagged;
-		}		
+		return null;
 	}
 	
-	private List<DatatypeMostTagged> insertOrderedMostTagged(List<DatatypeMostTagged> orderedList, DatatypeMostTagged dataMostTagged) {		
-		int index = 0;
-		Iterator<DatatypeMostTagged> it = orderedList.iterator();
-		while (it.hasNext() && it.next().cantTags < dataMostTagged.cantTags ) {
-			index++;
+	public List<DatatypeContent> getBestRankedContent(int length) {
+		List<Integer> list = contDao.getBestRanked();
+		if (list.size() > length) {
+			list = list.subList(0, length);
 		}
-		orderedList.add(index, dataMostTagged);
-		return orderedList;
+		List<Content> contents = getContentListById(list);
+		return TranslatorCollection.translateContent(contents);
+	}
+
+	public List<DatatypeContent> getMostCommentedContent(int length) {
+		List<Integer> list = contDao.getMostCommented();
+		if (list.size() > length) {
+			list = list.subList(0, length);
+		}
+		List<Content> contents = getContentListById(list);
+		return TranslatorCollection.translateContent(contents);
+	}
+
+	private List<Content> getContentListById(List<Integer> list) {
+		List<Content> contents = new ArrayList<Content>();
+		for (Iterator<Integer> it = list.iterator(); it.hasNext();) {
+			contents.add(contDao.findByID(it.next()));
+		}
+		return contents;
 	}
 
 	public DatatypeEventSummary findEventById(int eventId) {
@@ -708,6 +643,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		}
 		return res;
 	}
+
 	
 	
 }

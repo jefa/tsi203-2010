@@ -24,6 +24,5 @@ public class TagDAOBean extends JpaDao<Integer, Tag> implements TagDAO {
 		Query namedQuery = em.createNamedQuery("Tag.findAll");
 		return (List<Tag>)namedQuery.getResultList();
 	}
-	
 
 }
