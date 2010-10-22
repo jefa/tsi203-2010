@@ -43,8 +43,8 @@
 							</f:facet>
 							<h:panelGroup>
 								<h:commandLink value="#{evento.evtName}" action="verEvento">
-									<f:setPropertyActionListener value="#{evento}"
-											target="#{eventoMB.evento}" />
+									<f:setPropertyActionListener value="#{evento.evtId}"
+											target="#{eventoMB.eventId}" />
 								</h:commandLink>
 							</h:panelGroup>							
 						</rich:dataGrid>											
