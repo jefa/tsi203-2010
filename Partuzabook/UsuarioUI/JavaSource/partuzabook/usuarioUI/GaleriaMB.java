@@ -60,7 +60,6 @@ public class GaleriaMB {
 	
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
-		setContentsCategory(getServicesEvent().getCategoryContents(eventId, categoryId, 1, 10));
 	}
 
 	public int getCategory() {
@@ -77,7 +76,6 @@ public class GaleriaMB {
 
 	public void setContentsCategory(DatatypeCategory contentsCategory) {
 		this.contentsCategory = contentsCategory;
-		setContentId(contentsCategory.getContents().get(0).getContId());
 	}
 
 	public DatatypeCategory getContentsCategory() {
@@ -146,5 +144,10 @@ public class GaleriaMB {
 		properties.put("java.naming.provider.url", "jnp://localhost:1099");
 		Context ctx = new InitialContext(properties);
 		return ctx;
+	}
+	
+	public void updateContentCategory() {
+		setContentsCategory(getServicesEvent().getCategoryContents(eventId, categoryId, 1, 10));
+		setContentId(contentsCategory.getContents().get(0).getContId());
 	}
 }
