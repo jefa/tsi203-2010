@@ -1,176 +1,202 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 
-<ui:composition template="templates/usuarioUI.xhtml">
-	<ui:define name="title">Galeria #{galeriaMB.contentsCategory.category} de #{galeriaMB.eventName}</ui:define>
-	<ui:define name="body">
-		<script type="text/javascript" src="scripts/jquery.imgareaselect.js"></script>
-		<script type="text/javascript" src="scripts/jquery.imgareaselect.min.js"></script>
-		
-		<h:form id="galeria">
-		<h:panelGrid styleClass="image-header-table" cellpadding="0">
-			<h:panelGroup>
-				<h:outputText value="Content ID: "/>
-				<h:outputText value="#{galeriaMB.contentId}"/>
-			</h:panelGroup>
-		</h:panelGrid>
-		
-		
+	<script type="text/javascript" src="scripts/jquery.imgareaselect.js"></script>
+	<script type="text/javascript"
+		src="scripts/jquery.imgareaselect.min.js"></script>
+
+	<strong><h:outputText value="Categorías" /></strong>
+	<a4j:form id="formCategories">
+		<a4j:repeat var="category" elements="8"
+			value="#{eventoMB.evento.contentCategories}"
+			style="text-align:center;">
+			<rich:panel>
+				<f:facet name="header">
+					<a4j:commandLink value="#{category.category}"
+						action="#{eventoMB.setCategoryId}"
+						reRender="formCategories,formThumbnails,formContent">
+						<f:setPropertyActionListener target="#{eventoMB.categoryId}"
+							value="#{category.categoryId}" />
+					</a4j:commandLink>
+				</f:facet>
+				<a4j:repeat var="contentCategory" value="#{category.contents}">
+					<h:graphicImage
+						value="/ContentFeeder?id=#{contentCategory.contId}&#38;thb=30" />
+				</a4j:repeat>
+			</rich:panel>
+		</a4j:repeat>
+	</a4j:form>
+	<a4j:form id="formThumbnails">
 		<h:panelGroup layout="block" id="imagesTable"
 			style="margin: 30px 0px 40px 30px; float: left; position: relative; left: -2px;">
-			<h:panelGrid columns="2">
-			<a4j:repeat value="#{galeriaMB.contentsCategory.contents}" rows="5" var="content" id="repeat" rowKeyVar="rk">
-				<a4j:outputPanel layout="block"
-					styleClass="preview_box_photo_nav #{galeriaMB.selectedContent == content ? 'preview_box_photo_current' : 'preview_box_photo_default'}">
-					<h:panelGroup layout="block" styleClass="preview_box_photo_80">
-						<h:graphicImage styleClass="pr_photo_bg" value="/images/frame_photo_80.png" />
-						<h:panelGrid cellpadding="0" cellspacing="2">
-							<h:panelGroup layout="block">
-								<h:graphicImage
-									value="/ContentFeeder?id=#{content.contId}&#38;thb=30" />
-								<br/>
-							</h:panelGroup>
-						</h:panelGrid>
-						<!-- h:panelGroup layout="block" styleClass="photo_name"><h:outputText value="#{content.type}"/></h:panelGroup>  -->
-						<h:panelGroup layout="block" styleClass="photo_data"><h:outputText value="#{rk + 1}"/></h:panelGroup>
-					</h:panelGroup>
-					<a4j:support event="onclick" 
-						rendered="#{galeriaMB.contentId != content.contId}"
-						reRender="mainImage, commentPanel, contentArea" >
-						<f:setPropertyActionListener value="#{content}"
-							target="#{galeriaMB.selectedContent}" />
-					</a4j:support>
-				</a4j:outputPanel>
-			</a4j:repeat>
+			<h:panelGrid columns="3" cellpadding="0" cellspacing="2">
+				<a4j:repeat value="#{eventoMB.selectedCategory.contents}" rows="5"
+					var="content" id="repeat" rowKeyVar="rk">
+					<a4j:outputPanel layout="block"
+						styleClass="preview_box_photo_nav #{eventoMB.selectedContent == content ? 'preview_box_photo_current' : 'preview_box_photo_default'}">
+						<h:panelGroup layout="block">
+							<h:graphicImage
+								value="/ContentFeeder?id=#{content.contId}&#38;thb=30" />
+							<br />
+						</h:panelGroup>
+						<a4j:support event="onclick"
+							rendered="#{eventoMB.contentId != content.contId}"
+							reRender="mainImage, commentPanel, contentArea">
+							<f:setPropertyActionListener value="#{content}"
+								target="#{eventoMB.selectedContent}" />
+						</a4j:support>
+					</a4j:outputPanel>
+				</a4j:repeat>
 			</h:panelGrid>
-			
-			<rich:datascroller page="#{galeriaMB.page}" styleClass="image-scroller" lastPageMode="full"
-				for="repeat" reRender="imagesTable,contentArea" boundaryControls="hide" stepControls="hide">
+
+			<rich:datascroller page="#{eventoMB.page}"
+				styleClass="image-scroller" lastPageMode="full" for="repeat"
+				reRender="imagesTable,contentArea" boundaryControls="hide"
+				stepControls="hide">
 				<f:facet name="pages">
 					<h:outputText />
 				</f:facet>
 				<f:facet name="fastforward">
-					<h:panelGroup styleClass="image-scroller-right-arrow" style="width: 56px; height:34px; display: inline-block; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/arr_right.png',sizingMethod='scale');">
-						<h:graphicImage 
-							value="images/arr_right.png" styleClass="ie6transparency" height="34" width="56" border="0"/>
-					</h:panelGroup>		
+					<h:panelGroup styleClass="image-scroller-right-arrow"
+						style="width: 56px; height:34px; display: inline-block; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/arr_right.png',sizingMethod='scale');">
+						<h:graphicImage value="images/arr_right.png"
+							styleClass="ie6transparency" height="34" width="56" border="0" />
+					</h:panelGroup>
 				</f:facet>
 				<f:facet name="fastforward_disabled">
-					<h:panelGroup styleClass="image-scroller-right-arrow" style="width: 56px; height:34px; display: inline-block; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/arr_right_dis.png',sizingMethod='scale');">
-						<h:graphicImage styleClass="ie6transparency" value="images/arr_right_dis.png" />
-					</h:panelGroup>	
+					<h:panelGroup styleClass="image-scroller-right-arrow"
+						style="width: 56px; height:34px; display: inline-block; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/arr_right_dis.png',sizingMethod='scale');">
+						<h:graphicImage styleClass="ie6transparency"
+							value="images/arr_right_dis.png" />
+					</h:panelGroup>
 				</f:facet>
 				<f:facet name="fastrewind">
-					<h:panelGroup styleClass="image-scroller-left-arrow" style="width: 56px; height:34px; display: inline-block; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/arr_left.png',sizingMethod='scale');">
+					<h:panelGroup styleClass="image-scroller-left-arrow"
+						style="width: 56px; height:34px; display: inline-block; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/arr_left.png',sizingMethod='scale');">
 						<h:graphicImage styleClass="ie6transparency"
 							value="images/arr_left.png" />
-					</h:panelGroup>		
+					</h:panelGroup>
 				</f:facet>
 				<f:facet name="fastrewind_disabled">
-					<h:panelGroup styleClass="image-scroller-left-arrow" style="width: 56px; height:34px; display: inline-block; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/arr_left_dis.png',sizingMethod='scale');">
+					<h:panelGroup styleClass="image-scroller-left-arrow"
+						style="width: 56px; height:34px; display: inline-block; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/arr_left_dis.png',sizingMethod='scale');">
 						<h:graphicImage styleClass="ie6transparency"
 							value="images/arr_left_dis.png" />
-					</h:panelGroup>		
+					</h:panelGroup>
 				</f:facet>
 			</rich:datascroller>
 		</h:panelGroup>
-		
-		
-		<br clear="all" />
+	</a4j:form>
+	<a4j:outputPanel id="formContent">
+		<h:panelGrid styleClass="image-header-table" cellpadding="0">
+			<h:panelGroup>
+				<h:outputText value="Content ID: " />
+				<h:outputText value="#{eventoMB.contentId}" />
+			</h:panelGroup>
+		</h:panelGrid>
 		<h:panelGroup id="mainImage" layout="block" styleClass="mainImage-div">
 			<table cellpadding="0" class="mainImage-table">
 				<tr>
-					<td class="mainImage-table-col1" rowspan="2">
-						<h:graphicImage
-							value="/ContentFeeder?id=#{galeriaMB.contentId}" />
-					</td>
+					<td class="mainImage-table-col1" rowspan="2"><h:graphicImage
+						value="/ContentFeeder?id=#{eventoMB.contentId}" /></td>
 				</tr>
 			</table>
 			<h:inputText id="tag" value="#{tagSuggestionMB.suggest}" />
-			<h:commandButton value="Etiquetar" action="#{tagSuggestionMB.tagUser}">
-				<f:setPropertyActionListener value="#{galeriaMB.selectedContent}"
+			<h:commandButton value="Etiquetar"
+				action="#{tagSuggestionMB.tagUser}">
+				<f:setPropertyActionListener value="#{eventoMB.selectedContent}"
 					target="#{tagSuggestionMB.contenido}" />
 				<f:setPropertyActionListener value="#{loginMB.userName}"
 					target="#{tagSuggestionMB.username}" />
 			</h:commandButton>
-			<h:inputHidden value="#{tagSuggestionMB.tagX1}" id="x1" />
-			<h:inputHidden value="#{tagSuggestionMB.tagY1}" id="y1" />
-			<h:inputHidden value="#{tagSuggestionMB.tagX2}" id="x2" />
-			<h:inputHidden value="#{tagSuggestionMB.tagY2}" id="y2" />
-			<rich:suggestionbox id="suggestionBoxId" for="tag" tokens=",["
-				suggestionAction="#{tagSuggestionMB.autocomplete}" var="result"
-				nothingLabel="No user matches this criteria" columnClasses="center">
-				<h:column>
-					<h:graphicImage value="/UserImageFeeder?username=#{result.userName}" width="30" height="30" alt="" style="border:none"/>
-				</h:column>
-				<h:column>
-					<h:outputText value="#{result.name}" />
-				</h:column>
-			</rich:suggestionbox>
+			<h:form id="formTag">
+				<h:inputHidden value="#{tagSuggestionMB.tagX1}" id="x1" />
+				<h:inputHidden value="#{tagSuggestionMB.tagY1}" id="y1" />
+				<h:inputHidden value="#{tagSuggestionMB.tagX2}" id="x2" />
+				<h:inputHidden value="#{tagSuggestionMB.tagY2}" id="y2" />
+				<rich:suggestionbox id="suggestionBoxId" for="tag" tokens=",["
+					suggestionAction="#{tagSuggestionMB.autocomplete}" var="result"
+					nothingLabel="No user matches this criteria" columnClasses="center">
+					<h:column>
+						<h:graphicImage
+							value="/UserImageFeeder?username=#{result.userName}" width="30"
+							height="30" alt="" style="border:none" />
+					</h:column>
+					<h:column>
+						<h:outputText value="#{result.name}" />
+					</h:column>
+				</rich:suggestionbox>
+			</h:form>
 		</h:panelGroup>
 		<rich:jQuery selector="#mainImage img"
 			query="imgAreaSelect({ minWidth:80, minHeight:80, maxWidth:80, maxHeight:80,
-				idx1:'evento:x1', idy1:'evento:y1', idx2:'evento:x2', idy2:'evento:y2',
-				fadeSpeed:200 })" />
-	     <!-- -->
+					idx1:'evento:x1', idy1:'evento:y1', idx2:'evento:x2', idy2:'evento:y2',
+					fadeSpeed:200 })" />
 		<h:outputText styleClass="additional-info-text" value="AvgScore: " />
-		<h:outputText value="#{galeriaMB.selectedContent.avgScore}" />
+		<h:outputText value="#{eventoMB.selectedContent.avgScore}" />
 		<br />
-		
-		
+
 		<h:panelGroup layout="block" style="margin-top : 20px">
-			<h:outputText styleClass="bold" value="Tags: "/>
-			<a4j:repeat value="#{galeriaMB.selectedContent.tags}" var="tag">
+			<h:outputText styleClass="bold" value="Tags: " />
+			<a4j:repeat value="#{eventoMB.selectedContent.tags}" var="tag">
 				<h:outputText value="#{tag.userName} " />
 			</a4j:repeat>
 		</h:panelGroup>
-		
-		<h:panelGroup layout="block" id="commentPanel" style="margin-top : 30px; width:100%;">
+
+		<h:panelGroup layout="block" id="commentPanel"
+			style="margin-top : 30px; width:100%;">
 			<h:panelGroup style="padding-bottom:15px;">
-				<h:outputText  styleClass="bold" value="Comentarios"/>
+				<h:outputText styleClass="bold" value="Comentarios" />
 			</h:panelGroup>
-	
-			<a4j:repeat value="#{galeriaMB.selectedContent.comments}" var="comment">
-				<h:panelGroup layout="block" style="clear:both; padding-bottom:10px;padding-top:10px;">
-					<h:panelGroup layout="block" styleClass="preview_box_photo_nav" style="margin-right : 5px; float:left;">
-						<h:graphicImage styleClass="pr_photo_bg" value="/images/frame_photo_200.png" />
-						<h:panelGrid cellpadding="0">
-							<h:panelGroup>
-								<h:commandLink value="#{comment.userName}" action="verPerfil">
-									<!-- <f:setPropertyActionListener value="#{comment.userName}" target="#{eventoMB.userName}" /> -->
-									<f:setPropertyActionListener value="#{comment.userId}" target="#{PublicProfile.userId}" />
-									<h:graphicImage value="/UserImageFeeder?username=#{comment.userId}" width="80" height="80" alt="" style="border:none"/>
-								</h:commandLink>	
-								<br/>
-							</h:panelGroup>
-						</h:panelGrid>				
-					</h:panelGroup>		
-			
-					<h:panelGroup style="width:600px;overflow-x:auto;" layout="block" styleClass="comment-text">
-						<h:outputText value="#{comment.text}" />
-					</h:panelGroup>	
-				</h:panelGroup>
-			</a4j:repeat>
-			<h:panelGroup layout="block" style="padding-top:10px;clear:both">
-				<a4j:region renderRegionOnly="true" >
-					<h:panelGroup layout="block" id="editContent">
-						<rich:editor value="#{galeriaMB.comentario}"
-							configuration="/partuzabook/usuarioUI/advanced" id="editor2"
-							width="400" height="200" >
-						</rich:editor>
+			<h:form id="formComments">
+				<a4j:repeat value="#{eventoMB.selectedContent.comments}"
+					var="comment">
+					<h:panelGroup layout="block"
+						style="clear:both; padding-bottom:10px;padding-top:10px;">
+						<h:panelGroup layout="block" styleClass="preview_box_photo_nav"
+							style="margin-right : 5px; float:left;">
+							<h:graphicImage styleClass="pr_photo_bg"
+								value="/images/frame_photo_200.png" />
+							<h:panelGrid cellpadding="0">
+								<h:panelGroup>
+									<h:commandLink value="#{comment.userName}" action="verPerfil">
+										<f:setPropertyActionListener value="#{comment.userId}"
+											target="#{PublicProfile.userId}" />
+										<h:graphicImage
+											value="/UserImageFeeder?username=#{comment.userId}"
+											width="80" height="80" alt="" style="border:none" />
+									</h:commandLink>
+									<br />
+								</h:panelGroup>
+							</h:panelGrid>
+						</h:panelGroup>
+
+						<h:panelGroup style="width:600px;overflow-x:auto;" layout="block"
+							styleClass="comment-text">
+							<h:outputText value="#{comment.text}" />
+						</h:panelGroup>
 					</h:panelGroup>
-				</a4j:region>
-			</h:panelGroup>
-			<h:commandButton value="Agregar comentario" action="#{galeriaMB.comentar}" reRender="commentPanel">
-			</h:commandButton>	
+				</a4j:repeat>
+			</h:form>
+			<h:form id="formCommentContent">
+				<h:panelGroup layout="block" style="padding-top:10px;clear:both">
+					<a4j:region renderRegionOnly="true">
+						<h:panelGroup layout="block" id="editContent">
+							<rich:editor value="#{eventoMB.comentario}"
+								configuration="/partuzabook/usuarioUI/advanced" id="editor2"
+								width="400" height="200">
+							</rich:editor>
+						</h:panelGroup>
+					</a4j:region>
+				</h:panelGroup>
+				<h:commandButton value="Agregar comentario"
+					action="#{eventoMB.comentar}" reRender="commentPanel">
+				</h:commandButton>
+			</h:form>
 		</h:panelGroup>
-		</h:form>
-	</ui:define>
+	</a4j:outputPanel>
 </ui:composition>
-</html>

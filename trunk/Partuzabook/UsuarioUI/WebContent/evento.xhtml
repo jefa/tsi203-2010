@@ -11,61 +11,43 @@
 	<ui:define name="title">Ver Evento</ui:define>
 	<ui:define name="body">
 		<h:form id="evento">
-			<div id="cover">
-				<h:graphicImage value="/ContentFeeder?id=#{eventoMB.evento.coverId}&#38;thb=1" />
+			<div id="cover"><h:graphicImage
+				value="/ContentFeeder?id=#{eventoMB.evento.coverId}&#38;thb=1" /></div>
+			<div id="eventDetails"><strong><h:outputText
+				value="#{eventoMB.evento.evtName} " /></strong> <br />
+			<h:outputText value="Fecha Evento: #{eventoMB.evento.formattedDate} " /><br />
+			<h:outputText value="Descripcion: #{eventoMB.evento.description} " /><br />
 			</div>
-			<div id="eventDetails">
-				<strong><h:outputText value="#{eventoMB.evento.evtName} " /></strong>
-				<br/>
-				<h:outputText value="Fecha Evento: #{eventoMB.evento.formattedDate} " /><br/>
-				<h:outputText value="Descripcion: #{eventoMB.evento.description} " /><br/>
-			</div>
-		<br/>
-		
-		<h:panelGroup id="notAuthorizedContent" rendered="#{!eventoMB.validUserForContext}">
+			<br />
+		</h:form>
+
+		<h:panelGroup id="notAuthorizedContent"
+			rendered="#{!eventoMB.validUserForContext}">
 			<h:outputText>Usted no esta autorizado a ver el contenido de este evento.</h:outputText>
-				<br/>
+			<br />
 			<h:outputText>Puede solicitar autorizacion enviando un mensaje al moderador.</h:outputText>
-				<br/>
+			<br />
 			<h:commandButton value="Enviar solicitud" />
 		</h:panelGroup>
-		<h:panelGroup id="authorizedContent" rendered="#{eventoMB.validUserForContext}">
-			<strong><h:outputText value="Categorías" /></strong>
-			<rich:dataGrid id="categories" var="category" elements="8" value="#{eventoMB.evento.contentCategories}"
-				width="100%" style="text-align:center;">
-				<rich:panel>
-					<f:facet name="header">
-						<h:commandLink value="#{category.category}" action="verGaleria">
-							<f:setPropertyActionListener 
-								target="#{galeriaMB.userName}" value="#{loginMB.userName}" />
-							<f:setPropertyActionListener 
-								target="#{galeriaMB.eventId}" value="#{eventoMB.eventId}" />
-							<f:setPropertyActionListener 
-								target="#{galeriaMB.eventName}" value="#{eventoMB.evento.evtName}" />
-							<f:setPropertyActionListener 
-								target="#{galeriaMB.categoryId}" value="#{category.categoryId}" />
-						</h:commandLink>
-					</f:facet>
-					<rich:dataGrid var="contentCategory" value="#{category.contents}">
-						<h:graphicImage value="/ContentFeeder?id=#{contentCategory.contId}&#38;thb=30" />
-					</rich:dataGrid>
-				</rich:panel>
-			</rich:dataGrid>
-			<h:commandLink value="Añadir contenido al evento" action="subirContenido">
-				<f:setPropertyActionListener value="#{eventoMB.eventId}"
-					target="#{subirFotoMB.idEvento}" />
-			</h:commandLink>
+		<h:panelGroup id="authorizedContent"
+			rendered="#{eventoMB.validUserForContext}">
+			<h:form id="formUploadContent">
+				<h:commandLink value="Añadir contenido al evento"
+					action="subirContenido">
+					<f:setPropertyActionListener value="#{eventoMB.eventId}"
+						target="#{subirFotoMB.idEvento}" />
+				</h:commandLink>
+			</h:form>
+			<ui:include src="/galeria.xhtml" />
+
 		</h:panelGroup>
-		<div>
-			<br />
-			<h:panelGroup id="twitterArea">
-				<h:outputText>
+		<div><br />
+		<h:panelGroup id="twitterArea">
+			<h:outputText>
 					Acá iría el timeline de twitter para el evento.
 					<br />
-				</h:outputText>
-			</h:panelGroup>
-		</div>
-		</h:form>
+			</h:outputText>
+		</h:panelGroup></div>
 	</ui:define>
 </ui:composition>
 </html>

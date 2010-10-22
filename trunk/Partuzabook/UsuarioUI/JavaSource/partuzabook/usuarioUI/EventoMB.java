@@ -8,20 +8,93 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 
+import partuzabook.datatypes.DatatypeCategory;
+import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.serviciosUI.multimedia.ServicesMultimediaRemote;
 
 public class EventoMB {
-
-	private DatatypeEvent evento;
-	private Integer eventId; 
-	private String userName;
-	private boolean validUserForContext;	
+	public static final int PAGE_SIZE = 12;
 	
-
 	private ServicesMultimediaRemote servicesMultimedia;
 	private ServicesEventRemote servicesEvent;
+	
+	private boolean validUserForContext;	
+	private String userName;
+	
+	private DatatypeEvent evento;
+	private Integer eventId; 
+	
+	private int categoryId;
+	private DatatypeCategory selectedCategory;
+	
+	private Integer contentId;
+	private DatatypeContent selectedContent;
+	
+	private String comentario = "";
+	
+	public DatatypeContent getSelectedContent(){
+		selectedContent = servicesEvent.getContentDetails(contentId, userName);
+		return selectedContent;
+	}
+	
+	public void setSelectedContent(DatatypeContent selectedContent){
+		this.selectedContent = selectedContent;
+	}
+	
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
+		setSelectedCategory(servicesEvent.getCategoryContents(eventId, categoryId, 1, PAGE_SIZE));
+	}
+
+	public int getCategoryId() {
+		return categoryId;
+	}
+
+	public void setContentId(Integer contentId) {
+		this.contentId = contentId;
+		setSelectedContent(servicesEvent.getContentDetails(contentId, userName));
+	}
+
+	public Integer getContentId() {
+		return contentId;
+	}
+
+	public void setSelectedCategory(DatatypeCategory selectedCategory) {
+		this.selectedCategory = selectedCategory;
+		setContentId(selectedCategory.getContents().get(0).getContId());
+	}
+
+	public DatatypeCategory getSelectedCategory() {
+		return selectedCategory;
+	}
+
+	
+	public String getComentario(){
+		return this.comentario;
+	}
+	
+	public void setComentario(String com){
+		this.comentario = com;
+	}
+	
+	public void comentar() {
+		try {
+			ServicesEventRemote service = getServicesEvent();
+			if (comentario != "") {
+				service.commentContent(contentId, comentario, userName);
+				comentario = "";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Integer getPage(){
+		//final Integer index = contentsCategory.getContents().indexOf(this.content);
+		return 1;
+	}
 
 	public boolean isValidUserForContext() {
 		validUserForContext = calcValidUserForContent();
@@ -42,9 +115,8 @@ public class EventoMB {
 	}
 
 	public void setEvento(DatatypeEvent evento) {
-		setEventId(evento.getEvtId());
-		this.validUserForContext = calcValidUserForContent();
-		System.out.println("EventoMB.setEvento():: validUserForContext="+this.validUserForContext);
+		this.evento = evento;
+		setCategoryId(evento.getContentCategories().get(0).getCategoryId());
 	}
 
 	public DatatypeEvent getEvento() {
@@ -58,8 +130,9 @@ public class EventoMB {
 
 	public void setEventId(Integer eventId){
 		this.eventId = eventId;
+		calcValidUserForContent();
 		// Also set the Event
-		evento = getServicesEvent().getEventDetails(eventId);
+		setEvento(getServicesEvent().getEventDetails(eventId));
 	}
 
 	private ServicesEventRemote getServicesEvent() {
@@ -131,7 +204,7 @@ public class EventoMB {
 	private Boolean calcValidUserForContent() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-		String username = (String) session.getAttribute("username");		
-		return getServicesMultimedia().isUserRelatedToEvent(this.evento.getEvtId(), username);
+		this.userName = (String) session.getAttribute("username");		
+		return getServicesMultimedia().isUserRelatedToEvent(eventId, userName);
 	}
 }
