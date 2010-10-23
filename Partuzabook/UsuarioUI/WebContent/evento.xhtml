@@ -21,8 +21,14 @@
 			<br />
 		</h:form>
 
+		<h:panelGroup id="notPublicContent"
+			rendered="#{!loginMB.isUserLogged}">
+			<h:outputText>Debe loguearse para ver el contenido de este evento.</h:outputText>
+			<br />
+		</h:panelGroup>
+
 		<h:panelGroup id="notAuthorizedContent"
-			rendered="#{!eventoMB.validUserForContext}">
+			rendered="#{!eventoMB.validUserForContext and loginMB.isUserLogged}">
 			<h:outputText>Usted no esta autorizado a ver el contenido de este evento.</h:outputText>
 			<br />
 			<h:outputText>Puede solicitar autorizacion enviando un mensaje al moderador.</h:outputText>

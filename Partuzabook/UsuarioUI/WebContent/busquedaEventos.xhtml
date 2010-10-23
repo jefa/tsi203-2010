@@ -13,7 +13,7 @@
 	<ui:define name="body">
 
 	<h:form id="formSearchByName">	
-		<strong>Search by Name</strong>
+		<strong>Busqueda por nombre</strong>
 		<br/>
 		
 		<h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" required="true"/>
@@ -27,8 +27,8 @@
 	<br/>
 	
 	<h:form id="formSearchByDate">	
-		<strong>Search by Date</strong>
-
+		<strong>Busqueda por fecha</strong>
+		<br/>
 
             <rich:calendar value="#{SearchEventMB.eventDateSearched}"
                     datePattern="d/MMM/y"  showApplyButton="false"  
@@ -43,7 +43,7 @@
 	<br/>
 
 	<h:form id="formFilterEventsByDate">	
-		<strong>Filter by Date</strong>
+		<strong>Filtrar Eventos</strong>
 
 	    <rich:comboBox selectFirstOnUpdate="false"
 	        defaultLabel="Enter value"
@@ -59,7 +59,7 @@
 	<br/>
 
 	<h:form id="searchResults">
-		<strong>Results</strong>
+		<strong>Resultado de la busqueda</strong>
 		<br/>
 		
 		<a4j:outputPanel id="output">
@@ -67,8 +67,8 @@
 				value="#{SearchEventMB.eventResults}" rows="10">				
 				<strong><h:commandLink value="#{resultado.evtName}"
 					action="verEvento">
-					<f:setPropertyActionListener value="#{resultado}"
-								target="#{eventoMB.evento}" />
+					<f:setPropertyActionListener value="#{resultado.evtId}"
+								target="#{eventoMB.eventId}" />
 				</h:commandLink></strong>
 				<br />
 				<h:outputText value="Fecha:" styleClass="label"></h:outputText>

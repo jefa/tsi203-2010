@@ -54,7 +54,9 @@ public class EventoMB {
 
 	public void setContentId(Integer contentId) {
 		this.contentId = contentId;
-		setSelectedContent(servicesEvent.getContentDetails(contentId, userName));
+		if (this.userName != null){
+			setSelectedContent(servicesEvent.getContentDetails(contentId, userName));
+		}
 	}
 
 	public Integer getContentId() {
@@ -205,6 +207,9 @@ public class EventoMB {
 		FacesContext context = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
 		this.userName = (String) session.getAttribute("username");		
+		if (userName == null) {
+			return false;
+		} 
 		return getServicesMultimedia().isUserRelatedToEvent(eventId, userName);
 	}
 }
