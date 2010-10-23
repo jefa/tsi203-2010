@@ -20,6 +20,7 @@ import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 public class PaginaInicioMB {
 
 	// General
+	private boolean isUserLogged;
 	private List<DatatypeEventSummary> eventosRecientes;
 	private List<DatatypeContent> fotosMejorCalificadas;
 	private int cantFotosMejorCalificadas;
@@ -218,4 +219,21 @@ public class PaginaInicioMB {
 	public void setToggleState(String state){
 		this.toggleState = state;
 	}
+
+	public boolean getIsUserLogged(){
+		this.isUserLogged = checkIfUserLogged();
+		return this.isUserLogged;
+	}
+	
+	public void setIsUserLogged(boolean logged){
+		this.isUserLogged = logged;
+	}
+	
+	public boolean checkIfUserLogged(){
+		FacesContext context = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+		String user = (String) session.getAttribute("username");		
+		return (user != null );
+	}
+	
 }

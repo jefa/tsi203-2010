@@ -11,131 +11,150 @@
 	<ui:define name="title">Pagina Inicio</ui:define>
 	<ui:define name="body">
 		
+		<h:form id="formNotifications" rendered="#{paginaInicioMB.isUserLogged}">		
+		  	<rich:togglePanel value="#{paginaInicioMB.toggleState}" switchType="client"
+		    	stateOrder="closed,opened">
 
-  	<rich:togglePanel value="#{paginaInicioMB.toggleState}" switchType="client"
-    	stateOrder="closed,opened">
-	 
- 	<f:facet name="closed">
-            <rich:toggleControl switchToState="opened">
-                <strong>Ver Notificaciones</strong>
-            </rich:toggleControl>
-     </f:facet>
+		 	<f:facet name="closed">
+	            <rich:toggleControl switchToState="opened">
+	                <strong>Ver Notificaciones</strong>
+	            </rich:toggleControl>
+		     </f:facet>
 
- 	<f:facet name="opened">
-	 	<a4j:outputPanel id="output">  
-	 		<h:form id="notificaciones">
-				<rich:dataList var="resultado"  rendered="#{not empty paginaInicioMB.misNotificacionesNoLeidas}"
-					value="#{paginaInicioMB.misNotificacionesNoLeidas}" rows="10">				
-					<h:outputText value="Fecha:"  ></h:outputText>
-					<h:outputText value="#{resultado.formattedDate}"></h:outputText>
-					<br/>
-					<h:outputText value="Notificacion:" ></h:outputText>
-					<h:outputText value="#{resultado.text } "></h:outputText>
-					<br/>
-				</rich:dataList>		
-			<h:outputText value="No unread notifications" 
-				style="font-style:italic" rendered="#{empty paginaInicioMB.misNotificacionesNoLeidas}"/>
-			</h:form>
-            <rich:toggleControl switchToState="closed">
-                <strong>Cerrar</strong>
-            </rich:toggleControl>
-		</a4j:outputPanel> 			
-     </f:facet>
-	
-	</rich:togglePanel>	
+		 	<f:facet name="opened" >
+			 	<a4j:outputPanel id="output">  
+						<rich:dataList var="resultado"  rendered="#{not empty paginaInicioMB.misNotificacionesNoLeidas}"
+							value="#{paginaInicioMB.misNotificacionesNoLeidas}" rows="10">				
+							<h:outputText value="Fecha:"  ></h:outputText>
+							<h:outputText value="#{resultado.formattedDate}"></h:outputText>
+							<br/>
+							<h:outputText value="Notificacion:" ></h:outputText>
+							<h:outputText value="#{resultado.text } "></h:outputText>
+							<br/>
+						</rich:dataList>		
+						<h:outputText value="No unread notifications" 
+							style="font-style:italic" rendered="#{empty paginaInicioMB.misNotificacionesNoLeidas}"/>
+		            <rich:toggleControl switchToState="closed">
+		                <strong>Cerrar</strong>
+		            </rich:toggleControl>
+				</a4j:outputPanel> 			
+		     </f:facet>	
+			</rich:togglePanel>		
+		<br/>		
+	</h:form>
 
-	<br/>		
-		<h:form id="eventosRecientes">
-			<rich:dataGrid var="evento" columns="1" elements ="8" width="100%"
-				value="#{paginaInicioMB.eventosRecientes}">
+	<h:form id="formMisEventos" rendered="#{paginaInicioMB.isUserLogged}">
+		<strong>Mis Eventos Recientes</strong>
+		<a4j:repeat var="evento"  value="#{paginaInicioMB.misEventosRecientes}">
+			<rich:panel>
 				<f:facet name="header">
-					<h:outputText value="Eventos Recientes"></h:outputText>
+					<h:commandLink value="#{evento.evtName}" action="verEvento">
+					<f:setPropertyActionListener value="#{evento.evtId}"
+							target="#{eventoMB.eventId}" />
+					</h:commandLink>
 				</f:facet>
-				<rich:panel>
-					<f:facet name="header">
-						<h:commandLink value="#{evento.evtName}" action="verEvento">
-						<f:setPropertyActionListener value="#{evento.evtId}"
-								target="#{eventoMB.eventId}" />
-						</h:commandLink>
-					</f:facet>
-						<b><h:outputText value="Descripcion: " styleClass="label"></h:outputText></b>
-						<h:outputText value="#{evento.description}" />
-						<br></br>
-						<b><h:outputText value="Fecha: " styleClass="label"></h:outputText></b>
-						<h:outputText value="#{evento.formattedDate}" />
-						<h:graphicImage value="/ContentFeeder?id=#{evento.coverId}&#38;thb=1" />
-				</rich:panel>
-			</rich:dataGrid>
-		</h:form>
-
+				<b><h:outputText value="Descripcion: " styleClass="label"></h:outputText></b>
+				<h:outputText value="#{evento.description}" />
+				<br></br>
+				<b><h:outputText value="Fecha: " styleClass="label"></h:outputText></b>
+				<h:outputText value="#{evento.formattedDate}" />
+				<h:graphicImage value="/ContentFeeder?id=#{evento.coverId}&#38;thb=1" />
+			</rich:panel>
+		</a4j:repeat>
 		<br/>
+	</h:form>		
 
-		<h:form id="fotosMejorCalificadas">
-			<rich:dataGrid var="contenido" columns="4"
-				elements ="4" width="100%" rowKeyVar="rk"
-				value="#{paginaInicioMB.fotosMejorCalificadas}">
+	<h:form id="eventosRecientes" >
+		<rich:dataGrid var="evento" columns="1" elements ="8" width="100%"
+			value="#{paginaInicioMB.eventosRecientes}">
+			<f:facet name="header">
+				<h:outputText value="Eventos Recientes"></h:outputText>
+			</f:facet>
+			<rich:panel>
 				<f:facet name="header">
-					<h:outputText value="Fotos Mejor Calificadas"></h:outputText>
+					<h:commandLink value="#{evento.evtName}" action="verEvento">
+					<f:setPropertyActionListener value="#{evento.evtId}"
+							target="#{eventoMB.eventId}" />
+					</h:commandLink>
 				</f:facet>
-				<rich:panel>
-					<f:facet name="header">
-						<h:commandLink value="#{contenido.eventName}" action="verEvento">
+					<b><h:outputText value="Descripcion: " styleClass="label"></h:outputText></b>
+					<h:outputText value="#{evento.description}" />
+					<br></br>
+					<b><h:outputText value="Fecha: " styleClass="label"></h:outputText></b>
+					<h:outputText value="#{evento.formattedDate}" />
+					<h:graphicImage value="/ContentFeeder?id=#{evento.coverId}&#38;thb=1" />
+			</rich:panel>
+		</rich:dataGrid>
+	</h:form>
+
+	<br/>
+
+	<h:form id="fotosMejorCalificadas">
+		<rich:dataGrid var="contenido" columns="4"
+			elements ="4" width="100%" rowKeyVar="rk"
+			value="#{paginaInicioMB.fotosMejorCalificadas}">
+			<f:facet name="header">
+				<h:outputText value="Fotos Mejor Calificadas"></h:outputText>
+			</f:facet>
+			<rich:panel>
+				<f:facet name="header">
+					<h:commandLink value="#{contenido.eventName}" action="verEvento">
+					<f:setPropertyActionListener value="#{contenido.eventId}"
+							target="#{eventoMB.eventId}" />
+					</h:commandLink>
+				</f:facet>
+					<b><h:outputText value="Calificacion: " styleClass="label"></h:outputText></b>
+					<h:outputText value="#{contenido.avgScore}" />
+					<br/>
+					<h:graphicImage value="/ContentFeeder?bestRanked=1&#38;pos=#{rk+1}&#38;thb=1" />
+			</rich:panel>
+		</rich:dataGrid>
+	</h:form>
+
+	<br/>
+
+	<h:form id="fotosMasComentadas">
+		<rich:dataGrid var="contenido" columns="4"
+			elements ="4" width="100%" rowKeyVar="rk"
+			value="#{paginaInicioMB.fotosMasComentadas}">
+			<f:facet name="header">
+				<h:outputText value="Fotos Mas Comentadas"></h:outputText>
+			</f:facet>
+			<rich:panel>
+				<f:facet name="header">
+					<h:commandLink value="#{contenido.eventName}" action="verEvento">
 						<f:setPropertyActionListener value="#{contenido.eventId}"
-								target="#{eventoMB.eventId}" />
-						</h:commandLink>
-					</f:facet>
-						<b><h:outputText value="Calificacion: " styleClass="label"></h:outputText></b>
-						<h:outputText value="#{contenido.avgScore}" />
-						<br/>
-						<h:graphicImage value="/ContentFeeder?bestRanked=1&#38;pos=#{rk+1}&#38;thb=1" />
-				</rich:panel>
-			</rich:dataGrid>
-		</h:form>
-
-		<br/>
-
-		<h:form id="fotosMasComentadas">
-			<rich:dataGrid var="contenido" columns="4"
-				elements ="4" width="100%" rowKeyVar="rk"
-				value="#{paginaInicioMB.fotosMasComentadas}">
-				<f:facet name="header">
-					<h:outputText value="Fotos Mas Comentadas"></h:outputText>
+							target="#{eventoMB.eventId}" />
+					</h:commandLink>
 				</f:facet>
-				<rich:panel>
-					<f:facet name="header">
-						<h:commandLink value="#{contenido.eventName}" action="verEvento">
-							<f:setPropertyActionListener value="#{contenido.eventId}"
-								target="#{eventoMB.eventId}" />
-						</h:commandLink>
-					</f:facet>
-						<h:graphicImage value="/ContentFeeder?mostCommented=1&#38;pos=#{rk+1}&#38;thb=1" />
-						<rich:dataList var="comentario" value="#{contenido.comments}" rows="5" title="Comentarios:">
-							<b><h:outputText value="#{comentario.userName}: "></h:outputText></b>
-							<h:outputText value="#{comentario.text}: "></h:outputText>
-						</rich:dataList>
-				</rich:panel>
-			</rich:dataGrid>
-		</h:form>
+					<h:graphicImage value="/ContentFeeder?mostCommented=1&#38;pos=#{rk+1}&#38;thb=1" />
+					<rich:dataList var="comentario" value="#{contenido.comments}" rows="5" title="Comentarios:">
+						<b><h:outputText value="#{comentario.userName}: "></h:outputText></b>
+						<h:outputText value="#{comentario.text}: "></h:outputText>
+					</rich:dataList>
+			</rich:panel>
+		</rich:dataGrid>
+	</h:form>
 
-		<h:form id="usuariosMasTaggeados">
-			<rich:dataGrid var="usuarioTaggeado" columns="4"
-				elements ="4" width="100%" rowKeyVar="rk" value="#{paginaInicioMB.usuariosMasTaggeados}">
+	<h:form id="usuariosMasTaggeados">
+		<rich:dataGrid var="usuarioTaggeado" columns="4"
+			elements ="4" width="100%" rowKeyVar="rk" value="#{paginaInicioMB.usuariosMasTaggeados}">
+			<f:facet name="header">
+				<h:outputText value="Usuarios mas taggeados"></h:outputText>
+			</f:facet>
+			<rich:panel>
 				<f:facet name="header">
-					<h:outputText value="Usuarios mas taggeados"></h:outputText>
+					<h:commandLink value="#{usuarioTaggeado.user.name}" action="verPerfil">
+						<f:setPropertyActionListener value="#{usuarioTaggeado.user.username}"
+							target="#{PublicProfile.userId}" />
+					</h:commandLink>
 				</f:facet>
-				<rich:panel>
-					<f:facet name="header">
-						<h:commandLink value="#{usuarioTaggeado.user.name}" action="verPerfil">
-							<f:setPropertyActionListener value="#{usuarioTaggeado.user.username}"
-								target="#{PublicProfile.userId}" />
-						</h:commandLink>
-					</f:facet>
-						<h:graphicImage value="/UserImageFeeder?mostTagged=1&#38;pos=#{rk+1}&#38;thb=1" />
-						<b><h:outputText value="Taggedo en: "></h:outputText></b>
-						<h:outputText value="#{usuarioTaggeado.cantTags} contenidos"></h:outputText>
-				</rich:panel>
-			</rich:dataGrid>
-		</h:form>
+					<h:graphicImage value="/UserImageFeeder?mostTagged=1&#38;pos=#{rk+1}&#38;thb=1" />
+					<b><h:outputText value="Taggedo en: "></h:outputText></b>
+					<h:outputText value="#{usuarioTaggeado.cantTags} contenidos"></h:outputText>
+			</rich:panel>
+		</rich:dataGrid>
+	</h:form>
 
 
 	</ui:define>
