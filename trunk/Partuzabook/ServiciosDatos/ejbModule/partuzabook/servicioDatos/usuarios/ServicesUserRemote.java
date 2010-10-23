@@ -25,6 +25,17 @@ public interface ServicesUserRemote {
 	public DatatypeUser createNormalUser(String username, String password, String mail, String name) throws UserAlreadyExistsException;
 	
 	/**
+     * Registers a new Admin account with id username
+     * @throws UserAlreadyExistsException	- if id username is already taken
+     * @param username						- New user's username for the account
+     * @param password						- New user's password
+     * @param mail							- New user's email
+     * @param name							- New user's full name
+     * @return								- A datatype containing the new user's info
+     */
+	public DatatypeUser createAdminUser(String username, String password, String mail, String name) throws UserAlreadyExistsException;
+	
+	/**
      * Updates an user account with id username
      * @throws UserNotFoundException		- if id username doesn't exist
      * @param username						- User's username for the account
@@ -40,6 +51,12 @@ public interface ServicesUserRemote {
 	 * @param username		- Id to search for user
 	 */
 	public boolean existsNormalUser(String username);
+	
+	/**
+	 * Returns true if all normal users with username id belonging to usernames exists
+	 * @param usernames		- Id's to search for user
+	 */
+	public List<Boolean> existsNormalUser(List<String> usernames);
 	
 	/**
 	 * Returns the password for the user with id username
