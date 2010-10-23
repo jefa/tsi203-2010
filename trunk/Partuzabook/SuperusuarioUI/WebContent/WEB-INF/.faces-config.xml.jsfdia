@@ -37,4 +37,20 @@
     TITLE="#{loginMB.logout}:logoutsuccess" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#createAdmin.xhtml" PATH="/createAdmin.xhtml"
+  SHAPE="48,417,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#createAdmin.xhtml:0" NAME="item"
+   PATH="/createAdmin.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="success:#{RegisterAdminMB.adminRegistration}:#paginaInicio.xhtml"
+    NAME="output" PATH="/paginaInicio.xhtml"
+    TARGET="rules:#paginaInicio.xhtml"
+    TITLE="#{RegisterAdminMB.adminRegistration}:success" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="failure:#{RegisterAdminMB.adminRegistration}:#createAdmin.xhtml"
+    NAME="output1" PATH="/createAdmin.xhtml"
+    TARGET="rules:#createAdmin.xhtml"
+    TITLE="#{RegisterAdminMB.adminRegistration}:failure" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
 </PROCESS>

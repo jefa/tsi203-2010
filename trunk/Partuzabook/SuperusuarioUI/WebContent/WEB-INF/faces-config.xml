@@ -12,6 +12,11 @@
   <managed-bean-class>partuzabook.superusuarioUI.LoginMB</managed-bean-class>
   <managed-bean-scope>request</managed-bean-scope>
  </managed-bean>
+ <managed-bean>
+  <managed-bean-name>RegisterAdminMB</managed-bean-name>
+  <managed-bean-class>partuzabook.superusuarioUI.RegisterAdminMB</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+ </managed-bean>
  <!-- Navegación -->
  <navigation-rule>
   <from-view-id>/event.xhtml</from-view-id>
@@ -27,6 +32,19 @@
   </navigation-case>
  </navigation-rule>
  <navigation-rule>
+  <from-view-id>/createAdmin.xhtml</from-view-id>
+  <navigation-case>
+   <from-action>#{RegisterAdminMB.adminRegistration}</from-action>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/paginaInicio.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-action>#{RegisterAdminMB.adminRegistration}</from-action>
+   <from-outcome>failure</from-outcome>
+   <to-view-id>/createAdmin.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
   <from-view-id>/login.xhtml</from-view-id>
   <navigation-case>
    <from-action>#{loginMB.validUser}</from-action>
@@ -39,7 +57,7 @@
    <to-view-id>/login.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
-  <navigation-rule>
+ <navigation-rule>
   <from-view-id>*</from-view-id>
   <navigation-case>
    <from-action>#{loginMB.logout}</from-action>
