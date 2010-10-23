@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -22,7 +21,6 @@ import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
-import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.CommentDAO;
 import partuzabook.datos.persistencia.DAO.ContentCategoryDAO;
@@ -33,7 +31,6 @@ import partuzabook.datos.persistencia.DAO.EvtCategoryDAO;
 import partuzabook.datos.persistencia.DAO.ModeratedEventDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.DAO.NotificationDAO;
-import partuzabook.datos.persistencia.DAO.PhotoDAO;
 import partuzabook.datos.persistencia.DAO.RatingDAO;
 import partuzabook.datos.persistencia.DAO.TagDAO;
 import partuzabook.datos.persistencia.beans.CntCategory;
@@ -60,7 +57,6 @@ import partuzabook.entityTranslators.TranslatorCategory;
 import partuzabook.entityTranslators.TranslatorContent;
 import partuzabook.entityTranslators.TranslatorEvent;
 import partuzabook.entityTranslators.TranslatorEventSummary;
-import partuzabook.entityTranslators.TranslatorUser;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotModeratedException;
@@ -85,7 +81,6 @@ public class ServicesEvent implements ServicesEventRemote {
 	private TagDAO tagDao;
 	private NotificationDAO notifDao;
 	private FileSystemLocal fileSystem;
-	private PhotoDAO photoDao;
 	private RatingDAO ratingDao;
 	private AdminDAO adminDao;
 	private EvtCategoryDAO evtCatDao;
@@ -116,7 +111,6 @@ public class ServicesEvent implements ServicesEventRemote {
     		tagDao = (TagDAO) ctx.lookup("TagDAOBean/local");    		
     		notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
     		fileSystem = (FileSystemLocal) ctx.lookup("FileSystem/local");
-    		photoDao = (PhotoDAO) ctx.lookup("PhotoDAOBean/local");
     		ratingDao = (RatingDAO) ctx.lookup("RatingDAOBean/local");
     		adminDao = (AdminDAO) ctx.lookup("AdminDAOBean/local");
     		evtCatDao = (EvtCategoryDAO) ctx.lookup("EvtCategoryDAOBean/local");
@@ -129,13 +123,13 @@ public class ServicesEvent implements ServicesEventRemote {
     @PreDestroy
     public void preDestroy() {
     	evDao = null;
+    	mevDao = null;
     	contDao = null;
     	comDao = null;
     	nUserDao = null;
     	tagDao = null;
     	notifDao = null;
     	ratingDao = null;
-    	photoDao = null;
     	adminDao = null;
     	evtCatDao = null;
     }
@@ -406,6 +400,8 @@ public class ServicesEvent implements ServicesEventRemote {
 			content.setSize((int) file.getLength());
 			content.setUrl(url);
 			content.setPos(contDao.findNextPosInGalleryEvent(event));
+			CntCategory categoryTodas = contentCategoryDao.findByNameInEvent(event, "Todas");
+			content.getCntCategories().add(categoryTodas);
 			contDao.persist(content);
 			result.add(content.getCntIdAuto() + "");
 		}

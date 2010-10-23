@@ -14,16 +14,16 @@ INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, REG_DATE) VALUES ('aen
 
 --Insertamos las categorias
 insert into "evtCategory" values('Casamiento');
-insert into "evtCategory" values('Cumpleaños de quince');
+insert into "evtCategory" values('Cumpleaï¿½os de quince');
 insert into "evtCategory" values('Aniversario');
 insert into "evtCategory" values('Otro')
 
 --Insertamos los eventos
-INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1001, 'Cumpleaños de quince de Valentina Rosas', '2011-11-15', 240,'', '8 de Octubre 1845', 'ggadmin','M',now()::timestamp, 'Cumpleaños de quince');
+INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1001, 'Cumpleaï¿½os de quince de Valentina Rosas', '2011-11-15', 240,'', '8 de Octubre 1845', 'ggadmin','M',now()::timestamp, 'Cumpleaï¿½os de quince');
 INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1002, 'Despedida de soltero de Lorenzo Lamas', '2011-11-28', 300,'', '18 de Julio 1221', 'vmadmin','M',now()::timestamp, 'Otro');
 INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1003, 'Fiesta de Halloween del grupo de TSI2', '2011-10-31', 180,'', 'Armando Esteban Quito 665', 'rradmin','E',now()::timestamp, 'Otro');
 INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1004, 'Previa de Perry vs Juventus', '2011-10-28', 180,'', 'Aquiles Baeza 1025', 'anadmin','M',now()::timestamp, 'Otro');
-INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1005, 'Fiesta Rave de fin de año', '2010-12-31', 300,'', 'Tunel de 8 de Octubre', 'jfadmin','E',now()::timestamp, 'Otro');
+INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1005, 'Fiesta Rave de fin de aï¿½o', '2010-12-31', 300,'', 'Tunel de 8 de Octubre', 'jfadmin','E',now()::timestamp, 'Otro');
 
 --Insertamos los moderadores de los eventos	
 INSERT INTO MODS(USR_ID, EVT_ID) VALUES('ggismero', 1001);
@@ -61,17 +61,42 @@ UPDATE EVENTS SET COVER = 1003 WHERE EVT_ID_AUTO = 1003;
 UPDATE EVENTS SET COVER = 1004 WHERE EVT_ID_AUTO = 1004;
 UPDATE EVENTS SET COVER = 1005 WHERE EVT_ID_AUTO = 1005;
 
+--Insertamos las categorias de contenidos para los eventos
+INSERT INTO CNTCATEGORY(CAT_ID_AUTO, CATEGORY, EVT_ID) VALUES (1001, 'Todas', 1001);
+INSERT INTO CNTCATEGORY(CAT_ID_AUTO, CATEGORY, EVT_ID) VALUES (1002, 'Familiares', 1001);
+INSERT INTO CNTCATEGORY(CAT_ID_AUTO, CATEGORY, EVT_ID) VALUES (1003, 'Amigos', 1001);
+INSERT INTO CNTCATEGORY(CAT_ID_AUTO, CATEGORY, EVT_ID) VALUES (1004, 'Todas', 1002);
+INSERT INTO CNTCATEGORY(CAT_ID_AUTO, CATEGORY, EVT_ID) VALUES (1005, 'Todas', 1003);
+INSERT INTO CNTCATEGORY(CAT_ID_AUTO, CATEGORY, EVT_ID) VALUES (1006, 'Todas', 1004);
+INSERT INTO CNTCATEGORY(CAT_ID_AUTO, CATEGORY, EVT_ID) VALUES (1007, 'Barra', 1004);
+INSERT INTO CNTCATEGORY(CAT_ID_AUTO, CATEGORY, EVT_ID) VALUES (1008, 'Todas', 1005);
+
+--Agregamos los contenidos a las categorias
+INSERT INTO CONTENTCNTCATEGORY(CNT_ID, CAT_ID) VALUES (1001, 1001);
+INSERT INTO CONTENTCNTCATEGORY(CNT_ID, CAT_ID) VALUES (1006, 1001);
+INSERT INTO CONTENTCNTCATEGORY(CNT_ID, CAT_ID) VALUES (1001, 1002);
+INSERT INTO CONTENTCNTCATEGORY(CNT_ID, CAT_ID) VALUES (1006, 1003);
+INSERT INTO CONTENTCNTCATEGORY(CNT_ID, CAT_ID) VALUES (1002, 1004);
+INSERT INTO CONTENTCNTCATEGORY(CNT_ID, CAT_ID) VALUES (1007, 1004);
+INSERT INTO CONTENTCNTCATEGORY(CNT_ID, CAT_ID) VALUES (1003, 1005);
+INSERT INTO CONTENTCNTCATEGORY(CNT_ID, CAT_ID) VALUES (1008, 1005);
+INSERT INTO CONTENTCNTCATEGORY(CNT_ID, CAT_ID) VALUES (1004, 1006);
+INSERT INTO CONTENTCNTCATEGORY(CNT_ID, CAT_ID) VALUES (1009, 1006);
+INSERT INTO CONTENTCNTCATEGORY(CNT_ID, CAT_ID) VALUES (1004, 1007);
+INSERT INTO CONTENTCNTCATEGORY(CNT_ID, CAT_ID) VALUES (1005, 1008);
+INSERT INTO CONTENTCNTCATEGORY(CNT_ID, CAT_ID) VALUES (1010, 1008);
+
 --Insertamos comentarios para los contenidos
 INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('rrivem', 1001, 'Que buena foto!!!', now()::timestamp, now()::timestamp);
-INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('ggismero', 1001, 'Si, está muy buena. :D', now()::timestamp, now()::timestamp);
+INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('ggismero', 1001, 'Si, estï¿½ muy buena. :D', now()::timestamp, now()::timestamp);
 INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('aenavcam', 1002, 'Que buena foto!!!', now()::timestamp, now()::timestamp);
-INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('rrivem', 1002, 'Si, está muy buena. :)', now()::timestamp, now()::timestamp);
+INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('rrivem', 1002, 'Si, estï¿½ muy buena. :)', now()::timestamp, now()::timestamp);
 INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('ggismero', 1003, 'Que buena foto!!!', now()::timestamp, now()::timestamp);
-INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('jefa55', 1003, 'Si, está muy buena. ;)', now()::timestamp, now()::timestamp);
+INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('jefa55', 1003, 'Si, estï¿½ muy buena. ;)', now()::timestamp, now()::timestamp);
 INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('jefa55', 1004, 'Que buena foto!!!', now()::timestamp, now()::timestamp);
-INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('veromanduk', 1004, 'Si, está muy buena. :O', now()::timestamp, now()::timestamp);
+INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('veromanduk', 1004, 'Si, estï¿½ muy buena. :O', now()::timestamp, now()::timestamp);
 INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('veromanduk', 1005, 'Que buena foto!!!', now()::timestamp, now()::timestamp);
-INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('aenavcam', 1005, 'Si, está muy buena. :$', now()::timestamp, now()::timestamp);
+INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('aenavcam', 1005, 'Si, estï¿½ muy buena. :$', now()::timestamp, now()::timestamp);
 INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('ggismero', 1006, 'Para el recuerdo.', now()::timestamp, now()::timestamp);
 INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('rrivem', 1006, 'Totalmente. :(', now()::timestamp, now()::timestamp);
 INSERT INTO COMMENT(USR_ID, CNT_ID, TEXT, DATE, REG_DATE) VALUES('rrivem', 1007, 'Para el recuerdo.', now()::timestamp, now()::timestamp);

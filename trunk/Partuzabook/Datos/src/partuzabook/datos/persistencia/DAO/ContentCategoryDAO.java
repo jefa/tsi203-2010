@@ -9,5 +9,6 @@ import partuzabook.datos.persistencia.beans.Event;
 public interface ContentCategoryDAO extends Dao<Integer, CntCategory>{
 	
 	public CntCategory findByIDInEvent(Event event, int contentCategoryID);
+	public CntCategory findByNameInEvent(Event event, String name);
 	
 }

@@ -72,7 +72,9 @@ jQuery.noConflict();
 		<h2 class="blog-description">Porque todas las fiestas terminan en eso...</h2>
 			</div>
 	<div id="searchbar"><form method="get" class="searchform clearfix" action="#">
- <input type="text" value="Buscar..." name="s" class="s" onfocus="this.value=&#39;&#39;"/>
+ <input type="text" value="Buscar..." name="s" class="s"
+ 	onfocus="if(value=='Buscar...')value=''"
+	onblur="if(value=='')value='Buscar...'" />
  <input type="submit" class="searchsubmit" value="Search" title="Buscar evento"/>
 </form>
 </div>

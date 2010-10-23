@@ -10,17 +10,17 @@ public class TranslatorContentSummary implements ITranslatable {
 	public Object translate(Object iEnt) {
 		Content ent = (Content)iEnt;
 		DatatypeContent dat = new DatatypeContent();
-		dat.contId = ent.getCntIdAuto();
-		dat.eventId = ent.getEvent().getEvtIdAuto();
+		dat.setContId(ent.getCntIdAuto());
+		dat.setEventId(ent.getEvent().getEvtIdAuto());
 		// Set type
 		if (ent instanceof Photo){
-			dat.type  = DatatypeContent.PHOTO;
+			dat.setType(DatatypeContent.PHOTO);
 		}
 		else if (ent instanceof Video) {
-			dat.type = DatatypeContent.VIDEO;
+			dat.setType(DatatypeContent.VIDEO);
 		}
 		else {
-			dat.type = DatatypeContent.EXTERNAL;
+			dat.setType(DatatypeContent.EXTERNAL);
 		}
 		return dat;
 	}

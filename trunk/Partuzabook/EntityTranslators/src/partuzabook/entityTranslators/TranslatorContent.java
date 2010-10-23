@@ -19,42 +19,43 @@ public class TranslatorContent implements ITranslatable {
 		}			
 		Content ent = (Content)iEnt;
 		DatatypeContent dat = new DatatypeContent();
-		dat.contId = ent.getCntIdAuto();
-		dat.eventName = ent.getEvent().getEvtName();
-		dat.eventId = ent.getEvent().getEvtIdAuto();
+		dat.setContId(ent.getCntIdAuto());
+		dat.setEventName(ent.getEvent().getEvtName());
+		dat.setEventId(ent.getEvent().getEvtIdAuto());
+		dat.setCategories(TranslatorCollection.translateContentCategoriesSummary(ent.getCntCategories()));
 		// Translate list of Comments
-		dat.comments = TranslatorCollection.translateComments(ent.getComments());
+		dat.setComments(TranslatorCollection.translateComments(ent.getComments()));
 		
 		// Translate list of Ratings
-		dat.ratings = new ArrayList<DatatypeRating>();
+		dat.setRatings(new ArrayList<DatatypeRating>());
 		Iterator<Rating> itRat = ent.getRatings().iterator();
 		TranslatorRating transRat = new TranslatorRating();
 		int avg_score = 0;
 		while (itRat.hasNext()) {
 			Rating r = itRat.next();
-			dat.ratings.add((DatatypeRating) transRat.translate(r));
+			dat.getRatings().add((DatatypeRating) transRat.translate(r));
 			avg_score += r.getScore();
 			
 		}
 		//Add average score of the content
 		if(ent.getRatings()!= null && ent.getRatings().size() > 0) {
-			dat.avgScore = (double) (avg_score / ent.getRatings().size());
+			dat.setAvgScore((double) (avg_score / ent.getRatings().size()));
 		}
 		else {
-			dat.avgScore = 0.0;
+			dat.setAvgScore(0.0);
 		}
 		
-		dat.tags = TranslatorCollection.translateTag(ent.getTags());
+		dat.setTags(TranslatorCollection.translateTag(ent.getTags()));
 		
 		// Set type
 		if (ent instanceof Photo){
-			dat.type  = DatatypeContent.PHOTO;
+			dat.setType(DatatypeContent.PHOTO);
 		} else if (ent instanceof Video) {
-			dat.type = DatatypeContent.VIDEO;
+			dat.setType(DatatypeContent.VIDEO);
 		} else {
-			dat.type = DatatypeContent.EXTERNAL;
+			dat.setType(DatatypeContent.EXTERNAL);
 		}
-		dat.pos = ent.getPos();
+		dat.setPos(ent.getPos());
 		
 		return dat;
 	}

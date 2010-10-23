@@ -26,6 +26,8 @@ import javax.persistence.Table;
 			query = "SELECT c FROM CntCategory c"),
 	@NamedQuery(name = "CntCategory.findByIDInEvent",
 			query = "SELECT c FROM CntCategory c WHERE c.event = :event AND c.catIdAuto = :category"),
+	@NamedQuery(name = "CntCategory.findByNameInEvent",
+			query = "SELECT c FROM CntCategory c WHERE c.event = :event AND c.category = :category")
 })
 public class CntCategory implements Serializable {
 	private static final long serialVersionUID = 1L;

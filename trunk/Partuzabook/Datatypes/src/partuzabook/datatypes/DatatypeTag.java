@@ -5,13 +5,12 @@ import java.io.Serializable;
 public class DatatypeTag implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	public Integer posX;
-
-	public Integer posY;
-
-	public Integer contentId;
-	
-	public String userName;
+	private Integer posX;
+	private Integer posY;
+	private Integer contentId;
+	private String userName;
+	private String name;
+	private Boolean isRealUser;
 
 	
 	public DatatypeTag() {
@@ -48,5 +47,21 @@ public class DatatypeTag implements Serializable{
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Boolean getIsRealUser() {
+		return isRealUser;
+	}
+
+	public void setIsRealUser(Boolean isRealUser) {
+		this.isRealUser = isRealUser;
 	}
 }

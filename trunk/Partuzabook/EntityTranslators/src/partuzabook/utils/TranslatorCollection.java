@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import partuzabook.datatypes.DatatypeCategory;
+import partuzabook.datatypes.DatatypeCategorySummary;
 import partuzabook.datatypes.DatatypeComment;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
@@ -23,14 +23,12 @@ import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.datos.persistencia.beans.Tag;
 import partuzabook.entityTranslators.ITranslatable;
-import partuzabook.entityTranslators.TranslatorBestRanked;
 import partuzabook.entityTranslators.TranslatorCategorySummary;
 import partuzabook.entityTranslators.TranslatorComment;
 import partuzabook.entityTranslators.TranslatorContent;
 import partuzabook.entityTranslators.TranslatorContentSummary;
 import partuzabook.entityTranslators.TranslatorEventSummary;
 import partuzabook.entityTranslators.TranslatorModUser;
-import partuzabook.entityTranslators.TranslatorMostCommented;
 import partuzabook.entityTranslators.TranslatorMostTagged;
 import partuzabook.entityTranslators.TranslatorNotification;
 import partuzabook.entityTranslators.TranslatorTag;
@@ -41,7 +39,7 @@ public class TranslatorCollection {
 		return translateList(from, new TranslatorEventSummary());
 	}
 
-	public static List<DatatypeCategory> translateContentCategoriesSummary(List<CntCategory> from) {
+	public static List<DatatypeCategorySummary> translateContentCategoriesSummary(List<CntCategory> from) {
 		return translateList(from, new TranslatorCategorySummary());
 	}
 	
