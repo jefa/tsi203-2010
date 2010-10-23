@@ -62,7 +62,9 @@ public class Event implements Serializable {
 	private Integer evtIdAuto;
 
 	private String address;
-
+	private double latitude;
+	private double longitude;
+	
   //  @Temporal( TemporalType.TIMESTAMP)
 	private Timestamp date;
 
@@ -127,6 +129,22 @@ public class Event implements Serializable {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	public double getLatitude() {
+		return this.latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return this.longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
 	}
 
 	public Timestamp getDate() {
