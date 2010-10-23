@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
@@ -79,7 +80,7 @@ public class ServicesUser implements ServicesUserRemote {
     }
 
 	public DatatypeUser createNormalUser(String username, String password, String mail, String name) throws UserAlreadyExistsException{
-		if (existsNormalUser(username)) {
+		if (existsAdminUser(username) || existsNormalUser(username)) {
 			throw new UserAlreadyExistsException();
 		}
 		NormalUser newUser = new NormalUser();
@@ -91,6 +92,23 @@ public class ServicesUser implements ServicesUserRemote {
 		newUser.setRegDate(new Timestamp(new java.util.Date().getTime()));
 		
 		nUserDao.persist(newUser);
+		
+		return (DatatypeUser)new TranslatorUser().translate(newUser);
+	}
+	
+	public DatatypeUser createAdminUser(String username, String password, String mail, String name) throws UserAlreadyExistsException{
+		if (existsAdminUser(username) || existsNormalUser(username)) {
+			throw new UserAlreadyExistsException();
+		}
+		Admin newUser = new Admin();
+		newUser.setUsername(username);
+		newUser.setPassword(password);
+		newUser.setEmail(mail);
+		newUser.setName(name);
+		newUser.setImgPath("");
+		newUser.setRegDate(new Timestamp(new java.util.Date().getTime()));
+		
+		adminDao.persist(newUser);
 		
 		return (DatatypeUser)new TranslatorUser().translate(newUser);
 	}
@@ -110,6 +128,14 @@ public class ServicesUser implements ServicesUserRemote {
 	
 	public boolean existsNormalUser(String username) {
 		return nUserDao.findByID(username) !=null;
+	}
+	
+	public List<Boolean> existsNormalUser(List<String> usernames) {
+		List<Boolean> res = new ArrayList<Boolean>();
+		for(ListIterator<String> it = usernames.listIterator(); it.hasNext(); ){
+			res.add(existsNormalUser(it.next()));				
+		} 
+		return res;
 	}
 	
 	private NormalUser getNormalUser(String username) {
