@@ -10,6 +10,11 @@ public class DatatypeEventSummary implements Serializable{
 
 	private String evtName;
 	
+	private String address;
+	
+	private double latitude;
+	private double longitude;
+	
 	private int evtId;
 
 	private Date date;
@@ -31,6 +36,9 @@ public class DatatypeEventSummary implements Serializable{
 		evtId = datSummary.getEvtId();
 		date = datSummary.getDate();
 		description = datSummary.getDescription();
+		address = datSummary.address;
+		longitude = datSummary.longitude;
+		latitude = datSummary.latitude;
 		eventCategory = datSummary.getEventCategory();
 		coverId = datSummary.getCoverId();
 	}
@@ -99,5 +107,29 @@ public class DatatypeEventSummary implements Serializable{
 	
 	public List<String> getModsUsernames() {
 		return modsUsernames;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
 	}
 }
