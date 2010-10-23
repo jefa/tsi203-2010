@@ -150,7 +150,7 @@ public class Register {
 			try {
 				Context ctx = getContext();
 				servicesUser = (ServicesUserRemote)ctx.lookup("PartuzabookEAR/ServicesUser/remote");
-				if(servicesUser.existsNormalUser(username)) {
+				if(servicesUser.existsNormalUser(username) || servicesUser.existsAdminUser(username)) {
 					setUsernameMessage(USERNAME_ALREADY_EXISTS);
 				}
 				
