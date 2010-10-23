@@ -53,6 +53,8 @@ CREATE TABLE events
   evt_id_auto integer NOT NULL,
   category character varying(50),
   cover integer,
+  latitude double precision,
+  longitude double precision,
   CONSTRAINT "PK_EVENTS" PRIMARY KEY (evt_id_auto),
   CONSTRAINT "FK_CREATOR" FOREIGN KEY (creator)
       REFERENCES users (username) MATCH SIMPLE
