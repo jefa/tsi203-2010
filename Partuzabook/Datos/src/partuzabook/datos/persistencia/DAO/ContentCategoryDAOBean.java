@@ -34,5 +34,10 @@ public class ContentCategoryDAOBean extends JpaDao<Integer, CntCategory> impleme
 		return (CntCategory)namedQuery.getSingleResult();	
 	}
 
-	
+	public CntCategory findByNameInEvent(Event event, String name) {
+		Query namedQuery = em.createNamedQuery("CntCategory.findByIDInEvent");
+		namedQuery.setParameter("event", event);
+		namedQuery.setParameter("category", name);
+		return (CntCategory)namedQuery.getSingleResult();	
+	}
 }

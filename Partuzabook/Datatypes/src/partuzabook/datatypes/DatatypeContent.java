@@ -4,6 +4,27 @@ import java.io.Serializable;
 import java.util.List;
 
 public class DatatypeContent implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	public static final short PHOTO = 0;
+	public static final short VIDEO = 1;
+	public static final short EXTERNAL = 2;
+	
+	private Integer contId;
+	private String eventName;
+	private Integer eventId;  
+	private Double avgScore;
+	private List<DatatypeCategorySummary> categories;
+	private List<DatatypeComment> comments;
+	private List<DatatypeRating> ratings;
+	private List<DatatypeTag> tags;
+	private short type;
+	private int pos;
+	
+	public DatatypeContent() {
+		
+	}
+	
 	public Integer getContId() {
 		return contId;
 	}
@@ -18,6 +39,14 @@ public class DatatypeContent implements Serializable {
 
 	public void setAvgScore(Double avgScore) {
 		this.avgScore = avgScore;
+	}
+
+	public void setCategories(List<DatatypeCategorySummary> categories) {
+		this.categories = categories;
+	}
+
+	public List<DatatypeCategorySummary> getCategories() {
+		return categories;
 	}
 
 	public List<DatatypeComment> getComments() {
@@ -90,33 +119,5 @@ public class DatatypeContent implements Serializable {
 	
 	public void setEventId(Integer id){
 		this.eventId = id;
-	}
-	
-	private static final long serialVersionUID = 1L;
-	
-	public static final short PHOTO = 0;
-	public static final short VIDEO = 1;
-	public static final short EXTERNAL = 2;
-	
-	public Integer contId;
-	
-	public String eventName;
-	
-	public Integer eventId;  
-	
-	public Double avgScore;
-	
-	public List<DatatypeComment> comments;
-	
-	public List<DatatypeRating> ratings;
-	
-	public List<DatatypeTag> tags;
-	
-	public short type;
-
-	public int pos;
-	
-	public DatatypeContent() {
-		
 	}
 }

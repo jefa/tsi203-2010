@@ -11,7 +11,6 @@ import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
-import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
@@ -86,8 +85,8 @@ public class Main {
 		        	System.out.println("   Result: NULL");
 		        } else {
 		        	for (int i = 0; i < masComentadas.size(); i++) {
-		        		System.out.println("   El contenido con ID " + masComentadas.get(i).contId + " tiene " 
-		        				+ masComentadas.get(i).comments.size() + " comentarios");
+		        		System.out.println("   El contenido con ID " + masComentadas.get(i).getContId() + " tiene " 
+		        				+ masComentadas.get(i).getComments().size() + " comentarios");
 		        	}	        		
 	        	}	
 	        	System.out.println("6. Invocando getBestQualifiedPictures");
@@ -96,8 +95,8 @@ public class Main {
 		        	System.out.println("   Result: NULL");
 		        } else {
 		        	for (int i = 0; i < mayorRating.size(); i++) {
-		        		System.out.println("   El contenido con ID " + mayorRating.get(i).contId + " tiene rating promedio de " 
-		        				+ mayorRating.get(i).avgScore);
+		        		System.out.println("   El contenido con ID " + mayorRating.get(i).getContId() + " tiene rating promedio de " 
+		        				+ mayorRating.get(i).getAvgScore());
 		        	}	        		
 	        	}
 	        	System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - ");
@@ -115,11 +114,11 @@ public class Main {
 	        		if (cont == null) {
 	        			System.out.println("   Result: NULL");
 			        } else {
-			        	System.out.println("   Galería de fotos - Posicion " + pos + " - Contenido con ID: " +  cont.contId);	        			
+			        	System.out.println("   Galería de fotos - Posicion " + pos + " - Contenido con ID: " +  cont.getContId());	        			
 	        			System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - ");
 			        	System.out.println("**** Testeando CU Etiquetar Usuario En Foto ****");
 		        		System.out.println("1. Invocando getUsersForTag");
-		        		List<DatatypeUser> users = evt.getUsersForTag(eventID,cont.contId);
+		        		List<DatatypeUser> users = evt.getUsersForTag(eventID,cont.getContId());
 			        	if (users == null){
 		        			System.out.println("   Result: NULL");
 			        	} else {
@@ -127,12 +126,12 @@ public class Main {
 				        		System.out.println("  Usuario: " + users.get(i).username );
 				        	}	
 				        	System.out.println("2. Invocando tagUserInContent");				        	
-				        	evt.tagUserInContent(eventID, cont.contId, usuario, users.get(pos).username, 1, 1);	        		        	
+				        	evt.tagUserInContent(eventID, cont.getContId(), usuario, users.get(pos).username, 1, 1);	        		        	
 				        	System.out.println("3. Invocando nuevamente para ver si quedo el tag");				        	
-				        	cont = evt.getContentDetails(cont.contId, usuario);	
-					        System.out.println("   Tags para el contenido con ID " +  cont.contId);
-					        for (int i = 0; i < cont.tags.size(); i++) {
-					        	System.out.println("   " + cont.tags.get(i).userName);
+				        	cont = evt.getContentDetails(cont.getContId(), usuario);	
+					        System.out.println("   Tags para el contenido con ID " +  cont.getContId());
+					        for (int i = 0; i < cont.getTags().size(); i++) {
+					        	System.out.println("   " + cont.getTags().get(i).getUserName());
 					        }			        	
 			        	}	        	
 		

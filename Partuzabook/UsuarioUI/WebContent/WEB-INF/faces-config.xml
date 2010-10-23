@@ -23,11 +23,6 @@
   <managed-bean-scope>request</managed-bean-scope>
  </managed-bean>
  <managed-bean>
-  <managed-bean-name>tagSuggestionMB</managed-bean-name>
-  <managed-bean-class>partuzabook.usuarioUI.TagSuggestionMB</managed-bean-class>
-  <managed-bean-scope>request</managed-bean-scope>
- </managed-bean>
- <managed-bean>
   <managed-bean-name>imageLoader</managed-bean-name>
   <managed-bean-class>partuzabook.usuarioUI.ImageLoader</managed-bean-class>
   <managed-bean-scope>request</managed-bean-scope>

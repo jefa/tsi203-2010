@@ -6,7 +6,7 @@ import java.util.List;
 public class DatatypeEvent extends DatatypeEventSummary implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	private List<DatatypeCategory> contentCategories;
+	private List<DatatypeCategorySummary> contentCategories;
 	
     public DatatypeEvent() {
     	
@@ -16,11 +16,11 @@ public class DatatypeEvent extends DatatypeEventSummary implements Serializable{
     	super(datSummary);
     }
 
-	public List<DatatypeCategory> getContentCategories() {
+	public List<DatatypeCategorySummary> getContentCategories() {
 		return contentCategories;
 	}
 
-	public void setContentCategories(List<DatatypeCategory> contentCategories) {
+	public void setContentCategories(List<DatatypeCategorySummary> contentCategories) {
 		this.contentCategories = contentCategories;
 	}
 
