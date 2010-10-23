@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:composition template="templates/superusuarioUI.xhtml">
+	<ui:define name="title">Registro de Superusuario</ui:define>
+	<ui:define name="body">
+		<f:view>
+			<center>
+			<rich:panel header="Registro de Superusuario" style="width:380px">
+				<h:form>
+				<!-- //TODO: -->				
+				<h:outputText value=""/>
+				<!--<h:panelGrid id="lpg" columns="2" >-->					
+					<h:outputText value="User Id:"/> <br/>
+					<h:inputText id="usernameField" value="#{RegisterAdminMB.username}"/><br/>
+					<h:outputText value="#{RegisterAdminMB.usernameMessage}" style="color:red"/><br/>					
+					<h:outputText value="Contraseña:"/><br/>
+					<h:inputSecret id="passwordField" value="#{RegisterAdminMB.password}"/><br/>
+					<h:outputText value="#{RegisterAdminMB.passwordMessage}" style="color:red"/><br/>
+					<h:outputText value="Confirmación de contraseña:"/><br/>
+					<h:inputSecret id="passwordRepeatedField" value="#{RegisterAdminMB.passwordRepeated}"/><br/>
+					<h:outputText value="#{RegisterAdminMB.passwordRepeatedMessage}" style="color:red"/><br/>
+					<h:outputText value="Nombre:"/><br/>
+					<h:inputText id="nameField" value="#{RegisterAdminMB.name}"/><br/>
+					<h:outputText value="#{RegisterAdminMB.nameMessage}" style="color:red"/><br/>
+					<h:outputText value="Email:"/><br/>
+					<h:inputText id="emailField" value="#{RegisterAdminMB.email}"/><br/>
+					<h:outputText value="#{RegisterAdminMB.emailMessage}" style="color:red"/><br/>
+				<!--</h:panelGrid>-->
+				<br/>
+				<h:commandButton value="Registrar Usuario" action="#{RegisterAdminMB.adminRegistration}"/>
+				</h:form>
+			</rich:panel>
+			</center>
+	</f:view>	
+	</ui:define>
+</ui:composition>
+</html>

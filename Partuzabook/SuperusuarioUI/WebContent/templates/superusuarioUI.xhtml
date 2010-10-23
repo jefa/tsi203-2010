@@ -7,6 +7,7 @@
 	xmlns:rich="http://richfaces.org/rich">
 
 <head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
 <link rel="stylesheet" id="comfeed-css" href="styles/comfeed.css" type="text/css" media="all"/>
 <link rel="stylesheet" id="wp-pagenavi-css" href="styles/pagenavi-css.css" type="text/css" media="all"/>
@@ -59,7 +60,8 @@ function toggleVisibility(controlId) {
 		control.style.visibility = "visible";
 }
 </script>
-
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="scripts/googlemaps.js"></script> 
 </head>
 
 <body class="home blog layout-2c-r-fixed js style-default">
@@ -91,13 +93,15 @@ jQuery.noConflict();
 <div id="nav">
 	<div id="nav-content" class="clearfix">
 	<div class="menu-main-menu-container"><ul id="menu-main-menu" class="sf-menu menu clearfix sf-js-enabled sf-shadow">
-<li class="menu-item menu-item-type-taxonomy"><a href="paginaInicio.jsf">Home</a></li>
-<li class="menu-item menu-item-type-taxonomy"><a href="event.jsf">Crear Evento</a></li>
-<li class="menu-item menu-item-type-taxonomy"><h:form><h:commandLink value="Logout" action="#{loginMB.logout}"></h:commandLink></h:form></li>
+		<li class="menu-item menu-item-type-taxonomy"><a href="paginaInicio.jsf">Home</a></li>
+		<li class="menu-item menu-item-type-taxonomy"><a href="event.jsf">Crear Evento</a></li>
+		<li class="menu-item menu-item-type-taxonomy"><a href="createAdmin.jsf">Crear Superusuario</a></li>
+		<li class="menu-item menu-item-type-taxonomy"><h:form><h:commandLink value="Logout" action="#{loginMB.logout}"></h:commandLink></h:form></li>
 </ul></div>		
 	</div><!-- #nav-content -->
 </div><!-- #nav -->
 
+ 
 <div id="wrapper">
 	
 	  
