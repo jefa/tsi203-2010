@@ -24,11 +24,11 @@ import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeUser;
-import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.DAO.CommentDAO;
 import partuzabook.datos.persistencia.DAO.ContentCategoryDAO;
 import partuzabook.datos.persistencia.DAO.ContentDAO;
 import partuzabook.datos.persistencia.DAO.EventDAO;
+import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.DAO.EvtCategoryDAO;
 import partuzabook.datos.persistencia.DAO.ModeratedEventDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
@@ -36,12 +36,12 @@ import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.DAO.PhotoDAO;
 import partuzabook.datos.persistencia.DAO.RatingDAO;
 import partuzabook.datos.persistencia.DAO.TagDAO;
-import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.CntCategory;
 import partuzabook.datos.persistencia.beans.Comment;
 import partuzabook.datos.persistencia.beans.CommentPK;
 import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
+import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.EvtCategory;
 import partuzabook.datos.persistencia.beans.ModeratedEvent;
 import partuzabook.datos.persistencia.beans.NormalUser;
@@ -565,7 +565,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	
 	public DatatypeEventSummary createEvent(String name, String description,
 			java.util.Date date, int duration, String address, String creator,
-			boolean moderated, String category) throws UserNotFoundException, EvtCategoryNotFoundException{
+			boolean moderated, String category, double latitude, double longitude) throws UserNotFoundException, EvtCategoryNotFoundException{
 		
 		Admin a = adminDao.findByID(creator);
 		if(a == null) {
@@ -591,6 +591,8 @@ public class ServicesEvent implements ServicesEventRemote {
 		evt.setAddress(address);
 		evt.setCreator(a);
 		evt.setEvtCategory(eCat);
+		evt.setLatitude(latitude);
+		evt.setLongitude(longitude);
 		evt.setRegDate(new Timestamp(new java.util.Date().getTime()));
 
 		evDao.persist(evt);

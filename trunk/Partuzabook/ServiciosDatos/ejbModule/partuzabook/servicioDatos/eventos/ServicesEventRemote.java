@@ -9,7 +9,6 @@ import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
-import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
@@ -34,7 +33,7 @@ public interface ServicesEventRemote {
 	 */
 	public DatatypeEventSummary createEvent(String name, String description, 
 			Date date, int duration, String address, String creator, boolean moderated, 
-			String category) throws UserNotFoundException, EvtCategoryNotFoundException;
+			String category, double latitude, double longitude) throws UserNotFoundException, EvtCategoryNotFoundException;
 	
 	/**
 	 * Adds new Users as mods to event with evt_id_auto = evt_id. If the user is only a normal user, it transforms to a client.
@@ -194,6 +193,9 @@ public interface ServicesEventRemote {
 	 */
 	public void rateContent(int contentID, int rating, String user) throws Exception;
 
+	/**
+	 * Returns the public content, used in the main page.
+	 * */
 	public byte[] getPublicContent(String type, int pos, int thumbnail);
 
 }
