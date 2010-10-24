@@ -1,6 +1,7 @@
 package partuzabook.datatypes;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class DataTypeFile implements Serializable{
 
@@ -11,6 +12,8 @@ public class DataTypeFile implements Serializable{
 	private String mime;
 	private long length;
 	private byte[] data;
+	private String description;
+	private List<DatatypeCategory> categories;
 	
 	public String getId() {
 		return id;
@@ -63,4 +66,21 @@ public class DataTypeFile implements Serializable{
 	public String getMime(){
 		return mime;
 	}
+	
+	public void setDescription(String descr){
+		this.description = descr;
+	}
+	
+	public String getDescription(){
+		return this.description;
+	}
+	
+	public void setCategories(List<DatatypeCategory> cats){
+		this.categories = cats;
+	}
+	
+	public List<DatatypeCategory> getCategories(){
+		return this.categories;
+	}
+	
 }

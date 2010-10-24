@@ -38,11 +38,11 @@
 		<h:panelGroup id="authorizedContent"
 			rendered="#{eventoMB.validUserForContext}">
 			<h:form id="formUploadContent">
-				<h:commandLink value="Añadir contenido al evento"
+				<h:commandButton value="Añadir contenido al evento"
 					action="subirContenido">
 					<f:setPropertyActionListener value="#{eventoMB.eventId}"
 						target="#{subirFotoMB.idEvento}" />
-				</h:commandLink>
+				</h:commandButton>
 			</h:form>
 			<ui:include src="/galeria.xhtml" />
 

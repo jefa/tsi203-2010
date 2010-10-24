@@ -399,6 +399,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			content.setRegDate(new Timestamp(new java.util.Date().getTime()));
 			content.setSize((int) file.getLength());
 			content.setUrl(url);
+			content.setDescription(file.getDescription());
 			content.setPos(contDao.findNextPosInGalleryEvent(event));
 			CntCategory categoryTodas = contentCategoryDao.findByNameInEvent(event, "Todas");
 			content.getCntCategories().add(categoryTodas);
