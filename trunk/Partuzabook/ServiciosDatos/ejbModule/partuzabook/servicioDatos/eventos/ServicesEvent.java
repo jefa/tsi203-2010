@@ -33,6 +33,7 @@ import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.DAO.RatingDAO;
 import partuzabook.datos.persistencia.DAO.TagDAO;
+import partuzabook.datos.persistencia.beans.Album;
 import partuzabook.datos.persistencia.beans.CntCategory;
 import partuzabook.datos.persistencia.beans.Comment;
 import partuzabook.datos.persistencia.beans.CommentPK;
@@ -57,10 +58,13 @@ import partuzabook.entityTranslators.TranslatorCategory;
 import partuzabook.entityTranslators.TranslatorContent;
 import partuzabook.entityTranslators.TranslatorEvent;
 import partuzabook.entityTranslators.TranslatorEventSummary;
+import partuzabook.servicioDatos.exception.AlbumNotFoundException;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
+import partuzabook.servicioDatos.exception.ContentNotInAlbumException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotModeratedException;
 import partuzabook.servicioDatos.exception.EvtCategoryNotFoundException;
+import partuzabook.servicioDatos.exception.InvalidPositionInAlbumException;
 import partuzabook.servicioDatos.exception.UnrecognizedFileTypeException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.servicioDatos.exception.UserNotRelatedToEventException;
@@ -641,6 +645,39 @@ public class ServicesEvent implements ServicesEventRemote {
 			res.add(it.next().getCategory());
 		}
 		return res;
+	}
+
+	public void addContentToAlbum(int contentID, int eventID, int pos) {
+		Event event = getEvent(eventID);
+		Album album = event.getAlbum();
+		if(album == null)
+			throw new AlbumNotFoundException();
+		// Verify if content exists 
+		Content currentContent = contDao.findByIDInEvent(event, contentID);
+		if (currentContent == null)
+			throw new ContentNotFoundException();
+		// Set pos to content
+		currentContent.setPos(pos);
+	}
+
+	public void changePosInAlbum(int contentID, int eventID, int newPos) {
+		Event event = getEvent(eventID);
+		Album album = event.getAlbum();
+		if(album == null)
+			throw new AlbumNotFoundException();
+		// Verify if content is part of the album
+		Content currentContent = contDao.findByIDInEvent(event, contentID);
+		if (currentContent == null)
+			throw new ContentNotFoundException();
+		int oldPos = currentContent.getPos();
+		if (oldPos < 0)
+			throw new ContentNotInAlbumException();
+		Content otherContent = contDao.findByPosInEvent(event, newPos);
+		if (otherContent == null) 
+			throw new InvalidPositionInAlbumException();
+		// Exchange positions in album
+		otherContent.setPos(oldPos);
+		currentContent.setPos(newPos);
 	}
 
 	

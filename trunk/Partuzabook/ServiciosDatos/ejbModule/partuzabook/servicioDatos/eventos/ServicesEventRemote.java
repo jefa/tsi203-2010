@@ -197,5 +197,21 @@ public interface ServicesEventRemote {
 	 * Returns the public content, used in the main page.
 	 * */
 	public byte[] getPublicContent(String type, int pos, int thumbnail);
+	
+	/**
+	 * Adds the content in position pos from the album of the event
+	 * @param contentID
+	 * @param eventID
+	 * @param pos
+	 */
+	public void addContentToAlbum(int contentID, int eventID, int pos);
+	
+	/**
+	 * Modifies the position of the content in the album. Contents in oldPos and newPos are exchanged
+	 * @param contentID
+	 * @param eventID
+	 * @param pos
+	 */
+	public void changePosInAlbum(int contentID, int eventID, int newPos);
 
 }
