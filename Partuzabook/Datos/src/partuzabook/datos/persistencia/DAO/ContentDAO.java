@@ -12,7 +12,7 @@ public interface ContentDAO extends Dao<Integer, Content>{
 	
 	public Content findByIDInEvent(Event event, int contentID);
 	
-	public List<Content> findByPosInGalleryEvent(Event event, int pos);
+	public Content findByPosInEvent(Event event, int pos);
 	
 	public Integer findNextPosInGalleryEvent(Event event);
 

@@ -35,7 +35,7 @@ import javax.persistence.OneToMany;
 			query = "SELECT c FROM Content c"),
 	@NamedQuery(name = "Content.findByIDInEvent",
 			query = "SELECT c FROM Content c WHERE c.event = :event AND c.cntIdAuto = :content"),
-	@NamedQuery(name = "Content.findByPosInGalleryEvent",
+	@NamedQuery(name = "Content.findByPosInEvent",
 			query = "SELECT c FROM Content c WHERE c.event = :event AND c.pos = :pos"),
 	@NamedQuery(name = "Content.findNextPosInGalleryEvent",
 			query = "SELECT c FROM Content c WHERE c.event = :event"),
