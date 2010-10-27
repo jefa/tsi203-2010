@@ -5,158 +5,211 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:rich="http://richfaces.org/rich">
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	>
 
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Pagina Inicio</ui:define>
+	<ui:define name="styles">
+	.main-aside {width:300px;}
+	#container {width:660px;}
+	#content {width:660px;} 
+	</ui:define>
 	<ui:define name="body">
-		
-		<h:form id="formNotifications" rendered="#{paginaInicioMB.isUserLogged}">		
-		  	<rich:togglePanel value="#{paginaInicioMB.toggleState}" switchType="client"
-		    	stateOrder="closed,opened">
 
-		 	<f:facet name="closed">
-	            <rich:toggleControl switchToState="opened">
-	                <strong>Ver Notificaciones</strong>
-	            </rich:toggleControl>
-		     </f:facet>
-
-		 	<f:facet name="opened" >
-			 	<a4j:outputPanel id="output">  
-						<rich:dataList var="resultado"  rendered="#{not empty paginaInicioMB.misNotificacionesNoLeidas}"
-							value="#{paginaInicioMB.misNotificacionesNoLeidas}" rows="10">				
-							<h:outputText value="Fecha:"  ></h:outputText>
-							<h:outputText value="#{resultado.formattedDate}"></h:outputText>
-							<br/>
-							<h:outputText value="Notificacion:" ></h:outputText>
-							<h:outputText value="#{resultado.text } "></h:outputText>
-							<br/>
-						</rich:dataList>		
-						<h:outputText value="No unread notifications" 
-							style="font-style:italic" rendered="#{empty paginaInicioMB.misNotificacionesNoLeidas}"/>
-		            <rich:toggleControl switchToState="closed">
-		                <strong>Cerrar</strong>
-		            </rich:toggleControl>
-				</a4j:outputPanel> 			
-		     </f:facet>	
-			</rich:togglePanel>		
-		<br/>		
-	</h:form>
-
-	<h:form id="formMisEventos" rendered="#{paginaInicioMB.isUserLogged}">
-		<strong>Mis Eventos Recientes</strong>
-		<a4j:repeat var="evento"  value="#{paginaInicioMB.misEventosRecientes}">
-			<rich:panel>
-				<f:facet name="header">
-					<h:commandLink value="#{evento.evtName}" action="verEvento">
-					<f:setPropertyActionListener value="#{evento.evtId}"
+		<h:form id="formMisEventos" rendered="#{paginaInicioMB.isUserLogged}">
+			<div id="index-featured1">
+			<div class="home-title">Mis Eventos Recientes</div>
+			<ul class="hfeed posts-default clearfix">
+				<a4j:repeat var="evento"
+					value="#{paginaInicioMB.misEventosRecientes}">
+					<li class="post type-post clearfix">
+					<div class="entry-thumbnails"><h:commandLink
+						action="verEvento" styleClass="entry-thumbnails-link">
+						<f:setPropertyActionListener value="#{evento.evtId}"
 							target="#{eventoMB.eventId}" />
-					</h:commandLink>
-				</f:facet>
-				<b><h:outputText value="Descripcion: " styleClass="label"></h:outputText></b>
-				<h:outputText value="#{evento.description}" />
-				<br></br>
-				<b><h:outputText value="Fecha: " styleClass="label"></h:outputText></b>
-				<h:outputText value="#{evento.formattedDate}" />
-				<h:graphicImage value="/ContentFeeder?id=#{evento.coverId}&#38;thb=1" />
-			</rich:panel>
-		</a4j:repeat>
-		<br/>
-	</h:form>		
 
-	<h:form id="eventosRecientes" >
-		<rich:dataGrid var="evento" columns="1" elements ="8" width="100%"
-			value="#{paginaInicioMB.eventosRecientes}">
-			<f:facet name="header">
-				<h:outputText value="Eventos Recientes"></h:outputText>
-			</f:facet>
-			<rich:panel>
-				<f:facet name="header">
-					<h:commandLink value="#{evento.evtName}" action="verEvento">
-					<f:setPropertyActionListener value="#{evento.evtId}"
+						<h:graphicImage
+							value="/ContentFeeder?id=#{evento.coverId}&#38;thb=195"
+							style="height:195px;margin:-85px 0 0 0"
+							styleClass="attachment-node-based-thumb wp-post-image" />
+
+						<span class="entry-meta"> <abbr class="published">#{evento.formattedDate}</abbr>
+						</span>
+					</h:commandLink></div>
+					<h3 class="entry-title"><h:commandLink
+						value="#{evento.evtName}" action="verEvento">
+						<f:setPropertyActionListener value="#{evento.evtId}"
 							target="#{eventoMB.eventId}" />
-					</h:commandLink>
-				</f:facet>
-					<b><h:outputText value="Descripcion: " styleClass="label"></h:outputText></b>
-					<h:outputText value="#{evento.description}" />
-					<br></br>
-					<b><h:outputText value="Fecha: " styleClass="label"></h:outputText></b>
-					<h:outputText value="#{evento.formattedDate}" />
-					<h:graphicImage value="/ContentFeeder?id=#{evento.coverId}&#38;thb=1" />
-			</rich:panel>
-		</rich:dataGrid>
-	</h:form>
+					</h:commandLink></h3>
+					</li>
+				</a4j:repeat>
+			</ul>
+			<!-- .posts-default --></div>
+			<!-- #index-featured1 -->
 
-	<br/>
+		</h:form>
 
-	<h:form id="fotosMejorCalificadas">
-		<rich:dataGrid var="contenido" columns="4"
-			elements ="4" width="100%" rowKeyVar="rk"
-			value="#{paginaInicioMB.fotosMejorCalificadas}">
-			<f:facet name="header">
-				<h:outputText value="Fotos Mejor Calificadas"></h:outputText>
-			</f:facet>
-			<rich:panel>
-				<f:facet name="header">
-					<h:commandLink value="#{contenido.eventName}" action="verEvento">
-					<f:setPropertyActionListener value="#{contenido.eventId}"
+		<h:form id="eventosRecientes">
+			<div id="index-featured2">
+			<div class="home-title">Eventos Recientes</div>
+			<ul class="hfeed posts-quick clearfix">
+				<a4j:repeat var="evento" value="#{paginaInicioMB.eventosRecientes}">
+					<li class="post type-post clearfix">
+					<div class="entry-thumbnails"><h:commandLink
+						action="verEvento" styleClass="entry-thumbnails-link">
+						<f:setPropertyActionListener value="#{evento.evtId}"
 							target="#{eventoMB.eventId}" />
-					</h:commandLink>
-				</f:facet>
-					<b><h:outputText value="Calificacion: " styleClass="label"></h:outputText></b>
-					<h:outputText value="#{contenido.avgScore}" />
-					<br/>
-					<h:graphicImage value="/ContentFeeder?bestRanked=1&#38;pos=#{rk+1}&#38;thb=1" />
-			</rich:panel>
-		</rich:dataGrid>
-	</h:form>
 
-	<br/>
-
-	<h:form id="fotosMasComentadas">
-		<rich:dataGrid var="contenido" columns="4"
-			elements ="4" width="100%" rowKeyVar="rk"
-			value="#{paginaInicioMB.fotosMasComentadas}">
-			<f:facet name="header">
-				<h:outputText value="Fotos Mas Comentadas"></h:outputText>
-			</f:facet>
-			<rich:panel>
-				<f:facet name="header">
-					<h:commandLink value="#{contenido.eventName}" action="verEvento">
-						<f:setPropertyActionListener value="#{contenido.eventId}"
+						<h:graphicImage
+							value="/ContentFeeder?id=#{evento.coverId}&#38;thb=115"
+							styleClass="attachment-quick-preview-thumb wp-post-image" />
+					</h:commandLink></div>
+					<h3 class="entry-title"><h:commandLink
+						value="#{evento.evtName}" action="verEvento">
+						<f:setPropertyActionListener value="#{evento.evtId}"
 							target="#{eventoMB.eventId}" />
-					</h:commandLink>
-				</f:facet>
-					<h:graphicImage value="/ContentFeeder?mostCommented=1&#38;pos=#{rk+1}&#38;thb=1" />
-					<rich:dataList var="comentario" value="#{contenido.comments}" rows="5" title="Comentarios:">
-						<b><h:outputText value="#{comentario.userName}: "></h:outputText></b>
-						<h:outputText value="#{comentario.text}: "></h:outputText>
-					</rich:dataList>
-			</rich:panel>
-		</rich:dataGrid>
-	</h:form>
+					</h:commandLink></h3>
+					<div class="entry-summary">
+					<div class="entry-info"><abbr class="published">#{evento.formattedDate}
+					</abbr></div>
+					#{evento.description}
+					<p class="quick-read-more"><h:commandLink value="Ver evento..."
+						action="verEvento">
+						<f:setPropertyActionListener value="#{evento.evtId}"
+							target="#{eventoMB.eventId}" />
+					</h:commandLink></p>
+					</div>
+					</li>
+				</a4j:repeat>
+			</ul>
+			<!-- .posts-quick --></div>
+			<!-- #index-featured2 -->
 
-	<h:form id="usuariosMasTaggeados">
-		<rich:dataGrid var="usuarioTaggeado" columns="4"
-			elements ="4" width="100%" rowKeyVar="rk" value="#{paginaInicioMB.usuariosMasTaggeados}">
-			<f:facet name="header">
-				<h:outputText value="Usuarios mas taggeados"></h:outputText>
-			</f:facet>
-			<rich:panel>
-				<f:facet name="header">
-					<h:commandLink value="#{usuarioTaggeado.user.name}" action="verPerfil">
-						<f:setPropertyActionListener value="#{usuarioTaggeado.user.username}"
-							target="#{PublicProfile.userId}" />
-					</h:commandLink>
-				</f:facet>
-					<h:graphicImage value="/UserImageFeeder?mostTagged=1&#38;pos=#{rk+1}&#38;thb=1" />
-					<b><h:outputText value="Taggedo en: "></h:outputText></b>
-					<h:outputText value="#{usuarioTaggeado.cantTags} contenidos"></h:outputText>
-			</rich:panel>
-		</rich:dataGrid>
-	</h:form>
+		</h:form>
+
+
+
+
 
 
 	</ui:define>
+	<ui:define name="sidebar">
+		<ul class="xoxo" id="ulSidebar">
+			<h:form id="formNotifications"
+				rendered="#{paginaInicioMB.isUserLogged}">
+				<li id="theme-switch" class="widgetcontainer clearfix">
+				<h5 class="widgettitle">Notificaciones</h5>
+				<a4j:outputPanel id="output">
+					<rich:dataList var="resultado"
+						rendered="#{not empty paginaInicioMB.misNotificacionesNoLeidas}"
+						value="#{paginaInicioMB.misNotificacionesNoLeidas}" rows="10">
+						<h:outputText value="Fecha:"></h:outputText>
+						<h:outputText value="#{resultado.formattedDate}"></h:outputText>
+						<br />
+						<h:outputText value="Notificacion:"></h:outputText>
+						<h:outputText value="#{resultado.text } "></h:outputText>
+						<br />
+					</rich:dataList>
+					<h:outputText value="No unread notifications"
+						style="font-style:italic"
+						rendered="#{empty paginaInicioMB.misNotificacionesNoLeidas}" />
+				</a4j:outputPanel></li>
+			</h:form>
+
+			<li class="multi-sidebar-container">
+			<div
+				class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
+			<script type="">
+			function toggleTab(control, tab)
+			{
+				jQuery('div.ui-tabs-panel').addClass('ui-tabs-hide');
+				jQuery('#' + control).fadeIn();
+				jQuery('#' + control).removeClass('ui-tabs-hide');
+				jQuery('ul.ui-tabs-nav li').removeClass('ui-tabs-selected ui-state-active');
+				jQuery(tab.parentNode).addClass('ui-tabs-selected ui-state-active');
+			}
+			</script>
+			<ul
+				class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+				<li
+					class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a
+					href="javascript:null" onclick="toggleTab('s-calificadas',this)"><span>Mejor
+				calificadas</span></a></li>
+				<li class="ui-state-default ui-corner-top"><a
+					href="javascript:null" onclick="toggleTab('s-comentadas',this)"><span>Mas
+				comentadas</span></a></li>
+				<li class="ui-state-default ui-corner-top"><a
+					href="javascript:null" onclick="toggleTab('s-figureti',this)"><span>Figureti</span></a></li>
+
+			</ul>
+			<div id="s-calificadas"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
+
+
+			<h:form id="fotosMejorCalificadas">
+				<a4j:repeat var="contenido" rowKeyVar="rk" rows="5"
+					value="#{paginaInicioMB.fotosMejorCalificadas}">
+					<li class="clearfix"><span class="thumb" style="height: 36px"><h:graphicImage
+						value="/ContentFeeder?bestRanked=1&#38;pos=#{rk+1}&#38;thb=36"
+						styleClass="attachment-sidebar-thumb wp-post-image" width="36px"
+						height="36px" /></span> <h:commandLink value="#{contenido.eventName}"
+						action="verEvento">
+						<f:setPropertyActionListener value="#{contenido.eventId}"
+							target="#{eventoMB.eventId}" />
+					</h:commandLink> <br />
+					<span class="sub"><strong>Calificacion:</strong> #{contenido.avgScore}</span></li>
+				</a4j:repeat>
+			</h:form></div>
+
+			<div id="s-comentadas"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<h:form id="fotosMasComentadas">
+				<a4j:repeat var="contenido" rowKeyVar="rk"
+					value="#{paginaInicioMB.fotosMasComentadas}" rows="5">
+					<li class="clearfix"><span class="thumb" style="height: 36px"><h:graphicImage
+						value="/ContentFeeder?mostCommented=1&#38;pos=#{rk+1}&#38;thb=36"
+						styleClass="attachment-sidebar-thumb wp-post-image" width="36px"
+						height="36px" /></span> <h:commandLink value="#{contenido.eventName}"
+						action="verEvento">
+						<f:setPropertyActionListener value="#{contenido.eventId}"
+							target="#{eventoMB.eventId}" />
+					</h:commandLink> <br />
+					<span class="sub"><strong>Comentarios:</strong> #{fn:length(contenido.comments)}</span></li>
+				</a4j:repeat>
+			</h:form></div>
+			<div id="s-figureti"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+
+			<h:form id="usuariosMasTaggeados">
+				<a4j:repeat var="usuarioTaggeado" rowKeyVar="rk" rows="5"
+					value="#{paginaInicioMB.usuariosMasTaggeados}">
+					<li class="clearfix"><span class="thumb" style="height: 36px"><h:graphicImage
+						value="/UserImageFeeder?mostTagged=1&#38;pos=#{rk+1}&#38;thb=36"
+						styleClass="attachment-sidebar-thumb wp-post-image" width="36px"
+						height="36px" /></span><h:commandLink
+						value="#{usuarioTaggeado.user.name}" action="verPerfil">
+						<f:setPropertyActionListener
+							value="#{usuarioTaggeado.user.username}"
+							target="#{PublicProfile.userId}" />
+					</h:commandLink><br />
+					<span class="sub"><strong>Taggedo en: </strong>
+					<h:outputText value="#{usuarioTaggeado.cantTags} contenidos"></h:outputText></span>
+					</li>
+				</a4j:repeat>
+			</h:form></div>
+			</div>
+			</li>
+
+			<li id="calendar-3" class="widgetcontainer clearfix">
+			<h5 class="widgettitle">Calendario</h5>
+			<div id="calendar_wrap">
+			<rich:calendar popup="false" style="width:100%" showFooter="false" showWeeksBar="false" firstWeekDay="1" locale="es"/>
+			</div>
+			</li>
+		</ul>
+	</ui:define>
+
 </ui:composition>
 </html>

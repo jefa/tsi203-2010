@@ -79,5 +79,5 @@
  <PROCESS-ITEM NAME="rules:#privateProfile.xhtml"
   PATH="/privateProfile.xhtml" SHAPE="240,1329,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#galeria.xhtml" PATH="/galeria.xhtml"
-  SHAPE="464,833,0,0" model-entity="JSFProcessGroup"/>
+  SHAPE="464,577,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

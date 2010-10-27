@@ -41,6 +41,7 @@
 		.featured-stories-summary  { margin-left: 51px; }
 	.single .post .entry-photo img, .single-post .entry-photo img  { width: 620px; height: 250px; }
 		.footer-sidebar  { width: 230px; }
+		<ui:insert name="styles"></ui:insert>
 </style>
 
 <script type="text/javascript">
@@ -71,12 +72,17 @@ jQuery.noConflict();
 				<h1 class="blog-name"><a href="paginaInicio.jsf">Partuzabook</a></h1>
 		<h2 class="blog-description">Porque todas las fiestas terminan en eso...</h2>
 			</div>
-	<div id="searchbar"><form method="get" class="searchform clearfix" action="#">
- <input type="text" value="Buscar..." name="s" class="s"
- 	onfocus="if(value=='Buscar...')value=''"
-	onblur="if(value=='')value='Buscar...'" />
- <input type="submit" class="searchsubmit" value="Search" title="Buscar evento"/>
-</form>
+	<div id="searchbar">
+ <h:form styleClass="searchform clearfix">
+ 
+ <h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" styleClass="s"
+ onfocus="if(value=='Buscar...')value=''"
+onblur="if(value=='')value='Buscar...'"
+ 
+ />
+		<a4j:commandButton styleClass="searchsubmit" action="#{SearchEventMB.searchEventsByName}" value="Buscar" id="searchByName"></a4j:commandButton>
+			 
+</h:form>
 </div>
 	</div><!-- #branding -->
 </div><!-- #header -->
@@ -139,6 +145,10 @@ jQuery.noConflict();
 	</div>
 	</div>
 </div>
+<div id="primary" class="aside main-aside sidebar">
+<ui:insert name="sidebar"></ui:insert>
+</div>
+
 </div>	
    <div id="footer">
 
