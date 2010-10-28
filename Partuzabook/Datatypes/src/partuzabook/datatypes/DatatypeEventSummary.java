@@ -25,6 +25,8 @@ public class DatatypeEventSummary implements Serializable{
 	
 	private int coverId;
 	
+	private String hashtag;
+	
 	public List<String> modsUsernames;
 	
     public DatatypeEventSummary() {
@@ -41,6 +43,7 @@ public class DatatypeEventSummary implements Serializable{
 		latitude = datSummary.latitude;
 		eventCategory = datSummary.getEventCategory();
 		coverId = datSummary.getCoverId();
+		hashtag = datSummary.getHashtag();
 	}
 
 	public String getEvtName() {
@@ -131,5 +134,13 @@ public class DatatypeEventSummary implements Serializable{
 
 	public double getLongitude() {
 		return longitude;
+	}
+
+	public void setHashtag(String hashtag) {
+		this.hashtag = hashtag;
+	}
+
+	public String getHashtag() {
+		return hashtag;
 	}
 }

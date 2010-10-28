@@ -7,8 +7,11 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 
+
+
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Ver Evento</ui:define>
+
 	<ui:define name="body">
 		<h:form id="evento">
 			<div id="cover"><h:graphicImage
@@ -19,6 +22,7 @@
 			<h:outputText value="Descripcion: #{eventoMB.evento.description} " /><br />
 			</div>
 			<br />
+			<h:inputHidden id="hiddenHashtag" value="#{eventoMB.evento.hashtag}"/>
 		</h:form>
 
 		<h:panelGroup id="notPublicContent"
@@ -47,13 +51,38 @@
 			<ui:include src="/galeria.xhtml" />
 
 		</h:panelGroup>
-		<div><br />
-		<h:panelGroup id="twitterArea">
-			<h:outputText>
-					Acá iría el timeline de twitter para el evento.
-					<br />
-			</h:outputText>
-		</h:panelGroup></div>
+		<div id="twitter"></div>
+
+		<script type="text/javascript">
+		//<![CDATA[
+        var twitterQuery = encodeURIComponent (document.getElementById("evento:hiddenHashtag").value);
+        var requestUrl = "http://search.twitter.com/search.json?q=@query&show_user=true&rpp=10&callback=?".
+            replace (/@query/g, twitterQuery);
+            
+        jQuery.getJSON (requestUrl, function (data)
+        {
+			jQuery.each(data.results, function (i, tweet)
+			{
+                
+                var date_tweet = new Date(tweet.created_at);
+                var date_now   = new Date();
+                var date_diff  = date_now - date_tweet;
+                var hours      = Math.round(date_diff/(1000*60*60));
+
+                var tweet_html = '<div class="tweet_text">';
+                tweet_html    += '<a href="http://www.twitter.com/';
+                tweet_html    += tweet.from_user + '/status/' + tweet.id + '">';
+                tweet_html    += tweet.text + '<\/a><\/div>';
+                tweet_html    += '<div class="tweet_hours">' + hours;
+                tweet_html    += ' hours ago<\/div>';
+
+                jQuery('#twitter').append(tweet_html);
+			});
+        });
+      //]]>
+		</script>
+
+
 	</ui:define>
 </ui:composition>
 </html>

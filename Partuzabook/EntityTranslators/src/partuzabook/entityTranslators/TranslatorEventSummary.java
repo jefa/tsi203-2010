@@ -29,6 +29,8 @@ public class TranslatorEventSummary implements ITranslatable {
 		else {
 			dat.modsUsernames = null;
 		}
+		dat.setHashtag("#kirchner");
+		
 		return dat;
 	}
 }
