@@ -1,0 +1,204 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<link rel="stylesheet" href="styles/gallerific/basic.css"
+		type="text/css" />
+	<link rel="stylesheet" href="styles/gallerific/galleriffic-3.css"
+		type="text/css" />
+	<script type="text/javascript" src="scripts/jquery.imgareaselect.js"></script>
+	<script type="text/javascript"
+		src="scripts/jquery.imgareaselect.min.js"></script>
+	<script type="text/javascript" src="scripts/jquery.galleriffic.js"></script>
+	<script type="text/javascript" src="scripts/jquery.opacityrollover.js"></script>
+	<script type="text/javascript" src="scripts/jquery.history.js"></script>
+
+	<h:panelGrid columns="3" layout="block">
+		<h:panelGroup>
+			<a4j:outputPanel id="panelThumbs" styleClass="navigation">
+				<ul class="thumbs noscript">
+					<rich:dataGrid value="#{eventoMB.album.contents}"
+						columns="2" elements="12" var="content" rowKeyVar="rk">
+						<li><a4j:form id="formThumb">
+							<a4j:commandLink action="#{eventoMB.updateContent}"
+								reRender="panelContent">
+								<f:setPropertyActionListener value="#{content.contId}"
+									target="#{eventoMB.contentId}" />
+								<h:graphicImage alt="Title"
+									value="/ContentFeeder?id=#{content.contId}&#38;thb=75" />
+							</a4j:commandLink>
+						</a4j:form></li>
+					</rich:dataGrid>
+				</ul>
+			</a4j:outputPanel>
+			<rich:jQuery selector="panelThumbs"
+				query="ready(function($) {
+    var gallery = $.galleriffic({
+        delay:                     3000, // in milliseconds
+        numThumbs:                 20, // The number of thumbnails to show page
+        preloadAhead:              40, // Set to -1 to preload all images
+        enableTopPager:            true,
+        enableBottomPager:         true,
+        maxPagesToShow:            7,  // The maximum number of pages to display in either the top or bottom pager
+        imageContainerSel:         '', // The CSS selector for the element within which the main slideshow image should be rendered
+        controlsContainerSel:      '', // The CSS selector for the element within which the slideshow controls should be rendered
+        captionContainerSel:       '', // The CSS selector for the element within which the captions should be rendered
+        loadingContainerSel:       '', // The CSS selector for the element within which should be shown when an image is loading
+        renderSSControls:          true, // Specifies whether the slideshow's Play and Pause links should be rendered
+        renderNavControls:         true, // Specifies whether the slideshow's Next and Previous links should be rendered
+        playLinkText:              'Reproducir',
+        pauseLinkText:             'Detener',
+        prevLinkText:              'Anterior',
+        nextLinkText:              'Siguiente',
+        nextPageLinkText:          'Siguiente ',
+        prevPageLinkText:          ' Anterior',
+        enableHistory:             true, // Specifies whether the url's hash and the browser's history cache should update when the current slideshow image changes
+        enableKeyboardNavigation:  false, // Specifies whether keyboard navigation is enabled
+        autoStart:                 false, // Specifies whether the slideshow should be playing or paused when the page first loads
+        syncTransitions:           false, // Specifies whether the out and in transitions occur simultaneously or distinctly
+        defaultTransitionDuration: 1000, // If using the default transitions, specifies the duration of the transitions
+        onSlideChange:             undefined, // accepts a delegate like such: function(prevIndex, nextIndex) { ... }
+        onTransitionOut:           undefined, // accepts a delegate like such: function(slide, caption, isSync, callback) { ... }
+        onTransitionIn:            undefined, // accepts a delegate like such: function(slide, caption, isSync) { ... }
+        onPageTransitionOut:       undefined, // accepts a delegate like such: function(callback) { ... }
+        onPageTransitionIn:        undefined, // accepts a delegate like such: function() { ... }
+        onImageAdded:              undefined, // accepts a delegate like such: function(imageData, $li) { ... }
+        onImageRemoved:            undefined  // accepts a delegate like such: function(imageData, $li) { ... }
+    });
+});" />
+		</h:panelGroup>
+		<h:panelGroup>
+			<a4j:outputPanel id="panelContent">
+				<h:panelGroup id="mainImage" layout="block"
+					styleClass="mainImage-div">
+					<h:column>
+						<h:panelGroup id="tagContentPanel">
+							<h:graphicImage value="/ContentFeeder?id=#{eventoMB.contentId}" />
+							<rich:componentControl for="panel" attachTo="tagContentPanel"
+								operation="show" event="onmouseup" />
+						</h:panelGroup>
+						<rich:modalPanel id="panel" width="350" height="100">
+							<f:facet name="header">
+								<h:panelGroup>
+									<h:outputText value="Etiquetar usuario"></h:outputText>
+								</h:panelGroup>
+							</f:facet>
+							<f:facet name="controls">
+								<h:panelGroup>
+									<h:graphicImage value="/images/close.png"
+										style="cursor:pointer" id="hidelink" />
+									<rich:componentControl for="panel" attachTo="hidelink"
+										operation="hide" event="onclick" />
+								</h:panelGroup>
+							</f:facet>
+							<h:form id="formTag">
+								<h:inputText id="tag" value="#{eventoMB.suggest}" />
+								<a4j:commandButton value="Etiquetar"
+									action="#{eventoMB.tagUser}" reRender="panelContent">
+								</a4j:commandButton>
+								<h:inputHidden value="#{eventoMB.tagX1}" id="x1" />
+								<h:inputHidden value="#{eventoMB.tagY1}" id="y1" />
+								<h:inputHidden value="#{eventoMB.tagX2}" id="x2" />
+								<h:inputHidden value="#{eventoMB.tagY2}" id="y2" />
+								<rich:suggestionbox id="suggestionBoxId" for="tag" tokens=",["
+									suggestionAction="#{eventoMB.autocomplete}" var="result"
+									nothingLabel="No se encuentran usuarios" columnClasses="center">
+									<h:column>
+										<h:outputText value="#{result.username}" />
+									</h:column>
+									<h:column>
+										<h:outputText value="#{result.name}" />
+									</h:column>
+									<h:column>
+										<h:graphicImage
+											value="/UserImageFeeder?username=#{result.username}&#38;thb=30" />
+									</h:column>
+								</rich:suggestionbox>
+							</h:form>
+						</rich:modalPanel>
+					</h:column>
+				</h:panelGroup>
+				<rich:jQuery selector="#mainImage img"
+					query="imgAreaSelect({ minWidth:80, minHeight:80, maxWidth:80, maxHeight:80,
+					idx1:'evento:x1', idy1:'evento:y1', idx2:'evento:x2', idy2:'evento:y2',
+					fadeSpeed:200 })" />
+				<h:panelGroup>
+					<h:outputText value="Calificación: " />
+					<h:outputText value="#{eventoMB.selectedContent.avgScore}" />
+				</h:panelGroup>
+				<br />
+				<h:panelGroup>
+					<h:outputText styleClass="bold"
+						value="Este contenido también está en las categorías: " />
+					<a4j:form id="formContentCategory">
+						<a4j:repeat value="#{eventoMB.selectedContent.categories}"
+							var="category">
+							<a4j:commandLink value="#{category.category}"
+								rendered="#{eventoMB.categoryId != category.categoryId}"
+								reRender="panelThumbs,panelContent">
+								<f:setPropertyActionListener target="#{eventoMB.categoryId}"
+									value="#{category.categoryId}" />
+							</a4j:commandLink>
+						</a4j:repeat>
+					</a4j:form>
+				</h:panelGroup>
+				<br />
+				<h:panelGroup>
+					<h:outputText styleClass="bold" value="Usuarios etiquetados: " />
+					<h:form id="tagPublicProfile">
+						<a4j:repeat value="#{eventoMB.selectedContent.tags}" var="tag">
+							<h:commandLink action="verPerfil" rendered="#{tag.isRealUser}">
+								<f:setPropertyActionListener value="#{tag.userName}"
+									target="#{PublicProfile.userId}" />
+								<h:outputText value="#{tag.userName} " />
+							</h:commandLink>
+							<h:outputText value="#{tag.name}" rendered="#{!tag.isRealUser}" />
+						</a4j:repeat>
+					</h:form>
+				</h:panelGroup>
+				<br />
+				<a4j:region>
+					<h:column>
+						<h:graphicImage
+							value="/UserImageFeeder?username=#{loginMB.userName}&#38;thb=50" />
+					</h:column>
+					<h:column>
+						<h:form id="formCommentContent">
+							<h:inputText value="#{eventoMB.comentario}"
+								onfocus="if(value=='Escribe un comentario...')value=''"
+								onblur="if(value=='')value='Escribe un comentario...'" />
+							<a4j:commandButton value="Comentar" action="#{eventoMB.comentar}"
+								reRender="panelContent">
+							</a4j:commandButton>
+						</h:form>
+					</h:column>
+				</a4j:region>
+				<h:panelGroup layout="block" id="commentPanel">
+					<rich:dataGrid value="#{eventoMB.selectedContent.comments}"
+						var="comment">
+						<h:panelGroup>
+							<h:column>
+								<h:form id="formComments">
+									<h:commandLink action="verPerfil">
+										<f:setPropertyActionListener value="#{comment.userId}"
+											target="#{PublicProfile.userId}" />
+										<h:graphicImage
+											value="/UserImageFeeder?username=#{comment.userId}&#38;thb=50"
+											style="border:none" />
+										<h:outputText value="#{comment.userName}" />
+									</h:commandLink>
+								</h:form>
+							</h:column>
+							<h:column>
+								<h:outputText value="#{comment.text}" />
+							</h:column>
+						</h:panelGroup>
+					</rich:dataGrid>
+				</h:panelGroup>
+			</a4j:outputPanel>
+		</h:panelGroup>
+	</h:panelGrid>
+</ui:composition>

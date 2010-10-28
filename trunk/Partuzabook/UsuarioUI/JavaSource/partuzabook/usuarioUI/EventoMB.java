@@ -11,6 +11,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 
+import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
@@ -37,6 +38,9 @@ public class EventoMB {
 	private DatatypeContent selectedContent;
 	
 	private String comentario = "Escribe un comentario...";
+	
+	private boolean hasAlbum;
+	private DatatypeAlbum album; 
 	
 	private int tagX1;
 	private int tagX2;
@@ -259,6 +263,45 @@ public class EventoMB {
 		this.suggest = suggest;
 	}
 
+	public boolean getHasAlbum(){
+		Context ctx;
+		try {
+			ctx = getContext();
+			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
+			this.hasAlbum = service.getEventDetails(eventId).getHasAlbum(); 
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return this.hasAlbum;
+	}
+	
+	public void setHasAlbum(boolean album){
+		this.hasAlbum = album;
+	}
+	
+	public DatatypeAlbum getAlbum() {
+		getHasAlbum();
+		if (this.hasAlbum == false) {
+			// Error
+		}
+		Context ctx;
+		try {
+			ctx = getContext();
+			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
+			this.album = service.getAlbumDetails(eventId); 
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return this.album;
+	}
+	
+	public void setAlbum(DatatypeAlbum dataAlbum){
+		this.album = dataAlbum;
+	}
+
+	
 	public int getTagX1(){
 		return this.tagX1;
 	}

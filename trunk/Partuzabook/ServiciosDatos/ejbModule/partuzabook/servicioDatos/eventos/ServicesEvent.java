@@ -17,6 +17,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import partuzabook.datatypes.DataTypeFile;
+import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
@@ -54,6 +55,7 @@ import partuzabook.datos.persistencia.beans.TagForUser;
 import partuzabook.datos.persistencia.beans.User;
 import partuzabook.datos.persistencia.beans.Video;
 import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
+import partuzabook.entityTranslators.TranslatorAlbum;
 import partuzabook.entityTranslators.TranslatorCategory;
 import partuzabook.entityTranslators.TranslatorContent;
 import partuzabook.entityTranslators.TranslatorEvent;
@@ -164,7 +166,13 @@ public class ServicesEvent implements ServicesEventRemote {
 		Event event = getEvent(eventID);
 		return (DatatypeEvent)new TranslatorEvent().translate(event);
 	}
-	
+
+	public DatatypeAlbum getAlbumDetails(int eventID) {
+		Event event = getEvent(eventID);
+		List<Content> albumContents = contDao.getAllInAlbumOfEvent(event);
+		return (DatatypeAlbum)new TranslatorAlbum().translate(albumContents);
+	}
+
 	
 	public List<DatatypeEventSummary> searchForEventByName(String name, int maxEvents){
 		name = name.toLowerCase();
