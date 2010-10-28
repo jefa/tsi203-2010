@@ -202,9 +202,8 @@ public interface ServicesEventRemote {
 	 * Adds the content in position pos from the album of the event
 	 * @param contentID
 	 * @param eventID
-	 * @param pos
 	 */
-	public void addContentToAlbum(int contentID, int eventID, int pos);
+	public void addContentToAlbum(int contentID, int eventID);
 	
 	/**
 	 * Modifies the position of the content in the album. Contents in oldPos and newPos are exchanged

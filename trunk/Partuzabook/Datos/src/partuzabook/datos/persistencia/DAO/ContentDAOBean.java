@@ -47,6 +47,12 @@ public class ContentDAOBean extends JpaDao<Integer, Content> implements ContentD
 		return (Integer)namedQuery.getResultList().size();	
 	}
 
+	public Integer findNextPosInAlbumEvent(Event event) {
+		Query namedQuery = em.createNamedQuery("Content.findNextPosInAlbumEvent");
+		namedQuery.setParameter("event", event);
+		return (Integer)namedQuery.getResultList().size();	
+	}
+
 	@Override
 	public List<Integer> getBestRanked() {
 		Query namedQuery = em.createNamedQuery("Content.getBestRanked");

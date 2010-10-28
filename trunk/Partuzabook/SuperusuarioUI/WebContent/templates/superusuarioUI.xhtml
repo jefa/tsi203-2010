@@ -93,10 +93,21 @@ jQuery.noConflict();
 <div id="nav">
 	<div id="nav-content" class="clearfix">
 	<div class="menu-main-menu-container"><ul id="menu-main-menu" class="sf-menu menu clearfix sf-js-enabled sf-shadow">
-		<li class="menu-item menu-item-type-taxonomy"><a href="paginaInicio.jsf">Home</a></li>
-		<li class="menu-item menu-item-type-taxonomy"><a href="event.jsf">Crear Evento</a></li>
-		<li class="menu-item menu-item-type-taxonomy"><a href="createAdmin.jsf">Crear Superusuario</a></li>
-		<li class="menu-item menu-item-type-taxonomy"><h:form><h:commandLink value="Logout" action="#{loginMB.logout}"></h:commandLink></h:form></li>
+
+		<h:form rendered="#{loginMB.isUserLogged}">
+			<li class="menu-item menu-item-type-taxonomy">
+				<a href="paginaInicio.jsf">Home</a>
+			</li>
+			<li class="menu-item menu-item-type-taxonomy">
+				<a href="event.jsf">Crear Evento</a>
+			</li>
+			<li class="menu-item menu-item-type-taxonomy">
+				<a href="createAdmin.jsf">Crear Superusuario</a>
+			</li>
+			<li class="menu-item menu-item-type-taxonomy">
+				<h:commandLink value="Logout" action="#{loginMB.logout}"/>
+			</li>
+		</h:form>
 </ul></div>		
 	</div><!-- #nav-content -->
 </div><!-- #nav -->

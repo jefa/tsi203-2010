@@ -35,7 +35,7 @@ public class ContentCategoryDAOBean extends JpaDao<Integer, CntCategory> impleme
 	}
 
 	public CntCategory findByNameInEvent(Event event, String name) {
-		Query namedQuery = em.createNamedQuery("CntCategory.findByIDInEvent");
+		Query namedQuery = em.createNamedQuery("CntCategory.findByNameInEvent");
 		namedQuery.setParameter("event", event);
 		namedQuery.setParameter("category", name);
 		return (CntCategory)namedQuery.getSingleResult();	

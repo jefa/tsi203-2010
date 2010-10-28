@@ -10,8 +10,8 @@
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Subir foto</ui:define>
 	<ui:define name="body">
-		<h:form>
-			<h:panelGrid columns="1" columnClasses="top,top">
+		<a4j:form>
+			<h:panelGrid columns="2" columnClasses="top,top">
 				<rich:fileUpload fileUploadListener="#{subirFotoMB.listener}"
 					maxFilesQuantity="#{subirFotoMB.uploadsAvailable}" id="upload"
 					immediateUpload="#{subirFotoMB.autoUpload}"
@@ -26,8 +26,7 @@
 						</f:facet>
 						<h:outputText value="No se han agregado archivos"
 							rendered="#{subirFotoMB.size==0}" />
-						<rich:dataGrid columns="1" value="#{subirFotoMB.files}" var="file"
-							rowKeyVar="row">
+						<a4j:repeat value="#{subirFotoMB.files}" var="file"	>
 							<rich:panel bodyClass="rich-laguna-panel-no-header">
 								<h:panelGrid columns="2">
 									<a4j:mediaOutput element="img" mimeType="#{file.mime}"
@@ -35,7 +34,7 @@
 										style="width:50px; height:50px;" cacheable="false">
 										<f:param value="#{subirFotoMB.timeStamp}" name="time" />
 									</a4j:mediaOutput>
-									<h:panelGrid columns="2">
+									<h:panelGrid columns="2" style="border-style:none">
 										<h:outputText value="Nombre del Archivo:" />
 										<h:outputText value="#{file.name}" />
 										<h:outputText value="Tamaño(bytes):" />
@@ -43,42 +42,55 @@
 										<h:outputText value="Descripcion:" />
 										<h:outputText value="#{file.description}"
 											rendered="#{not empty file.description}" />
-										<h:form>
-											<h:column rendered="#{empty file.description}">
-												<h:inputText value="#{file.description}" />
-												<a4j:commandButton value="Agregar Descripcion"
-													action="#{subirFotoMB.addDescription}" reRender="info">
-													<f:setPropertyActionListener value="#{file.description}"
-														target="#{subirFotoMB.currentDescription}" />
-													<f:setPropertyActionListener value="#{file.id}"
-														target="#{subirFotoMB.currentFileId}" />
-												</a4j:commandButton>
-											</h:column>
-										</h:form>
-										<h:form id="cats">
-											<h:outputText value="Categorias" />
-											<h:column>
-											<rich:dataList value="#{subirFotoMB.chosenCategories}" var="categ">
-												<h:outputText value="categ.category"/>
-												<h:commandButton action="#{subirFotoMB.removeChosenCategories}" value="Eliminar">
-													<f:setPropertyActionListener value="categ" target="#{subirFotoMB.selectedCategory}"/>
-												</h:commandButton>
-											</rich:dataList>
-											<rich:comboBox selectFirstOnUpdate="false"
-										        defaultLabel="Choose value"
-										        value="#{subirFotoMB.selectedCategoryString}" 
-										        suggestionValues="#{subirFotoMB.categoriesToChooseString}" >
-										        <a4j:support event="onselect" action="#{subirFotoMB.addChosenCategoriesString}" 
-										        	reRender="cats" />		
-										    </rich:comboBox> 
-												<h:commandButton action="#{subirFotoMB.addChosenCategoriesString}" value="Agregar">
-												</h:commandButton>
-											</h:column>
-										</h:form>		
+										<div><h:column rendered="#{empty file.description}">
+											<h:inputText value="#{file.description}" />
+											<a4j:commandButton value="Agregar Descripcion"
+												action="#{subirFotoMB.addDescription}" reRender="info">
+												<a4j:actionparam value="#{file.description}"
+													target="#{subirFotoMB.currentDescription}" />
+												<a4j:actionparam value="#{file.id}"
+													target="#{subirFotoMB.currentFileId}" />
+											</a4j:commandButton>
+										</h:column></div>
 									</h:panelGrid>
+													
 								</h:panelGrid>
 							</rich:panel>
-						</rich:dataGrid>
+							
+							
+								<h:panelGroup id="divNewCateg2">
+										<h:inputText id="inputSuggestCateg"
+											value="#{subirFotoMB.suggestCateg}" />
+										<a4j:commandButton value="Agregar Categoria"
+											action="#{subirFotoMB.addCategory}" 
+											reRender="info"/>
+										<a4j:commandButton value="Limpiar lista"
+											action="#{subirFotoMB.resetChosenCategories}"
+											reRender="info" />
+										<rich:suggestionbox id="suggestBoxCategs"
+											for="inputSuggestCateg" tokens=",["
+											suggestionAction="#{subirFotoMB.autocomplete}" var="result"
+											nothingLabel="No category matches" columnClasses="center"
+											ajaxSingle="true">
+										
+											<h:column>
+												<h:outputText value="#{result.category}" />
+											</h:column>
+										</rich:suggestionbox>
+										<rich:panel style="width:50%" id="panelCategories">
+											<f:facet name="header">
+												<h:outputText value="Categorias del contenido" />
+											</f:facet>
+											<rich:dataList value="#{subirFotoMB.chosenCategories}"
+												var="categ"
+												rendered="#{not empty subirFotoMB.chosenCategories}">
+												<h:outputText value="#{categ.category}" />
+											</rich:dataList>
+										</rich:panel>
+								</h:panelGroup>
+
+						</a4j:repeat>
+
 					</rich:panel>
 					<a4j:commandButton action="#{subirFotoMB.confirmUpload}"
 						reRender="info, upload" value="Subir Archivos"
@@ -91,7 +103,7 @@
 					<h:outputText style="italic" value="#{subirFotoMB.message}" />
 				</h:panelGroup>
 			</h:panelGrid>
-		</h:form>
+		</a4j:form>
 	</ui:define>
 </ui:composition>
 </body>
