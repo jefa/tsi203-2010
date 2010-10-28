@@ -90,6 +90,7 @@ public class Authentication implements Filter {
 		publicURLs.add("/styles");
 		publicURLs.add("/scripts");
 		publicURLs.add("/a4j/");
+		publicURLs.add("/index.jsp");
 	}
 
 }
