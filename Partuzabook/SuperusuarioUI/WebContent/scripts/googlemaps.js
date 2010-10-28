@@ -3,7 +3,7 @@ var reasons;
 var global_map;
 var global_marker;
 var markAddress;
-
+/*
 function initGMap() {
     var latlng = new google.maps.LatLng(-34.397, 150.644);
     var myOptions = {
@@ -13,7 +13,7 @@ function initGMap() {
     };
     var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 }
-
+*/
 function addMarker(googlemap, lat, long) {
 	var marker = new GMarker(new GLatLng(lat,long), {draggable:true}); 
 	GEvent.addListener(marker, 'click', function() {
@@ -60,6 +60,7 @@ function eraseMarker(googlemap, marker) {
 	googlemap.clearOverlay(marker);
 }
 
+/*
 function addMarkerByAddress(gmap, geocoder, address) {
 	if(geocoder) {
 		geocoder.geocode( { 'address': address}, function(results, status) {
@@ -75,7 +76,7 @@ function addMarkerByAddress(gmap, geocoder, address) {
 		});
 	}	
 }
-
+*/
 /*
 function showAddress2(street, city, country, gmap) {
    // ====== Perform the Geocoding ======
