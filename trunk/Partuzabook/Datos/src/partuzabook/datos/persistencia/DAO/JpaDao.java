@@ -11,6 +11,10 @@ public abstract class JpaDao<K, E> implements Dao<K, E> {
 	@PersistenceContext
 	private EntityManager em;
 	
+	public void flush() {
+		em.flush();
+	}
+	
 	public JpaDao() {
 		ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
 		this.entityClass = (Class<E>) genericSuperclass.getActualTypeArguments()[1];		
