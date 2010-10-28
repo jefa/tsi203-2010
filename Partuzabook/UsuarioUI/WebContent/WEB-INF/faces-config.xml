@@ -8,6 +8,11 @@
   <managed-bean-scope>session</managed-bean-scope>
  </managed-bean>
  <managed-bean>
+  <managed-bean-name>subirVideoMB</managed-bean-name>
+  <managed-bean-class>partuzabook.usuarioUI.SubirVideoMB</managed-bean-class>
+  <managed-bean-scope>session</managed-bean-scope>
+ </managed-bean>
+ <managed-bean>
   <managed-bean-name>paginaInicioMB</managed-bean-name>
   <managed-bean-class>partuzabook.usuarioUI.PaginaInicioMB</managed-bean-class>
   <managed-bean-scope>request</managed-bean-scope>
@@ -60,14 +65,22 @@
   </navigation-case>
  </navigation-rule>
  <navigation-rule>
-  <display-name>subirContenido</display-name>
+  <display-name>subirFoto</display-name>
   <from-view-id>/evento.xhtml</from-view-id>
   <navigation-case>
-   <from-outcome>subirContenido</from-outcome>
+   <from-outcome>subirFoto</from-outcome>
    <to-view-id>/subirFoto.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
  <navigation-rule>
+  <display-name>subirVideo</display-name>
+  <from-view-id>/evento.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>subirVideo</from-outcome>
+   <to-view-id>/subirVideo.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+  <navigation-rule>
   <from-view-id>/login.xhtml</from-view-id>
   <navigation-case>
    <from-action>#{loginMB.validUser}</from-action>

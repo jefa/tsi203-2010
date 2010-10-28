@@ -69,6 +69,11 @@
   <servlet-name>UserImageFeeder</servlet-name>
   <servlet-class>partuzabook.usuarioUI.UserImageFeeder</servlet-class>
  </servlet>
+ <servlet>
+  <display-name>YoutubeRedirect</display-name>
+  <servlet-name>YoutubeRedirect</servlet-name>
+  <servlet-class>partuzabook.usuarioUI.YoutubeRedirect</servlet-class>
+ </servlet>
  <servlet-mapping>
   <servlet-name>Faces Servlet</servlet-name>
   <url-pattern>*.jsf</url-pattern>
@@ -88,6 +93,10 @@
  <servlet-mapping>
   <servlet-name>MailController</servlet-name>
   <url-pattern>/sendmail</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>YoutubeRedirect</servlet-name>
+  <url-pattern>/YoutubeRedirect</url-pattern>
  </servlet-mapping>
  <welcome-file-list>
   <welcome-file>/index.jsp</welcome-file>
