@@ -100,16 +100,17 @@ ALTER TABLE "cntCategory" OWNER TO postgres;
 CREATE TABLE "content"
 (
   cnt_id_auto integer NOT NULL,
+  evt_id integer NOT NULL,
+  pos_gallery integer NOT NULL,
   creator character varying(30) NOT NULL,
   description character varying(100),
+  duration character varying(10),
+  album boolean,
+  pos_album integer,
   size integer,
-  pos integer NOT NULL,
   url character varying(50),
   flags character(1) NOT NULL,
   reg_date timestamp without time zone NOT NULL,
-  duration character varying(10),
-  album boolean,
-  evt_id integer NOT NULL,
   CONSTRAINT "PK_CONTENT" PRIMARY KEY (cnt_id_auto),
   CONSTRAINT "FK_ALB_EVT" FOREIGN KEY (evt_id)
       REFERENCES events (evt_id_auto) MATCH SIMPLE

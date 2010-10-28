@@ -16,6 +16,13 @@ public class LoginMB {
 	private String text;
 	private String userName;
 	private String password;
+	private boolean isUserLogged;
+	
+	public boolean getIsUserLogged(){
+		this.userName = getUserName();
+		this.isUserLogged = this.userName != null;
+		return this.isUserLogged;
+	}
 
 	public String getUserName() {
 		FacesContext context = FacesContext.getCurrentInstance();

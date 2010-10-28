@@ -399,14 +399,15 @@ public class ServicesEvent implements ServicesEventRemote {
 			String url = fileSystem.writeFile(file.getData(), file.getMime(), eventID + "/");
 			content.setAlbum(false);
 			content.setEvent(event);
-			content.setUser(user);
+			content.setUser(user); 
 			content.setRegDate(new Timestamp(new java.util.Date().getTime()));
 			content.setSize((int) file.getLength());
 			content.setUrl(url);
 			content.setDescription(file.getDescription());
-			content.setPos(contDao.findNextPosInGalleryEvent(event));
-			CntCategory categoryTodas = contentCategoryDao.findByNameInEvent(event, "Todas");
-			content.getCntCategories().add(categoryTodas);
+			content.setPosGallery(contDao.findNextPosInGalleryEvent(event));
+//			CntCategory categoryTodas = contentCategoryDao.findByNameInEvent(event, "Todas");
+//			List<CntCategory> list = content.getCntCategories();
+//			list.add(categoryTodas);
 			contDao.persist(content);
 			result.add(content.getCntIdAuto() + "");
 		}
@@ -598,6 +599,15 @@ public class ServicesEvent implements ServicesEventRemote {
 
 		evDao.persist(evt);
 		
+		// Create default category for contents: "Todas" 
+		CntCategory defaultCategory = new CntCategory();
+		defaultCategory.setCategory("Todas");
+		defaultCategory.setContents(new ArrayList<Content>());
+		defaultCategory.setEvent(evt);
+
+		evt.setCntCategories(new ArrayList<CntCategory>());
+		evt.getCntCategories().add(defaultCategory);
+		
 		return (DatatypeEventSummary)new TranslatorEventSummary().translate(evt);
 	}
 
@@ -647,7 +657,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		return res;
 	}
 
-	public void addContentToAlbum(int contentID, int eventID, int pos) {
+	public void addContentToAlbum(int contentID, int eventID) {
 		Event event = getEvent(eventID);
 		Album album = event.getAlbum();
 		if(album == null)
@@ -656,8 +666,9 @@ public class ServicesEvent implements ServicesEventRemote {
 		Content currentContent = contDao.findByIDInEvent(event, contentID);
 		if (currentContent == null)
 			throw new ContentNotFoundException();
-		// Set pos to content
-		currentContent.setPos(pos);
+		// Associate to album and set pos to content
+		currentContent.setAlbum(true);
+		currentContent.setPosAlbum(contDao.findNextPosInAlbumEvent(event));
 	}
 
 	public void changePosInAlbum(int contentID, int eventID, int newPos) {
@@ -669,15 +680,15 @@ public class ServicesEvent implements ServicesEventRemote {
 		Content currentContent = contDao.findByIDInEvent(event, contentID);
 		if (currentContent == null)
 			throw new ContentNotFoundException();
-		int oldPos = currentContent.getPos();
-		if (oldPos < 0)
+		if (!currentContent.getAlbum())
 			throw new ContentNotInAlbumException();
+		int oldPos = currentContent.getPosAlbum();
 		Content otherContent = contDao.findByPosInEvent(event, newPos);
 		if (otherContent == null) 
 			throw new InvalidPositionInAlbumException();
 		// Exchange positions in album
-		otherContent.setPos(oldPos);
-		currentContent.setPos(newPos);
+		otherContent.setPosAlbum(oldPos);
+		currentContent.setPosAlbum(newPos);
 	}
 
 	

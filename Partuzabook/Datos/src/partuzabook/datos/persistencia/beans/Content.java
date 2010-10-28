@@ -36,9 +36,11 @@ import javax.persistence.OneToMany;
 	@NamedQuery(name = "Content.findByIDInEvent",
 			query = "SELECT c FROM Content c WHERE c.event = :event AND c.cntIdAuto = :content"),
 	@NamedQuery(name = "Content.findByPosInEvent",
-			query = "SELECT c FROM Content c WHERE c.event = :event AND c.pos = :pos"),
+			query = "SELECT c FROM Content c WHERE c.event = :event AND c.posGallery = :pos"),
 	@NamedQuery(name = "Content.findNextPosInGalleryEvent",
 			query = "SELECT c FROM Content c WHERE c.event = :event"),
+	@NamedQuery(name = "Content.findNextPosInAlbumEvent",
+			query = "SELECT c FROM Content c WHERE c.event = :event AND c.album = true"),			
 	@NamedQuery(name = "Content.getBestRanked",
 			query = "SELECT c.cntIdAuto FROM Content c, IN(c.ratings) r "
 				+"GROUP BY c.cntIdAuto ORDER BY AVG(r.score) DESC"),
@@ -61,8 +63,11 @@ public abstract class Content implements Serializable {
 
 	private String url;
 
-	@Column(name="pos")
-	private int pos;
+	@Column(name="pos_gallery")
+	private int posGallery;
+
+	@Column(name="pos_album")
+	private Integer posAlbum;
 	
 	//bi-directional many-to-one association to Comment
 	@OneToMany(mappedBy="content")
@@ -169,12 +174,20 @@ public abstract class Content implements Serializable {
 		this.tags = tags;
 	}
 
-	public int getPos() {
-		return this.pos;
+	public int getPosGallery() {
+		return this.posGallery;
 	}
 	
-	public void setPos(int pos) {
-		this.pos = pos;
+	public void setPosGallery(int pos){
+		this.posGallery = pos;
+	}
+	
+	public Integer getPosAlbum() {
+		return this.posAlbum;
+	}
+	
+	public void setPosAlbum(Integer pos) {
+		this.posAlbum = pos;
 	}
 	
 	public List<CntCategory> getCntCategories() {

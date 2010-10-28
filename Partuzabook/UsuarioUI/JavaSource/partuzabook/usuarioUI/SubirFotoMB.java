@@ -21,6 +21,7 @@ import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
 import partuzabook.datatypes.DatatypeEvent;
+import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.serviciosUI.multimedia.ServicesUploadRemote;
 
@@ -36,103 +37,103 @@ public class SubirFotoMB{
 	
 	private String currentFileId;
 	private String currentDescription;
-	private List<SelectItem> allCategoriesSelItems;
-	private List<SelectItem> selectedCategoriesSelItems;
 
-	private List<String> categoriesToChooseString = null;
-	private List<DatatypeCategorySummary> categoriesToChoose = null;
-	private List<DatatypeCategorySummary> chosenCategories = null;	
-	private DatatypeCategorySummary selectedCategory = null;
-	public String selectedCategoryString ;
+	// All existing categories associated to the event
+	private List<DatatypeCategorySummary> allCategories = null;
+
+	// Associated to Suggestion Box
+	private String suggestCateg = "";
+	private List<DatatypeCategorySummary> resultCategories = null;
+
+	// Subset of existing categories. Shown in dataList
+	private List<DatatypeCategorySummary> chosenCategories = null;
 	
 	private ServicesEventRemote servicesEvent;
 
-	
-	public String getSelectedCategoryString(){
-		return this.selectedCategoryString;
+	public List<DatatypeCategorySummary> autocomplete(Object suggestParam) {
+			suggestCateg = ((String)suggestParam).toLowerCase();
+			if (suggestCateg.equals("")) {
+				// Si se busca el string vacío se devuelven todos	
+				resultCategories = getAllCategories();
+			} else {
+				resultCategories = new ArrayList<DatatypeCategorySummary>();
+				Iterator<DatatypeCategorySummary> it = allCategories.iterator();
+				while (it.hasNext()) {
+					DatatypeCategorySummary categ = (DatatypeCategorySummary) it.next();
+					if (categ.getCategory().toLowerCase().contains(suggestCateg)) {
+						resultCategories.add(categ);
+					}
+				}
+			}
+		return resultCategories;
 	}
 
-	public void setSelectedCategoryString(String str){
-		this.selectedCategoryString = str;
-	}
-
-	public List<String> getCategoriesToChooseString(){
-		if (this.categoriesToChoose == null){
-			getCategoriesToChoose();
-		}
-		return this.categoriesToChooseString;
-	}
-
-	public void setCategoriesToChooseString(List<String> list){
-		this.categoriesToChooseString = list;
-	}
-	
-
-	public List<DatatypeCategorySummary> getCategoriesToChoose(){
-		if (this.chosenCategories == null){
+	public List<DatatypeCategorySummary> getAllCategories(){
+		if (this.allCategories == null){
 			this.servicesEvent = getServicesEvent();
 			if (this.servicesEvent != null) {
 				DatatypeEvent dataEvent = this.servicesEvent.getEventDetails(this.idEvento);
 				if (dataEvent != null) {
-					setCategoriesToChoose(dataEvent.getContentCategories());
+					List<DatatypeCategorySummary> results = dataEvent.getContentCategories();
+					if (results != null) {
+						this.allCategories = results;
+					}					
 				}
-			}	
+			} 	
 		}
-		return this.categoriesToChoose;
-	}
+		return this.allCategories;
+	}		
 
-	public void setCategoriesToChoose(List<DatatypeCategorySummary> list){
-		this.categoriesToChoose = list;
-		List<String> listStr = new ArrayList<String>();
-		Iterator<DatatypeCategorySummary> itList = list.iterator();
-		while (itList.hasNext()){
-			listStr.add(itList.next().getCategory());
-		}
-		setCategoriesToChooseString(listStr);
+	public String getSuggestCateg(){
+		return this.suggestCateg;
 	}
 	
+	public void setSuggestCateg(String sug){
+		this.suggestCateg = sug;
+	}
+
+	public List<DatatypeCategorySummary> getResultCategories(){
+		 return this.resultCategories;
+	} 
+	
 	public List<DatatypeCategorySummary> getChosenCategories(){
+		if (this.chosenCategories == null || this.chosenCategories.size()== 0){
+			this.chosenCategories = new ArrayList<DatatypeCategorySummary>();
+			// First calculate all Categories
+			if (this.allCategories == null || this.allCategories.size() == 0){
+				getAllCategories();
+			}
+			// Add default category to chosenCategories
+			Iterator<DatatypeCategorySummary> it = this.allCategories.iterator();
+			while (it.hasNext()){
+				DatatypeCategorySummary dataCateg = it.next();
+				if (dataCateg.getCategory().equals("Todas")){
+					this.chosenCategories.add(dataCateg);
+				}
+			}
+		}
 		return this.chosenCategories;
 	}
 	
-	public void setChosenCategories(List<DatatypeCategorySummary> list){
-		this.chosenCategories = list;
-	}
-	
-	public DatatypeCategorySummary getSelectedCategory(){
-		return this.selectedCategory;
-	}
-	
-	public void setSelectedCategory(DatatypeCategorySummary dataCat){
-		this.selectedCategory = dataCat;
-	}
-
-	public void addChosenCategoriesString(){
-		if (this.selectedCategoryString == null){
-			Iterator<DatatypeCategorySummary> it = this.categoriesToChoose.iterator();
+	public void addCategory(){
+		if (this.suggestCateg != null && !this.suggestCateg.equals("")){
+			Iterator<DatatypeCategorySummary> it = this.allCategories.iterator();
 			while (it.hasNext()){
-				DatatypeCategorySummary dataCat = it.next();
-				if (this.selectedCategoryString.equals(dataCat.getCategory())){
-					this.selectedCategory = dataCat;
-					addChosenCategories();
+				DatatypeCategorySummary dataCateg = it.next();
+				if (dataCateg.getCategory().equals(this.suggestCateg)) {
+					if (!this.chosenCategories.contains(dataCateg)) {
+						this.chosenCategories.add(dataCateg);
+					}
 				}
 			}
 		}
 	}
-	
-	public void addChosenCategories(){
-		if (this.selectedCategory != null) {
-			this.chosenCategories.add(this.selectedCategory);
-			this.categoriesToChoose.remove(this.selectedCategory);
-		}
-	}
 
-	public void removeChosenCategories(){
-		if (this.selectedCategory != null) {
-			this.chosenCategories.remove(this.selectedCategory);
-			this.categoriesToChoose.add(this.selectedCategory);
-		}
+	public void resetChosenCategories(){
+		this.chosenCategories = null;
+		getChosenCategories();
 	}
+	
 
 	public String getMessage(){
 		return this.message;
@@ -182,53 +183,6 @@ public class SubirFotoMB{
 		return servicesEvent;
 	}
 	
-	public List<SelectItem> getAllCategoriesSelItems(){
-		if (this.allCategoriesSelItems == null){
-			List<SelectItem> allCats =  new ArrayList<SelectItem>();		
-			this.servicesEvent = getServicesEvent();
-			if (this.servicesEvent != null) {
-				DatatypeEvent dataEvent = this.servicesEvent.getEventDetails(this.idEvento);
-				if (dataEvent != null) {
-					List<DatatypeCategorySummary> allCategories = dataEvent.getContentCategories();
-					Iterator<DatatypeCategorySummary> it = allCategories.iterator();
-					while (it.hasNext()){
-						DatatypeCategorySummary dataCateg = it.next();
-						allCats.add(new SelectItem(dataCateg,dataCateg.getCategory()));
-					}
-				}
-			}
-			this.allCategoriesSelItems = allCats;
-		}
-		return this.allCategoriesSelItems;
-	}
-	
-	public void setAllCategoriesSelItems(List<SelectItem> cats){
-		this.allCategoriesSelItems = cats;
-	}
-		
-	public List<SelectItem> getSelectedCategoriesSelItems(){		
-		return this.selectedCategoriesSelItems;
-	}
-
-	public void setSelectedCategoriesSelItems(List<SelectItem> cats){
-		this.selectedCategoriesSelItems = cats;
-	}
-
-	public void saveCategories(){
-		Iterator<DataTypeFile> it = files.iterator();
-		while (it.hasNext()){
-			DataTypeFile file = it.next();
-			if (file.getId() == this.currentFileId){
-				List<DatatypeCategory> listDataCat = new ArrayList<DatatypeCategory>();
-				Iterator<SelectItem> itSelItm = this.selectedCategoriesSelItems.iterator();
-				while (itSelItm.hasNext()) {
-					listDataCat.add((DatatypeCategory) itSelItm.next().getValue());
-				}
-				file.setCategories(listDataCat);
-			}
-		}
-	}
-
 	public int getIdEvento() {
 		return idEvento;
 	}
@@ -271,6 +225,7 @@ public class SubirFotoMB{
 	  
 	public String clearUploadData() {
 		files.clear();
+		this.suggestCateg = "";
 		setUploadsAvailable(5);
 		return null;
 	}
@@ -285,6 +240,7 @@ public class SubirFotoMB{
 			servUpload.uploadMultimedia(idEvento, username, files);
 			this.message = "Se han subido de forma exitosa";
 			files.clear();
+			this.suggestCateg = "";
 			setUploadsAvailable(5);
 		}
 		return null;
