@@ -19,6 +19,7 @@ import javax.naming.NamingException;
 import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
+import partuzabook.datatypes.DatatypeCategorySummary;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
@@ -33,6 +34,7 @@ import partuzabook.datos.persistencia.DAO.ModeratedEventDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.DAO.RatingDAO;
+import partuzabook.datos.persistencia.DAO.VideoDAO;
 import partuzabook.datos.persistencia.DAO.TagDAO;
 import partuzabook.datos.persistencia.beans.Album;
 import partuzabook.datos.persistencia.beans.CntCategory;
@@ -78,6 +80,9 @@ import partuzabook.utils.TranslatorCollection;
 @Stateless
 public class ServicesEvent implements ServicesEventRemote {
 
+	private static final String YOUTUBE_PRE = "http://www.youtube.com/v/";
+	private static final String YOUTUBE_POS = "?fs=1&amp;hl=es_ES";
+	
 	private EventDAO evDao;
 	private ModeratedEventDAO mevDao;
 	private ContentCategoryDAO contentCategoryDao;
@@ -90,6 +95,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	private RatingDAO ratingDao;
 	private AdminDAO adminDao;
 	private EvtCategoryDAO evtCatDao;
+	private VideoDAO videoDao;
 	
     public ServicesEvent() {
     	
@@ -120,6 +126,7 @@ public class ServicesEvent implements ServicesEventRemote {
     		ratingDao = (RatingDAO) ctx.lookup("RatingDAOBean/local");
     		adminDao = (AdminDAO) ctx.lookup("AdminDAOBean/local");
     		evtCatDao = (EvtCategoryDAO) ctx.lookup("EvtCategoryDAOBean/local");
+    		videoDao = (VideoDAO) ctx.lookup("VideoDAOBean/local");
 		}
         catch (NamingException e) {
 			e.printStackTrace();
@@ -138,6 +145,7 @@ public class ServicesEvent implements ServicesEventRemote {
     	ratingDao = null;
     	adminDao = null;
     	evtCatDao = null;
+    	videoDao = null;
     }
     
     private Event getEvent(int eventID) throws EventNotFoundException { 
@@ -407,15 +415,19 @@ public class ServicesEvent implements ServicesEventRemote {
 			String url = fileSystem.writeFile(file.getData(), file.getMime(), eventID + "/");
 			content.setAlbum(false);
 			content.setEvent(event);
-			content.setUser(user); 
+			content.setUser(user);
 			content.setRegDate(new Timestamp(new java.util.Date().getTime()));
 			content.setSize((int) file.getLength());
 			content.setUrl(url);
 			content.setDescription(file.getDescription());
 			content.setPosGallery(contDao.findNextPosInGalleryEvent(event));
-//			CntCategory categoryTodas = contentCategoryDao.findByNameInEvent(event, "Todas");
-//			List<CntCategory> list = content.getCntCategories();
-//			list.add(categoryTodas);
+			CntCategory categoryTodas = contentCategoryDao.findByNameInEvent(event, "Todas");
+			if(content.getCntCategories() == null)
+				content.setCntCategories(new ArrayList<CntCategory>());
+			content.getCntCategories().add(categoryTodas);
+			if(categoryTodas.getContents() == null)
+				categoryTodas.setContents(new ArrayList<Content>());
+			categoryTodas.getContents().add(content);
 			contDao.persist(content);
 			result.add(content.getCntIdAuto() + "");
 		}
@@ -598,7 +610,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		evt.setDescription(description);
 		evt.setDate(new Timestamp(date.getTime()));
 		evt.setDuration(duration);
-		evt.setAddress(address);
+		evt.setAddress(address); 
 		evt.setCreator(a);
 		evt.setEvtCategory(eCat);
 		evt.setLatitude(latitude);
@@ -664,7 +676,8 @@ public class ServicesEvent implements ServicesEventRemote {
 		}
 		return res;
 	}
-
+	
+	
 	public void addContentToAlbum(int contentID, int eventID) {
 		Event event = getEvent(eventID);
 		Album album = event.getAlbum();
@@ -698,7 +711,110 @@ public class ServicesEvent implements ServicesEventRemote {
 		otherContent.setPosAlbum(oldPos);
 		currentContent.setPosAlbum(newPos);
 	}
+	
+	
+	
 
+	public int uploadYoutubeVideo(int eventId, String creator,
+			String youtube_id, String description) {
+		
+		if (!isUserRelatedToEvent(eventId, creator)) {
+			throw new UserNotRelatedToEventException();
+		}
+		
+		Event event = getEvent(eventId);
+		
+		NormalUser user = nUserDao.findByID(creator);	
+		Video content = new Video();	
+		content.setAlbum(false);
+		content.setEvent(event);
+		content.setUser(user);
+		content.setRegDate(new Timestamp(new java.util.Date().getTime()));
+		content.setUrl(YOUTUBE_PRE + youtube_id + YOUTUBE_POS);
+		content.setDescription(description);
+		content.setPosGallery(contDao.findNextPosInGalleryEvent(event));
+		content.setDuration("");
+		content.setSize(0);
+		//contDao.persist(content);
+		videoDao.persist(content);
+		
+		CntCategory categoryTodas = contentCategoryDao.findByNameInEvent(event, "Todas");
+		
+		if(content.getCntCategories() == null) 
+			content.setCntCategories(new ArrayList<CntCategory>());
+		content.getCntCategories().add(categoryTodas);
+		if(categoryTodas.getContents() == null)
+			categoryTodas.setContents(new ArrayList<Content>());
+		categoryTodas.getContents().add(content);
+		contDao.persist(content);
+		
+		return content.getCntIdAuto();		
+	}
 	
+	public void addCategoryToContent(int cntId, List<DatatypeCategorySummary> catsToAdd) {
+		if(catsToAdd == null || catsToAdd.size() == 0)
+			return;
+		
+		Content content = contDao.findByID(cntId);
+		if(content == null)
+			throw new ContentNotFoundException();
+				
+		//Obtenemos las categorias del contenido
+		List<Integer> myCatsId = new ArrayList<Integer>();
+		for(Iterator<CntCategory> it = content.getCntCategories().iterator(); it.hasNext(); ) {
+			myCatsId.add(it.next().getCatIdAuto());
+		} 
+		
+		//Agregamos las categorias
+		for(Iterator<DatatypeCategorySummary> it = catsToAdd.iterator(); it.hasNext(); ) {
+			DatatypeCategorySummary cat = it.next();
+			int cat_id = cat.getCategoryId();
+			if(cat_id == 0){
+				//No existe la categoria, la creamos y la agregamos al contenido
+				CntCategory newCat = new CntCategory();
+				newCat.setCategory(cat.getCategory());
+				newCat.setEvent(content.getEvent());
+				contentCategoryDao.persist(newCat);
+				
+				newCat.setContents(new ArrayList<Content>());
+				newCat.getContents().add(content);
+				content.getCntCategories().add(newCat);
+			} else if(!myCatsId.contains(cat_id)) {
+				//La categoria existe, pero no pertenece al contenido, la agregamos
+				CntCategory oldCat = contentCategoryDao.findByID(cat_id);
+				oldCat.getContents().add(content);
+				content.getCntCategories().add(oldCat);
+			}
+		}
 	
+		contDao.persist(content);
+	}
+	/*
+	public void testVideo() {
+		NormalUser nu = nUserDao.findByID("ggismero");
+		
+		Event event = evDao.findByID(1001);
+	
+		Video content = new Video();
+		String youtube_id = "TEST";
+		content.setAlbum(false);
+		content.setEvent(event);
+		content.setUser(nu);
+		content.setRegDate(new Timestamp(new java.util.Date().getTime()));
+		content.setUrl("http://www.youtube.com/watch?v=" + youtube_id + "&feature=youtube_gdata");
+		content.setDescription("una desc");
+		content.setPos(contDao.findNextPosInGalleryEvent(event));
+		content.setDuration("");
+		content.setSize(0);
+		//TODO: Setear la duración del videos			
+		//contDao.persist(content);
+		
+		videoDao.persist(content);
+		try {
+			videoDao.flush();
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	*/
 }

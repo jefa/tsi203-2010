@@ -7,6 +7,7 @@ import javax.ejb.Remote;
 import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
+import partuzabook.datatypes.DatatypeCategorySummary;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
@@ -220,5 +221,24 @@ public interface ServicesEventRemote {
 	 * @param pos
 	 */
 	public void changePosInAlbum(int contentID, int eventID, int newPos);
+
+	/**
+	 * Creates a new video from a youtube video
+	 * @param eventId			- Event for the new content
+	 * @param creator			- username of the NormalUser creator of the content
+	 * @param yotube_id			- YouTube id for the video
+	 * @param description		- Description for the video
+	 * */
+	public int uploadYoutubeVideo(int eventId, String creator, String youtube_id, 
+			String description);
+	
+	/**
+	 * Add categories to content with id = cntId. If the categories doesn't exist they are created. 
+	 * To mark a category as new, set the catId in the DatatypeCategorySummary to 0
+	 * @param cntId				- Id of the content
+	 * @param catsToAdd			- List of categories to add
+	 * */
+	public void addCategoryToContent(int cntId, List<DatatypeCategorySummary> catsToAdd);
+	
 
 }
