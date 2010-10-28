@@ -27,6 +27,13 @@ public class ContentDAOBean extends JpaDao<Integer, Content> implements ContentD
 		return (List<Content>)namedQuery.getResultList();
 	}
 	
+	public List<Content> getAllInAlbumOfEvent(Event event){
+		Query namedQuery = em.createNamedQuery("Content.findAllInAlbumOfEvent");
+		namedQuery.setParameter("event", event);
+		return (List<Content>)namedQuery.getResultList();
+	}
+
+	
 	public Content findByIDInEvent(Event event, int contentID) {
 		Query namedQuery = em.createNamedQuery("Content.findByIDInEvent");
 		namedQuery.setParameter("event", event);

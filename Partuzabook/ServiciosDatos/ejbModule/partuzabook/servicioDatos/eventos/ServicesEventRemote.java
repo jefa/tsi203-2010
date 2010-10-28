@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import partuzabook.datatypes.DataTypeFile;
+import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
@@ -61,7 +62,14 @@ public interface ServicesEventRemote {
 	 * @return						- Details for the event including its categories
      */ 
 	public DatatypeEvent getEventDetails(int eventID);
-	
+
+    /**
+     * Returns the full details of the album associated to the event
+	 * @param eventID				- Identifier of the event
+	 * @return						- Details for album and its contents
+     */ 
+	public DatatypeAlbum getAlbumDetails(int eventID);
+
 	/**
 	 * Returns a paged result of the contents for the category in the event
 	 * @param eventID				- Identifier of the event

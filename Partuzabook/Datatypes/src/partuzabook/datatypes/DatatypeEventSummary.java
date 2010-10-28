@@ -29,6 +29,8 @@ public class DatatypeEventSummary implements Serializable{
 	
 	public List<String> modsUsernames;
 	
+	private boolean hasAlbum;
+	
     public DatatypeEventSummary() {
     	
     }
@@ -44,6 +46,7 @@ public class DatatypeEventSummary implements Serializable{
 		eventCategory = datSummary.getEventCategory();
 		coverId = datSummary.getCoverId();
 		hashtag = datSummary.getHashtag();
+		hasAlbum = datSummary.getHasAlbum();
 	}
 
 	public String getEvtName() {
@@ -142,5 +145,13 @@ public class DatatypeEventSummary implements Serializable{
 
 	public String getHashtag() {
 		return hashtag;
+	}
+	
+	public boolean getHasAlbum(){
+		return hasAlbum;
+	}
+	
+	public void setHasAlbum(boolean alb){
+		this.hasAlbum = alb;
 	}
 }
