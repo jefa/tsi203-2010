@@ -555,18 +555,28 @@ public class ServicesEvent implements ServicesEventRemote {
 			throw new UserNotFoundException();
 		}
 		NormalUser nUser = (NormalUser) user;
+		
 		// Create Rating
-		Rating rate = new Rating();
-		rate.setContent(cont);
 		RatingPK pk = new RatingPK();
 		pk.setCntId(contentID);
-		pk.setUsrId(userId);		
-		Date today = (Date) new java.util.Date(); 
-		rate.setId(pk);
+		pk.setUsrId(userId);
+		Rating rate = ratingDao.findByID(pk);
+		if (rating == 0) {
+			if (rate != null) {
+				ratingDao.remove(rate);
+			}
+			return;
+		}
+		if (rate == null) {
+			rate = new Rating();
+			rate.setContent(cont);
+			rate.setId(pk);
+			rate.setUser(nUser);
+		}
+		Date today = new Date(new java.util.Date().getTime()); 
 		Timestamp now = new Timestamp(today.getTime());
 		rate.setRegDate(now);
 		rate.setScore(rating);
-		rate.setUser(nUser);
 		
 		ratingDao.persist(rate);		
 	}
@@ -715,6 +725,13 @@ public class ServicesEvent implements ServicesEventRemote {
 	
 	
 
+	public int getMyRatingForContent(Integer contentId, String username) {
+		Rating rating = ratingDao.findByContentAndUsername(contentId, username);
+		if (rating != null) {
+			return rating.getScore();
+		}
+		return 0;
+	}
 	public int uploadYoutubeVideo(int eventId, String creator,
 			String youtube_id, String description) {
 		
@@ -794,7 +811,6 @@ public class ServicesEvent implements ServicesEventRemote {
 		NormalUser nu = nUserDao.findByID("ggismero");
 		
 		Event event = evDao.findByID(1001);
-	
 		Video content = new Video();
 		String youtube_id = "TEST";
 		content.setAlbum(false);
@@ -806,7 +822,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		content.setPos(contDao.findNextPosInGalleryEvent(event));
 		content.setDuration("");
 		content.setSize(0);
-		//TODO: Setear la duración del videos			
+		//TODO: Setear la duraciï¿½n del videos			
 		//contDao.persist(content);
 		
 		videoDao.persist(content);

@@ -27,15 +27,11 @@ public class TranslatorContent implements ITranslatable {
 		dat.setComments(TranslatorCollection.translateComments(ent.getComments()));
 		
 		// Translate list of Ratings
-		dat.setRatings(new ArrayList<DatatypeRating>());
 		Iterator<Rating> itRat = ent.getRatings().iterator();
-		TranslatorRating transRat = new TranslatorRating();
-		int avg_score = 0;
+		double avg_score = 0;
 		while (itRat.hasNext()) {
 			Rating r = itRat.next();
-			dat.getRatings().add((DatatypeRating) transRat.translate(r));
 			avg_score += r.getScore();
-			
 		}
 		//Add average score of the content
 		if(ent.getRatings()!= null && ent.getRatings().size() > 0) {

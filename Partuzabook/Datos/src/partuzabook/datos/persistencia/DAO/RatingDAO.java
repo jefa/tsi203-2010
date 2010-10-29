@@ -9,6 +9,8 @@ import partuzabook.datos.persistencia.beans.RatingPK;
 public interface RatingDAO extends Dao<RatingPK, Rating>{
 	
 	public int getAverageRatingOfContent(int contentID);
+
+	public Rating findByContentAndUsername(Integer contentId, String username);
 	
 	
 }

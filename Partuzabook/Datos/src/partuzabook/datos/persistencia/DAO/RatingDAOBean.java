@@ -32,5 +32,16 @@ public class RatingDAOBean extends JpaDao<RatingPK, Rating> implements RatingDAO
 		return ((Double)namedQuery.getSingleResult()).intValue();
 	}
 
+	@Override
+	public Rating findByContentAndUsername(Integer contentId, String username) {
+		Query q = em.createNamedQuery("Rating.findByContentAndUsername")
+			.setParameter("username", username)
+			.setParameter("contentId", contentId);
+		if (q.getResultList().size() > 0) {
+			return (Rating)q.getSingleResult();
+		}
+		return null;
+	}
+
 
 }

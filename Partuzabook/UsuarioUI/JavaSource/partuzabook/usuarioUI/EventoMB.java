@@ -29,13 +29,18 @@ public class EventoMB {
 	private String userName;
 	
 	private DatatypeEvent evento;
-	private Integer eventId; 
+	private Integer eventId;
+	private Integer categoriesCount;
 	
 	private int categoryId;
 	private DatatypeCategory selectedCategory;
+	private Integer contentsCount;
 	
 	private Integer contentId;
 	private DatatypeContent selectedContent;
+	
+	private List<Integer> averageRates;
+	private int rating = 0;
 	
 	private String comentario = "Escribe un comentario...";
 	
@@ -77,6 +82,7 @@ public class EventoMB {
 		suggest = null;
 		if (this.userName != null){
 			setSelectedContent(servicesEvent.getContentDetails(contentId, userName));
+			setRating(servicesEvent.getMyRatingForContent(contentId, userName));
 		}
 	}
 
@@ -90,6 +96,7 @@ public class EventoMB {
 
 	public void setSelectedCategory(DatatypeCategory selectedCategory) {
 		this.selectedCategory = selectedCategory;
+		setContentsCount(this.selectedCategory.getContents().size());
 		setContentId(selectedCategory.getContents().get(0).getContId());
 	}
 
@@ -98,6 +105,14 @@ public class EventoMB {
 	}
 
 	
+	public void setContentsCount(Integer contentsCount) {
+		this.contentsCount = contentsCount;
+	}
+
+	public Integer getContentsCount() {
+		return contentsCount;
+	}
+
 	public String getComentario(){
 		return this.comentario;
 	}
@@ -144,6 +159,7 @@ public class EventoMB {
 
 	public void setEvento(DatatypeEvent evento) {
 		this.evento = evento;
+		setCategoriesCount(evento.getContentCategories().size());
 		setCategoryId(evento.getContentCategories().get(0).getCategoryId());
 	}
 
@@ -161,6 +177,14 @@ public class EventoMB {
 		calcValidUserForContent();
 		// Also set the Event
 		setEvento(getServicesEvent().getEventDetails(eventId));
+	}
+
+	public void setCategoriesCount(Integer categoriesCount) {
+		this.categoriesCount = categoriesCount;
+	}
+
+	public Integer getCategoriesCount() {
+		return categoriesCount;
 	}
 
 	private ServicesEventRemote getServicesEvent() {
@@ -340,6 +364,38 @@ public class EventoMB {
 			return null;
 		return evento.contents.get(position);
 	}*/
+
+	public void setAverageRates(List<Integer> averageRates) {
+		this.averageRates = averageRates;
+	}
+
+	public List<Integer> getAverageRates() {
+		if (averageRates == null) {
+			averageRates = new ArrayList<Integer>();
+			for (int i = 0; i < 25; i++) {
+				averageRates.add(i);
+			}
+		}
+		return averageRates;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+
+	public int getRating() {
+		return rating;
+	}
+	
+	public void rate() {
+		try {
+			getServicesEvent().rateContent(contentId, rating, userName);
+			setContentId(getContentId());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
