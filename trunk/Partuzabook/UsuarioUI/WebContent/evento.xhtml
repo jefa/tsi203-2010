@@ -43,9 +43,14 @@
 			rendered="#{eventoMB.validUserForContext}">
 			<h:form id="formUploadContent">
 				<h:commandButton value="Añadir contenido al evento"
-					action="subirContenido">
+					action="subirFoto">
 					<f:setPropertyActionListener value="#{eventoMB.eventId}"
 						target="#{subirFotoMB.idEvento}" />
+				</h:commandButton>
+				<h:commandButton value="Añadir video al evento"
+					action="subirVideo">
+					<f:setPropertyActionListener value="#{eventoMB.eventId}"
+						target="#{subirVideoMB.eventId}" />
 				</h:commandButton>
 			</h:form>
 			<ui:include src="/galeria.xhtml" />

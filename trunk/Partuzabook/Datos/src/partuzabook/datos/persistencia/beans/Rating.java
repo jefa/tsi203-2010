@@ -16,7 +16,10 @@ import java.sql.Timestamp;
 @NamedQueries({
 	@NamedQuery(name = "Rating", query = "SELECT o FROM Rating o"),
 	@NamedQuery(name = "Rating.avgRating",
-			query = "SELECT avg(score) FROM Rating r WHERE r.content.cntIdAuto = :cntId")
+			query = "SELECT avg(score) FROM Rating r WHERE r.content.cntIdAuto = :cntId"),
+	@NamedQuery(name = "Rating.findByContentAndUsername",
+			query = "SELECT r FROM Rating r " +
+			"WHERE r.content.cntIdAuto = :contentId AND r.user.username = :username")
 	})
 public class Rating implements Serializable {
 	private static final long serialVersionUID = 1L;

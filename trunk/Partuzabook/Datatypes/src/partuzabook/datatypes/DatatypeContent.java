@@ -16,7 +16,6 @@ public class DatatypeContent implements Serializable {
 	private Double avgScore;
 	private List<DatatypeCategorySummary> categories;
 	private List<DatatypeComment> comments;
-	private List<DatatypeRating> ratings;
 	private List<DatatypeTag> tags;
 	private short type;
 	private int pos;
@@ -34,7 +33,8 @@ public class DatatypeContent implements Serializable {
 	}
 
 	public Double getAvgScore() {
-		return avgScore;
+		Double avg = (Double) (Math.round(avgScore * 2.0) / 2.0);
+		return avg;
 	}
 
 	public void setAvgScore(Double avgScore) {
@@ -55,14 +55,6 @@ public class DatatypeContent implements Serializable {
 
 	public void setComments(List<DatatypeComment> comments) {
 		this.comments = comments;
-	}
-
-	public List<DatatypeRating> getRatings() {
-		return ratings;
-	}
-
-	public void setRatings(List<DatatypeRating> ratings) {
-		this.ratings = ratings;
 	}
 
 	public List<DatatypeTag> getTags() {

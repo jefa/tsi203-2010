@@ -222,6 +222,8 @@ public interface ServicesEventRemote {
 	 */
 	public void changePosInAlbum(int contentID, int eventID, int newPos);
 
+	public int getMyRatingForContent(Integer contentId, String userName);
+
 	/**
 	 * Creates a new video from a youtube video
 	 * @param eventId			- Event for the new content
