@@ -80,6 +80,10 @@
 		</a4j:outputPanel>
 		<br/>
 	</h:form>			
+		<script>
+		if (document.getElementById("formSearchByName:searchField").value!="")
+			document.getElementById("formSearchByName:searchByName").click();
+		</script>
 		
 	</ui:define>
 </ui:composition>
