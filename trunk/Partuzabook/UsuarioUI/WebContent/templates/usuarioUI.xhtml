@@ -101,13 +101,6 @@ onblur="if(value=='')value='Buscar...'"
 	</h:form>
 </li>
 
-<li class="menu-item menu-item-type-taxonomy">
-	<h:form rendered="#{loginMB.isUserLogged}">
-			<h:commandLink value="Mi perfil" action="verMiPerfil">
-				<f:setPropertyActionListener value="#{loginMB.userName}" target="#{PublicProfile.userId}" />
-			</h:commandLink>
-	</h:form>
-</li>	
 
 <li class="menu-item menu-item-type-taxonomy">
 	<h:form rendered="#{loginMB.isUserLogged}">
@@ -115,7 +108,16 @@ onblur="if(value=='')value='Buscar...'"
 	</h:form>
 </li>
 
-</ul></div>		
+</ul>
+<div id="userWelcome">
+	<h:form rendered="#{loginMB.isUserLogged}">
+	<span style="margin-right:3px">Bienvenido</span> 
+			<h:commandLink value="#{loginMB.name}" action="verMiPerfil">
+				<f:setPropertyActionListener value="#{loginMB.userName}" target="#{PublicProfile.userId}" />
+			</h:commandLink>
+	</h:form>
+</div>
+</div>		
 	</div><!-- #nav-content -->
 </div><!-- #nav -->
 
