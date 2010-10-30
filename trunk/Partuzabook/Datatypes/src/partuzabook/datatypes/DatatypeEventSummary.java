@@ -20,6 +20,8 @@ public class DatatypeEventSummary implements Serializable{
 	private Date date;
 
 	private String description;
+	
+	private int duration;
 
 	private String eventCategory;
 	
@@ -153,5 +155,13 @@ public class DatatypeEventSummary implements Serializable{
 	
 	public void setHasAlbum(boolean alb){
 		this.hasAlbum = alb;
+	}
+
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+
+	public int getDuration() {
+		return duration;
 	}
 }
