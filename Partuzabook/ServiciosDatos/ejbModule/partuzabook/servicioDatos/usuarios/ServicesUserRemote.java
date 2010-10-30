@@ -66,6 +66,13 @@ public interface ServicesUserRemote {
 	public String getNormalUserPassword(String username);
 	
 	/**
+	 * Returns the password for the user with id username
+	 * @param username		- Id for the user
+	 * @return				- User's email address
+	 */
+	public String getNormalUserMailAddress(String username);
+	
+	/**
 	 * Returns true if exists an admin user with id username
 	 * @param username		- Id to search for user
 	 */
@@ -134,4 +141,11 @@ public interface ServicesUserRemote {
 	 * @return
 	 */
 	public byte[] getPublicAvatar(String type, int pos, int thumbnail);
+
+	public List<DatatypeNotification> getUpdateNotificationsReceived(
+			String username);
+
+	public List<DatatypeNotification> getUpdateNotificationsSent(String username);
+
+	public DatatypeNotification createNotification(String fromUser, String toUser, Integer type, String message) throws UserNotFoundException;
 }
