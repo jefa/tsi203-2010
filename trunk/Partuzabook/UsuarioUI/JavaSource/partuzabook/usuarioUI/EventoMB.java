@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
+import partuzabook.datatypes.DatatypeCategorySummary;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeUser;
@@ -316,6 +317,22 @@ public class EventoMB {
 			ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
 			this.album = service.getAlbumDetails(eventId); 
+			List<DatatypeCategorySummary> list = this.album.getEvent().getContentCategories();
+			int catId = 0;
+			Iterator<DatatypeCategorySummary> it = list.iterator();
+			while (it.hasNext()) {
+				DatatypeCategorySummary dataCatSum = it.next();
+				if (dataCatSum.getCategory().equals("Album")) {
+					catId = dataCatSum.getCategoryId();
+					break;
+				}
+			}
+			DatatypeCategory dataCat = servicesEvent.getCategoryContents(eventId, catId, 1, PAGE_SIZE);
+			this.selectedContent = dataCat.getContents().get(0);
+			this.contentId = this.selectedContent.getContId();
+			this.categoryId = dataCat.getCategoryId();
+			this.selectedCategory = dataCat;
+
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -325,6 +342,21 @@ public class EventoMB {
 	
 	public void setAlbum(DatatypeAlbum dataAlbum){
 		this.album = dataAlbum;
+		List<DatatypeCategorySummary> list = dataAlbum.getEvent().getContentCategories();
+		int catId = 0;
+		Iterator<DatatypeCategorySummary> it = list.iterator();
+		while (it.hasNext()) {
+			DatatypeCategorySummary dataCatSum = it.next();
+			if (dataCatSum.getCategory().equals("Album")) {
+				catId = dataCatSum.getCategoryId();
+				break;
+			}
+		}
+		DatatypeCategory dataCat = servicesEvent.getCategoryContents(eventId, catId, 1, PAGE_SIZE);
+		this.selectedContent = dataCat.getContents().get(0);
+		this.contentId = this.selectedContent.getContId();
+		this.categoryId = dataCat.getCategoryId();
+		this.selectedCategory = dataCat;
 	}
 
 	

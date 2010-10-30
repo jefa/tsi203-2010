@@ -16,9 +16,15 @@
   </PROCESS-ITEM>
   <PROCESS-ITEM ID="rules:#evento.xhtml:1" NAME="item1"
    PATH="/evento.xhtml" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID="subirContenido::#subirFoto.xhtml"
-    NAME="output" PATH="/subirFoto.xhtml"
-    TARGET="rules:#subirFoto.xhtml" TITLE="subirContenido" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="subirFoto::#subirFoto.xhtml" NAME="output"
+    PATH="/subirFoto.xhtml" TARGET="rules:#subirFoto.xhtml"
+    TITLE="subirFoto" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+  <PROCESS-ITEM ID="rules:#evento.xhtml:2" NAME="item2"
+   PATH="/evento.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="subirVideo::#subirVideo.xhtml" NAME="output"
+    PATH="/subirVideo.xhtml" TARGET="rules:#subirVideo.xhtml"
+    TITLE="subirVideo" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#subirFoto.xhtml" PATH="/subirFoto.xhtml"
@@ -80,4 +86,6 @@
   PATH="/privateProfile.xhtml" SHAPE="240,1329,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#galeria.xhtml" PATH="/galeria.xhtml"
   SHAPE="464,577,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#subirVideo.xhtml" PATH="/subirVideo.xhtml"
+  SHAPE="480,865,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

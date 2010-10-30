@@ -230,6 +230,12 @@ public interface ServicesEventRemote {
 	 * @param pos
 	 */
 	public void changePosInAlbum(int contentID, int eventID, int newPos);
+	
+	/**
+	 * Returns a list of albums and their information
+	 * @param maxAlbums
+	 */
+	public List<DatatypeAlbum> getRecentAlbums(int maxAlbums);
 
 	public int getMyRatingForContent(Integer contentId, String userName);
 

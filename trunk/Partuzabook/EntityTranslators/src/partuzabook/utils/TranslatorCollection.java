@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategorySummary;
 import partuzabook.datatypes.DatatypeComment;
 import partuzabook.datatypes.DatatypeContent;
@@ -15,6 +16,7 @@ import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeTag;
 import partuzabook.datatypes.DatatypeUser;
+import partuzabook.datos.persistencia.beans.Album;
 import partuzabook.datos.persistencia.beans.CntCategory;
 import partuzabook.datos.persistencia.beans.Comment;
 import partuzabook.datos.persistencia.beans.Content;
@@ -23,6 +25,7 @@ import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.datos.persistencia.beans.Tag;
 import partuzabook.entityTranslators.ITranslatable;
+import partuzabook.entityTranslators.TranslatorAlbum;
 import partuzabook.entityTranslators.TranslatorCategorySummary;
 import partuzabook.entityTranslators.TranslatorComment;
 import partuzabook.entityTranslators.TranslatorContent;
@@ -37,6 +40,10 @@ import partuzabook.entityTranslators.TranslatorUser;
 public class TranslatorCollection {
 	public static List<DatatypeEventSummary> translateEventSummary(List<Event> from) {
 		return translateList(from, new TranslatorEventSummary());
+	}
+
+	public static List<DatatypeAlbum> translateAlbums(List<Album> from) {
+		return translateList(from, new TranslatorAlbum());
 	}
 
 	public static List<DatatypeCategorySummary> translateContentCategoriesSummary(List<CntCategory> from) {
