@@ -49,6 +49,7 @@ public class DatatypeEventSummary implements Serializable{
 		coverId = datSummary.getCoverId();
 		hashtag = datSummary.getHashtag();
 		hasAlbum = datSummary.getHasAlbum();
+		duration = datSummary.getDuration();
 	}
 
 	public String getEvtName() {
