@@ -89,6 +89,44 @@
 
 		</h:form>
 
+		<h:form id="albumsRecientes">
+			<div id="index-featured2">
+			<div class="home-title">Albums Recientes</div>
+			<ul class="hfeed posts-quick clearfix">
+				<a4j:repeat var="album" value="#{paginaInicioMB.albumsRecientes}">
+					<li class="post type-post clearfix">
+					<div class="entry-thumbnails"><h:commandLink
+						action="verAlbum" styleClass="entry-thumbnails-link">
+						<f:setPropertyActionListener value="#{album.event.evtId}"
+							target="#{albumMB.eventId}" />
+
+						<h:graphicImage
+							value="/ContentFeeder?id=#{album.event.coverId}&#38;thb=115"
+							styleClass="attachment-quick-preview-thumb wp-post-image" />
+					</h:commandLink></div>
+					<h3 class="entry-title"><h:commandLink
+						value="#{evento.evtName}" action="verEvento">
+						<f:setPropertyActionListener value="#{evento.evtId}"
+							target="#{eventoMB.eventId}" />
+					</h:commandLink></h3>
+					<div class="entry-summary">
+					<div class="entry-info"><abbr class="published">#{evento.formattedDate}
+					</abbr></div>
+					#{evento.description}
+					<p class="quick-read-more"><h:commandLink value="Ver evento..."
+						action="verEvento">
+						<f:setPropertyActionListener value="#{evento.evtId}"
+							target="#{eventoMB.eventId}" />
+					</h:commandLink></p>
+					</div>
+					</li>
+				</a4j:repeat>
+			</ul>
+			<!-- .posts-quick --></div>
+			<!-- #index-featured2 -->
+
+		</h:form>
+
 
 
 

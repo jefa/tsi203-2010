@@ -10,6 +10,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 
+import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeMostTagged;
@@ -28,6 +29,7 @@ public class PaginaInicioMB {
 	private int cantFotosMasComentadas;
 	private List<DatatypeMostTagged> usuariosMasTaggeados;
 	private int cantUsuariosMasTaggeados;
+	private List<DatatypeAlbum> albumsRecientes;
 	
 	// Para el usuario logueado
 	private String username;
@@ -227,5 +229,22 @@ public class PaginaInicioMB {
 		String user = (String) session.getAttribute("username");		
 		return (user != null );
 	}
-	
+
+	public List<DatatypeAlbum> getAlbumsRecientes() {
+		try {
+			Context ctx = getContext();
+			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
+			this.albumsRecientes = service.getRecentAlbums(10);
+			return albumsRecientes;
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public void setAlbumsRecientes(ArrayList<DatatypeAlbum> albumsRecientes) {
+		this.albumsRecientes = albumsRecientes;
+	}
+
 }

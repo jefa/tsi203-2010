@@ -1,22 +1,32 @@
 package partuzabook.datatypes;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class DatatypeAlbum implements Serializable{
 	private static final long serialVersionUID = 1L;
+		
+	private DatatypeEvent event;
+	private DatatypeEventSummary eventSummary;
+
 	
-	private List<DatatypeContent> contents;
-	
-	public List<DatatypeContent> getContents() {
-		return contents;
+	public DatatypeEvent getEvent() {
+		return event;
 	}
 
-	public void setContents(List<DatatypeContent> contents) {
-		this.contents = contents;
+	public void setEvent(DatatypeEvent evt) {
+		this.event = evt;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public DatatypeEventSummary getEventSummary() {
+		return eventSummary;
 	}
+
+	public void setEventSummary(DatatypeEventSummary dataEvent) {
+		this.eventSummary = dataEvent;
+	}
+	
 }
