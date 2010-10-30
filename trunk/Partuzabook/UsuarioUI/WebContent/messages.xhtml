@@ -37,11 +37,15 @@
 						reRender="messagesContentArea">
 						<f:setPropertyActionListener value="includes/messageRcvList.xhtml"
 							target="#{notificationsBean.include}" />
+						<f:setPropertyActionListener value="#{notificationsBean.notificacionesRecibidas}"
+							target="#{notificationsBean.notifActive}" />
 					</a4j:commandLink></li>
 					<li><a4j:commandLink value="Sent"
 						reRender="messagesContentArea">
-						<f:setPropertyActionListener value="includes/messageSentList.xhtml"
+						<f:setPropertyActionListener value="includes/messageRcvList.xhtml"
 							target="#{notificationsBean.include}" />
+						<f:setPropertyActionListener value="#{notificationsBean.notificacionesEnviadas}"
+							target="#{notificationsBean.notifActive}" />
 					</a4j:commandLink></li>
 					<li><a4j:commandLink value="Notifications"
 						reRender="messagesContentArea">
@@ -50,9 +54,10 @@
 					</a4j:commandLink></li>
 	        	</h:form>
 	        </f:facet>
-			<ui:include src="#{notificationsBean.include}" />
+	        <a4j:outputPanel ajaxRendered="true">
+				<ui:include src="#{notificationsBean.include}" />
+			</a4j:outputPanel>
 	        <f:facet name="footer">
-	            footer
 	        </f:facet>   
 	    </rich:page>		
 	</ui:define>

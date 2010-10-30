@@ -9,17 +9,21 @@
 	
 	<rich:panel id="messagesContentArea" >
 	    <f:facet name="header">
-	        <h:outputText value="Received messages"></h:outputText>
 	    </f:facet>
 	    <h:form>
-		    <rich:dataGrid value="#{notificationsBean.data}" var="d" columns="1" elements="10" width="600px">
+		    <rich:dataGrid value="#{notificationsBean.notifActive}" var="notif" columns="1" elements="5" width="600px">
 		        <rich:panel bodyClass="pbody">
 		            <f:facet name="header3">
 		                <h:outputText value="aca iria algo :))"></h:outputText>
 		            </f:facet>
 		            <h:panelGrid columns="2">
-		                <h:outputText value="Dato: " styleClass="label"></h:outputText>
-		                <h:outputText value="#{d}" />
+		                <h:outputText value="Fecha: " styleClass="label"></h:outputText>
+		                <h:outputText value="#{notif.formattedDate}" />
+		                <h:outputText value="From: " styleClass="label"></h:outputText>
+		                <h:outputText value="#{notif.userFrom}" />
+		                <h:outputText value="Message: " styleClass="label" style="colspan='2'"></h:outputText>
+		                
+		                <h:outputText value="#{notif.text}" />
 		            </h:panelGrid>
 		        </rich:panel>
 		        <f:facet name="footer2">
