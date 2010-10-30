@@ -11,19 +11,69 @@
 
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Ver Evento</ui:define>
+	<ui:define name="styles">
+	.main-aside {width:300px;}
+	#container {width:660px;}
+	#content {width:660px;} 
+	</ui:define>
 
 	<ui:define name="body">
-		<h:form id="evento">
-			<div id="cover"><h:graphicImage
-				value="/ContentFeeder?id=#{eventoMB.evento.coverId}&#38;thb=1" /></div>
-			<div id="eventDetails"><strong><h:outputText
-				value="#{eventoMB.evento.evtName} " /></strong> <br />
-			<h:outputText value="Fecha Evento: #{eventoMB.evento.formattedDate} " /><br />
-			<h:outputText value="Descripcion: #{eventoMB.evento.description} " /><br />
-			</div>
-			<br />
-			<h:inputHidden id="hiddenHashtag" value="#{eventoMB.evento.hashtag}"/>
-		</h:form>
+		<script type="">
+			function toggleTab(control, tab)
+			{
+				jQuery('div.ui-tabs-panel').addClass('ui-tabs-hide');
+				jQuery('#' + control).fadeIn();
+				jQuery('#' + control).removeClass('ui-tabs-hide');
+				jQuery('ul.ui-tabs-nav li').removeClass('ui-tabs-selected ui-state-active');
+				jQuery(tab.parentNode).addClass('ui-tabs-selected ui-state-active');
+			}
+		</script>
+		<link rel="stylesheet" href="styles/pikachoose/styles.css"
+			type="text/css" />
+		<link rel="stylesheet" href="styles/stars/jquery.rating.css"
+			type="text/css" />
+		<link rel="stylesheet" type="text/css"
+			href="styles/imgareaselect-default.css" />
+		<script type="text/javascript" src="scripts/jquery.imgareaselect.js"></script>
+		<script type="text/javascript"
+			src="scripts/jquery.imgareaselect.min.js"></script>
+		<script type="text/javascript" src="scripts/jquery.pikachoose.js"></script>
+		<script type="text/javascript" src="scripts/jquery.jcarousel.min.js"></script>
+		<script type="text/javascript" src="scripts/jquery.rating.js"></script>
+		<script type="text/javascript" src="scripts/jquery.MetaData.js"></script>
+		<script type="text/javascript" src="scripts/documentation.js"></script>
+
+		<h:panelGroup id="panelEvento">
+			<div id="index-featured2">
+			<ul class="hfeed posts-quick clearfix">
+				<li class="post type-post clearfix">
+				<div class="entry-thumbnails"><h:graphicImage
+					value="/ContentFeeder?id=#{eventoMB.evento.coverId}&#38;thb=115"
+					styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
+				<h3 class="entry-title">#{eventoMB.evento.evtName}</h3>
+				<div class="entry-summary">
+				<div class="entry-info"><abbr class="published">#{eventoMB.evento.formattedDate}</abbr>
+				</div>
+				<div class="entry-info"><abbr class="published">#{eventoMB.evento.description}</abbr>
+				</div>
+				<h:inputHidden id="hiddenHashtag" value="#{eventoMB.evento.hashtag}" />
+				</div>
+				<h:form id="formUploadContent" rendered="#{eventoMB.validUserForContext}">
+					<h:commandButton value="Añadir fotos"
+						action="subirFoto">
+						<f:setPropertyActionListener value="#{eventoMB.eventId}"
+							target="#{subirFotoMB.idEvento}" />
+					</h:commandButton>
+					<h:commandButton value="Añadir videos" action="subirVideo">
+						<f:setPropertyActionListener value="#{eventoMB.eventId}"
+							target="#{subirVideoMB.eventId}" />
+					</h:commandButton>
+				</h:form>
+				</li>
+			</ul>
+			<!-- .posts-quick --></div>
+			<!-- #index-featured2 -->
+		</h:panelGroup>
 
 		<h:panelGroup id="notPublicContent"
 			rendered="#{!loginMB.isUserLogged}">
@@ -41,24 +91,302 @@
 		</h:panelGroup>
 		<h:panelGroup id="authorizedContent"
 			rendered="#{eventoMB.validUserForContext}">
-			<h:form id="formUploadContent">
-				<h:commandButton value="Añadir contenido al evento"
-					action="subirFoto">
-					<f:setPropertyActionListener value="#{eventoMB.eventId}"
-						target="#{subirFotoMB.idEvento}" />
-				</h:commandButton>
-				<h:commandButton value="Añadir video al evento"
-					action="subirVideo">
-					<f:setPropertyActionListener value="#{eventoMB.eventId}"
-						target="#{subirVideoMB.eventId}" />
-				</h:commandButton>
-			</h:form>
-			<ui:include src="/galeria.xhtml" />
-
+			<!-- 
+			<div class="pikachoose" style="height:400px;">
+				<h:outputText value="#{eventoMB.selectedCategory.category}" />
+				<ul id="pikame" class="jcarousel-skin-pika">
+					<a4j:repeat value="#{eventoMB.selectedCategory.contents}" var="content">
+						<li><h:graphicImage value="/ContentFeeder?id=#{content.contId}&#38;" />
+							<span>#{content.eventName}</span>
+						</li>
+					</a4j:repeat>
+				</ul>
+				<rich:jQuery selector="#pikame" query="PikaChoose();">
+				</rich:jQuery>
+			</div>
+			-->
+			<a4j:outputPanel id="panelCategories">
+				<h:form id="formCategory">
+					<div
+						class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
+					<ul
+						class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+						<a4j:repeat var="category"
+							value="#{eventoMB.evento.contentCategories}">
+							<li
+								class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a
+								href="javascript:null"
+								onclick="toggleTab('s-'+#{category.category},this)">
+						<a4j:commandLink value="#{category.category}"
+							action="#{eventoMB.updateCategory}"
+							reRender="panelThumbs,panelContent,panelRating,panelOtherCategories,panelTags,panelComments">
+							<f:setPropertyActionListener target="#{eventoMB.categoryId}"
+								value="#{category.categoryId}" />
+						</a4j:commandLink>
+							</a></li>
+						</a4j:repeat>
+					</ul>
+					</div>
+				</h:form>
+			</a4j:outputPanel>
+			<a4j:outputPanel id="panelThumbs">
+				<a4j:form id="formThumb">
+					<rich:dataGrid value="#{eventoMB.selectedCategory.contents}"
+						columns="#{eventoMB.contentsCount}" var="content" rowKeyVar="rk">
+						<a4j:commandLink action="#{eventoMB.updateContent}"
+							reRender="panelContent,panelRating,panelOtherCategories,panelTags,panelComments">
+							<f:setPropertyActionListener value="#{content.contId}"
+								target="#{eventoMB.contentId}" />
+							<h:graphicImage alt="Title"
+								value="/ContentFeeder?id=#{content.contId}&#38;thb=75" />
+						</a4j:commandLink>
+					</rich:dataGrid>
+				</a4j:form>
+			</a4j:outputPanel>
+			<a4j:outputPanel id="panelContent">
+				<h:panelGroup id="mainImage" layout="block">
+					<h:column>
+						<h:panelGroup id="tagContentPanel">
+							<h:graphicImage value="/ContentFeeder?id=#{eventoMB.contentId}" />
+							<rich:componentControl for="panel" attachTo="tagContentPanel"
+								operation="show" event="onmouseup" />
+						</h:panelGroup>
+						<rich:modalPanel id="panel" width="350" height="100">
+							<f:facet name="header">
+								<h:panelGroup>
+									<h:outputText value="Etiquetar usuario"></h:outputText>
+								</h:panelGroup>
+							</f:facet>
+							<f:facet name="controls">
+								<h:panelGroup>
+									<h:graphicImage value="/images/close.png"
+										style="cursor:pointer" id="hidelink" />
+									<rich:componentControl for="panel" attachTo="hidelink"
+										operation="hide" event="onclick" />
+								</h:panelGroup>
+							</f:facet>
+							<h:form id="formTag">
+								<h:inputText id="tag" value="#{eventoMB.suggest}" />
+								<a4j:commandButton value="Etiquetar"
+									action="#{eventoMB.tagUser}" reRender="panelTags">
+								</a4j:commandButton>
+								<h:inputHidden value="#{eventoMB.tagX1}" id="x1" />
+								<h:inputHidden value="#{eventoMB.tagY1}" id="y1" />
+								<h:inputHidden value="#{eventoMB.tagX2}" id="x2" />
+								<h:inputHidden value="#{eventoMB.tagY2}" id="y2" />
+								<rich:suggestionbox id="suggestionBoxId" for="tag" tokens=",["
+									suggestionAction="#{eventoMB.autocomplete}" var="result"
+									nothingLabel="No se encuentran usuarios" columnClasses="center">
+									<h:column>
+										<h:outputText value="#{result.username}" />
+									</h:column>
+									<h:column>
+										<h:outputText value="#{result.name}" />
+									</h:column>
+									<h:column>
+										<h:graphicImage
+											value="/UserImageFeeder?username=#{result.username}&#38;thb=30" />
+									</h:column>
+								</rich:suggestionbox>
+							</h:form>
+						</rich:modalPanel>
+					</h:column>
+				</h:panelGroup>
+			</a4j:outputPanel>
+			<!-- 
+	<rich:jQuery selector="#mainImage img"
+		query="imgAreaSelect({ minWidth:80, minHeight:80, maxWidth:80, maxHeight:80,
+					idx1:'evento:x1', idy1:'evento:y1', idx2:'evento:x2', idy2:'evento:y2',
+					fadeSpeed:200 })" />
+	 -->
+			<a4j:outputPanel id="panelRating">
+				<h:column id="myRating" styleClass="Clear">
+					<h:outputText value="Tu calificación: " />
+					<h:form id="formRating">
+						<a4j:commandButton id="btnRate" action="#{eventoMB.rate}"
+							style="display:none;" reRender="panelRating">
+						</a4j:commandButton>
+						<h:inputHidden id="txtRating" value="#{eventoMB.rating}" />
+						<input type="radio" class="hover-star" name="myRating" value="1"
+							title="Malo" />
+						<input type="radio" class="hover-star" name="myRating" value="2"
+							title="Regular" />
+						<input type="radio" class="hover-star" name="myRating" value="3"
+							title="Bueno" />
+						<input type="radio" class="hover-star" name="myRating" value="4"
+							title="Muy bueno" />
+						<input type="radio" class="hover-star" name="myRating" value="5"
+							title="Excelente!" />
+						<span id="hover-test" style="margin: 0 0 0 20px;"></span>
+						<rich:jQuery selector="#formRating .hover-star"
+							query="rating({
+								focus: function(value, link){
+									var tip = $('#hover-test');
+									tip[0].data = tip[0].data || tip.html();
+									tip.html(link.title || 'value: '+value);
+								},
+								blur: function(value, link){
+									var tip = $('#hover-test');
+									$('#hover-test').html(tip[0].data || '');
+								},
+								callback: function(value, link) {
+									if (value == undefined) value = 0;
+									$('formRating:txtRating').value = value;
+									$('formRating:btnRate').click();
+								}
+							}).rating('select', #{eventoMB.rating} + '', false);"></rich:jQuery>
+					</h:form>
+				</h:column>
+				<h:column styleClass="Clear">
+					<h:outputText value="Calificación global: " />
+					<h:form id="formGlobalRating">
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="0.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="1" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="1.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="2" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="2.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="3" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="3.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="4" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="4.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="5" />
+						<rich:jQuery selector="#formGlobalRating .hover-star"
+							query="rating({}).rating('select', #{eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
+					</h:form>
+				</h:column>
+			</a4j:outputPanel>
+			<a4j:outputPanel id="panelOtherCategories">
+				<h:outputText styleClass="bold"
+					value="Este contenido también está en las categorías: " />
+				<a4j:form id="formContentCategory">
+					<a4j:repeat value="#{eventoMB.selectedContent.categories}"
+						var="category">
+						<a4j:commandLink value="#{category.category}"
+							rendered="#{eventoMB.categoryId != category.categoryId}"
+							reRender="panelThumbs,panelContent,panelRating,panelOtherCategories,panelTags,panelComments">
+							<f:setPropertyActionListener target="#{eventoMB.categoryId}"
+								value="#{category.categoryId}" />
+						</a4j:commandLink>
+					</a4j:repeat>
+				</a4j:form>
+			</a4j:outputPanel>
 		</h:panelGroup>
-		<div id="twitter"></div>
+	</ui:define>
+	<ui:define name="sidebar" rendered="#{eventoMB.validUserForContext}">
+		<ul class="xoxo" id="ulSidebar">
+			<li class="multi-sidebar-container">
+			<div
+				class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
+			<ul
+				class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+				<li
+					class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a
+					href="javascript:null" onclick="toggleTab('s-etiquetados',this)"><span>Etiquetados</span></a></li>
+				<li class="ui-state-default ui-corner-top"><a
+					href="javascript:null" onclick="toggleTab('s-comentarios',this)"><span>Comentarios</span></a></li>
+				<li class="ui-state-default ui-corner-top"><a
+					href="javascript:null" onclick="toggleTab('s-twitter',this)"><span>Twitter</span></a></li>
+			</ul>
+			<div id="s-etiquetados"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
+			<a4j:outputPanel id="panelTags">
+				<h:form id="tagPublicProfile">
+					<div id="index-featured2">
+					<ul class="hfeed posts-quick-tag clearfix">
+						<a4j:repeat value="#{eventoMB.selectedContent.tags}" var="tag">
+							<li class="post type-post clearfix">
+							<div class="entry-thumbnails-tag"><h:commandLink
+								rendered="#{tag.isRealUser}" action="verPerfil"
+								styleClass="entry-thumbnails-link">
+								<f:setPropertyActionListener value="#{tag.userName}"
+									target="#{PublicProfile.userId}" />
+								<h:graphicImage
+									value="/UserImageFeeder?username=#{tag.userName}&#38;thb=50"
+									styleClass="attachment-quick-preview-thumb wp-post-image" />
+							</h:commandLink> <h:graphicImage rendered="#{!tag.isRealUser}"
+								value="/UserImageFeeder?username=__unr_#{tag.userName}&#38;thb=50"
+								styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
+							<h5 class="entry-title"><h:commandLink
+								rendered="#{tag.isRealUser}" value="#{tag.name}"
+								action="verPerfil">
+								<f:setPropertyActionListener value="#{tag.userName}"
+									target="#{PublicProfile.userId}" />
+							</h:commandLink> <h:outputText rendered="#{!tag.isRealUser}" value="#{tag.name}" />
+							</h5>
+							</li>
+						</a4j:repeat>
+					</ul>
+					<!-- .posts-quick --></div>
+					<!-- #index-featured2 -->
+				</h:form>
+			</a4j:outputPanel></div>
 
-		<script type="text/javascript">
+			<div id="s-comentarios"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<a4j:outputPanel id="panelComments">
+				<h:form id="formCommentContent">
+					<div id="index-featured2">
+					<ul class="hfeed posts-quick-tag clearfix">
+						<li class="post type-post clearfix">
+						<div class="entry-thumbnails-tag"><h:graphicImage
+							value="/UserImageFeeder?username=#{loginMB.userName}&#38;thb=50"
+							styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
+						<h5 class="entry-title"><h:inputText
+							value="#{eventoMB.comentario}"
+							onfocus="if(value=='Escribe un comentario...')value=''"
+							onblur="if(value=='')value='Escribe un comentario...'" /> <a4j:commandButton
+							value="Comentar" action="#{eventoMB.comentar}"
+							reRender="panelComments">
+						</a4j:commandButton></h5>
+						</li>
+					</ul>
+					<!-- .posts-quick --></div>
+					<!-- #index-featured2 -->
+				</h:form>
+				<h:panelGroup layout="block" id="commentPanel">
+					<h:form id="formComments">
+						<div id="index-featured2">
+						<ul class="hfeed posts-quick-tag clearfix">
+							<a4j:repeat value="#{eventoMB.selectedContent.comments}"
+								var="comment">
+								<li class="post type-post clearfix">
+								<div class="entry-thumbnails-tag"><h:commandLink
+									action="verPerfil" styleClass="entry-thumbnails-link">
+									<f:setPropertyActionListener value="#{comment.userId}"
+										target="#{PublicProfile.userId}" />
+									<h:graphicImage
+										value="/UserImageFeeder?username=#{comment.userId}&#38;thb=50"
+										styleClass="attachment-quick-preview-thumb wp-post-image" />
+								</h:commandLink></div>
+								<h5 class="entry-title"><h:commandLink
+									value="#{comment.userName}" action="verPerfil">
+									<f:setPropertyActionListener value="#{comment.userId}"
+										target="#{PublicProfile.userId}" />
+								</h:commandLink></h5>
+								<div class="entry-summary">#{comment.text}</div>
+								</li>
+							</a4j:repeat>
+						</ul>
+						<!-- .posts-quick --></div>
+						<!-- #index-featured2 -->
+					</h:form>
+				</h:panelGroup>
+			</a4j:outputPanel></div>
+			<div id="s-twitter"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<div id="twitter"></div>
+
+			<script type="text/javascript">
 		//<![CDATA[
         var twitterQuery = encodeURIComponent (document.getElementById("evento:hiddenHashtag").value);
         var requestUrl = "http://search.twitter.com/search.json?q=@query&show_user=true&rpp=10&callback=?".
@@ -85,9 +413,10 @@
 			});
         });
       //]]>
-		</script>
-
-
+		</script></div>
+			</div>
+			</li>
+		</ul>
 	</ui:define>
 </ui:composition>
 </html>

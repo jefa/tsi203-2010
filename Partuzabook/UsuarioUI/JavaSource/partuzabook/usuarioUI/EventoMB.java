@@ -127,6 +127,7 @@ public class EventoMB {
 			if (comentario != "") {
 				comentario = comentario.replace("<p>", "").replace("</p>","");
 				service.commentContent(contentId, comentario, userName);
+				setContentId(contentId);
 				comentario = "";
 			}
 		} catch (Exception e) {
@@ -251,6 +252,7 @@ public class EventoMB {
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
  			service.tagUserInContent(eventId, contentId, userName, suggest, tagX1, tagY1);
 			suggest = null;
+			setContentId(contentId);
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
