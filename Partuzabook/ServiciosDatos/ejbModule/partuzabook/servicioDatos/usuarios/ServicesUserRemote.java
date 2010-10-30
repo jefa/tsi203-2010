@@ -53,6 +53,12 @@ public interface ServicesUserRemote {
 	public boolean existsNormalUser(String username);
 	
 	/**
+	 * Returns the name of the normal user with id username
+	 * @param username		- Id to search for user
+	 */
+	public String getName(String username);
+	
+	/**
 	 * Returns true if all normal users with username id belonging to usernames exists
 	 * @param usernames		- Id's to search for user
 	 */
