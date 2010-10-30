@@ -5,6 +5,7 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 
+	<ui:define name="body">
 	<link rel="stylesheet" href="styles/pikachoose/styles.css"
 		type="text/css" />
 	<link rel="stylesheet" href="styles/stars/jquery.rating.css"
@@ -33,7 +34,6 @@
 		</rich:jQuery>
 	</div>
 	 -->
-	<h:panelGroup>
 		<a4j:outputPanel id="panelCategories">
 			<h:form id="formCategory">
 				<rich:dataGrid var="category" columns="#{eventoMB.categoriesCount}"
@@ -47,12 +47,11 @@
 				</rich:dataGrid>
 			</h:form>
 		</a4j:outputPanel>
-	</h:panelGroup>
-	<h:panelGroup>
 		<a4j:outputPanel id="panelThumbs">
 			<a4j:form id="formThumb">
 				<rich:dataGrid value="#{eventoMB.selectedCategory.contents}"
-					columns="#{eventoMB.contentsCount}" elements="12" var="content" rowKeyVar="rk">
+					columns="#{eventoMB.contentsCount}" elements="12" var="content"
+					rowKeyVar="rk">
 					<a4j:commandLink action="#{eventoMB.updateContent}"
 						reRender="panelContent">
 						<f:setPropertyActionListener value="#{content.contId}"
@@ -63,8 +62,6 @@
 				</rich:dataGrid>
 			</a4j:form>
 		</a4j:outputPanel>
-	</h:panelGroup>
-	<h:panelGroup>
 		<a4j:outputPanel id="panelContent">
 			<h:panelGroup id="mainImage" layout="block">
 				<h:column>
@@ -114,31 +111,34 @@
 					</rich:modalPanel>
 				</h:column>
 			</h:panelGroup>
-			<rich:jQuery selector="#mainImage img"
-				query="imgAreaSelect({ minWidth:80, minHeight:80, maxWidth:80, maxHeight:80,
+		</a4j:outputPanel>
+		<!-- 
+	<rich:jQuery selector="#mainImage img"
+		query="imgAreaSelect({ minWidth:80, minHeight:80, maxWidth:80, maxHeight:80,
 					idx1:'evento:x1', idy1:'evento:y1', idx2:'evento:x2', idy2:'evento:y2',
 					fadeSpeed:200 })" />
-			<h:panelGroup>
-				<h:column id="myRating" styleClass="Clear">
-					<h:outputText value="Tu calificación: " />
-					<h:form id="formRating">
-						<a4j:commandButton id="btnRate" action="#{eventoMB.rate}"
-							style="display:none;" reRender="panelContent">
-						</a4j:commandButton>
-						<h:inputHidden id="txtRating" value="#{eventoMB.rating}" />
-						<input type="radio" class="hover-star" name="myRating" value="1"
-							title="Malo" />
-						<input type="radio" class="hover-star" name="myRating" value="2"
-							title="Regular" />
-						<input type="radio" class="hover-star" name="myRating" value="3"
-							title="Bueno" />
-						<input type="radio" class="hover-star" name="myRating" value="4"
-							title="Muy bueno" />
-						<input type="radio" class="hover-star" name="myRating" value="5"
-							title="Excelente!" />
-						<span id="hover-test" style="margin: 0 0 0 20px;"></span>
-						<rich:jQuery selector="#formRating .hover-star"
-							query="rating({
+	 -->
+		<a4j:outputPanel id="panelRating">
+			<h:column id="myRating" styleClass="Clear">
+				<h:outputText value="Tu calificación: " />
+				<h:form id="formRating">
+					<a4j:commandButton id="btnRate" action="#{eventoMB.rate}"
+						style="display:none;" reRender="panelContent">
+					</a4j:commandButton>
+					<h:inputHidden id="txtRating" value="#{eventoMB.rating}" />
+					<input type="radio" class="hover-star" name="myRating" value="1"
+						title="Malo" />
+					<input type="radio" class="hover-star" name="myRating" value="2"
+						title="Regular" />
+					<input type="radio" class="hover-star" name="myRating" value="3"
+						title="Bueno" />
+					<input type="radio" class="hover-star" name="myRating" value="4"
+						title="Muy bueno" />
+					<input type="radio" class="hover-star" name="myRating" value="5"
+						title="Excelente!" />
+					<span id="hover-test" style="margin: 0 0 0 20px;"></span>
+					<rich:jQuery selector="#formRating .hover-star"
+						query="rating({
 								focus: function(value, link){
 									var tip = $('#hover-test');
 									tip[0].data = tip[0].data || tip.html();
@@ -154,67 +154,92 @@
 									$('formRating:btnRate').click();
 								}
 							}).rating('select', #{eventoMB.rating} + '', false);"></rich:jQuery>
-					</h:form>
-				</h:column>
-				<h:column styleClass="Clear">
-					<h:outputText value="Calificación global: " />
-					<h:form id="formGlobalRating">
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="0.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="1" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="1.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="2" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="2.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="3" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="3.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="4" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="4.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="5" />
-						<rich:jQuery selector="#formGlobalRating .hover-star"
-							query="rating({}).rating('select', #{eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
-					</h:form>
-				</h:column>
-			</h:panelGroup>
-			<br />
-			<h:panelGroup>
-				<h:outputText styleClass="bold"
-					value="Este contenido también está en las categorías: " />
-				<a4j:form id="formContentCategory">
-					<a4j:repeat value="#{eventoMB.selectedContent.categories}"
-						var="category">
-						<a4j:commandLink value="#{category.category}"
-							rendered="#{eventoMB.categoryId != category.categoryId}"
-							reRender="panelThumbs,panelContent">
-							<f:setPropertyActionListener target="#{eventoMB.categoryId}"
-								value="#{category.categoryId}" />
-						</a4j:commandLink>
-					</a4j:repeat>
-				</a4j:form>
-			</h:panelGroup>
-			<br />
-			<h:panelGroup>
-				<h:outputText styleClass="bold" value="Usuarios etiquetados: " />
-				<h:form id="tagPublicProfile">
-					<a4j:repeat value="#{eventoMB.selectedContent.tags}" var="tag">
-						<h:commandLink action="verPerfil" rendered="#{tag.isRealUser}">
-							<f:setPropertyActionListener value="#{tag.userName}"
-								target="#{PublicProfile.userId}" />
-							<h:outputText value="#{tag.userName} " />
-						</h:commandLink>
-						<h:outputText value="#{tag.name}" rendered="#{!tag.isRealUser}" />
-					</a4j:repeat>
 				</h:form>
-			</h:panelGroup>
-			<br />
+			</h:column>
+			<h:column styleClass="Clear">
+				<h:outputText value="Calificación global: " />
+				<h:form id="formGlobalRating">
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="0.5" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="1" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="1.5" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="2" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="2.5" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="3" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="3.5" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="4" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="4.5" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="5" />
+					<rich:jQuery selector="#formGlobalRating .hover-star"
+						query="rating({}).rating('select', #{eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
+				</h:form>
+			</h:column>
+		</a4j:outputPanel>
+		<a4j:outputPanel id="panelOtherCategories">
+			<h:outputText styleClass="bold"
+				value="Este contenido también está en las categorías: " />
+			<a4j:form id="formContentCategory">
+				<a4j:repeat value="#{eventoMB.selectedContent.categories}"
+					var="category">
+					<a4j:commandLink value="#{category.category}"
+						rendered="#{eventoMB.categoryId != category.categoryId}"
+						reRender="panelThumbs,panelContent">
+						<f:setPropertyActionListener target="#{eventoMB.categoryId}"
+							value="#{category.categoryId}" />
+					</a4j:commandLink>
+				</a4j:repeat>
+			</a4j:form>
+		</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="sidebar">
+		<ul class="xoxo" id="ulSidebar">
+			<li class="multi-sidebar-container">
+			<div
+				class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
+			<script type="">
+			function toggleTab(control, tab)
+			{
+				jQuery('div.ui-tabs-panel').addClass('ui-tabs-hide');
+				jQuery('#' + control).fadeIn();
+				jQuery('#' + control).removeClass('ui-tabs-hide');
+				jQuery('ul.ui-tabs-nav li').removeClass('ui-tabs-selected ui-state-active');
+				jQuery(tab.parentNode).addClass('ui-tabs-selected ui-state-active');
+			}
+			</script>
+			<ul
+				class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+				<li
+					class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a
+					href="javascript:null" onclick="toggleTab('s-etiquetados',this)"><span>Etiquetados</span></a></li>
+				<li class="ui-state-default ui-corner-top"><a
+					href="javascript:null" onclick="toggleTab('s-comentarios',this)"><span>Comentarios</span></a></li>
+				<li class="ui-state-default ui-corner-top"><a
+					href="javascript:null" onclick="toggleTab('s-twitter',this)"><span>Twitter</span></a></li>
+			</ul>
+			<div id="s-etiquetados"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
+			<h:form id="tagPublicProfile">
+				<a4j:repeat value="#{eventoMB.selectedContent.tags}" var="tag">
+					<h:commandLink action="verPerfil" rendered="#{tag.isRealUser}">
+						<f:setPropertyActionListener value="#{tag.userName}"
+							target="#{PublicProfile.userId}" />
+						<h:outputText value="#{tag.userName} " />
+					</h:commandLink>
+					<h:outputText value="#{tag.name}" rendered="#{!tag.isRealUser}" />
+				</a4j:repeat>
+			</h:form></div>
+
+			<div id="s-comentarios"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
 			<a4j:region>
 				<h:column>
 					<h:graphicImage
@@ -230,8 +255,7 @@
 						</a4j:commandButton>
 					</h:form>
 				</h:column>
-			</a4j:region>
-			<h:panelGroup layout="block" id="commentPanel">
+			</a4j:region> <h:panelGroup layout="block" id="commentPanel">
 				<rich:dataGrid value="#{eventoMB.selectedContent.comments}"
 					var="comment">
 					<h:panelGroup>
@@ -252,7 +276,41 @@
 						</h:column>
 					</h:panelGroup>
 				</rich:dataGrid>
-			</h:panelGroup>
-		</a4j:outputPanel>
-	</h:panelGroup>
+			</h:panelGroup></div>
+			<div id="s-twitter"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<div id="twitter"></div>
+
+			<script type="text/javascript">
+		//<![CDATA[
+        var twitterQuery = encodeURIComponent (document.getElementById("evento:hiddenHashtag").value);
+        var requestUrl = "http://search.twitter.com/search.json?q=@query&show_user=true&rpp=10&callback=?".
+            replace (/@query/g, twitterQuery);
+            
+        jQuery.getJSON (requestUrl, function (data)
+        {
+			jQuery.each(data.results, function (i, tweet)
+			{
+                
+                var date_tweet = new Date(tweet.created_at);
+                var date_now   = new Date();
+                var date_diff  = date_now - date_tweet;
+                var hours      = Math.round(date_diff/(1000*60*60));
+
+                var tweet_html = '<div class="tweet_text">';
+                tweet_html    += '<a href="http://www.twitter.com/';
+                tweet_html    += tweet.from_user + '/status/' + tweet.id + '">';
+                tweet_html    += tweet.text + '<\/a><\/div>';
+                tweet_html    += '<div class="tweet_hours">' + hours;
+                tweet_html    += ' hours ago<\/div>';
+
+                jQuery('#twitter').append(tweet_html);
+			});
+        });
+      //]]>
+		</script></div>
+			</div>
+			</li>
+		</ul>
+	</ui:define>
 </ui:composition>

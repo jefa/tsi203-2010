@@ -198,6 +198,8 @@ public class ServicesUser implements ServicesUserRemote {
 	}
 
 	public byte[] getUserAvatar(String username, int thumbnail) {
+		if (username.startsWith("__unr_"))
+			return fileSystem.readFile(DEFAULT_IMAGE, thumbnail);
 		NormalUser user = getNormalUser(username);
 		if(user.getImgPath() != null && !user.getImgPath().equals(""))
 			return fileSystem.readFile(user.getImgPath(), thumbnail);
