@@ -13,19 +13,20 @@ import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
-import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
+import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.DAO.TagForUserDAO;
 import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
+import partuzabook.entityTranslators.TranslatorNotification;
 import partuzabook.entityTranslators.TranslatorUser;
 import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
@@ -43,7 +44,7 @@ public class ServicesUser implements ServicesUserRemote {
 	private AdminDAO adminDao;
 	private FileSystemLocal fileSystem;
 	private TagForUserDAO tagForUserDao;
-//	private NotificationDAO notifDao;
+	private NotificationDAO notifDao;
 		
     /**
      * Default constructor. 
@@ -64,7 +65,7 @@ public class ServicesUser implements ServicesUserRemote {
 	        nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local"); 
     		fileSystem = (FileSystemLocal) ctx.lookup("FileSystem/local");
     		tagForUserDao = (TagForUserDAO) ctx.lookup("TagForUserDAOBean/local");    		
-//	        notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
+	        notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
 		}
         catch (Exception e) {
 			e.printStackTrace();
@@ -76,7 +77,7 @@ public class ServicesUser implements ServicesUserRemote {
     	nUserDao = null;
     	fileSystem = null;
     	tagForUserDao = null;
-//    	notifDao = null;
+    	notifDao = null;
     }
 
 	public DatatypeUser createNormalUser(String username, String password, String mail, String name) throws UserAlreadyExistsException{
@@ -169,7 +170,7 @@ public class ServicesUser implements ServicesUserRemote {
     }
 
     public List<DatatypeNotification> getUpdateNotifications(String user) {
-    	NormalUser nUser = getNormalUser(user);  
+    	NormalUser nUser = getNormalUser(user);
     	List<Notification> notif = nUser.getNotificationsReceived();
     	return TranslatorCollection.translateNotification(notif);
     }
@@ -191,6 +192,10 @@ public class ServicesUser implements ServicesUserRemote {
 
 	public String getNormalUserPassword(String username) {
 		return getNormalUser(username).getPassword();
+	}
+	
+	public String getNormalUserMailAddress(String username) {
+		return getNormalUser(username).getEmail();
 	}
 	
 	public String getAdminUserPassword(String username) {
@@ -239,6 +244,43 @@ public class ServicesUser implements ServicesUserRemote {
 			return getUserAvatar(usernames.get(pos - 1), thumbnail);
 		}
 		return null;
+	}
+
+	public List<DatatypeNotification> getUpdateNotificationsReceived(
+			String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<DatatypeNotification> getUpdateNotificationsSent(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public DatatypeNotification createNotification(String fromUser, String toUser, 
+			Integer type, String message) throws UserNotFoundException{
+		if (existsNormalUser(fromUser) || existsNormalUser(toUser)) {
+			throw new UserNotFoundException("from="+fromUser+". to="+toUser);
+		}
+		
+		NormalUser fUser = nUserDao.findByID(fromUser);
+		NormalUser tUser = nUserDao.findByID(toUser);
+		
+		Notification not = new Notification();
+		not.setNotDate(new Timestamp((new java.util.Date()).getTime()));
+		not.setRead(false);
+		not.setRegDate(new Timestamp((new java.util.Date()).getTime()));
+		not.setText(message);
+		not.setType(type);
+		not.setUserFrom(fUser);
+		not.setUserTo(tUser);
+		
+		notifDao.persist(not);
+		
+		//necetiso el flush para que falle persistir notification y no se mande mail en ese caso
+		notifDao.flush();
+		
+		return (DatatypeNotification)new TranslatorNotification().translate(not);
 	}
 	
 }
