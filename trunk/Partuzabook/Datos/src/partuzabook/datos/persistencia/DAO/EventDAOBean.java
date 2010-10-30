@@ -58,6 +58,14 @@ public class EventDAOBean extends JpaDao<Integer, Event> implements EventDAO {
 			.setParameter("before", date).getResultList();
 	}
 
+	@Override
+	public List<Event> findAllBetweenDates(Date after, Date before) {
+		return (List<Event>)em.createNamedQuery("Event.findAllBetweenDates")
+			.setParameter("after", after)
+			.setParameter("before", before)
+			.getResultList();
+	}
+
 	
 	public NormalUser findMostTagged() {
 		Query namedQuery = em.createNamedQuery("Event.findMostTagged");

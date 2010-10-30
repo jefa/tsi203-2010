@@ -24,6 +24,8 @@ public interface EventDAO extends Dao<Integer, Event>{
 	
 	public List<Event> findAllBeforeDate(Date date);
 	
+	public List<Event> findAllBetweenDates(Date after, Date before);
+	
 	public NormalUser findMostTagged();
 
 }

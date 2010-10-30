@@ -149,6 +149,15 @@ public interface ServicesEventRemote {
 	
 	
 	/**
+     * Returns a list of Events taking place on that day
+     * @param after				- Since date
+     * @param before			- To date
+     * @param maxEvents			- Max number of events to return in the list
+     */ 
+	public List<DatatypeEventSummary> searchForEventBetweenDates(Date after, Date before, int maxEvents);
+	
+	
+	/**
 	 * Returns a list of the best picture for each event, ordered by rating
 	 * @param lenght - length of the list to return 
 	 */
