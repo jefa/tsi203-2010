@@ -256,20 +256,21 @@ public class ServicesUser implements ServicesUserRemote {
 		return null;
 	}
 
-	public List<DatatypeNotification> getUpdateNotificationsReceived(
-			String username) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<DatatypeNotification> getUpdateNotificationsReceived(String username) {
+    	NormalUser nUser = getNormalUser(username);
+    	List<Notification> notif = nUser.getNotificationsReceived();
+    	return TranslatorCollection.translateNotification(notif);
 	}
 
 	public List<DatatypeNotification> getUpdateNotificationsSent(String username) {
-		// TODO Auto-generated method stub
-		return null;
+    	NormalUser nUser = getNormalUser(username);
+    	List<Notification> notif = nUser.getNotificationsCreated();
+    	return TranslatorCollection.translateNotification(notif);
 	}
 	
 	public DatatypeNotification createNotification(String fromUser, String toUser, 
 			Integer type, String message) throws UserNotFoundException{
-		if (existsNormalUser(fromUser) || existsNormalUser(toUser)) {
+		if (!existsNormalUser(fromUser) || !existsNormalUser(toUser)) {
 			throw new UserNotFoundException("from="+fromUser+". to="+toUser);
 		}
 		
