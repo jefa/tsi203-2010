@@ -16,6 +16,7 @@ import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
+import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.serviciosUI.multimedia.ServicesMultimediaRemote;
@@ -30,9 +31,10 @@ public class EventoMB {
 	private String userName;
 	
 	private DatatypeEvent evento;
+	private List<DatatypeCategorySummary> categories;
 	private Integer eventId;
 	private Integer categoriesCount;
-	
+
 	private int categoryId;
 	private DatatypeCategory selectedCategory;
 	private Integer contentsCount;
@@ -46,7 +48,6 @@ public class EventoMB {
 	private String comentario = "Escribe un comentario...";
 	
 	private boolean hasAlbum;
-	private DatatypeAlbum album; 
 	
 	private int tagX1;
 	private int tagX2;
@@ -161,14 +162,42 @@ public class EventoMB {
 
 	public void setEvento(DatatypeEvent evento) {
 		this.evento = evento;
-		setCategoriesCount(evento.getContentCategories().size());
-		setCategoryId(evento.getContentCategories().get(0).getCategoryId());
+		// Setear solamente la categoría publica Album en caso que exista
+		if (!calcValidUserForContent()) {
+			if (!evento.getHasAlbum()) {
+				setCategories(null);
+				setCategoriesCount(0);
+			} else {
+				List<DatatypeCategorySummary> newList = new ArrayList<DatatypeCategorySummary>();
+				List<DatatypeCategorySummary> catList = evento.getContentCategories();
+				Iterator<DatatypeCategorySummary> it = catList.iterator();
+				while (it.hasNext()) {
+					DatatypeCategorySummary dataCateg = it.next();
+					if (dataCateg.getCategory().equals("Album")){
+						newList.add(dataCateg);	
+					}
+				}
+				setCategories(newList);
+				setCategoriesCount(1);
+				setCategoryId(newList.get(0).getCategoryId());
+			}
+		} else {
+			setCategoriesCount(evento.getContentCategories().size());
+			setCategoryId(evento.getContentCategories().get(0).getCategoryId());
+		}
 	}
 
 	public DatatypeEvent getEvento() {
 		return this.evento;
 	}
+	
+	public void setCategories(List<DatatypeCategorySummary> list) {
+		this.categories = list;
+	}
 
+	public List<DatatypeCategorySummary> getCategories(){
+		return this.categories;
+	}
 	
 	public Integer getEventId() {
 		return this.eventId; 
@@ -305,58 +334,6 @@ public class EventoMB {
 	
 	public void setHasAlbum(boolean album){
 		this.hasAlbum = album;
-	}
-	
-	public DatatypeAlbum getAlbum() {
-		getHasAlbum();
-		if (this.hasAlbum == false) {
-			// Error
-		}
-		Context ctx;
-		try {
-			ctx = getContext();
-			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			this.album = service.getAlbumDetails(eventId); 
-			List<DatatypeCategorySummary> list = this.album.getEvent().getContentCategories();
-			int catId = 0;
-			Iterator<DatatypeCategorySummary> it = list.iterator();
-			while (it.hasNext()) {
-				DatatypeCategorySummary dataCatSum = it.next();
-				if (dataCatSum.getCategory().equals("Album")) {
-					catId = dataCatSum.getCategoryId();
-					break;
-				}
-			}
-			DatatypeCategory dataCat = servicesEvent.getCategoryContents(eventId, catId, 1, PAGE_SIZE);
-			this.selectedContent = dataCat.getContents().get(0);
-			this.contentId = this.selectedContent.getContId();
-			this.categoryId = dataCat.getCategoryId();
-			this.selectedCategory = dataCat;
-
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return this.album;
-	}
-	
-	public void setAlbum(DatatypeAlbum dataAlbum){
-		this.album = dataAlbum;
-		List<DatatypeCategorySummary> list = dataAlbum.getEvent().getContentCategories();
-		int catId = 0;
-		Iterator<DatatypeCategorySummary> it = list.iterator();
-		while (it.hasNext()) {
-			DatatypeCategorySummary dataCatSum = it.next();
-			if (dataCatSum.getCategory().equals("Album")) {
-				catId = dataCatSum.getCategoryId();
-				break;
-			}
-		}
-		DatatypeCategory dataCat = servicesEvent.getCategoryContents(eventId, catId, 1, PAGE_SIZE);
-		this.selectedContent = dataCat.getContents().get(0);
-		this.contentId = this.selectedContent.getContId();
-		this.categoryId = dataCat.getCategoryId();
-		this.selectedCategory = dataCat;
 	}
 
 	

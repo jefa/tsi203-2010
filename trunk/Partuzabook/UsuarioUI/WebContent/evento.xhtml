@@ -76,11 +76,11 @@
 		</h:panelGroup>
 
 		<h:panelGroup id="notPublicContent"
-			rendered="#{!loginMB.isUserLogged}">
+			rendered="#{!loginMB.isUserLogged and !eventoMB.hasAlbum}">
 			<h:outputText>Debe loguearse para ver el contenido de este evento.</h:outputText>
 			<br />
 		</h:panelGroup>
-
+		
 		<h:panelGroup id="notAuthorizedContent"
 			rendered="#{!eventoMB.validUserForContext and loginMB.isUserLogged}">
 			<h:outputText>Usted no esta autorizado a ver el contenido de este evento.</h:outputText>
@@ -90,7 +90,7 @@
 			<h:commandButton value="Enviar solicitud" />
 		</h:panelGroup>
 		<h:panelGroup id="authorizedContent"
-			rendered="#{eventoMB.validUserForContext}">
+			rendered="#{eventoMB.validUserForContext || eventoMB.hasAlbum}">
 			<!-- 
 			<div class="pikachoose" style="height:400px;">
 				<h:outputText value="#{eventoMB.selectedCategory.category}" />
@@ -112,7 +112,7 @@
 					<ul
 						class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 						<a4j:repeat var="category"
-							value="#{eventoMB.evento.contentCategories}">
+							value="#{eventoMB.categories}">
 							<li
 								class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a
 								href="javascript:null"

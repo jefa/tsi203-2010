@@ -433,7 +433,6 @@ public class ServicesEvent implements ServicesEventRemote {
 			}
 			//TODO initMultimediaManager();
 			String url = fileSystem.writeFile(file.getData(), file.getMime(), eventID + "/");
-			content.setAlbum(false);
 			content.setEvent(event);
 			content.setUser(user); 
 			content.setRegDate(new Timestamp(new java.util.Date().getTime()));
@@ -611,7 +610,8 @@ public class ServicesEvent implements ServicesEventRemote {
 			return content;
 		}
 		// Si es del album tambien es publico
-		if (content.getAlbum()) {
+		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(content.getEvent(), "Album");
+		if (catAlbum !=  null && content.getCntCategories().contains(catAlbum)) {
 			return content;
 		}
 		if (!isUserRelatedToEvent(content.getEvent().getEvtIdAuto(), username)) {
@@ -722,7 +722,16 @@ public class ServicesEvent implements ServicesEventRemote {
 		if (currentContent == null)
 			throw new ContentNotFoundException();
 		// Associate to album and set pos to content
-		currentContent.setAlbum(true);
+		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
+		if (catAlbum == null) {
+			throw new AlbumNotFoundException();
+		}
+		if (!currentContent.getCntCategories().contains(catAlbum)) {
+			currentContent.getCntCategories().add(catAlbum);
+		}
+		if (!catAlbum.getContents().contains(currentContent)) {
+			catAlbum.getContents().add(currentContent);
+		}
 		currentContent.setPosAlbum(contDao.findNextPosInAlbumEvent(event));
 	}
 
@@ -735,7 +744,11 @@ public class ServicesEvent implements ServicesEventRemote {
 		Content currentContent = contDao.findByIDInEvent(event, contentID);
 		if (currentContent == null)
 			throw new ContentNotFoundException();
-		if (!currentContent.getAlbum())
+		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
+		if (catAlbum == null) {
+			throw new AlbumNotFoundException();
+		}
+		if (!currentContent.getCntCategories().contains(catAlbum))
 			throw new ContentNotInAlbumException();
 		int oldPos = currentContent.getPosAlbum();
 		Content otherContent = contDao.findByPosInEvent(event, newPos);
@@ -782,7 +795,6 @@ public class ServicesEvent implements ServicesEventRemote {
 		
 		NormalUser user = nUserDao.findByID(creator);	
 		Video content = new Video();	
-		content.setAlbum(false);
 		content.setEvent(event);
 		content.setUser(user);
 		content.setRegDate(new Timestamp(new java.util.Date().getTime()));

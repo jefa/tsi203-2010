@@ -36,13 +36,13 @@ import javax.persistence.OneToMany;
 	@NamedQuery(name = "Content.findByIDInEvent",
 			query = "SELECT c FROM Content c WHERE c.event = :event AND c.cntIdAuto = :content"),
 	@NamedQuery(name = "Content.findAllInAlbumOfEvent",
-			query = "SELECT c FROM Content c WHERE c.event = :event AND c.album = true"),
+			query = "SELECT c FROM Content c WHERE c.event = :event AND c.posAlbum IS NOT NULL"),
 	@NamedQuery(name = "Content.findByPosInEvent",
 			query = "SELECT c FROM Content c WHERE c.event = :event AND c.posGallery = :pos"),
 	@NamedQuery(name = "Content.findNextPosInGalleryEvent",
 			query = "SELECT c FROM Content c WHERE c.event = :event"),
 	@NamedQuery(name = "Content.findNextPosInAlbumEvent",
-			query = "SELECT c FROM Content c WHERE c.event = :event AND c.album = true"),			
+			query = "SELECT max(c.posAlbum)+1 FROM Content c WHERE c.event = :event"),			
 	@NamedQuery(name = "Content.getBestRanked",
 			query = "SELECT c.cntIdAuto FROM Content c, IN(c.ratings) r "
 				+"GROUP BY c.cntIdAuto ORDER BY AVG(r.score) DESC"),
@@ -58,11 +58,10 @@ public abstract class Content implements Serializable {
 	@Column(name="cnt_id_auto")
 	private Integer cntIdAuto;
 
-	private Boolean album;
-
 	@Column(name="reg_date")
 	private Timestamp regDate;
 
+	@Column(name="url")
 	private String url;
 
 	@Column(name="pos_gallery")
@@ -111,14 +110,6 @@ public abstract class Content implements Serializable {
 		this.cntIdAuto = cntIdAuto;
 	}
 	
-	public Boolean getAlbum() {
-		return this.album;
-	}
-
-	public void setAlbum(Boolean album) {
-		this.album = album;
-	}
-
 	public Timestamp getRegDate() {
 		return this.regDate;
 	}

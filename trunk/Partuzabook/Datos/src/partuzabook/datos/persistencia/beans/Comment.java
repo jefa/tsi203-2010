@@ -24,6 +24,7 @@ public class Comment implements Serializable {
 	@Column(name="reg_date")
 	private Timestamp regDate;
 
+	@Column(name="text")	
 	private String text;
 
 	//bi-directional many-to-one association to Content

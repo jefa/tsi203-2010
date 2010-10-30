@@ -39,6 +39,7 @@ public class CntCategory implements Serializable {
 	@Column(name="cat_id_auto")
 	private Integer catIdAuto;
 
+	@Column(name="category")
 	private String category;
 
 	//bi-directional many-to-one association to Event

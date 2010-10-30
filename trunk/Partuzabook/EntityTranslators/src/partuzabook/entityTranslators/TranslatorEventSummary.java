@@ -18,6 +18,7 @@ public class TranslatorEventSummary implements ITranslatable {
 		dat.setLatitude(ent.getLatitude());
 		dat.setLongitude(ent.getLongitude());
 		dat.setDuration(ent.getDuration());
+		dat.setHasAlbum(ent.getAlbum() != null);
 		if (ent.getCover() != null) {
 			dat.setCoverId(ent.getCover().getCntIdAuto());
 		}

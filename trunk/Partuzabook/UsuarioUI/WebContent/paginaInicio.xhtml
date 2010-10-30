@@ -96,26 +96,26 @@
 				<a4j:repeat var="album" value="#{paginaInicioMB.albumsRecientes}">
 					<li class="post type-post clearfix">
 					<div class="entry-thumbnails"><h:commandLink
-						action="verAlbum" styleClass="entry-thumbnails-link">
+						action="verEvento" styleClass="entry-thumbnails-link">
 						<f:setPropertyActionListener value="#{album.event.evtId}"
-							target="#{albumMB.eventId}" />
+							target="#{eventoMB.eventId}" />
 
 						<h:graphicImage
 							value="/ContentFeeder?id=#{album.event.coverId}&#38;thb=115"
 							styleClass="attachment-quick-preview-thumb wp-post-image" />
 					</h:commandLink></div>
 					<h3 class="entry-title"><h:commandLink
-						value="#{evento.evtName}" action="verEvento">
-						<f:setPropertyActionListener value="#{evento.evtId}"
+						value="#{album.event.evtName}" action="verEvento">
+						<f:setPropertyActionListener value="#{album.event.evtId}"
 							target="#{eventoMB.eventId}" />
 					</h:commandLink></h3>
 					<div class="entry-summary">
-					<div class="entry-info"><abbr class="published">#{evento.formattedDate}
+					<div class="entry-info"><abbr class="published">#{album.event.formattedDate}
 					</abbr></div>
-					#{evento.description}
+					#{album.event.description}
 					<p class="quick-read-more"><h:commandLink value="Ver evento..."
 						action="verEvento">
-						<f:setPropertyActionListener value="#{evento.evtId}"
+						<f:setPropertyActionListener value="#{album.event.evtId}"
 							target="#{eventoMB.eventId}" />
 					</h:commandLink></p>
 					</div>
