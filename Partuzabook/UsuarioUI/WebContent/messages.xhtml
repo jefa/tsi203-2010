@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<ui:composition template="templates/usuarioUI.xhtml">
+	<ui:define name="title">Mensajeria</ui:define>
+	<ui:define name="body">
+		<style>
+		.label{
+		font-weight:bold;
+		}
+		.pbody{
+		    width:200px;
+		}
+		</style>
+		
+		<!-- width="980" sidebarPosition="left" sidebarWidth="300" -->
+		
+	    <rich:page>
+	        <f:facet name="header">
+				<div>
+					<h2>Inbox</h2>
+				</div>
+	        </f:facet>
+	        <f:facet name="sidebar">
+	        	<h:form>
+					<li><a4j:commandLink value="Compose"
+						reRender="messagesContentArea">
+						<f:setPropertyActionListener value="includes/messageCompose.xhtml"
+							target="#{notificationsBean.include}" />
+					</a4j:commandLink></li>
+					<li><a4j:commandLink value="Received"
+						reRender="messagesContentArea">
+						<f:setPropertyActionListener value="includes/messageRcvList.xhtml"
+							target="#{notificationsBean.include}" />
+					</a4j:commandLink></li>
+					<li><a4j:commandLink value="Sent"
+						reRender="messagesContentArea">
+						<f:setPropertyActionListener value="includes/messageSentList.xhtml"
+							target="#{notificationsBean.include}" />
+					</a4j:commandLink></li>
+					<li><a4j:commandLink value="Notifications"
+						reRender="messagesContentArea">
+						<f:setPropertyActionListener value="includes/messageNotifList.xhtml"
+							target="#{notificationsBean.include}" />
+					</a4j:commandLink></li>
+	        	</h:form>
+	        </f:facet>
+			<ui:include src="#{notificationsBean.include}" />
+	        <f:facet name="footer">
+	            footer
+	        </f:facet>   
+	    </rich:page>		
+	</ui:define>
+</ui:composition>
+</html>
