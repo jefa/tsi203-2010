@@ -15,8 +15,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 
-import com.google.gdata.data.spreadsheet.Data;
-
 import partuzabook.datatypes.DatatypeCategorySummary;
 import partuzabook.datatypes.DatatypeYoutubeToken;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
