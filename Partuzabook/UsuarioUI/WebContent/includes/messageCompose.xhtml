@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<ui:composition>
+	<f:view>
+		<center>
+		<rich:panel id="messagesContentArea" header="Compose message" style="width:380px">
+			<h:form>
+			<!-- //TODO: -->				
+			<h:outputText value=""/>
+			<!--<h:panelGrid id="lpg" columns="2" >-->					
+				<h:outputText value="To:"/> <br/>
+				<h:inputText id="toField" value="#{notificationsBean.toUser}"/><br/>
+				<h:outputText value="#{notificationsBean.toUserMessage}" style="color:red"/><br/>					
+				<h:outputText value="Subject:"/><br/>
+				<h:inputText id="subjectField" value="#{notificationsBean.subject}"/><br/>
+				<h:outputText value="#{notificationsBean.subjectMessage}" style="color:red"/><br/>
+				<h:outputText value="Message:"/><br/>
+				<h:inputText id="bodyField" value="#{notificationsBean.body}"/><br/>
+				<h:outputText value="#{notificationsBean.bodyMessage}" style="color:red"/><br/>
+			<!--</h:panelGrid>-->
+			<br/>
+			<h:commandButton value="Enviar" action="#{notificationsBean.sendMail}"/>
+			</h:form>
+		</rich:panel>
+		</center>
+	</f:view>	
+</ui:composition>
+</html>
