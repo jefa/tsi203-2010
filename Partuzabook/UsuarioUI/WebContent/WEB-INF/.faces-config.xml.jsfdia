@@ -88,4 +88,13 @@
   SHAPE="464,577,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#subirVideo.xhtml" PATH="/subirVideo.xhtml"
   SHAPE="480,865,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:*:4" PATH="*" SHAPE="32,1489,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:4" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="buscar::#busquedaEventos.xhtml"
+    NAME="output" PATH="/busquedaEventos.xhtml"
+    TARGET="rules:#busquedaEventos.xhtml" TITLE="buscar" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#busquedaEventos.xhtml"
+  PATH="/busquedaEventos.xhtml" SHAPE="240,1505,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

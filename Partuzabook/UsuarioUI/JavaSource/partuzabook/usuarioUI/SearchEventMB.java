@@ -51,6 +51,7 @@ public class SearchEventMB {
 
 	public void setEventNameSearched(String eventName) {
 		this.eventNameSearched = eventName;
+		
 	}
 
 	public String getMensaje() {

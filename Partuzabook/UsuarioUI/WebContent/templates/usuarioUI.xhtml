@@ -65,14 +65,19 @@ jQuery.noConflict();
 		<h2 class="blog-description">Porque todas las fiestas terminan en eso...</h2>
 			</div>
 	<div id="searchbar">
- <h:form styleClass="searchform clearfix">
+ <h:form styleClass="searchform clearfix" id="formSearch">
  
  <h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" styleClass="s"
  onfocus="if(value=='Buscar...')value=''"
 onblur="if(value=='')value='Buscar...'"
  
  />
-		<a4j:commandButton styleClass="searchsubmit" action="#{SearchEventMB.searchEventsByName}" value="Buscar" id="searchByName"></a4j:commandButton>
+ <script>
+ 	document.getElementById("formSearch:searchField").value="Buscar...";
+ </script>
+ 	<h:commandButton value="Search" action="buscar" styleClass="searchsubmit" >
+				
+	</h:commandButton>
 			 
 </h:form>
 </div>
