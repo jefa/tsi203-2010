@@ -38,5 +38,19 @@ public class NotificationDAOBean extends JpaDao<Integer, Notification> implement
 		return (List<Notification>) namedQuery.getResultList();
 	}
 
+	@Override
+	public List<Notification> findSentByUser(String user) {
+		Query namedQuery = em.createNamedQuery("Notification.findSentByUser");
+		namedQuery.setParameter("user", user);
+		return (List<Notification>) namedQuery.getResultList();
+	}
+
+	@Override
+	public List<Notification> findReceivedByUser(String user) {
+		Query namedQuery = em.createNamedQuery("Notification.findReceivedByUser");
+		namedQuery.setParameter("user", user);
+		return (List<Notification>) namedQuery.getResultList();
+	}
+
 	
 }

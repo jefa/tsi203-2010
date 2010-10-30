@@ -17,11 +17,18 @@ import java.sql.Timestamp;
 	@NamedQuery(name = "Notification.findAll", query = "SELECT o FROM Notification o"),
 	@NamedQuery(name = "Notification.findByUser", query = "SELECT o FROM Notification o " +
 			"WHERE o.userTo = :user"),
-	@NamedQuery(name = "Notification.findByUserUnread", query = "SELECT o FROM Notification o " +
-			"WHERE o.userTo = :user AND o.read = false")		
+			@NamedQuery(name = "Notification.findByUserUnread", query = "SELECT o FROM Notification o " +
+			"WHERE o.userTo = :user AND o.read = false"),		
+			@NamedQuery(name = "Notification.findSentByUser", query = "SELECT o FROM Notification o " +
+			"WHERE o.userFrom = :user AND o.type = 1"),		
+			@NamedQuery(name = "Notification.findReceivedByUser", query = "SELECT o FROM Notification o " +
+			"WHERE o.userTo = :user AND o.type = 1")		
 	})
 public class Notification implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public static final int MAIL_NOTIF_TYPE = 1;
+	public static final int OTHER_NOTIF_TYPE = 2;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
