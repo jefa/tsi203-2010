@@ -13,6 +13,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
@@ -52,6 +53,11 @@ public class EventMB {
 	private List<DatatypeUser> candidates;
 	private List<DatatypeUser> results;
 	private String suggest = "";
+	
+	
+	//Para la edicion del evento:
+	private int evt_id = -1;
+	private DatatypeEvent eventToModify = null;
 	
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
@@ -151,6 +157,9 @@ public class EventMB {
 		return res;
 	}
 	
+	
+	
+	
 	private void clearAll() {
 		name = "";
 		//nameMessage = "";
@@ -172,48 +181,88 @@ public class EventMB {
 		this.name = name;
 	}
 	public String getName() {
+		if(evt_id != -1) {
+			if(eventToModify == null)
+				initEventToModify();
+			return eventToModify.getEvtName();
+		}		
 		return name;
 	}
 	public void setDescription(String description) {
 		this.description = description;
 	}
 	public String getDescription() {
+		if(evt_id != -1) {
+			if(eventToModify == null)
+				initEventToModify();
+			return eventToModify.getDescription();
+		}
 		return description;
 	}
 	public void setDate(Date date) {
 		this.date = date;
 	}
 	public Date getDate() {
+		if(evt_id != -1) {
+			if(eventToModify == null)
+				initEventToModify();
+			return eventToModify.getDate();
+		}
 		return date;
 	}
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
 	public int getDuration() {
+		if(evt_id != -1) {
+			if(eventToModify == null)
+				initEventToModify();
+			return eventToModify.getDuration();
+		}
 		return duration;
 	}
 	public void setAddress(String address) {
 		this.address = address;
 	}
 	public String getAddress() {
+		if(evt_id != -1) {
+			if(eventToModify == null)
+				initEventToModify();
+			return eventToModify.getAddress();
+		}
 		return address;
 	}
 	public void setCreator(String creator) {
 		this.creator = creator;
 	}
 	public String getCreator() {
+		if(evt_id != -1) {
+			if(eventToModify == null)
+				initEventToModify();
+			return "";
+		}
 		return creator;
 	}
 	public void setModerated(boolean moderated) {
 		this.moderated = moderated;
 	}
 	public boolean isModerated() {
+		if(evt_id != -1) {
+			if(eventToModify == null)
+				initEventToModify();
+			return eventToModify.getModsUsernames() == null;
+		}
 		return moderated;
 	}
 	public void setMods(List<String> mods) {
 		this.mods = mods;
 	}
 	public List<String> getMods() {
+		if(evt_id != -1) {
+			if(eventToModify == null)
+				initEventToModify();
+			return eventToModify.getModsUsernames();
+		}
 		if(mods == null) {
 			mods = new ArrayList<String>();
 		}
@@ -223,8 +272,14 @@ public class EventMB {
 		this.category = category;
 	}
 	public String getCategory() {
+		if(evt_id != -1) {
+			if(eventToModify == null)
+				initEventToModify();
+			return eventToModify.getEventCategory();
+		}
 		return category;
 	}
+	
 	public void setAllCats(Map<String,String> allCats) {
 		this.allCats = allCats;
 	}
@@ -351,4 +406,102 @@ public class EventMB {
 	public double getLongitude() {
 		return longitude;
 	}
+	
+	
+	
+	public String updateEvent() throws Exception{
+		if(evt_id == -1 || eventToModify == null)
+			throw new Exception("No deberías estar aca!");
+		
+		String res = "failure";
+		//Limpiamos los mensajes
+		clearMessages();
+		if(name == null || name.equals(""))
+			nameMessage = INPUT_OBLIG;
+		if(description == null || description.equals(""))
+			descriptionMessage = INPUT_OBLIG;
+		if(duration == 0)
+			durationMessage = INPUT_NOT_ZERO;
+		if(address == null || address.equals(""))
+			addressMessage = INPUT_OBLIG;
+		
+		if(noMessages() && creator != null && category != null && !creator.equals("") && !category.equals("")) {
+			Context ctx;
+			try {
+				ctx = getContext();
+				ServicesEventRemote serviceEvent = (ServicesEventRemote)ctx.lookup(SERVICE_EVENT);
+				ServicesUserRemote serviceUser = (ServicesUserRemote) ctx.lookup(SERVICE_USER);
+				if(moderated && mods.size()>0) {
+					List<Boolean> existsMods = serviceUser.existsNormalUser(mods);
+					int index = 0;
+					for(ListIterator<Boolean> it = existsMods.listIterator(); it.hasNext(); index++){
+						if(!it.next()){
+							modsMessage += MOD_NOT_FOUND + mods.get(index) +". ";
+						}			
+					}
+					if(noMessages()) {
+						//DatatypeEventSummary event = serviceEvent.updateEvent(evt_id, name, description, date, duration, address, moderated, category, latitude, longitude);
+						
+						//serviceEvent.updateModstoEvent(evt_id, mods);
+						
+						name = null;
+						nameMessage  = null;
+						description  = null;
+						descriptionMessage  = null;
+						date = new Date();
+						duration  = 0;
+						durationMessage  = null;
+						address  = null;
+						addressMessage  = null;
+						moderated = true;
+						mods = null;
+						modsMessage = null;
+						category = null;
+						evt_id = -1;
+						eventToModify = null;
+						res  = "success";
+					}						
+				} else if(moderated){
+					//Es moderado pero no tiene mods.
+					modsMessage = NO_MODS;
+					res = "failure";
+				} else {
+					serviceEvent.createEvent(name, description, date, duration, address, creator, moderated, category, latitude, longitude);
+					res = "success";
+				}				
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				clearAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				clearAll();
+			}
+		}		
+		clearAll();
+		if(res.equals("success"))
+			clearMessages();
+		return res;
+	}
+	
+	private void initEventToModify() {
+		try {
+			Context ctx = getContext();
+			ServicesEventRemote serviceEvent = (ServicesEventRemote)ctx.lookup(SERVICE_EVENT);
+			eventToModify = serviceEvent.getEventDetails(evt_id);
+		} catch(NamingException e) {
+			
+		}
+	}
+
+	public void setEvt_id(int evt_id) {
+		this.evt_id = evt_id;
+	}
+
+	public int getEvt_id() {
+		return evt_id;
+	}
+	
+	
+	
 }

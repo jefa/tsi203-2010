@@ -16,6 +16,10 @@
 				<f:facet name="header">
 					<h:outputText value="Modificar Evento"></h:outputText>
 				</f:facet>
+				
+				<h:outputText value="Busqueda de evento:"></h:outputText><br/>
+				
+				
 				<h:panelGrid columns="2">
 					<h:panelGroup>
 						<h:outputText value="Nombre del evento:"></h:outputText><br/>
@@ -56,15 +60,6 @@
 					<h:panelGroup>
 			        	<rich:gmap  gmapVar="map" style="width:400px;height:400px" id="map" lat="-34.831" lng="-56.2055"  enableDoubleClickZoom="true"
 			        zoom="11" mapType="G_NORMAL_MAP"/>
-			        
-			        <!--
-			        	<h:outputText value="Calle: "/><br/><h:inputText id="street"/><br/>
-			        	<h:outputText value="Ciudad: "/><br/><h:inputText id="city"/><br/>
-			        	<h:outputText value="País: "/><br/><h:inputText id="country"/><br/>-->
-			        	<!-- a href="javascript: void 0" onclick="addMarker(map, -34.831, -56.2055);">Colocar marcador bien</a><br/-->
-			        	<!-- a href="javascript: void 0" onclick="showAddress2('CreateEvent:street', 'CreateEvent:city', 'CreateEvent:country', map);">Colocar marcador por dir</a><br/-->
-			        	<!-- input type="button" value="Buscar Dirección" onclick="showAddress3('CreateEvent:street', 'CreateEvent:city', 'CreateEvent:country', map);"/><br/-->
-			        	
 			        </h:panelGroup>
 				</h:panelGrid>
 				
@@ -95,14 +90,14 @@
 				        </rich:panel>
 				        <h:outputText value="#{EventMB.modsMessage}" style="color:red"></h:outputText><br/>
 				        </div>
-			   <!--Inicilizamos el geoCoder-->
+			   <!--Inicializamos el geoCoder-->
 			   <script>window.onload=function(){initGeoCoder(map);}</script>
 			   
 				<center>
 				        
-				<h:commandButton value="Crear el evento" action="#{EventMB.createEvent}">
+				<h:commandButton value="COnfirmar cambios" action="#{EventMB.updateEvent}">
 					<f:setPropertyActionListener value="#{loginMB.userName}"
-								target="#{EventMB.creator}" />
+								target="#{EventMB.updater}" />
 				</h:commandButton>
 				<br/>
 				</center>

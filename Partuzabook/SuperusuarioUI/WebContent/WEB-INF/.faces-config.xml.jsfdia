@@ -53,4 +53,28 @@
     TITLE="#{RegisterAdminMB.adminRegistration}:failure" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#editEvent.xhtml" PATH="/editEvent.xhtml"
+  SHAPE="48,561,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#editEvent.xhtml:0" NAME="item"
+   PATH="/editEvent.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="success:#{EventMB.updateEvent}:#paginaInicio.xhtml"
+    NAME="output" PATH="/paginaInicio.xhtml"
+    TARGET="rules:#paginaInicio.xhtml"
+    TITLE="#{EventMB.updateEvent}:success" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="failure:#{EventMB.updateEvent}:#editEvent.xhtml" NAME="output1"
+    PATH="/editEvent.xhtml" TARGET="rules:#editEvent.xhtml"
+    TITLE="#{EventMB.updateEvent}:failure" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#*" PATH="/*" SHAPE="48,561,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#*:0" NAME="item" PATH="/*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="crearEvento::#event.xhtml" NAME="output"
+    PATH="/event.xhtml" TARGET="rules:#event.xhtml" TITLE="crearEvento" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="modEvento::#editEvent.xhtml" NAME="output1"
+    PATH="/editEvent.xhtml" TARGET="rules:#editEvent.xhtml"
+    TITLE="modEvento" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
 </PROCESS>

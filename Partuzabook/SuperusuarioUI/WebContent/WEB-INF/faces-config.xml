@@ -32,6 +32,19 @@
   </navigation-case>
  </navigation-rule>
  <navigation-rule>
+  <from-view-id>/editEvent.xhtml</from-view-id>
+  <navigation-case>
+   <from-action>#{EventMB.updateEvent}</from-action>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/paginaInicio.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-action>#{EventMB.updateEvent}</from-action>
+   <from-outcome>failure</from-outcome>
+   <to-view-id>/editEvent.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
   <from-view-id>/createAdmin.xhtml</from-view-id>
   <navigation-case>
    <from-action>#{RegisterAdminMB.adminRegistration}</from-action>
@@ -42,6 +55,17 @@
    <from-action>#{RegisterAdminMB.adminRegistration}</from-action>
    <from-outcome>failure</from-outcome>
    <to-view-id>/createAdmin.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/*</from-view-id>
+  <navigation-case>
+   <from-outcome>crearEvento</from-outcome>
+   <to-view-id>/event.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>modEvento</from-outcome>
+   <to-view-id>/editEvent.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
  <navigation-rule>
