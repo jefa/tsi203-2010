@@ -63,17 +63,25 @@ public class Event implements Serializable {
 	@Column(name="evt_id_auto")
 	private Integer evtIdAuto;
 
+	@Column(name="address")
 	private String address;
+
+	@Column(name="latitude")
 	private double latitude;
+
+	@Column(name="longitude")
 	private double longitude;
 	
+	@Column(name="hashtag")
 	private String hashtag;
 	
-  //  @Temporal( TemporalType.TIMESTAMP)
+	@Column(name="date")
 	private Timestamp date;
 
+	@Column(name="description")
 	private String description;
 
+	@Column(name="duration")
 	private Integer duration;
 
 	@Column(name="evt_name")

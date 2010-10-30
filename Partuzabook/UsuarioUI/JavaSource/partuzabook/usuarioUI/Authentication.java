@@ -83,6 +83,7 @@ public class Authentication implements Filter {
 		publicURLs.add("/paginaInicio.jsf");
 		publicURLs.add("/busquedaEventos.jsf");
 		publicURLs.add("/login.jsf");
+		publicURLs.add("/evento.jsf");
 		publicURLs.add("/register.jsf");
 		publicURLs.add("/ContentFeeder");
 		publicURLs.add("/UserImageFeeder");
