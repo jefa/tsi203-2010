@@ -48,6 +48,8 @@ import javax.persistence.Table;
 			query = "SELECT o FROM Event o WHERE o.date >= :after"),
 	@NamedQuery(name = "Event.findAllBeforeDate",
 			query = "SELECT o FROM Event o WHERE o.date <= :before"),
+	@NamedQuery(name = "Event.findAllBetweenDates",
+			query = "SELECT o FROM Event o WHERE o.date <= :before AND o.date >= :after"),
 	@NamedQuery(name = "Event.findContentById",
 			query = "SELECT c FROM Content c WHERE c.id = :content"),
 	@NamedQuery(name = "Event.findByDate",
