@@ -2,7 +2,6 @@ package partuzabook.entityTranslators;
 
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datos.persistencia.beans.Event;
-import partuzabook.datos.persistencia.beans.ModeratedEvent;
 import partuzabook.utils.TranslatorCollection;
 
 public class TranslatorEventSummary implements ITranslatable {
@@ -25,12 +24,11 @@ public class TranslatorEventSummary implements ITranslatable {
 		if(ent.getEvtCategory() != null) {
 			dat.setEventCategory(ent.getEvtCategory().getCategory());
 		}
-		if(ent instanceof ModeratedEvent) {
-			dat.modsUsernames = TranslatorCollection.translateModUser(((ModeratedEvent)ent).getMyMods());
-		}
-		else {
+		if(ent.getMyMods() == null)
 			dat.modsUsernames = null;
-		}
+		else
+			dat.modsUsernames = TranslatorCollection.translateModUser(ent.getMyMods());
+		
 		//dat.setHashtag("#kirchner");
 		if(ent.getHashtag() == null)
 			dat.setHashtag("");
