@@ -28,6 +28,7 @@ public class PartuzaMailer {
 			
 			Properties props = new Properties();
 			InitialContext ictx = new InitialContext(props);
+			//session = (Session) ictx.lookup("java:/Mail");
 			session = (Session) ictx.lookup("java:/Mail");
 			//username = (String) session.getProperties().get("mail.smtps.user");
 			//password = (String) session.getProperties().get("mail.smtps.password");			
