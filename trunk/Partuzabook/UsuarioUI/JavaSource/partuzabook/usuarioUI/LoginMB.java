@@ -9,12 +9,14 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
+import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.serviciosUI.autenticacion.ServicesAutenticacionRemote;
 
 public class LoginMB {
 
 	private String text;
 	private String userName;
+	private String name;
 	private String password;
 	private boolean isUserLogged;
 	
@@ -35,6 +37,22 @@ public class LoginMB {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+	
+	public String getName(){
+		if (this.name == null) {
+			Context ctx;
+			try {
+				ctx = getContext();
+				ServicesUserRemote serviceUser = (ServicesUserRemote) ctx.lookup("/PartuzabookEAR/ServicesUser/remote");
+				if (serviceUser.existsNormalUser(this.userName)){
+					this.name = serviceUser.getName(this.userName);
+				}
+			} catch (NamingException e) {
+				e.printStackTrace();
+			}
+		} 
+		return this.name;		
+	}
 
 	public String getPassword() {
 		return password;
@@ -53,16 +71,11 @@ public class LoginMB {
 	}
 
 	public String validUser() throws Exception {
-		String returnString = "success";
-		
-		
+		String returnString = "success";		
 		Context ctx = getContext();
 		ServicesAutenticacionRemote service = (ServicesAutenticacionRemote) ctx.lookup("PartuzabookEAR/ServicesAutenticacion/remote");	
-		
-		
 		boolean usuarioValido = service.verifyUserAndPassword(userName, password);
-		
-		
+				
 		if (usuarioValido) {
 			FacesContext context = FacesContext.getCurrentInstance();
 			HttpSession session = (HttpSession) context.getExternalContext()
@@ -79,17 +92,13 @@ public class LoginMB {
 	public String logout() throws Exception {
 		FacesContext context = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) context.getExternalContext()
-				.getSession(true);
-		
-		
-		if (session == null) {
-			// TODO
-			throw new Exception("No deberias estar aca, se rompio todo!!!");
-		} else {
+				.getSession(true);		
+		if (session != null) {
 			session.invalidate();
 			setText("Logout con exito.");
 			return "logoutsuccess";
 		}
+		return "";
 
 	}
 	

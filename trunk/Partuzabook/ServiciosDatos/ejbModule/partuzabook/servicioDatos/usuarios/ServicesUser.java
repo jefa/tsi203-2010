@@ -131,6 +131,16 @@ public class ServicesUser implements ServicesUserRemote {
 		return nUserDao.findByID(username) !=null;
 	}
 	
+	public String getName(String username){
+		String name = "";
+		NormalUser nUser = nUserDao.findByID(username);
+		if (nUser != null) {
+			name = nUser.getName();
+		} 
+		return name;
+	}
+	
+	
 	public List<Boolean> existsNormalUser(List<String> usernames) {
 		List<Boolean> res = new ArrayList<Boolean>();
 		for(ListIterator<String> it = usernames.listIterator(); it.hasNext(); ){

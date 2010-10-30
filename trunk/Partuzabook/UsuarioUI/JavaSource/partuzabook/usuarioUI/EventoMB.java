@@ -182,8 +182,18 @@ public class EventoMB {
 				setCategoryId(newList.get(0).getCategoryId());
 			}
 		} else {
+			setCategories(evento.getContentCategories());
 			setCategoriesCount(evento.getContentCategories().size());
-			setCategoryId(evento.getContentCategories().get(0).getCategoryId());
+			List<DatatypeCategorySummary> list = evento.getContentCategories();
+			Iterator<DatatypeCategorySummary> it = list.iterator();
+			int indexAlbum = 0;
+			while (it.hasNext()) {
+				DatatypeCategorySummary dataCateg =  it.next();
+				if (dataCateg.getCategory().equals("Album")){
+					indexAlbum = list.indexOf(dataCateg);
+				}
+			}
+			setCategoryId(evento.getContentCategories().get(indexAlbum).getCategoryId());
 		}
 	}
 
@@ -196,6 +206,8 @@ public class EventoMB {
 	}
 
 	public List<DatatypeCategorySummary> getCategories(){
+		// Actualizar las categorias
+		setEvento(this.evento);
 		return this.categories;
 	}
 	
