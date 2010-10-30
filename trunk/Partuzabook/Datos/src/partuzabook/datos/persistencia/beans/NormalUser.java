@@ -52,7 +52,7 @@ public class NormalUser extends User {
 	@JoinTable(name="Mods", 
 	          joinColumns=@JoinColumn(name="usr_id"),
 	          inverseJoinColumns=@JoinColumn(name="evt_id"))
-	private List<ModeratedEvent> myModeratedEvents;
+	private List<Event> myModeratedEvents;
 
 	public List<Comment> getComments() {
 		return this.comments;
@@ -101,11 +101,11 @@ public class NormalUser extends User {
 		this.myEvents = myEvents;
 	}	
 
-	public List<ModeratedEvent> getMyModeratedEvents() {
+	public List<Event> getMyModeratedEvents() {
 		return this.myModeratedEvents;
 	}
 
-	public void setMyModeratedEvents(List<ModeratedEvent> myModeratedEvents) {
+	public void setMyModeratedEvents(List<Event> myModeratedEvents) {
 		this.myModeratedEvents = myModeratedEvents;
 	}
 

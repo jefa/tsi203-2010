@@ -34,9 +34,6 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="events")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "flags", discriminatorType = DiscriminatorType.STRING)
-@DiscriminatorValue("E")
 @NamedQueries({
 	@NamedQuery(name = "Event.findAll", 
 			query = "SELECT o FROM Event o"),
@@ -124,6 +121,15 @@ public class Event implements Serializable {
 	@JoinColumn(name="cover")
 	private Content cover;
     
+  //bi-directional many-to-many association to User
+	@ManyToMany(mappedBy="myModeratedEvents")
+	@JoinTable(name="Mods", 
+          joinColumns=@JoinColumn(name="evt_id"),
+          inverseJoinColumns=@JoinColumn(name="usr_id"))
+	private List<NormalUser> myMods;
+
+
+	
     public Event() {
     }
 
@@ -261,6 +267,14 @@ public class Event implements Serializable {
 
 	public String getHashtag() {
 		return hashtag;
+	}
+	
+	public List<NormalUser> getMyMods() {
+		return this.myMods;
+	}
+
+	public void setMyMods(List<NormalUser> myMods) {
+		this.myMods = myMods;
 	}
 	
 }
