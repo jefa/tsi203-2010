@@ -92,7 +92,6 @@ public class EventoMB {
 		return contentId;
 	}
 
-
 	public void setSelectedCategory(DatatypeCategory selectedCategory) {
 		this.selectedCategory = selectedCategory;
 		setContentsCount(this.selectedCategory.getContents().size());
