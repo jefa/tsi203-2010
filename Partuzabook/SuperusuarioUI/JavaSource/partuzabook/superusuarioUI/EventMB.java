@@ -27,6 +27,7 @@ public class EventMB {
 	private static final String INPUT_NOT_ZERO = "La duración no puede ser 0";
 	private static final String MOD_NOT_FOUND = "No existe el usuario ";
 	private static final String NO_MODS = "Se asignó el evento como moderado, pero no se establecieron moderadores.";
+	private static final String EVENT_NOT_FOUND = "No se encontró el evento";
 	
 	private String name;
 	private String nameMessage;
@@ -58,6 +59,12 @@ public class EventMB {
 	//Para la edicion del evento:
 	private int evt_id = -1;
 	private DatatypeEvent eventToModify = null;
+	
+	private String findName;
+	private List<DatatypeEventSummary> eventCandidates;
+	private List<DatatypeEventSummary> eventResults;
+	private String eventSuggest = "";
+	private String findEventMessage;
 	
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
@@ -250,12 +257,18 @@ public class EventMB {
 		if(evt_id != -1) {
 			if(eventToModify == null)
 				initEventToModify();
-			return eventToModify.getModsUsernames() == null;
+			return eventToModify.getModsUsernames() != null;
 		}
 		return moderated;
 	}
 	public void setMods(List<String> mods) {
 		this.mods = mods;
+		if(evt_id != -1) {
+			if(eventToModify == null)
+				initEventToModify();
+			eventToModify.setModsUsernames(mods);
+		}
+		
 	}
 	public List<String> getMods() {
 		if(evt_id != -1) {
@@ -339,6 +352,8 @@ public class EventMB {
 	
 	public void addMod() {
 		if(suggest != null && !suggest.equals("")) {
+			if(getMods() == null)
+				setMods(new ArrayList<String>());
 			getMods().add(suggest);
 		}
 	}
@@ -349,6 +364,8 @@ public class EventMB {
 	}
 	
 	public int getCantMods() {
+		if(getMods() == null)
+			return 0;
 		return getMods().size();
 	}
 
@@ -409,9 +426,9 @@ public class EventMB {
 	
 	
 	
-	public String updateEvent() throws Exception{
+	public String updateEvent(){
 		if(evt_id == -1 || eventToModify == null)
-			throw new Exception("No deberías estar aca!");
+			return "failure";
 		
 		String res = "failure";
 		//Limpiamos los mensajes
@@ -440,8 +457,9 @@ public class EventMB {
 						}			
 					}
 					if(noMessages()) {
-						//DatatypeEventSummary event = serviceEvent.updateEvent(evt_id, name, description, date, duration, address, moderated, category, latitude, longitude);
+						DatatypeEventSummary event = serviceEvent.updateEvent(evt_id, name, description, date, duration, address, creator, category, latitude, longitude);
 						
+						//TODO
 						//serviceEvent.updateModstoEvent(evt_id, mods);
 						
 						name = null;
@@ -466,7 +484,7 @@ public class EventMB {
 					modsMessage = NO_MODS;
 					res = "failure";
 				} else {
-					serviceEvent.createEvent(name, description, date, duration, address, creator, moderated, category, latitude, longitude);
+					serviceEvent.updateEvent(evt_id, name, description, date, duration, address, creator, category, latitude, longitude);
 					res = "success";
 				}				
 			} catch (NamingException e) {
@@ -501,7 +519,63 @@ public class EventMB {
 	public int getEvt_id() {
 		return evt_id;
 	}
+
+	public void setFindName(String findName) {
+		this.findName = findName;
+	}
+
+	public String getFindName() {
+		return findName;
+	}
 	
+	private void setEventCandidates() {
+		//if (eventCandidates == null) {
+			try {
+				Context ctx = getContext();
+				ServicesEventRemote service = (ServicesEventRemote) ctx.lookup(SERVICE_EVENT);	
+				eventCandidates = service.getSummaryEvents(-1);
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		//}
+	}
+		
+	public List<DatatypeEventSummary> findEventAutocomplete(Object suggestParam) {
+		setEventCandidates();
+		eventSuggest = ((String)suggestParam).toLowerCase();
+		eventResults = new ArrayList<DatatypeEventSummary>();
+		Iterator<DatatypeEventSummary> it = eventCandidates.iterator();
+		while (it.hasNext()) {
+			DatatypeEventSummary event = (DatatypeEventSummary) it.next();
+			if (event.getEvtName().toLowerCase().contains(eventSuggest)) {
+				eventResults.add(event);
+			}
+		}
+		return eventResults;
+	}
 	
-	
+	public void searchEvent() {
+		if(eventResults == null)
+			return;
+		boolean find = false;
+		for(Iterator<DatatypeEventSummary> it = eventResults.iterator(); it.hasNext(); ) {
+			DatatypeEventSummary evt = it.next();
+			if(evt.getEvtName().equals(findName)) {
+				find = true;
+				evt_id = evt.getEvtId();
+				initEventToModify();
+			}
+		}
+		if(!find);
+			findEventMessage = EVENT_NOT_FOUND; 
+	}
+
+	public void setFindEventMessage(String findEventMessage) {
+		this.findEventMessage = findEventMessage;
+	}
+
+	public String getFindEventMessage() {
+		return findEventMessage;
+	}
 }

@@ -8,7 +8,7 @@
 	xmlns:rich="http://richfaces.org/rich">
 
 <ui:composition template="templates/superusuarioUI.xhtml">
-	<ui:define name="title">Crear un Evento</ui:define>
+	<ui:define name="title">Modificar un Evento</ui:define>
 	<ui:define name="body">
 	<h:form id="EditEvent">
 		<f:view>
@@ -17,8 +17,22 @@
 					<h:outputText value="Modificar Evento"></h:outputText>
 				</f:facet>
 				
-				<h:outputText value="Busqueda de evento:"></h:outputText><br/>
-				
+				<h:outputText value="Busqueda de evento:"/><br/>
+				<h:inputText id="findEvent" value="#{EventMB.findName}" size="50" style="margin-right:5px"/>
+				<h:commandButton value="Buscar Evento" action="#{EventMB.searchEvent}"/><br/>
+				<h:outputText vaue="#{EventMB.findEventMessage}"/>
+				<rich:suggestionbox id="eventSuggestionBoxId" for="findEvent" tokens=",["
+					suggestionAction="#{EventMB.findEventAutocomplete}" var="eventResult"
+					nothingLabel="No hay eventos que coincidan" columnClasses="center">
+					<!-- h:column>
+						<h:outputText value="#{eventResult.evtId}" />
+					</h:column-->
+					<h:column>
+						<h:outputText value="#{eventResult.evtName}" />
+					</h:column>
+				</rich:suggestionbox>
+			
+				<br/><br/>
 				
 				<h:panelGrid columns="2">
 					<h:panelGroup>
@@ -45,8 +59,8 @@
 						<h:inputText id="address" value="#{EventMB.address}"></h:inputText>
 							<h:outputText value="#{EventMB.addressMessage}" style="color:red"></h:outputText><br/>
 						
-						<input type="button" value="Buscar Dirección" onclick="showAddress('CreateEvent:address', map);"/><br/>
-			        	<input type="button" value="Borrar Marcadores" onclick="eraseMarkers(map);"/><br/>
+						<input type="button" value="Buscar Dirección" onclick="showAddress('EditEvent:address', map, 'EditEvent:hidden_coord_lat', 'EditEvent:hidden_coord_lng');"/><br/>
+			        	<input type="button" value="Borrar Marcadores" onclick="eraseMarkers(map,'EditEvent:hidden_coord_lat', 'EditEvent:hidden_coord_lng');"/><br/>
 			        	
 			            <h:inputHidden id="hidden_coord_lat" value="#{EventMB.latitude}" /><br/>
 			            <h:inputHidden id="hidden_coord_lng" value="#{EventMB.longitude}"/><br/>
@@ -64,15 +78,15 @@
 				</h:panelGrid>
 				
 				<h:outputText value="Evento es moderado:"/>
-						<h:selectBooleanCheckbox value="#{EventMB.moderated}" 
-						onclick="toggleVisibility('divNewMod');" /><br/><br/>
+						<h:selectBooleanCheckbox id="check" value="#{EventMB.moderated}" 
+						onclick="toggleVisibility('divNewMod','EditEvent:check');" /><br/><br/>
 						<div id="divNewMod">
 						<h:inputText id="newMod" value="#{EventMB.suggest}" />
 						<h:commandButton value="Agregar como moderador" action="#{EventMB.addMod}"/>
 						<h:commandButton value="Limpiar lista" action="#{EventMB.resetMod}"/>
 						<rich:suggestionbox id="suggestionBoxId" for="newMod" tokens=",["
 							suggestionAction="#{EventMB.autocomplete}" var="result"
-							nothingLabel="No user matches" columnClasses="center">
+							nothingLabel="No hay usuarios que coincidan" columnClasses="center">
 							<h:column>
 								<h:outputText value="#{result.username}" />
 							</h:column>
@@ -91,13 +105,17 @@
 				        <h:outputText value="#{EventMB.modsMessage}" style="color:red"></h:outputText><br/>
 				        </div>
 			   <!--Inicializamos el geoCoder-->
-			   <script>window.onload=function(){initGeoCoder(map);}</script>
-			   
+			   <script>window.onload=function(){
+				   initGeoCoder(map, 'EditEvent:hidden_coord_lat', 'EditEvent:hidden_coord_lng');
+				   toggleVisibility('divNewMod','EditEvent:check');
+				   addMarkerWithInfo(map, "#{EventMB.latitude}", "#{EventMB.longitude}", '', 'EditEvent:hidden_coord_lat', 'EditEvent:hidden_coord_lng');
+				}</script>
+					   
 				<center>
 				        
-				<h:commandButton value="COnfirmar cambios" action="#{EventMB.updateEvent}">
+				<h:commandButton value="Confirmar cambios" action="#{EventMB.updateEvent}">
 					<f:setPropertyActionListener value="#{loginMB.userName}"
-								target="#{EventMB.updater}" />
+								target="#{EventMB.creator}" />
 				</h:commandButton>
 				<br/>
 				</center>
