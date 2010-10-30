@@ -31,7 +31,6 @@ import partuzabook.datos.persistencia.DAO.ContentDAO;
 import partuzabook.datos.persistencia.DAO.EventDAO;
 import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.DAO.EvtCategoryDAO;
-import partuzabook.datos.persistencia.DAO.ModeratedEventDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.DAO.RatingDAO;
@@ -45,7 +44,6 @@ import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.EvtCategory;
-import partuzabook.datos.persistencia.beans.ModeratedEvent;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.datos.persistencia.beans.Photo;
@@ -67,7 +65,6 @@ import partuzabook.servicioDatos.exception.AlbumNotFoundException;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.ContentNotInAlbumException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
-import partuzabook.servicioDatos.exception.EventNotModeratedException;
 import partuzabook.servicioDatos.exception.EvtCategoryNotFoundException;
 import partuzabook.servicioDatos.exception.InvalidPositionInAlbumException;
 import partuzabook.servicioDatos.exception.UnrecognizedFileTypeException;
@@ -85,7 +82,6 @@ public class ServicesEvent implements ServicesEventRemote {
 	private static final String YOUTUBE_POS = "?fs=1&amp;hl=es_ES";
 	
 	private EventDAO evDao;
-	private ModeratedEventDAO mevDao;
 	private ContentCategoryDAO contentCategoryDao;
 	private ContentDAO contDao;
 	private CommentDAO comDao;
@@ -116,45 +112,43 @@ public class ServicesEvent implements ServicesEventRemote {
     public void postConstruct() {
         try {
 			Context ctx = getContext();
-	        evDao = (EventDAO) ctx.lookup("EventDAOBean/local");  
-	        mevDao = (ModeratedEventDAO) ctx.lookup("ModeratedEventDAOBean/local");
-	        contentCategoryDao = (ContentCategoryDAO) ctx.lookup("ContentCategoryDAOBean/local");  
-    		contDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
-    		comDao = (CommentDAO) ctx.lookup("CommentDAOBean/local");
-    		nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
-    		tagDao = (TagDAO) ctx.lookup("TagDAOBean/local");    		
-    		notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
-    		fileSystem = (FileSystemLocal) ctx.lookup("FileSystem/local");
-    		ratingDao = (RatingDAO) ctx.lookup("RatingDAOBean/local");
-    		adminDao = (AdminDAO) ctx.lookup("AdminDAOBean/local");
-    		evtCatDao = (EvtCategoryDAO) ctx.lookup("EvtCategoryDAOBean/local");
-    		albumDao = (AlbumDAO) ctx.lookup("AlbumDAOBean/local");
-    		videoDao = (VideoDAO) ctx.lookup("VideoDAOBean/local");    		
+			evDao = (EventDAO) ctx.lookup("EventDAOBean/local");  
+			contentCategoryDao = (ContentCategoryDAO) ctx.lookup("ContentCategoryDAOBean/local");  
+			contDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
+			comDao = (CommentDAO) ctx.lookup("CommentDAOBean/local");
+			nUserDao = (NormalUserDAO) ctx.lookup("NormalUserDAOBean/local");
+			tagDao = (TagDAO) ctx.lookup("TagDAOBean/local");    		
+			notifDao = (NotificationDAO) ctx.lookup("NotificationDAOBean/local");
+			fileSystem = (FileSystemLocal) ctx.lookup("FileSystem/local");
+			ratingDao = (RatingDAO) ctx.lookup("RatingDAOBean/local");
+			adminDao = (AdminDAO) ctx.lookup("AdminDAOBean/local");
+			evtCatDao = (EvtCategoryDAO) ctx.lookup("EvtCategoryDAOBean/local");
+			albumDao = (AlbumDAO) ctx.lookup("AlbumDAOBean/local");
+			videoDao = (VideoDAO) ctx.lookup("VideoDAOBean/local");
 		}
         catch (NamingException e) {
 			e.printStackTrace();
 		}
     }
 
-    @PreDestroy
-    public void preDestroy() {
-    	evDao = null;
-    	mevDao = null;
-    	contDao = null;
-    	comDao = null;
-    	nUserDao = null;
-    	tagDao = null;
-    	notifDao = null;
-    	ratingDao = null;
-    	adminDao = null;
-    	evtCatDao = null;
-    	albumDao = null;
-    	videoDao = null;
-    }
-    
-    private Event getEvent(int eventID) throws EventNotFoundException { 
-    	Event event = evDao.findByID(eventID);
-    	if (event == null) {
+	@PreDestroy
+	public void preDestroy() {
+		evDao = null;
+		contDao = null;
+		comDao = null;
+		nUserDao = null;
+		tagDao = null;
+		notifDao = null;
+		ratingDao = null;
+		adminDao = null;
+		evtCatDao = null;
+		albumDao = null;
+		videoDao = null;
+	}
+
+	private Event getEvent(int eventID) throws EventNotFoundException { 
+		Event event = evDao.findByID(eventID);
+		if (event == null) {
 			throw new EventNotFoundException();
 		}
     	return event;
@@ -168,7 +162,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		
 		// Take the first maxEvents and translate to the datatype
 		List<Event> list =  evDao.findAllAfterDate(afterDate);
-		if (maxEvents < list.size()) {
+		if (maxEvents != -1 && maxEvents < list.size()) {
 			list = list.subList(0, maxEvents);
 		}
 		return TranslatorCollection.translateEventSummary(list);
@@ -238,7 +232,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			list = list.subList(0, maxEvents);
 			return TranslatorCollection.translateEventSummary(list);
 		} else if (list.size() == 0){
-				return null;
+			return null;
 		} else { 
 			return TranslatorCollection.translateEventSummary(list);			
 		}
@@ -268,7 +262,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			throw new UserNotFoundException();
 		}
 		return nUser.getMyEvents().contains(ev);
-  	}
+	}
 
 	public DatatypeCategory getCategoryContents(int eventID, int categoryID, int startAt, int count) {
 		// Verify existence of Event
@@ -290,7 +284,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		cat.setContents(list);
 		return (DatatypeCategory)new TranslatorCategory().translate(cat);
 	}
-	
+
 	public DatatypeContent getContentDetails(int contentID, String username) throws ContentNotFoundException {
 		Content content = getContentAndVerifyPermission(username, contentID);
 		if (content == null) {
@@ -298,7 +292,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		}
 		return (DatatypeContent)new TranslatorContent().translate(content);
 	}
-	
+
 	public List<DatatypeUser> getUsersForTag(int eventID, int contentID){
 		// Verify existence of Event
 		Event event = getEvent(eventID);
@@ -307,7 +301,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		if (cont == null) {
 			throw new ContentNotFoundException();
 		}
-		
+
 		// Obtain set of users already tagged in the content
 		List<User> usersAlreadyTagged = new ArrayList<User>();		
 		List<Tag> tags = cont.getTags();
@@ -320,19 +314,19 @@ public class ServicesEvent implements ServicesEventRemote {
 				usersAlreadyTagged.add(currentCast.getUserTagged());
 			}
 		}
-			
+
 		// Obtain a set of all users related to the event 
 		List<NormalUser> allUsersInEvent = event.getMyParticipants();
-    	if (allUsersInEvent.isEmpty()){
-    		return null;
-    	} 
-    	
-    	// Filter users that have already been tagged in this content    	
-    	allUsersInEvent.removeAll(usersAlreadyTagged);
-    	
-    	return TranslatorCollection.translateNormalUser(allUsersInEvent);
+		if (allUsersInEvent.isEmpty()){
+			return null;
+		} 
+
+		// Filter users that have already been tagged in this content    	
+		allUsersInEvent.removeAll(usersAlreadyTagged);
+
+		return TranslatorCollection.translateNormalUser(allUsersInEvent);
 	} 
-	
+
 	public void tagUserInContent(int eventID, int contentID, String userTagger, String userToTag,
 			int posX, int posY) throws EventNotFoundException, ContentNotFoundException, UserNotFoundException {
 		// Verify existence of Event
@@ -366,7 +360,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			tagUser.setUserTagged(nUserTagged);
 			//TODO Averiguar si es necesario setear ademas el tag al userTagged, ya setee el userTagged al tag
 			//nUserTagged.getMyTags().add(tagUser);
-			
+
 			// Notify the existing user that has been tagged
 			Notification ntfTagged = new Notification();
 			ntfTagged.setNotDate(new Timestamp(new java.util.Date().getTime()));
@@ -377,7 +371,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			ntfTagged.setType(0);
 			ntfTagged.setUserFrom(nUserTagger);	
 			ntfTagged.setUserTo(nUserTagged);
-			
+
 			try {
 				notifDao.persist(ntfTagged);
 			}
@@ -385,29 +379,29 @@ public class ServicesEvent implements ServicesEventRemote {
 				e.printStackTrace();
 			}
 		}
-		
+
 		//tag.setCntId(cont.getId().getCntIdAuto());
 		//tag.setEvtId(cont.getId().getEvtId());
-		
+
 		tag.setContent(cont); 
 		//TODO Averiguar si es necesario setear ademas el tag al content, ya setee el content al tag
 		cont.getTags().add(tag);
-	
+
 		tag.setCreator(nUserTagger);
 		//TODO Averiguar si es necesario setear ademas el tag a los users, ya setee los users al tag
 		//nUserTagger.getTagsCreated().add(tag);
-		
+
 		tag.set_posX_(posX);
 		tag.set_posY_(posY);
-		
+
 		tag.setRegDate(new Timestamp(new java.util.Date().getTime()));
-		
+
 		try {
-		tagDao.persist(tag);
+			tagDao.persist(tag);
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-}
+	}
 
 
 	public List<String> uploadContent(int eventID, String username, List<DataTypeFile> files) {
@@ -434,7 +428,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			//TODO initMultimediaManager();
 			String url = fileSystem.writeFile(file.getData(), file.getMime(), eventID + "/");
 			content.setEvent(event);
-			content.setUser(user); 
+			content.setUser(user);
 			content.setRegDate(new Timestamp(new java.util.Date().getTime()));
 			content.setSize((int) file.getLength());
 			content.setUrl(url);
@@ -450,9 +444,9 @@ public class ServicesEvent implements ServicesEventRemote {
 			contDao.persist(content);
 			result.add(content.getCntIdAuto() + "");
 		}
-	    return result;
+		return result;
 	}
-	
+
 	public byte[] getContent(String username, int contentID, int thumbnail) {
 		Content content = getContentAndVerifyPermission(username, contentID);
 		if (content instanceof Photo) {
@@ -634,12 +628,12 @@ public class ServicesEvent implements ServicesEventRemote {
 			throw new EvtCategoryNotFoundException();
 		}
 		
-		Event evt;
-		if(moderated) {
-			evt = new ModeratedEvent();
-		} else {
-			evt = new Event();
-		}
+		Event evt = new Event();
+		
+		if(moderated)
+			evt.setMyMods( new ArrayList<NormalUser>());
+		else 
+			evt.setMyMods(null);
 		
 		evt.setEvtName(name);
 		evt.setDescription(description);
@@ -652,8 +646,6 @@ public class ServicesEvent implements ServicesEventRemote {
 		evt.setLongitude(longitude);
 		evt.setRegDate(new Timestamp(new java.util.Date().getTime()));
 
-		evDao.persist(evt);
-		
 		// Create default category for contents: "Todas" 
 		CntCategory defaultCategory = new CntCategory();
 		defaultCategory.setCategory("Todas");
@@ -663,17 +655,19 @@ public class ServicesEvent implements ServicesEventRemote {
 		evt.setCntCategories(new ArrayList<CntCategory>());
 		evt.getCntCategories().add(defaultCategory);
 		
+		evDao.persist(evt);
+		
 		return (DatatypeEventSummary)new TranslatorEventSummary().translate(evt);
 	}
 
 	public DatatypeEventSummary addModtoEvent(int evt_id, List<String> newMods)
-			throws EventNotFoundException, UserNotFoundException, EventNotModeratedException {
-		
+	throws EventNotFoundException, UserNotFoundException {
+
 		//No es necesario el control de null, porque ya se hace en getEvent
 		Event event = getEvent(evt_id);
-		if(!(event instanceof ModeratedEvent))
-			throw new EventNotModeratedException();
-		ModeratedEvent mEvent = (ModeratedEvent)event;
+
+		if(event.getMyMods() == null)
+			event.setMyMods(new ArrayList<NormalUser>());
 		
 		//Verificamos que existan todos los usuarios
 		List<NormalUser> newUsers = new ArrayList<NormalUser>();
@@ -686,22 +680,22 @@ public class ServicesEvent implements ServicesEventRemote {
 		}
 		//Generamos una lista con los nombres de los moderados viejos
 		List<String> actualMods = new ArrayList<String>();
-		for(Iterator<NormalUser> it = mEvent.getMyMods().iterator(); it.hasNext(); ) {
+		for(Iterator<NormalUser> it = event.getMyMods().iterator(); it.hasNext(); ) {
 			actualMods.add(it.next().getUsername());
 		}
 		//Agregamos los nuevos moderadores que no existian
 		for(Iterator<NormalUser> it = newUsers.iterator(); it.hasNext(); ) {
 			NormalUser newMod = it.next();
 			if(!actualMods.contains(newMod.getUsername())){
-				mEvent.getMyMods().add(newMod);
-				newMod.getMyModeratedEvents().add(mEvent);
+				event.getMyMods().add(newMod);
+				newMod.getMyModeratedEvents().add(event);
 				//nUserDao.persist(newMod);
 			}
 		}
-		
-		mevDao.persist(mEvent);
-		
-		return (DatatypeEventSummary)new TranslatorEventSummary().translate(mEvent);
+
+		evDao.persist(event);
+
+		return (DatatypeEventSummary)new TranslatorEventSummary().translate(event);
 	}
 
 	public List<String> findAllEvtCategories() {
@@ -822,7 +816,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	public void addCategoryToContent(int cntId, List<DatatypeCategorySummary> catsToAdd) {
 		if(catsToAdd == null || catsToAdd.size() == 0)
 			return;
-		
+
 		Content content = contDao.findByID(cntId);
 		if(content == null)
 			throw new ContentNotFoundException();
@@ -883,4 +877,41 @@ public class ServicesEvent implements ServicesEventRemote {
 		}
 	}
 	*/
+
+	public DatatypeEventSummary updateEvent(int evt_id, String name,
+			String description, java.util.Date date, int duration,
+			String address, String creator, String category,
+			double latitude, double longitude) throws UserNotFoundException,
+			EvtCategoryNotFoundException, EventNotFoundException {
+		
+		Event evt = evDao.findByID(evt_id);
+		if(evt == null) {
+			throw new EventNotFoundException();
+		}			
+		
+		Admin a = adminDao.findByID(creator);
+		if(a == null) {
+			throw new UserNotFoundException();
+		}
+
+		EvtCategory eCat = evtCatDao.findByID(category);
+		if(eCat == null) {
+			throw new EvtCategoryNotFoundException();
+		}	
+
+		evt.setEvtName(name);
+		evt.setDescription(description);
+		evt.setDate(new Timestamp(date.getTime()));
+		evt.setDuration(duration);
+		evt.setAddress(address); 
+		evt.setCreator(a);
+		evt.setEvtCategory(eCat);
+		evt.setLatitude(latitude);
+		evt.setLongitude(longitude);
+
+		evDao.persist(evt);
+		
+		return (DatatypeEventSummary)new TranslatorEventSummary().translate(evt);
+		
+	}
 }

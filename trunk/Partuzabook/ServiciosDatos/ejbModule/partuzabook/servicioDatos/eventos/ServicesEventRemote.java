@@ -14,7 +14,6 @@ import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
-import partuzabook.servicioDatos.exception.EventNotModeratedException;
 import partuzabook.servicioDatos.exception.EvtCategoryNotFoundException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 
@@ -38,12 +37,30 @@ public interface ServicesEventRemote {
 			String category, double latitude, double longitude) throws UserNotFoundException, EvtCategoryNotFoundException;
 	
 	/**
+	 * Update a Event in the database and returns a datatype which represents the event.
+	 * @param evt_id			- Id of the event to update
+	 * @param name				- Name of the event
+	 * @param description		- The description of the event
+	 * @param date				- Date of the event
+	 * @param duration			- Duration of the event in minutes
+	 * @param address 			- Address of the event
+	 * @param creator			- username of the admin who created the event
+	 * @param moderated			- true if the event is moderated, false otherwise
+	 * @param category			- category for the event
+	 * @return	A Datatype representing the event
+	 */
+	public DatatypeEventSummary updateEvent(int evt_id, String name, String description, 
+			Date date, int duration, String address, String creator, String category, 
+			double latitude, double longitude) throws UserNotFoundException, EvtCategoryNotFoundException;
+	
+	
+	/**
 	 * Adds new Users as mods to event with evt_id_auto = evt_id. If the user is only a normal user, it transforms to a client.
 	 * @param evt_id			- id of the event
 	 * @param newMods			- The new mods to add for the event
 	 * */
 	public DatatypeEventSummary addModtoEvent(int evt_id, List<String> newMods) 
-		throws EventNotFoundException, UserNotFoundException, EventNotModeratedException ;
+		throws EventNotFoundException, UserNotFoundException ;
 	
 	/**
 	 * Returns a list of all the categories for events
@@ -53,7 +70,7 @@ public interface ServicesEventRemote {
 	
     /**
      * Returns a list of Events of interest (Eg: Events from this week)
-     * @param maxEvents				- Max number of events to return 
+     * @param maxEvents				- Max number of events to return. If maxEvents is -1 it returns all the events
      */ 
 	public List<DatatypeEventSummary> getSummaryEvents(int maxEvents);
 	
