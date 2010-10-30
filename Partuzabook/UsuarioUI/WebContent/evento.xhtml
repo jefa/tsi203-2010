@@ -26,6 +26,7 @@
 				jQuery('#' + control).removeClass('ui-tabs-hide');
 				jQuery('ul.ui-tabs-nav li').removeClass('ui-tabs-selected ui-state-active');
 				jQuery(tab.parentNode).addClass('ui-tabs-selected ui-state-active');
+				jQuery("#ulCategories li." + document.getElementById("formThumb:catName").value).addClass("ui-tabs-selected ui-state-active");
 			}
 		</script>
 		<link rel="stylesheet" href="styles/pikachoose/styles.css"
@@ -83,7 +84,7 @@
 		
 		<h:panelGroup id="notAuthorizedContent"
 			rendered="#{!eventoMB.validUserForContext and loginMB.isUserLogged}">
-			<h:outputText>Usted no esta autorizado a ver el contenido de este evento.</h:outputText>
+			<h:outputText>Usted no esta autorizado a ver contenido privado de este evento.</h:outputText>
 			<br />
 			<h:outputText>Puede solicitar autorizacion enviando un mensaje al moderador.</h:outputText>
 			<br />
@@ -107,15 +108,15 @@
 			-->
 			<a4j:outputPanel id="panelCategories">
 				<h:form id="formCategory">
-					<div
+					<div 
 						class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
-					<ul
-						class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+					<ul id="ulCategories"
+						class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">	
 						<a4j:repeat var="category"
 							value="#{eventoMB.categories}">
 							<li
-								class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a
-								href="javascript:null"
+								class="ui-state-default ui-corner-top #{category.category}"><a
+								href="javascript:null()"
 								onclick="toggleTab('s-'+#{category.category},this)">
 						<a4j:commandLink value="#{category.category}"
 							action="#{eventoMB.updateCategory}"
@@ -131,6 +132,12 @@
 			</a4j:outputPanel>
 			<a4j:outputPanel id="panelThumbs">
 				<a4j:form id="formThumb">
+					<h:inputHidden id="catName" value="#{eventoMB.selectedCategory.category}"/>	
+					<script>
+						jQuery("#ulCategories li").removeClass("ui-tabs-selected ui-state-active");
+						jQuery("#ulCategories li." + document.getElementById("formThumb:catName").value).addClass("ui-tabs-selected ui-state-active");
+					</script>
+								
 					<rich:dataGrid value="#{eventoMB.selectedCategory.contents}"
 						columns="#{eventoMB.contentsCount}" var="content" rowKeyVar="rk">
 						<a4j:commandLink action="#{eventoMB.updateContent}"
@@ -291,11 +298,11 @@
 				class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 				<li
 					class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a
-					href="javascript:null" onclick="toggleTab('s-etiquetados',this)"><span>Etiquetados</span></a></li>
+					href="javascript:null()" onclick="toggleTab('s-etiquetados',this)"><span>Etiquetados</span></a></li>
 				<li class="ui-state-default ui-corner-top"><a
-					href="javascript:null" onclick="toggleTab('s-comentarios',this)"><span>Comentarios</span></a></li>
+					href="javascript:null()" onclick="toggleTab('s-comentarios',this)"><span>Comentarios</span></a></li>
 				<li class="ui-state-default ui-corner-top"><a
-					href="javascript:null" onclick="toggleTab('s-twitter',this)"><span>Twitter</span></a></li>
+					href="javascript:null()" onclick="toggleTab('s-twitter',this)"><span>Twitter</span></a></li>
 			</ul>
 			<div id="s-etiquetados"
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">

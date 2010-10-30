@@ -92,9 +92,6 @@ public class EventoMB {
 		return contentId;
 	}
 
-	public void updateContent() {
-		System.out.println("holaaa");
-	}
 
 	public void setSelectedCategory(DatatypeCategory selectedCategory) {
 		this.selectedCategory = selectedCategory;
@@ -103,6 +100,7 @@ public class EventoMB {
 	}
 
 	public DatatypeCategory getSelectedCategory() {
+		setCategoryId(this.categoryId);
 		return selectedCategory;
 	}
 
@@ -163,37 +161,36 @@ public class EventoMB {
 	public void setEvento(DatatypeEvent evento) {
 		this.evento = evento;
 		// Setear solamente la categoría publica Album en caso que exista
+		List<DatatypeCategorySummary> newList = new ArrayList<DatatypeCategorySummary>();
+		List<DatatypeCategorySummary> catList = evento.getContentCategories();
+		Iterator<DatatypeCategorySummary> it = catList.iterator();
+		while (it.hasNext()) {
+			DatatypeCategorySummary dataCateg = it.next();
+			if (dataCateg.getCategory().equals("Album")){
+				newList.add(dataCateg);	
+			}
+		}
 		if (!calcValidUserForContent()) {
 			if (!evento.getHasAlbum()) {
 				setCategories(null);
 				setCategoriesCount(0);
 			} else {
-				List<DatatypeCategorySummary> newList = new ArrayList<DatatypeCategorySummary>();
-				List<DatatypeCategorySummary> catList = evento.getContentCategories();
-				Iterator<DatatypeCategorySummary> it = catList.iterator();
-				while (it.hasNext()) {
-					DatatypeCategorySummary dataCateg = it.next();
-					if (dataCateg.getCategory().equals("Album")){
-						newList.add(dataCateg);	
-					}
-				}
+				// Setear solamente la categoria Album
 				setCategories(newList);
 				setCategoriesCount(1);
 				setCategoryId(newList.get(0).getCategoryId());
 			}
 		} else {
-			setCategories(evento.getContentCategories());
-			setCategoriesCount(evento.getContentCategories().size());
-			List<DatatypeCategorySummary> list = evento.getContentCategories();
-			Iterator<DatatypeCategorySummary> it = list.iterator();
-			int indexAlbum = 0;
-			while (it.hasNext()) {
-				DatatypeCategorySummary dataCateg =  it.next();
-				if (dataCateg.getCategory().equals("Album")){
-					indexAlbum = list.indexOf(dataCateg);
+			Iterator<DatatypeCategorySummary> itCat = catList.iterator();
+			while (itCat.hasNext()) {
+				DatatypeCategorySummary dataCateg = itCat.next();
+				if (!dataCateg.getCategory().equals("Album")){
+					newList.add(dataCateg);	
 				}
 			}
-			setCategoryId(evento.getContentCategories().get(indexAlbum).getCategoryId());
+			setCategories(newList);
+			setCategoriesCount(newList.size());
+			setCategoryId(newList.get(0).getCategoryId());
 		}
 	}
 
