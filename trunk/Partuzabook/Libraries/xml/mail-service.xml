@@ -1,43 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- $Id: mail-service.xml 62350 2007-04-15 16:50:12Z dimitris@jboss.org $ -->
 <server>
-
-  <!-- ==================================================================== -->
-  <!-- Mail Connection Factory                                              -->
-  <!-- ==================================================================== -->
-
-  <mbean code="org.jboss.mail.MailService"
-         name="jboss:service=Mail">
-    <attribute name="JNDIName">java:/Mail</attribute>
-    <attribute name="User">user</attribute>
-    <attribute name="Password">passws</attribute>
-    <attribute name="Configuration">
-      <!-- A test configuration -->
-      <configuration>
-        <!-- Change to your mail server prototocol -->
+    <mbean code="org.jboss.mail.MailService" name="jboss:service=Mail">  
+     <attribute name="JNDIName">java:/Mail</attribute>  
+   
+     <!-- Replace "someuser@gmail.com" in the next line with your GMail address -->  
+     <attribute name="User">partuzabook</attribute>  
+   
+     <!-- Replace "SecretPasswordGoesHere" in the next line with your GMail password -->  
+     <attribute name="Password">departuza</attribute>  
+   
+     <attribute name="Configuration">  
+       <configuration>  
+	   
+		<property name="mail.from" value="partuzabook@gmail.com"/>
+	   
+        <property name="mail.smtp.host" value="smtp.gmail.com"/>  
+        <property name="mail.smtp.port" value="587"/>  
+        <property name="mail.smtp.starttls.enable" value="true"/>
+		<property name="mail.smtp.auth" value="true"/>  
+        <!--property name="mail.transport.protocol" value="smtp"/>  
+        <property name="mail.smtp.auth" value="true"/-->
+		 
         <property name="mail.store.protocol" value="pop3"/>
-        <property name="mail.transport.protocol" value="smtp"/>
+		<property name="mail.transport.protocol" value="smtps"/>
+        <property name="mail.smtps.starttls.enable" value="true"/>
+		<property name="mail.smtps.auth" value="true"/>  
+        <property name="mail.pop3.host" value="pop3.gmail.com"/>
+        <property name="mail.smtps.host" value="smtp.gmail.com"/>
+        <property name="mail.smtps.port" value="465"/>
 
-        <!-- Change to the user who will receive mail  -->
-        <property name="mail.user" value="user"/>
+        <property name="mail.smtps.user" value="partuzabook@gmail.com"/>
+        <property name="mail.smtps.password" value="departuza"/>
 
-        <!-- Change to the mail server  -->
-        <property name="mail.pop3.host" value="adinet.com.uy"/>
-
-        <!-- Change to the SMTP gateway server -->
-        <property name="mail.smtp.host" value="adinet.com.uy"/>
-		<property name="mail.smtp.auth" value="true"/>
-        <!-- The mail server port -->
-        <property name="mail.smtp.port" value="25"/>
-        
-        <!-- Change to the address mail will be from  -->
-        <property name="mail.from" value="poner mail from"/>
-
-        <!-- Enable debugging output from the javamail classes -->
         <property name="mail.debug" value="true"/>
-      </configuration>
-    </attribute>
-    <depends>jboss:service=Naming</depends>
-  </mbean>
-
+		 
+       </configuration>  
+     </attribute>  
+     <depends>jboss:service=Naming</depends>  
+   </mbean>
 </server>
