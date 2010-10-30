@@ -99,7 +99,17 @@ jQuery.noConflict();
 				<a href="paginaInicio.jsf">Home</a>
 			</li>
 			<li class="menu-item menu-item-type-taxonomy">
-				<a href="event.jsf">Crear Evento</a>
+				<!--  a href="event.jsf">Crear Evento</a-->
+				<h:commandLink value="Crear Evento" action="crearEvento">
+					<f:setPropertyActionListener value="-1" target="#{EventMB.evt_id}" />
+				</h:commandLink>
+			</li>
+			<li class="menu-item menu-item-type-taxonomy">
+				<!--  a href="event.jsf">Modificar Evento</a-->
+				<h:commandLink value="Modificar Evento" action="modEvento">
+					<f:setPropertyActionListener value="-1"
+								target="#{EventMB.evt_id}" />
+				</h:commandLink>
 			</li>
 			<li class="menu-item menu-item-type-taxonomy">
 				<a href="createAdmin.jsf">Crear Superusuario</a>
