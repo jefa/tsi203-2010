@@ -17,6 +17,7 @@ public class TranslatorEventSummary implements ITranslatable {
 		dat.setAddress(ent.getAddress());
 		dat.setLatitude(ent.getLatitude());
 		dat.setLongitude(ent.getLongitude());
+		dat.setDuration(ent.getDuration());
 		if (ent.getCover() != null) {
 			dat.setCoverId(ent.getCover().getCntIdAuto());
 		}
@@ -29,7 +30,11 @@ public class TranslatorEventSummary implements ITranslatable {
 		else {
 			dat.modsUsernames = null;
 		}
-		dat.setHashtag("#kirchner");
+		//dat.setHashtag("#kirchner");
+		if(ent.getHashtag() == null)
+			dat.setHashtag("");
+		else
+			dat.setHashtag(ent.getHashtag());
 		
 		return dat;
 	}
