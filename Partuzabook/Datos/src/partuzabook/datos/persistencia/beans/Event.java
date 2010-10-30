@@ -67,6 +67,8 @@ public class Event implements Serializable {
 	private double latitude;
 	private double longitude;
 	
+	private String hashtag;
+	
   //  @Temporal( TemporalType.TIMESTAMP)
 	private Timestamp date;
 
@@ -243,6 +245,14 @@ public class Event implements Serializable {
 
 	public void setCover(Content cover) {
 		this.cover = cover;
+	}
+
+	public void setHashtag(String hashtag) {
+		this.hashtag = hashtag;
+	}
+
+	public String getHashtag() {
+		return hashtag;
 	}
 	
 }
