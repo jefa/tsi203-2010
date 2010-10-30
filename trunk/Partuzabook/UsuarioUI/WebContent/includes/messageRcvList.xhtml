@@ -1,0 +1,32 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:richx="http://richfaces.org/richx">
+	
+	<rich:panel id="messagesContentArea" >
+	    <f:facet name="header">
+	        <h:outputText value="Received messages"></h:outputText>
+	    </f:facet>
+	    <h:form>
+		    <rich:dataGrid value="#{notificationsBean.data}" var="d" columns="1" elements="10" width="600px">
+		        <rich:panel bodyClass="pbody">
+		            <f:facet name="header3">
+		                <h:outputText value="aca iria algo :))"></h:outputText>
+		            </f:facet>
+		            <h:panelGrid columns="2">
+		                <h:outputText value="Dato: " styleClass="label"></h:outputText>
+		                <h:outputText value="#{d}" />
+		            </h:panelGrid>
+		        </rich:panel>
+		        <f:facet name="footer2">
+		            <rich:datascroller></rich:datascroller>
+		        </f:facet>
+		    </rich:dataGrid>
+	    </h:form>
+	</rich:panel>
+	
+</ui:composition>
