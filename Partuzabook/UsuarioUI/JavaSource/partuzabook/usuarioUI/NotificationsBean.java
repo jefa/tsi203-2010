@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datos.persistencia.beans.Notification;
-import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.serviciosNotificaciones.email.PartuzaMailer;
 
@@ -40,6 +39,7 @@ public class NotificationsBean {
 	
 	private List<DatatypeNotification> sentNotifications;
 	private List<DatatypeNotification> recvNotifications;
+	private List<DatatypeNotification> notifActive;
 		
 	public NotificationsBean() {
 		data = new ArrayList<String>();
@@ -228,6 +228,14 @@ public class NotificationsBean {
 
 	public void setBodyMessage(String bodyMessage) {
 		this.bodyMessage = bodyMessage;
+	}
+
+	public List<DatatypeNotification> getNotifActive() {
+		return notifActive;
+	}
+
+	public void setNotifActive(List<DatatypeNotification> notifActive) {
+		this.notifActive = notifActive;
 	}
 
 }
