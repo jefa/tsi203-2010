@@ -79,7 +79,7 @@ public class Event implements Serializable {
 	private String description;
 
 	@Column(name="duration")
-	private Integer duration;
+	private String duration;
 
 	@Column(name="evt_name")
 	private String evtName;
@@ -181,11 +181,11 @@ public class Event implements Serializable {
 		this.description = description;
 	}
 
-	public Integer getDuration() {
+	public String getDuration() {
 		return this.duration;
 	}
 
-	public void setDuration(Integer duration) {
+	public void setDuration(String duration) {
 		this.duration = duration;
 	}
 
