@@ -33,7 +33,7 @@ public interface ServicesEventRemote {
 	 * @return	A Datatype representing the event
 	 */
 	public DatatypeEventSummary createEvent(String name, String description, 
-			Date date, int duration, String address, String creator, boolean moderated, 
+			Date date, String duration, String address, String creator, boolean moderated, 
 			String category, double latitude, double longitude) throws UserNotFoundException, EvtCategoryNotFoundException;
 	
 	/**
@@ -50,7 +50,7 @@ public interface ServicesEventRemote {
 	 * @return	A Datatype representing the event
 	 */
 	public DatatypeEventSummary updateEvent(int evt_id, String name, String description, 
-			Date date, int duration, String address, String creator, String category, 
+			Date date, String duration, String address, String creator, String category, 
 			double latitude, double longitude) throws UserNotFoundException, EvtCategoryNotFoundException;
 	
 	

@@ -615,7 +615,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	}
 	
 	public DatatypeEventSummary createEvent(String name, String description,
-			java.util.Date date, int duration, String address, String creator,
+			java.util.Date date, String duration, String address, String creator,
 			boolean moderated, String category, double latitude, double longitude) throws UserNotFoundException, EvtCategoryNotFoundException{
 		
 		Admin a = adminDao.findByID(creator);
@@ -879,7 +879,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	*/
 
 	public DatatypeEventSummary updateEvent(int evt_id, String name,
-			String description, java.util.Date date, int duration,
+			String description, java.util.Date date, String duration,
 			String address, String creator, String category,
 			double latitude, double longitude) throws UserNotFoundException,
 			EvtCategoryNotFoundException, EventNotFoundException {
