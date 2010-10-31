@@ -34,7 +34,7 @@ public class EventMB {
 	private String description;
 	private String descriptionMessage;
 	private Date date = new Date();
-	private int duration;
+	private String duration;
 	private String durationMessage;
 	private String address;
 	private String addressMessage;
@@ -101,7 +101,7 @@ public class EventMB {
 			nameMessage = INPUT_OBLIG;
 		if(description == null || description.equals(""))
 			descriptionMessage = INPUT_OBLIG;
-		if(duration == 0)
+		if(duration == null || duration.equals(""));
 			durationMessage = INPUT_NOT_ZERO;
 		if(address == null || address.equals(""))
 			addressMessage = INPUT_OBLIG;
@@ -130,7 +130,7 @@ public class EventMB {
 						description  = null;
 						descriptionMessage  = null;
 						date = new Date();
-						duration  = 0;
+						duration  = null;
 						durationMessage  = null;
 						address  = null;
 						addressMessage  = null;
@@ -173,7 +173,7 @@ public class EventMB {
 		description = "";
 		//descriptionMessage = "";
 		date = new Date();
-		duration = 0;
+		duration = null;
 		//durationMessage = "";
 		address = "";
 		//addressMessage = "";
@@ -208,10 +208,10 @@ public class EventMB {
 			initEventToModify();
 		return date;
 	}
-	public void setDuration(int duration) {
+	public void setDuration(String duration) {
 		this.duration = duration;
 	}
-	public int getDuration() {
+	public String getDuration() {
 		if(evt_id != -1 && eventToModify == null)
 			initEventToModify();
 		return duration;
@@ -416,7 +416,7 @@ public class EventMB {
 			nameMessage = INPUT_OBLIG;
 		if(description == null || description.equals(""))
 			descriptionMessage = INPUT_OBLIG;
-		if(duration == 0)
+		if(duration == null || duration.equals(""))
 			durationMessage = INPUT_NOT_ZERO;
 		if(address == null || address.equals(""))
 			addressMessage = INPUT_OBLIG;
@@ -446,7 +446,7 @@ public class EventMB {
 						description  = null;
 						descriptionMessage  = null;
 						date = new Date();
-						duration  = 0;
+						duration  = null;
 						durationMessage  = null;
 						address  = null;
 						addressMessage  = null;
