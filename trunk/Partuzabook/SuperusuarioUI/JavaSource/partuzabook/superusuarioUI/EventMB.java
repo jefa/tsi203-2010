@@ -44,7 +44,7 @@ public class EventMB {
 	private String modsMessage;
 	private Map<String,String> allCats;
 	private String category;
-	
+	private String hashtag;
 	private double latitude;
 	private double longitude;
 	
@@ -121,7 +121,8 @@ public class EventMB {
 						}			
 					}
 					if(noMessages()) {
-						DatatypeEventSummary event = serviceEvent.createEvent(name, description, date, duration, address, creator, moderated, category, latitude, longitude);
+						DatatypeEventSummary event = serviceEvent.createEvent(name, description, date, duration, 
+								address, creator, moderated, category, latitude, longitude, hashtag);
 						
 						serviceEvent.addModtoEvent(event.getEvtId(), mods);
 						
@@ -146,7 +147,8 @@ public class EventMB {
 					modsMessage = NO_MODS;
 					res = "failure";
 				} else {
-					serviceEvent.createEvent(name, description, date, duration, address, creator, moderated, category, latitude, longitude);
+					serviceEvent.createEvent(name, description, date, duration, address, creator, 
+							moderated, category, latitude, longitude, hashtag);
 					res = "success";
 				}				
 			} catch (NamingException e) {
@@ -436,7 +438,8 @@ public class EventMB {
 						}			
 					}
 					if(noMessages()) {
-						DatatypeEventSummary event = serviceEvent.updateEvent(evt_id, name, description, date, duration, address, creator, category, latitude, longitude);
+						DatatypeEventSummary event = serviceEvent.updateEvent(evt_id, name, description, date, 
+								duration, address, creator, category, latitude, longitude, hashtag);
 						
 						
 						serviceEvent.updateModsEvent(evt_id, mods);
@@ -463,7 +466,8 @@ public class EventMB {
 					modsMessage = NO_MODS;
 					res = "failure";
 				} else {
-					serviceEvent.updateEvent(evt_id, name, description, date, duration, address, creator, category, latitude, longitude);
+					serviceEvent.updateEvent(evt_id, name, description, date, duration, address, creator, 
+							category, latitude, longitude, hashtag);
 					res = "success";
 				}				
 			} catch (NamingException e) {
@@ -496,6 +500,7 @@ public class EventMB {
 			setModerated(eventToModify.getModsUsernames() != null);
 			setMods(eventToModify.getModsUsernames());
 			setName(eventToModify.getEvtName());
+			setHashtag(eventToModify.getHashtag());
 		} catch(NamingException e) {
 			
 		}
@@ -566,5 +571,15 @@ public class EventMB {
 
 	public String getFindEventMessage() {
 		return findEventMessage;
+	}
+
+	public void setHashtag(String hashtag) {
+		this.hashtag = hashtag;
+	}
+
+	public String getHashtag() {
+		if(evt_id != -1 && eventToModify == null)
+			initEventToModify();
+		return hashtag;
 	}
 }
