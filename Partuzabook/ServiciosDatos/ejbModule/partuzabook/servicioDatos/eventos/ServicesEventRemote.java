@@ -63,6 +63,15 @@ public interface ServicesEventRemote {
 		throws EventNotFoundException, UserNotFoundException ;
 	
 	/**
+	 * Updates the event's mods with evt_id_auto = evt_id. If the user is only a normal user.
+	 * @param evt_id			- id of the event
+	 * @param mods				- The new mods to add for the event
+	 * */
+	public DatatypeEventSummary updateModsEvent(int evt_id, List<String> mods) 
+		throws EventNotFoundException, UserNotFoundException ;
+	
+	
+	/**
 	 * Returns a list of all the categories for events
 	 * @return	A list of all the categories for events
 	 * */
