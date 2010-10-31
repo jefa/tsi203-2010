@@ -188,55 +188,40 @@ public class EventMB {
 		this.name = name;
 	}
 	public String getName() {
-		if(evt_id != -1) {
-			if(eventToModify == null)
-				initEventToModify();
-			return eventToModify.getEvtName();
-		}		
+		if(evt_id != -1 && eventToModify == null)
+			initEventToModify();
 		return name;
 	}
 	public void setDescription(String description) {
 		this.description = description;
 	}
 	public String getDescription() {
-		if(evt_id != -1) {
-			if(eventToModify == null)
-				initEventToModify();
-			return eventToModify.getDescription();
-		}
+		if(evt_id != -1 && eventToModify == null)
+			initEventToModify();
 		return description;
 	}
 	public void setDate(Date date) {
 		this.date = date;
 	}
 	public Date getDate() {
-		if(evt_id != -1) {
-			if(eventToModify == null)
-				initEventToModify();
-			return eventToModify.getDate();
-		}
+		if(evt_id != -1 && eventToModify == null)
+			initEventToModify();
 		return date;
 	}
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
 	public int getDuration() {
-		if(evt_id != -1) {
-			if(eventToModify == null)
-				initEventToModify();
-			return eventToModify.getDuration();
-		}
+		if(evt_id != -1 && eventToModify == null)
+			initEventToModify();
 		return duration;
 	}
 	public void setAddress(String address) {
 		this.address = address;
 	}
 	public String getAddress() {
-		if(evt_id != -1) {
-			if(eventToModify == null)
-				initEventToModify();
-			return eventToModify.getAddress();
-		}
+		if(evt_id != -1 && eventToModify == null)
+			initEventToModify();
 		return address;
 	}
 	public void setCreator(String creator) {
@@ -254,11 +239,8 @@ public class EventMB {
 		this.moderated = moderated;
 	}
 	public boolean isModerated() {
-		if(evt_id != -1) {
-			if(eventToModify == null)
-				initEventToModify();
-			return eventToModify.getModsUsernames() != null;
-		}
+		if(evt_id != -1 && eventToModify == null)
+			initEventToModify();
 		return moderated;
 	}
 	public void setMods(List<String> mods) {
@@ -271,25 +253,18 @@ public class EventMB {
 		
 	}
 	public List<String> getMods() {
-		if(evt_id != -1) {
-			if(eventToModify == null)
-				initEventToModify();
-			return eventToModify.getModsUsernames();
-		}
-		if(mods == null) {
+		if(evt_id != -1 && eventToModify == null)
+			initEventToModify();
+		if(mods == null)
 			mods = new ArrayList<String>();
-		}
 		return mods;
 	}
 	public void setCategory(String category) {
 		this.category = category;
 	}
 	public String getCategory() {
-		if(evt_id != -1) {
-			if(eventToModify == null)
-				initEventToModify();
-			return eventToModify.getEventCategory();
-		}
+		if(evt_id != -1 && eventToModify == null)
+			initEventToModify();
 		return category;
 	}
 	
@@ -414,6 +389,8 @@ public class EventMB {
 	}
 
 	public double getLatitude() {
+		if(evt_id != -1 && eventToModify == null)
+			initEventToModify();
 		return latitude;
 	}
 	public void setLongitude(double longitude) {
@@ -421,6 +398,8 @@ public class EventMB {
 	}
 
 	public double getLongitude() {
+		if(evt_id != -1 && eventToModify == null)
+			initEventToModify();
 		return longitude;
 	}
 	
@@ -459,8 +438,8 @@ public class EventMB {
 					if(noMessages()) {
 						DatatypeEventSummary event = serviceEvent.updateEvent(evt_id, name, description, date, duration, address, creator, category, latitude, longitude);
 						
-						//TODO
-						//serviceEvent.updateModstoEvent(evt_id, mods);
+						
+						serviceEvent.updateModsEvent(evt_id, mods);
 						
 						name = null;
 						nameMessage  = null;
@@ -507,6 +486,16 @@ public class EventMB {
 			Context ctx = getContext();
 			ServicesEventRemote serviceEvent = (ServicesEventRemote)ctx.lookup(SERVICE_EVENT);
 			eventToModify = serviceEvent.getEventDetails(evt_id);
+			setAddress(eventToModify.getAddress());
+			setCategory(eventToModify.getEventCategory());
+			setDate(eventToModify.getDate());
+			setDescription(eventToModify.getDescription());
+			setDuration(eventToModify.getDuration());
+			setLatitude(eventToModify.getLatitude());
+			setLongitude(eventToModify.getLongitude());
+			setModerated(eventToModify.getModsUsernames() != null);
+			setMods(eventToModify.getModsUsernames());
+			setName(eventToModify.getEvtName());
 		} catch(NamingException e) {
 			
 		}
