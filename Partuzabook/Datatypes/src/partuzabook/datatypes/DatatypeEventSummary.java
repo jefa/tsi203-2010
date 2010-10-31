@@ -21,7 +21,7 @@ public class DatatypeEventSummary implements Serializable{
 
 	private String description;
 	
-	private int duration;
+	private String duration;
 
 	private String eventCategory;
 	
@@ -159,11 +159,11 @@ public class DatatypeEventSummary implements Serializable{
 		this.hasAlbum = alb;
 	}
 
-	public void setDuration(int duration) {
+	public void setDuration(String duration) {
 		this.duration = duration;
 	}
 
-	public int getDuration() {
+	public String getDuration() {
 		return duration;
 	}
 }
