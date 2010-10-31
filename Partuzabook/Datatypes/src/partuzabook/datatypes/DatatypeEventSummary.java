@@ -29,7 +29,7 @@ public class DatatypeEventSummary implements Serializable{
 	
 	private String hashtag;
 	
-	public List<String> modsUsernames;
+	private List<String> modsUsernames;
 	
 	private boolean hasAlbum;
 	
@@ -50,6 +50,7 @@ public class DatatypeEventSummary implements Serializable{
 		hashtag = datSummary.getHashtag();
 		hasAlbum = datSummary.getHasAlbum();
 		duration = datSummary.getDuration();
+		modsUsernames = datSummary.getModsUsernames();
 	}
 
 	public String getEvtName() {
