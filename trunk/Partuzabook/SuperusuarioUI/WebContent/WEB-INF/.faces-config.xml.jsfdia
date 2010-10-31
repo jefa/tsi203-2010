@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PROCESS model-entity="JSFProcess">
- <PROCESS-ITEM NAME="rules:#event.xhtml" PATH="/event.xhtml"
-  SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
-  <PROCESS-ITEM ID="rules:#event.xhtml:0" NAME="item"
-   PATH="/event.xhtml" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT
-    ID="success:#{EventMB.createEvent}:#paginaInicio.xhtml"
-    NAME="output" PATH="/paginaInicio.xhtml"
-    TARGET="rules:#paginaInicio.xhtml"
-    TITLE="#{EventMB.createEvent}:success" model-entity="JSFProcessItemOutput"/>
-   <PROCESS-ITEM-OUTPUT ID="failure:#{EventMB.createEvent}:#event.xhtml"
-    NAME="output1" PATH="/event.xhtml" TARGET="rules:#event.xhtml"
-    TITLE="#{EventMB.createEvent}:failure" model-entity="JSFProcessItemOutput"/>
-  </PROCESS-ITEM>
- </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginaInicio.xhtml"
   PATH="/paginaInicio.xhtml" SHAPE="256,33,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#login.xhtml" PATH="/login.xhtml"
@@ -31,10 +17,8 @@
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:*" PATH="*" SHAPE="48,305,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:*:0" NAME="item" PATH="*" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT
-    ID="logoutsuccess:#{loginMB.logout}:#login.xhtml" NAME="output"
-    PATH="/login.xhtml" TARGET="rules:#login.xhtml"
-    TITLE="#{loginMB.logout}:logoutsuccess" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="verEvento::#evento.xhtml" NAME="output"
+    PATH="/evento.xhtml" TARGET="rules:#evento.xhtml" TITLE="verEvento" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#createAdmin.xhtml" PATH="/createAdmin.xhtml"
@@ -75,6 +59,39 @@
    <PROCESS-ITEM-OUTPUT ID="modEvento::#editEvent.xhtml" NAME="output1"
     PATH="/editEvent.xhtml" TARGET="rules:#editEvent.xhtml"
     TITLE="modEvento" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*:1" PATH="*" SHAPE="48,561,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:1" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="buscarEventos::#busquedaEventos.xhtml"
+    NAME="output" PATH="/busquedaEventos.xhtml"
+    TARGET="rules:#busquedaEventos.xhtml" TITLE="buscarEventos" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*:2" PATH="*" SHAPE="48,561,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:2" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="logoutsuccess:#{loginMB.logout}:#login.xhtml" NAME="output"
+    PATH="/login.xhtml" TARGET="rules:#login.xhtml"
+    TITLE="#{loginMB.logout}:logoutsuccess" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#busquedaEventos.xhtml"
+  PATH="/busquedaEventos.xhtml" SHAPE="240,1057,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#evento.xhtml" PATH="/evento.xhtml"
+  SHAPE="240,833,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#event.xhtml" PATH="/event.xhtml"
+  SHAPE="48,529,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#event.xhtml:0" NAME="item"
+   PATH="/event.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="success:#{EventMB.createEvent}:#paginaInicio.xhtml"
+    NAME="output" PATH="/paginaInicio.xhtml"
+    TARGET="rules:#paginaInicio.xhtml"
+    TITLE="#{EventMB.createEvent}:success" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="failure:#{EventMB.createEvent}:#event.xhtml"
+    NAME="output1" PATH="/event.xhtml" TARGET="rules:#event.xhtml"
+    TITLE="#{EventMB.createEvent}:failure" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
 </PROCESS>

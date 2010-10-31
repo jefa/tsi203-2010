@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsf/jstl/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:composition template="templates/superusuarioUI.xhtml">
+	<ui:define name="title">Busqueda de Eventos</ui:define>
+	<ui:define name="body">
+
+	<h:form id="formSearchByName">	
+		<strong>Busqueda por nombre</strong>
+		<br/>
+		
+		<h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" required="true"/>
+		<a4j:commandButton action="#{SearchEventMB.searchEventsByName}" value="Search" 
+		    reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate" id="searchByName"/> 
+		<br/>		
+	</h:form>
+
+	<br/>
+	<rich:separator/>
+	<br/>
+	
+	<h:form id="formSearchByDate">	
+		<strong>Busqueda por fecha</strong>
+		<br/>
+
+            <rich:calendar value="#{SearchEventMB.eventDateSearched}"
+                    datePattern="d/MMM/y"  showApplyButton="false"  
+                    cellWidth="24px" cellHeight="22px" style="width:200px"/>
+          	<a4j:commandButton action="#{SearchEventMB.searchEventsByDate}" value="Search" 
+		    	reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate" id="searchByDate"/>
+
+	</h:form>
+ 
+	<br/>
+	<rich:separator/>
+	<br/>
+
+	<h:form id="formFilterEventsByDate">	
+		<strong>Filtrar Eventos</strong>
+
+	    <rich:comboBox selectFirstOnUpdate="false"
+	        defaultLabel="Enter value"
+	        value="#{SearchEventMB.eventFilter}" 
+	        suggestionValues="#{SearchEventMB.filterByDateOptions}" >
+	        <a4j:support event="onselect" action="#{SearchEventMB.filterEvents}" 
+	        	reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate" />		
+	    </rich:comboBox> 
+	</h:form>
+
+	<br/>
+	<rich:separator/>
+	<br/>
+
+	<h:form id="searchResults">
+		<strong>Resultado de la busqueda</strong>
+		<br/>
+		
+		<a4j:outputPanel id="output">
+			<rich:dataList var="resultado" rendered="#{not empty SearchEventMB.eventResults}"
+				value="#{SearchEventMB.eventResults}" rows="10">				
+				<strong><h:commandLink value="#{resultado.evtName}"
+					action="verEvento">
+					<f:setPropertyActionListener value="#{resultado.evtId}"
+								target="#{eventoMB.eventId}" />
+				</h:commandLink></strong>
+				<br />
+				<h:outputText value="Fecha:" styleClass="label"></h:outputText>
+				<h:outputText value="#{resultado.formattedDate} " />
+				<h:graphicImage value="/ContentFeeder?id=#{resultado.coverId}&#38;thb=1" />
+			</rich:dataList>		
+			<h:outputText value="#{SearchEventMB.mensaje}" 
+				style="font-style:italic" rendered="#{empty SearchEventMB.eventResults}"/>
+		</a4j:outputPanel>
+		<br/>
+	</h:form>			
+		
+	</ui:define>
+</ui:composition>
+</html>

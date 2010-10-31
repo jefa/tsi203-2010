@@ -257,11 +257,17 @@ public class ServicesEvent implements ServicesEventRemote {
 
 	public boolean isUserRelatedToEvent(int eventID, String user) {
 		Event ev = getEvent(eventID);
-		NormalUser nUser = nUserDao.findByID(user);
-		if (nUser == null) {
-			throw new UserNotFoundException();
+		// Verify if user is Admin
+		Admin aUser = adminDao.findByID(user);
+		if (aUser ==  null) {
+			// Verify if user is Normal User
+			NormalUser nUser = nUserDao.findByID(user);
+			if (nUser == null) {
+				throw new UserNotFoundException();
+			}
+			return nUser.getMyEvents().contains(ev);
 		}
-		return nUser.getMyEvents().contains(ev);
+		return true;
 	}
 
 	public DatatypeCategory getCategoryContents(int eventID, int categoryID, int startAt, int count) {
@@ -945,7 +951,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			for(Iterator<NormalUser> it = event.getMyMods().iterator(); it.hasNext(); ) {
 				actualMods.add(it.next().getUsername());
 			}
-			//Borramos los moderadores que no estén en la lista
+			//Borramos los moderadores que no estï¿½n en la lista
 			for(Iterator<String> it = actualMods.iterator(); it.hasNext(); ) {
 				String oldMod = it.next();
 				if(!mods.contains(oldMod)) {
