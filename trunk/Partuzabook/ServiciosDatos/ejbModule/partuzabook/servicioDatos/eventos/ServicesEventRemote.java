@@ -34,7 +34,7 @@ public interface ServicesEventRemote {
 	 */
 	public DatatypeEventSummary createEvent(String name, String description, 
 			Date date, String duration, String address, String creator, boolean moderated, 
-			String category, double latitude, double longitude) throws UserNotFoundException, EvtCategoryNotFoundException;
+			String category, double latitude, double longitude, String hashtag) throws UserNotFoundException, EvtCategoryNotFoundException;
 	
 	/**
 	 * Update a Event in the database and returns a datatype which represents the event.
@@ -51,7 +51,7 @@ public interface ServicesEventRemote {
 	 */
 	public DatatypeEventSummary updateEvent(int evt_id, String name, String description, 
 			Date date, String duration, String address, String creator, String category, 
-			double latitude, double longitude) throws UserNotFoundException, EvtCategoryNotFoundException;
+			double latitude, double longitude, String hashtag) throws UserNotFoundException, EvtCategoryNotFoundException;
 	
 	
 	/**

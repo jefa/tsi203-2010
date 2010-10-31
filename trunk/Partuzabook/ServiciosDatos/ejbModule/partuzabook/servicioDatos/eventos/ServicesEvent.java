@@ -616,7 +616,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	
 	public DatatypeEventSummary createEvent(String name, String description,
 			java.util.Date date, String duration, String address, String creator,
-			boolean moderated, String category, double latitude, double longitude) throws UserNotFoundException, EvtCategoryNotFoundException{
+			boolean moderated, String category, double latitude, double longitude, String hashtag) throws UserNotFoundException, EvtCategoryNotFoundException{
 		
 		Admin a = adminDao.findByID(creator);
 		if(a == null) {
@@ -644,6 +644,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		evt.setEvtCategory(eCat);
 		evt.setLatitude(latitude);
 		evt.setLongitude(longitude);
+		evt.setHashtag(hashtag);
 		evt.setRegDate(new Timestamp(new java.util.Date().getTime()));
 
 		// Create default category for contents: "Todas" 
@@ -881,7 +882,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	public DatatypeEventSummary updateEvent(int evt_id, String name,
 			String description, java.util.Date date, String duration,
 			String address, String creator, String category,
-			double latitude, double longitude) throws UserNotFoundException,
+			double latitude, double longitude, String hashtag) throws UserNotFoundException,
 			EvtCategoryNotFoundException, EventNotFoundException {
 		
 		Event evt = evDao.findByID(evt_id);
@@ -908,6 +909,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		evt.setEvtCategory(eCat);
 		evt.setLatitude(latitude);
 		evt.setLongitude(longitude);
+		evt.setHashtag(hashtag);
 
 		evDao.persist(evt);
 		
