@@ -914,4 +914,56 @@ public class ServicesEvent implements ServicesEventRemote {
 		return (DatatypeEventSummary)new TranslatorEventSummary().translate(evt);
 		
 	}
+
+	public DatatypeEventSummary updateModsEvent(int evt_id, List<String> mods)
+			throws EventNotFoundException, UserNotFoundException {
+				
+		//No es necesario el control de null, porque ya se hace en getEvent
+		Event event = getEvent(evt_id);
+
+		if(event.getMyMods() == null) {
+			event.setMyMods(new ArrayList<NormalUser>());
+			return addModtoEvent(evt_id, mods);
+		} else if(event.getMyMods().size() == 0) {
+			return addModtoEvent(evt_id, mods);
+		} else {
+			//Verificar si debeo quitar moderadores
+			
+			//Verificamos que existan todos los usuarios
+			List<NormalUser> newUsers = new ArrayList<NormalUser>();
+			for(Iterator<String> it = mods.iterator(); it.hasNext(); ) {
+				String username = it.next();
+				NormalUser user = nUserDao.findByID(username);
+				if(user == null)
+					throw new UserNotFoundException();
+				newUsers.add(user);
+			}
+			//Generamos una lista con los nombres de los moderados viejos
+			List<String> actualMods = new ArrayList<String>();
+			for(Iterator<NormalUser> it = event.getMyMods().iterator(); it.hasNext(); ) {
+				actualMods.add(it.next().getUsername());
+			}
+			//Borramos los moderadores que no estén en la lista
+			for(Iterator<String> it = actualMods.iterator(); it.hasNext(); ) {
+				String oldMod = it.next();
+				if(!mods.contains(oldMod)) {
+					//El moderador oldMod no esta en la nueva lista, debo borrarlo
+					NormalUser oldModNU = nUserDao.findByID(oldMod);
+					event.getMyMods().remove(oldModNU);
+					oldModNU.getMyModeratedEvents().remove(event);
+				}
+			}
+			//Agregamos los nuevos moderadores que no existian y borramos los que no pertenezcan
+			for(Iterator<NormalUser> it = newUsers.iterator(); it.hasNext(); ) {
+				NormalUser newMod = it.next();
+				if(!actualMods.contains(newMod.getUsername())){
+					event.getMyMods().add(newMod);
+					newMod.getMyModeratedEvents().add(event);
+				}
+			}
+			evDao.persist(event);
+			
+			return (DatatypeEventSummary)new TranslatorEventSummary().translate(event);
+		}
+	}
 }
