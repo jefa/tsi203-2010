@@ -10,33 +10,28 @@
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Login</ui:define>
 	<ui:define name="body">
+		<h:form id="LoginForm">
 		<f:view>
-		<center>
-		<h:panelGrid width="380px" columns="2" border="0">
-			<rich:panel header="Login">
-				<h:form id="LoginForm">
-					<h:outputText value="#{loginMB.text}" />
-					<h:panelGrid id="lpg" columns="2" >
-						<h:outputText value="User Id"/> 
-						<h:inputText id="username" value="#{loginMB.userName}"/>
-						<h:outputText value=""/>
-						<h:message for="username"/>
-					
+			<center><h:panelGrid width="380px" columns="2"  border="0">
+				<rich:panel header="Login">
+					<center>
+						<h:outputText value="#{loginMB.text}" />
+						<h:panelGrid id="lpg" columns="2">
+							<h:outputText value="User Id" />
+							<h:inputText id="username" value="#{loginMB.userName}" />
 
-						<h:outputText value="Password"/> 
-						<h:inputSecret id="password" value="#{loginMB.password}" />
-						<h:outputText value=""/>
-						<h:message for="password"/>
-					
+							<h:outputText value="Password" />
+							<h:inputSecret id="password" value="#{loginMB.password}" />
 
-						<h:outputText value=""/>
-						<h:commandButton value="Login" action="#{loginMB.validUser}"/>
-					</h:panelGrid>
-				</h:form>
-			</rich:panel>
-		</h:panelGrid>
-		</center>
-	</f:view>	
+						</h:panelGrid>
+						<br />
+						<h:commandButton value="Login" action="#{loginMB.validUser}" />
+</center>
+
+				</rich:panel>
+			</h:panelGrid></center>
+		</f:view>
+		</h:form>
 	</ui:define>
 </ui:composition>
 </html>
