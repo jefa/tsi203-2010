@@ -11,8 +11,9 @@ public class DatatypeContent implements Serializable {
 	public static final short EXTERNAL = 2;
 	
 	private Integer contId;
+	private String description;
 	private String eventName;
-	private Integer eventId;  
+	private Integer eventId;
 	private Double avgScore;
 	private List<DatatypeCategorySummary> categories;
 	private List<DatatypeComment> comments;
@@ -30,6 +31,14 @@ public class DatatypeContent implements Serializable {
 
 	public void setContId(Integer contId) {
 		this.contId = contId;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public Double getAvgScore() {

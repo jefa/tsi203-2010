@@ -206,7 +206,7 @@ jQuery('#featured-slideshow').cycle({
 			<h:form id="fotosMejorCalificadas">
 				<a4j:repeat var="contenido" rowKeyVar="rk" rows="5"
 					value="#{paginaInicioMB.fotosMejorCalificadas}">
-					<li class="clearfix"><span class="thumb" style="height: 36px"><h:graphicImage
+					<li id="rating" class="clearfix Clear"><span class="thumb" style="height: 36px"><h:graphicImage
 						value="/ContentFeeder?bestRanked=1&#38;pos=#{rk+1}&#38;thb=36"
 						styleClass="attachment-sidebar-thumb wp-post-image" width="36px"
 						height="36px" /></span> <h:commandLink value="#{contenido.eventName}"
@@ -214,8 +214,30 @@ jQuery('#featured-slideshow').cycle({
 						<f:setPropertyActionListener value="#{contenido.eventId}"
 							target="#{eventoMB.eventId}" />
 					</h:commandLink> <br />
-					<span class="sub"><strong>Calificacion:</strong>
-					#{contenido.avgScore}</span></li>
+					<span class="sub">
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="0.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="1" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="1.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="2" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="2.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="3" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="3.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="4" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="4.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="5" />
+						<rich:jQuery selector="#rating .hover-star"
+							query="rating({}).rating('select', #{contenido.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
+					</span></li>
 				</a4j:repeat>
 			</h:form></div>
 
