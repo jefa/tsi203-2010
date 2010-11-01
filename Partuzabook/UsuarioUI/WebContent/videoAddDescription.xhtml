@@ -10,7 +10,6 @@
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Agregar descripción</ui:define>
 	<ui:define name="body">
-		
 		<a4j:form>
 		<a4j:outputPanel id="panelCategories">
 			<h:outputText value="Categorias:" /><br/>
@@ -28,18 +27,18 @@
 					</h:selectOneMenu>
 					
 				<a4j:commandButton value="Agregar Categoria" reRender="panelCategories"/>
-				<a4j:commandButton value="Confirmar Categorias" reRender="panelCategories"/>
+				<!-- a4j:commandButton value="Confirmar Categorias" reRender="panelCategories"/-->
 				<a4j:commandButton value="Borrar Categorias" reRender="panelCategories" action="#{subirVideoMB.borrarCats}"/>
 
 		</a4j:outputPanel>
-		</a4j:form>	
-		<br/><br/>
-		<h:form>
+				<br/><br/>
 			<h:outputText value="Descripción del video:" /><br/>
 				<h:inputText value="#{subirVideoMB.description}"/>
 			<br/><br/>
 			<h:commandButton value="Confirmar video" action="#{subirVideoMB.confirmUpload}"/>
-		</h:form>
+			
+		</a4j:form>	
+
 	</ui:define>
 </ui:composition>
 </body>

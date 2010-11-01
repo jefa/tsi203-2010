@@ -30,7 +30,7 @@ public class SubirVideoMB{
 	private int eventId;
 	private String description;
 	private List<DatatypeCategorySummary> allCategories;
-	private List<DatatypeCategorySummary> myCategories;
+	//private List<DatatypeCategorySummary> myCategories;
 	
 	private Map<String,String> categoriesToSelect;
 	private List<String> catsSelected;
@@ -73,6 +73,9 @@ public class SubirVideoMB{
 
 	public String confirmUpload() {
 		try {
+			if(getCatsSelected().size() > 0)
+				getCatsSelected().remove(getCatsSelected().size() - 1);
+			
 			FacesContext context = FacesContext.getCurrentInstance();
 			HttpSession session = (HttpSession) context.getExternalContext()
 					.getSession(true);
@@ -203,7 +206,7 @@ public class SubirVideoMB{
 
 	public List<DatatypeCategorySummary> getAllCategories() {
 		if(allCategories == null || allCategories.size() == 0) {
-			eventId = 1001; //FIXME comentar esta linea
+			//eventId = 1001; //FIXME esta linea es para realizar pruebas. Hay que comentarla para que funcione adecuadamente
 			allCategories = getServicesEvent().getEventDetails(eventId).getContentCategories();
 			int i = 0;
 			int remove = 0;
@@ -230,7 +233,7 @@ public class SubirVideoMB{
 				categoriesToSelect.put(dat.getCategory(), dat.getCategory());
 			}		
 		}
-		if(!(getCatsSelected() == null || getCatsSelected().size() == 0))
+		//if(!(getCatsSelected() == null || getCatsSelected().size() == 0))
 			categoriesToSelect.put("Nueva categoria", "Nueva categoria");
 		return categoriesToSelect;
 	}

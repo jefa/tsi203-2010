@@ -26,69 +26,41 @@
 						</f:facet>
 						<h:outputText value="No se han agregado archivos"
 							rendered="#{subirFotoMB.size==0}" />
-						<a4j:repeat value="#{subirFotoMB.files}" var="file"	>
-							<rich:panel bodyClass="rich-laguna-panel-no-header">
-								<h:panelGrid columns="2">
+						<a4j:repeat value="#{subirFotoMB.filesAux}" var="file"	>
+							<rich:panel bodyClass="rich-laguna-panel-no-header">								
 									<a4j:mediaOutput element="img" mimeType="#{file.mime}"
 										createContent="#{subirFotoMB.paint}" value="#{row}"
 										style="width:50px; height:50px;" cacheable="false">
 										<f:param value="#{subirFotoMB.timeStamp}" name="time" />
-									</a4j:mediaOutput>
+									</a4j:mediaOutput><br/>
 									<h:panelGrid columns="2" style="border-style:none">
 										<h:outputText value="Nombre del Archivo:" />
 										<h:outputText value="#{file.name}" />
 										<h:outputText value="Tamaño(bytes):" />
 										<h:outputText value="#{file.length}" />
-										<h:outputText value="Descripcion:" />
-										<h:outputText value="#{file.description}"
-											rendered="#{not empty file.description}" />
-										<div><h:column rendered="#{empty file.description}">
-											<h:inputText value="#{file.description}" />
-											<a4j:commandButton value="Agregar Descripcion"
-												action="#{subirFotoMB.addDescription}" reRender="info">
-												<a4j:actionparam value="#{file.description}"
-													target="#{subirFotoMB.currentDescription}" />
-												<a4j:actionparam value="#{file.id}"
-													target="#{subirFotoMB.currentFileId}" />
-											</a4j:commandButton>
-										</h:column></div>
-									</h:panelGrid>
-													
-								</h:panelGrid>
-							</rich:panel>
-							
-							
-								<h:panelGroup id="divNewCateg2">
-										<h:inputText id="inputSuggestCateg"
-											value="#{subirFotoMB.suggestCateg}" />
-										<a4j:commandButton value="Agregar Categoria"
-											action="#{subirFotoMB.addCategory}" 
-											reRender="info"/>
-										<a4j:commandButton value="Limpiar lista"
-											action="#{subirFotoMB.resetChosenCategories}"
-											reRender="info" />
-										<rich:suggestionbox id="suggestBoxCategs"
-											for="inputSuggestCateg" tokens=",["
-											suggestionAction="#{subirFotoMB.autocomplete}" var="result"
-											nothingLabel="No category matches" columnClasses="center"
-											ajaxSingle="true">
+										<h:outputText value="Descripción:" />
+										<h:inputText value="#{file.description}"/>
+										<h:outputText value="Categorías:" />
+										<a4j:repeat value="#{file.catsSelected}" var="catList">
+											<h:outputText value="#{catList}"/>
+											<h:inputText value="#{file.newCat}" rendered="#{catList eq ''}"/>
+											<h:outputText value=", "/>
+										</a4j:repeat>
 										
-											<h:column>
-												<h:outputText value="#{result.category}" />
-											</h:column>
-										</rich:suggestionbox>
-										<rich:panel style="width:50%" id="panelCategories">
-											<f:facet name="header">
-												<h:outputText value="Categorias del contenido" />
-											</f:facet>
-											<rich:dataList value="#{subirFotoMB.chosenCategories}"
-												var="categ"
-												rendered="#{not empty subirFotoMB.chosenCategories}">
-												<h:outputText value="#{categ.category}" />
-											</rich:dataList>
-										</rich:panel>
-								</h:panelGroup>
-
+										<h:selectOneMenu value="#{file.catAux}">
+											<f:selectItems value="#{file.categoriesToSelect}" />
+										</h:selectOneMenu>
+										
+										<a4j:commandButton value="Agregar Categoria" reRender="info" action="#{subirFotoMB.addCat}">
+											<f:setPropertyActionListener value="#{file.id}" target="#{subirFotoMB.fileNewCat}" />
+										</a4j:commandButton>
+										<a4j:commandButton value="Borrar Categorias" reRender="info" action="#{subirFotoMB.borrarCats}">
+											<f:setPropertyActionListener value="#{file.id}" target="#{subirFotoMB.fileNewCat}" />
+										</a4j:commandButton>
+										
+										
+									</h:panelGrid>
+							</rich:panel>							
 						</a4j:repeat>
 
 					</rich:panel>
