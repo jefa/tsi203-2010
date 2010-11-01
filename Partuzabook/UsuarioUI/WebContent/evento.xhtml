@@ -31,6 +31,8 @@
 		</script>
 		<link rel="stylesheet" href="styles/pikachoose/styles.css"
 			type="text/css" />
+		<link rel="stylesheet" href="styles/lightbox/jquery.lightbox-0.5.css"
+			type="text/css" />
 		<link rel="stylesheet" type="text/css"
 			href="styles/imgareaselect-default.css" />
 		<script type="text/javascript" src="scripts/jquery.imgareaselect.js"></script>
@@ -38,6 +40,7 @@
 			src="scripts/jquery.imgareaselect.min.js"></script>
 		<script type="text/javascript" src="scripts/jquery.pikachoose.js"></script>
 		<script type="text/javascript" src="scripts/jquery.jcarousel.js"></script>
+		<script type="text/javascript" src="scripts/jquery.lightbox-0.5.js"></script>
 		<script type="text/javascript" src="scripts/googlemaps.js"></script>
 
 		<h:panelGroup id="panelEvento">
@@ -49,22 +52,17 @@
 					styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
 				<h3 class="entry-title">#{eventoMB.evento.evtName}</h3>
 				<div class="entry-summary">
-				<div class="entry-info"><abbr class="published">#{eventoMB.evento.formattedDate}</abbr>
-				</div>
-				<div class="entry-info"><abbr class="published">#{eventoMB.evento.eventCategory}</abbr>
-				</div>
-				
-				<div class="entry-info"><abbr class="published">#{eventoMB.evento.address}</abbr>
-				</div>
-				<div class="entry-info"><abbr class="published">#{eventoMB.evento.duration}</abbr>
-				</div>
-				<div class="entry-info"><abbr class="published">Moderadores: 
-					<a4j:repeat value="#{eventoMB.evento.modsUsernames}" var="mods" >
-						<h:outputText value="#{mods} "/>
-					</a4j:repeat>
-				</abbr>
-				</div>
-				<div class="entry-info"><abbr class="published">Descripción:<br/>#{eventoMB.evento.description}</abbr>
+				<div class="entry-info">
+					<abbr class="published">#{eventoMB.evento.formattedDate}</abbr>
+					<abbr class="published">#{eventoMB.evento.eventCategory}</abbr>
+					<abbr class="published">#{eventoMB.evento.address}</abbr>
+					<abbr class="published">#{eventoMB.evento.duration}</abbr>
+					<abbr class="published">Moderadores: 
+						<a4j:repeat value="#{eventoMB.evento.modsUsernames}" var="mods" >
+							<h:outputText value="#{mods} "/>
+						</a4j:repeat>
+					</abbr>
+					<abbr class="published">Descripción:<br/>#{eventoMB.evento.description}</abbr>
 				</div>
 				</div>
 				<h:form id="formUploadContent" rendered="#{eventoMB.validUserForContext}">
@@ -120,7 +118,7 @@
 								onclick="toggleTab('s-'+#{category.category},this)">
 						<a4j:commandLink value="#{category.category}"
 							action="#{eventoMB.updateCategory}"
-							reRender="panelThumbs,panelContent,panelRating,panelOtherCategories,panelTags,panelComments">
+							reRender="panelThumbs,panelRating,panelOtherCategories,panelTags,panelComments">
 							<f:setPropertyActionListener target="#{eventoMB.categoryId}"
 								value="#{category.categoryId}" />
 						</a4j:commandLink>
@@ -131,7 +129,7 @@
 				</h:form>
 			</a4j:outputPanel>
 			<a4j:form id="panelThumbs">
-			<div class="pikachoose" style="height:600px;">
+			<div class="pikachoose" style="height:620px;">
 				<h:inputHidden id="selectContentId" value="#{eventoMB.contentId}"/>	
 				<a4j:commandButton id="btnSelectThumb"
 					action="#{eventoMB.updateCategory}"
@@ -146,16 +144,35 @@
 					</a4j:repeat>
 				</ul>
 				<script>
-					jQuery("#pikame").PikaChoose();
+					jQuery("#pikame").PikaChoose({speed:7000});
 					jQuery("#pikame").jcarousel({scroll:5,					
 						initCallback: function(carousel) {
 					        $(carousel.list).find('img').click(function() {
-				            	carousel.scroll(parseInt($(this).ancestors()[1].getAttribute('jcarouselindex')));
+				          		carousel.scroll(parseInt($(this).ancestors()[1].getAttribute('jcarouselindex')));
 				        	});
 					    }
 			    	});
 			    </script>
 			</div>
+			<a onclick="lights();">ETIQUETAR</a>
+			<script>
+				function lights() {
+					jQuery("pika-image").lightBox();
+					jQuery("pika-image").click(showTagBox);
+				}
+				function showTagBox() {
+				    if (jQuery('#lightbox-image').is(':visible')) {
+				        jQuery('#lightbox-image').imgAreaSelect({ 
+				            x1: 10, y1: 10, x2: 100, y2: 100, handles: true,
+				            parent: '#jquery-lightbox'
+				        });
+				        jQuery('#jquery-lightbox').unbind('click');
+				        jQuery('#lightbox-nav').remove();
+				    }
+				    else
+				        setTimeout(showTagBox, 50);
+				}
+			</script>
 		    </a4j:form>
 			<a4j:outputPanel id="panelRating">
 				<h:column id="myRating" styleClass="Clear">
@@ -179,13 +196,13 @@
 						<rich:jQuery selector="#formRating .hover-star"
 							query="rating({
 								focus: function(value, link){
-									var tip = $('#hover-test');
+									var tip = jQuery('#hover-test');
 									tip[0].data = tip[0].data || tip.html();
 									tip.html(link.title || 'value: '+value);
 								},
 								blur: function(value, link){
-									var tip = $('#hover-test');
-									$('#hover-test').html(tip[0].data || '');
+									var tip = jQuery('#hover-test');
+									jQuery('#hover-test').html(tip[0].data || '');
 								},
 								callback: function(value, link) {
 									if (value == undefined) value = 0;
@@ -231,7 +248,7 @@
 						var="category">
 						<a4j:commandLink value="#{category.category}"
 							rendered="#{eventoMB.categoryId != category.categoryId}"
-							reRender="panelThumbs,panelContent,panelRating,panelOtherCategories,panelTags,panelComments">
+							reRender="panelThumbs,panelRating,panelOtherCategories,panelTags,panelComments">
 							<f:setPropertyActionListener target="#{eventoMB.categoryId}"
 								value="#{category.categoryId}" />
 						</a4j:commandLink>

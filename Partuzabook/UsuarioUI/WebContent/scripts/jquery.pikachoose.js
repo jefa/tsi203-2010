@@ -30,7 +30,7 @@
  	var defaults = {
 		autoPlay: true,
 		speed: 5000,
-		text: { play: "", stop: "", previous: "Previous", next: "Next" },
+		text: { play: "", stop: "", previous: "Anterior", next: "Siguiente" },
 		transition:[0],
 		showCaption: true,
 		IESafe: true
@@ -245,7 +245,7 @@
 	     	self.active.addClass('active').fadeTo(200,1);
      		var val = self.active.attr('src').split('id=');
      		document.getElementById('panelThumbs:selectContentId').value = val[1];
-     		document.getElementById('panelThumbs:btnSelectThumb').click();
+     		//document.getElementById('panelThumbs:btnSelectThumb').click();
 	     	var data = $.data(this);
 	 		$('<img />').bind('load', {self:self,data:data}, function()
 			{
@@ -425,7 +425,11 @@
 		 {
 		 	var how = "natural";
 		 	try{
-				var self = e.data.self;
+				var self;
+				if (e != undefined)
+					self = e.data.self;
+				else
+					self = this;
 			}catch(err)
 			{
 				var self = this;

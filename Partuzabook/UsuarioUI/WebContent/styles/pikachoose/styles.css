@@ -5,21 +5,21 @@
   src: local('Yanone-thin'), url('http://themes.googleusercontent.com/font?kit=We_iSDqttE3etzfdfhuPRfYfc3bPVUtuDoUoHMkf5-E') format('truetype');
 }
 
-.pikachoose{width:650px;position:relative;}
+.pikachoose{width:660px;position:relative;}
 
-.pika-image {position: absolute; top:30px; right:0; height: 340px; width: 500px; background: #fafafa; border: 1px solid #e5e5e5; padding: 10px;}
+.pika-image {position: absolute; top:100px; right:0; height: 480px; width: 640px; background: #fafafa; border: 1px solid #e5e5e5; padding: 9px;}
 	/*position image holders */
-	.pika-image .animation, .pika-image .main-image {position: absolute; top: 10px; left: 10px;}
+	.pika-image .animation, .pika-image .main-image {position: absolute; top: 9px; left: 9px;}
 	.pika-image .animation {display: none;z-index:2;background-size:100%;-moz-background-size:100%;}
 	div.animation {background-size:100%;-moz-background-size:100%;}
-.pika-image img {border:0; width:500px;}
+.pika-image img {border:0; width:640px;}
 
-.pika-image .caption {position: absolute; background: url(../../images/pikachoose/75-black.png);  border: 1px solid #141414; font-size: 11px; color: #fafafa; padding: 10px; text-align: right; bottom: 50px; right: 10px;}
+.pika-image .caption {position: absolute; background: url(../../images/pikachoose/75-black.png);  border: 1px solid #141414; font-size: 11px; color: #fafafa; padding: 9px; text-align: right; bottom: 50px; right: 9px;}
 	.pika-image .caption p {padding: 0; margin: 0; line-height: 14px;}
 
 .pika-imgnav a {position: absolute; text-indent: -5000px; display: block;z-index:3;}
-	.pika-imgnav a.previous {background: url(../../images/pikachoose/prev.png) no-repeat left 50%; height: 340px; width: 50px; top: 10px; left: 10px;cursor:pointer;}
-	.pika-imgnav a.next {background: url(../../images/pikachoose/next.png) no-repeat right 50%; height: 340px; width: 50px; top: 10px; right: 10px;cursor:pointer;}
+	.pika-imgnav a.previous {background: url(../../images/pikachoose/prev.png) no-repeat left 50%; height: 480px; width: 50px; top: 9px; left: 9px;cursor:pointer;}
+	.pika-imgnav a.next {background: url(../../images/pikachoose/next.png) no-repeat right 50%; height: 480px; width: 50px; top: 9px; right: 9px;cursor:pointer;}
 	.pika-imgnav a.play {background: url(../../images/pikachoose/play.png) no-repeat 50% 50%; height: 100px; width: 40px;top:0;left:50%;display: none;cursor:pointer;}
 	.pika-imgnav a.pause {background: url(../../images/pikachoose/pause.png) no-repeat 50% 50%; height: 100px; width: 40px;top:0;left:50%;display:none;cursor:pointer;}
 
@@ -36,23 +36,23 @@
 
 /* jCarousel Styles */
 .jcarousel-skin-pika .jcarousel-container-horizontal {
-    padding: 15px 30px;
+    padding: 5px 5px;
 }
 
 .jcarousel-skin-pika .jcarousel-container-vertical {
     width: 90px;
-    height: 350px;
+    height: 480px;
     padding: 20px 20px;
 }
 
 .jcarousel-skin-pika .jcarousel-clip-horizontal {
     height: 90px;
-    width: 460px;
+    width: 640px;
 }
 
 .jcarousel-skin-pika .jcarousel-clip-vertical {
     width:  90px;
-    height: 350px;
+    height: 480px;
 }
 
 .jcarousel-skin-pika .jcarousel-item-horizontal {
