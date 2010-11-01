@@ -112,6 +112,9 @@ public class SubirFotoMB{
 	}
 	
 	public String confirmUpload() {
+		//Actualizamos las categorias de los files
+		addCat();
+		
 		ServicesUploadRemote servUpload = getServicesUpload();
 		if (servUpload != null) {
 			FacesContext context = FacesContext.getCurrentInstance();
@@ -122,7 +125,43 @@ public class SubirFotoMB{
 			for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
 				files.add((DataTypeFile)it.next());
 			}
-			servUpload.uploadMultimedia(idEvento, username, files);
+			List<String> cnt_id = servUpload.uploadMultimedia(idEvento, username, files);
+		
+			//Agregamos las categorias para cada archivo
+			int i = 0;
+			ServicesEventRemote serE = getServicesEvent();
+			for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
+			
+				DatatypeFileAux file = it.next();
+				
+				//En catsSelected tengo las categorias seleccionadas, verifiquemos que no hayan nombres repetidos, etc
+				List<String> categoriasSeleccionadas = file.getCatsSelected();
+				//Quitamos todos los ""
+				while(categoriasSeleccionadas.contains("")) {
+					categoriasSeleccionadas.remove("");
+				}
+				
+				List<DatatypeCategorySummary> categoriasParaAgregar = new ArrayList<DatatypeCategorySummary>();
+				//Pasamos los String a Categorias
+				for(Iterator<DatatypeCategorySummary> it2 = getAllCategories().iterator(); it2.hasNext(); ) {
+					DatatypeCategorySummary dat = it2.next();
+					if(categoriasSeleccionadas.contains(dat.getCategory())) {
+						//Es una categoria que ya existe
+						categoriasParaAgregar.add(dat);
+						categoriasSeleccionadas.remove(dat.getCategory());
+					}					
+				}
+				//Agregamos las categorias que no existen
+				for(Iterator<String> it2 = categoriasSeleccionadas.iterator(); it2.hasNext(); ) {
+					DatatypeCategorySummary nuevaCat = new DatatypeCategorySummary();
+					nuevaCat.setCategory(it2.next());
+					nuevaCat.setCategoryId(0); //0 es porque no existe
+					categoriasParaAgregar.add(nuevaCat);
+				}
+				
+				serE.addCategoryToContent(Integer.parseInt(cnt_id.get(i)), categoriasParaAgregar);
+				i++;
+			}
 			this.message = "Se han subido de forma exitosa";
 			filesAux.clear();
 			setUploadsAvailable(5);
@@ -189,7 +228,7 @@ public class SubirFotoMB{
 
 	//Funciones auxiliares para las categorias de las fotos
 	private List<DatatypeCategorySummary> getAllCategories() {
-		if(allCategories == null || allCategories.size() == 0) {
+		//if(allCategories == null || allCategories.size() == 0) {
 			//eventId = 1001; //FIXME esta linea es para realizar pruebas. Hay que comentarla para que funcione adecuadamente
 			allCategories = getServicesEvent().getEventDetails(idEvento).getContentCategories();
 			int i = 0;
@@ -201,7 +240,7 @@ public class SubirFotoMB{
 				i++;
 			}
 			allCategories.remove(remove);
-		}
+		//}
 		return allCategories;
 	}
 	//Establece las categorías que pueden ser seleccionadas
@@ -241,6 +280,20 @@ public class SubirFotoMB{
 			file.getCatsSelected().add(file.getCatAux());
 		else
 			file.getCatsSelected().add("");
+		
+		if(file.getNewCat() != null && !file.getNewCat().equals("")) {
+			boolean agregar = true;
+			for(Iterator<String> it = file.getCatsSelected().iterator(); it.hasNext(); ){
+				if(it.next().equalsIgnoreCase(file.getNewCat()))
+					agregar = false;
+			}
+			if(agregar) {
+				file.getCatsSelected().add(file.getNewCat());
+				file.getCatsSelected().remove("");
+			}
+			file.setNewCat("");
+		}
+		
 		getCategoriesToSelect();
 	}
 	
