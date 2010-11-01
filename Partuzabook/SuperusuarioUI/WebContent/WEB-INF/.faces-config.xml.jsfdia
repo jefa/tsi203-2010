@@ -25,6 +25,12 @@
    <PROCESS-ITEM-OUTPUT ID="modEvento::#editEvent.xhtml" NAME="output2"
     PATH="/editEvent.xhtml" TARGET="rules:#editEvent.xhtml"
     TITLE="modEvento" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="logoutsuccess:#{loginMB.logout}:#login.xhtml" NAME="output3"
+    PATH="/login.xhtml" TARGET="rules:#login.xhtml"
+    TITLE="#{loginMB.logout}:logoutsuccess" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="verEvento::#evento.xhtml" NAME="output4"
+    PATH="/evento.xhtml" TARGET="rules:#evento.xhtml" TITLE="verEvento" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#createAdmin.xhtml" PATH="/createAdmin.xhtml"

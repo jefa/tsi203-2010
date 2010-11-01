@@ -12,53 +12,57 @@
 	<ui:define name="title">Busqueda de Eventos</ui:define>
 	<ui:define name="body">
 
-	<h:form id="formSearchByName">	
-		<strong>Busqueda por nombre</strong>
-		<br/>
-		
-		<h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" required="true"/>
-		<a4j:commandButton action="#{SearchEventMB.searchEventsByName}" value="Search" 
-		    reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate" id="searchByName"/> 
-		<br/>		
-	</h:form>
+		<h:form id="formSearchByName">
+			<strong>Busqueda por nombre</strong>
+			<br />
 
-	<br/>
-	<rich:separator/>
-	<br/>
-	
-	<h:form id="formSearchByDate">	
-		<strong>Busqueda por fecha</strong>
-		<br/>
+			<h:inputText id="searchField"
+				value="#{SearchEventMB.eventNameSearched}" required="true" />
+			<a4j:commandButton action="#{SearchEventMB.searchEventsByName}"
+				value="Search"
+				reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate"
+				id="searchByName" />
+			<br />
+		</h:form>
 
-            <rich:calendar value="#{SearchEventMB.eventDateSearched}"
-                    datePattern="d/MMM/y"  showApplyButton="false"  
-                    cellWidth="24px" cellHeight="22px" style="width:200px"/>
-          	<a4j:commandButton action="#{SearchEventMB.searchEventsByDate}" value="Search" 
-		    	reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate" id="searchByDate"/>
+		<br />
+		<rich:separator />
+		<br />
 
-	</h:form>
- 
-	<br/>
-	<rich:separator/>
-	<br/>
+		<h:form id="formSearchByDate">
+			<strong>Busqueda por fecha</strong>
+			<br />
 
-	<h:form id="formFilterEventsByDate">	
-		<strong>Filtrar Eventos</strong>
+			<rich:calendar value="#{SearchEventMB.eventDateSearched}"
+				datePattern="d/MMM/y" showApplyButton="false" cellWidth="24px"
+				cellHeight="22px" style="width:200px" />
+			<a4j:commandButton action="#{SearchEventMB.searchEventsByDate}"
+				value="Search"
+				reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate"
+				id="searchByDate" />
 
-	    <rich:comboBox selectFirstOnUpdate="false"
-	        defaultLabel="Enter value"
-	        value="#{SearchEventMB.eventFilter}" 
-	        suggestionValues="#{SearchEventMB.filterByDateOptions}" >
-	        <a4j:support event="onselect" action="#{SearchEventMB.filterEvents}" 
-	        	reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate" />		
-	    </rich:comboBox> 
-	</h:form>
+		</h:form>
 
-	<br/>
-	<rich:separator/>
-	<br/>
+		<br />
+		<rich:separator />
+		<br />
 
-	<h:form id="searchResults">
+		<h:form id="formFilterEventsByDate">
+			<strong>Filtrar Eventos</strong>
+
+			<rich:comboBox selectFirstOnUpdate="false" defaultLabel="Enter value"
+				value="#{SearchEventMB.eventFilter}"
+				suggestionValues="#{SearchEventMB.filterByDateOptions}">
+				<a4j:support event="onselect" action="#{SearchEventMB.filterEvents}"
+					reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate" />
+			</rich:comboBox>
+		</h:form>
+
+		<br />
+		<rich:separator />
+		<br />
+
+			<h:form id="searchResults">
 		<strong>Resultado de la busqueda</strong>
 		<br/>
 		
@@ -80,7 +84,8 @@
 		</a4j:outputPanel>
 		<br/>
 	</h:form>			
-		
+
+
 	</ui:define>
 </ui:composition>
 </html>
