@@ -11,12 +11,10 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 
-import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
-import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.serviciosUI.multimedia.ServicesMultimediaRemote;

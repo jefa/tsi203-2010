@@ -5,16 +5,14 @@
   src: local('Yanone-thin'), url('http://themes.googleusercontent.com/font?kit=We_iSDqttE3etzfdfhuPRfYfc3bPVUtuDoUoHMkf5-E') format('truetype');
 }
 
-body {font-family: helvetica, arial, sans-serif; }
-
-h1 { font-family:'Yanone-thin'; text-align: center;}
 .pikachoose{width:650px;position:relative;}
 
 .pika-image {position: absolute; top:30px; right:0; height: 340px; width: 500px; background: #fafafa; border: 1px solid #e5e5e5; padding: 10px;}
 	/*position image holders */
 	.pika-image .animation, .pika-image .main-image {position: absolute; top: 10px; left: 10px;}
-	.pika-image .animation {display: none;z-index:2;}
-	.pika-image img {border:0;}
+	.pika-image .animation {display: none;z-index:2;background-size:100%;-moz-background-size:100%;}
+	div.animation {background-size:100%;-moz-background-size:100%;}
+.pika-image img {border:0; width:500px;}
 
 .pika-image .caption {position: absolute; background: url(../../images/pikachoose/75-black.png);  border: 1px solid #141414; font-size: 11px; color: #fafafa; padding: 10px; text-align: right; bottom: 50px; right: 10px;}
 	.pika-image .caption p {padding: 0; margin: 0; line-height: 14px;}

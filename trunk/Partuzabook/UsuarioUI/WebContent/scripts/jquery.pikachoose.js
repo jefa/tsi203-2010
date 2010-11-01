@@ -40,7 +40,7 @@
 		return this.each(function() {
 			$(this).data('pikachoose', new $pc(this, o));
 		});
-	}
+	};
 	
 	/**
      * The PikaChoose object.
@@ -70,7 +70,7 @@
 		this.transition= null;
 		this.active		= null;
 		this.animating	= false;
-		if (e.nodeName == 'ul' || e.nodeName == 'ol') {
+		if (e.nodeName == 'ul' || e.nodeName == 'ol' || e.nodeName == 'UL' || e.nodeName == 'OL') {
             this.list = $(e);
             this.build();
             this.bindEvents();
@@ -84,7 +84,7 @@
 		{
 			var a = '<div col="'+y+'" row="'+x+'"></div>';
 			this.aniDiv.append(a);
-			y++
+			y++;
 			if(y == 5)
 			{
 				x++;
@@ -92,7 +92,7 @@
 			}
 		}
 
-    }//end PikaChoose function(e, o)
+    };//end PikaChoose function(e, o)
     
     var $pc = $.PikaChoose;
         $pc.fn = $pc.prototype = {
@@ -243,6 +243,9 @@
 	     	self.active.fadeTo(300,0.4).removeClass('active');
 	     	self.active = $(this);
 	     	self.active.addClass('active').fadeTo(200,1);
+     		var val = self.active.attr('src').split('id=');
+     		document.getElementById('panelThumbs:selectContentId').value = val[1];
+     		document.getElementById('panelThumbs:btnSelectThumb').click();
 	     	var data = $.data(this);
 	 		$('<img />').bind('load', {self:self,data:data}, function()
 			{
@@ -262,7 +265,6 @@
 				}
 				if(self.options.IESafe && $.browser.msie){ n = 0; }
 				self.doAnimation(n,data);
-				
 			}).attr('src',$.data(this).source);//end image preload
 	     },//end bindEvents
 	     
@@ -281,6 +283,8 @@
 					var yOffset = Math.floor(div.parent().height()/5)*div.attr('row');
 					div.css({
 						'background':'url('+data.source+') -'+xOffset+'px -'+yOffset+'px',
+						'background-size':'100%',
+						'-moz-bacground-size':'100%',
 						'width':'0px',
 						'height':'0px',
 						'position':'absolute',
@@ -294,7 +298,10 @@
 				{
 					case 0:
 						//full frame fade
-						self.aniDiv.height(self.image.height()).hide().css({'background':'url('+data.source+') top left no-repeat'});
+						self.aniDiv.height(self.image.height()).hide().css({
+							'background':'url('+data.source+') top left no-repeat',
+							'background-size':'100%',
+							'-moz-bacground-size':'100%'});
 						self.aniDiv.children('div').hide();
 						self.aniDiv.fadeIn('slow',function(){
 							self.finishAnimating(data);
@@ -364,7 +371,9 @@
 						break;
 					case 5:
 						//full frame slide
-						self.aniDiv.height(self.image.height()).hide().css({'background':'url('+data.source+') top left no-repeat'});
+						self.aniDiv.height(self.image.height()).hide().css({'background':'url('+data.source+') top left no-repeat',
+							'background-size':'100%',
+							'-moz-bacground-size':'100%'});
 						self.aniDiv.children('div').hide();
 						self.aniDiv.css({width:0}).animate({width:self.image.width()},'slow',function(){
 							self.finishAnimating(data);
