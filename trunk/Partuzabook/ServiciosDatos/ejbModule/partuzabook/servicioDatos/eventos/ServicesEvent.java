@@ -80,6 +80,7 @@ public class ServicesEvent implements ServicesEventRemote {
 
 	private static final String YOUTUBE_PRE = "http://www.youtube.com/v/";
 	private static final String YOUTUBE_POS = "?fs=1&amp;hl=es_ES";
+	private static final String DEFAULT_VIDEO_THB_URL = "video.jpg";
 	
 	private EventDAO evDao;
 	private ContentCategoryDAO contentCategoryDao;
@@ -457,6 +458,8 @@ public class ServicesEvent implements ServicesEventRemote {
 		Content content = getContentAndVerifyPermission(username, contentID);
 		if (content instanceof Photo) {
 			return fileSystem.readFile(content.getUrl(), thumbnail);
+		} else if(content instanceof Video) {
+			return fileSystem.readFile(DEFAULT_VIDEO_THB_URL, thumbnail);
 		}
 		return null;
 	}
