@@ -43,13 +43,10 @@ public class UserImageFeeder extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 
-		int thumbnail = 0;
+		String thumbnail = "";
 		if (request.getParameter("thb") != null) {
 			try {
-				thumbnail = Integer.parseInt(request.getParameter("thb"));
-				if (thumbnail < 50) {
-					thumbnail = 50;
-				}
+				thumbnail = request.getParameter("thb");
 			}
 			catch(NumberFormatException e) {
 

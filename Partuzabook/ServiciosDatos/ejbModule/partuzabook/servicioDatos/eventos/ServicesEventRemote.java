@@ -159,7 +159,7 @@ public interface ServicesEventRemote {
 	 * @param thumbnail				- max size of the thumbnail, if 0 returns the original data
 	 * @return						- content's data
 	 */
-	public byte[] getContent(String username, int contentID, int thumbnail);
+	public byte[] getContent(String username, int contentID, String thumbnail);
 	
 	/**
      * Returns a list of Events that match the name provided
@@ -242,7 +242,7 @@ public interface ServicesEventRemote {
 	/**
 	 * Returns the public content, used in the main page.
 	 * */
-	public byte[] getPublicContent(String type, int pos, int thumbnail);
+	public byte[] getPublicContent(String type, int pos, String thumbnail);
 	
 	/**
 	 * If true, returns the Album category associated to the event

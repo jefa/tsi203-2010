@@ -33,7 +33,7 @@
 					
 					
 						
-						<div style="background-position:center center;width:640px;height:250px;background-image:url('ContentFeeder?id=#{album.event.coverId}&#38;thb=640')"
+						<div style="background-color:#000;background-position:top center;background-repeat:no-repeat;width:640px;height:250px;background-image:url('ContentFeeder?id=#{album.event.coverId}&#38;thb=H640')"
 												class="attachment-featured-slideshow-thumb wp-post-image"></div>
 
 				</h:commandLink>
@@ -84,10 +84,9 @@ jQuery('#featured-slideshow').cycle({
 						<f:setPropertyActionListener value="#{evento.evtId}"
 							target="#{eventoMB.eventId}" />
 
-						<h:graphicImage
-							value="/ContentFeeder?id=#{evento.coverId}&#38;thb=195"
-							style="height:195px;margin:-85px 0 0 0"
-							styleClass="attachment-node-based-thumb wp-post-image" />
+<div style="background-color:#000;background-position:top center;background-repeat:no-repeat;width:195px;height:110px;background-image:url('ContentFeeder?id=#{evento.coverId}&#38;thb=H195')"
+												class="attachment-node-based-thumb wp-post-image"></div>
+
 
 						<span class="entry-meta"> <abbr class="published">#{evento.formattedDate}</abbr>
 						</span>
