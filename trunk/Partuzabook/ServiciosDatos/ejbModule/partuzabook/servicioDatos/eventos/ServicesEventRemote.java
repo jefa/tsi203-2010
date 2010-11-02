@@ -8,10 +8,12 @@ import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
+import partuzabook.datatypes.DatatypeCntCategory;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeUser;
+import partuzabook.datos.persistencia.beans.CntCategory;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
 import partuzabook.servicioDatos.exception.EvtCategoryNotFoundException;
@@ -243,6 +245,13 @@ public interface ServicesEventRemote {
 	public byte[] getPublicContent(String type, int pos, int thumbnail);
 	
 	/**
+	 * If true, returns the Album category associated to the event
+	 * Returns null if no album has been created for the event
+	 * @param eventID
+	 */
+	public DatatypeCntCategory existsAlbum(int eventID);
+	
+	/**
 	 * Adds the content in position pos from the album of the event
 	 * @param contentID
 	 * @param eventID
@@ -250,12 +259,21 @@ public interface ServicesEventRemote {
 	public void addContentToAlbum(int contentID, int eventID);
 	
 	/**
-	 * Modifies the position of the content in the album. Contents in oldPos and newPos are exchanged
+	 * Modifies the position of the content in the album. 
+	 * Contents in oldPos and newPos are exchanged.
 	 * @param contentID
 	 * @param eventID
 	 * @param pos
 	 */
 	public void changePosInAlbum(int contentID, int eventID, int newPos);
+	
+	/**
+	 * Removes the content from the album of the event. 
+	 * Last content of the album is moved to removed position.
+	 * @param contentID
+	 * @param eventID
+	 */
+	public void removeContentFromAlbum(int contentID, int eventID);
 	
 	/**
 	 * Returns a list of albums and their information

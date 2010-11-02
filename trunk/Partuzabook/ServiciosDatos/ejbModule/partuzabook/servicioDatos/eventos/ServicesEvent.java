@@ -20,6 +20,7 @@ import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
+import partuzabook.datatypes.DatatypeCntCategory;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
@@ -58,6 +59,7 @@ import partuzabook.datos.persistencia.beans.Video;
 import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
 import partuzabook.entityTranslators.TranslatorAlbum;
 import partuzabook.entityTranslators.TranslatorCategory;
+import partuzabook.entityTranslators.TranslatorCntCategory;
 import partuzabook.entityTranslators.TranslatorContent;
 import partuzabook.entityTranslators.TranslatorEvent;
 import partuzabook.entityTranslators.TranslatorEventSummary;
@@ -716,6 +718,14 @@ public class ServicesEvent implements ServicesEventRemote {
 		return res;
 	}
 
+	public DatatypeCntCategory existsAlbum(int eventID){
+		Event event = getEvent(eventID);
+		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
+		if (catAlbum == null) return null;
+		TranslatorCntCategory transCntCat = new TranslatorCntCategory();
+		return (DatatypeCntCategory) transCntCat.translate(catAlbum);
+	}
+	
 	public void addContentToAlbum(int contentID, int eventID) {
 		Event event = getEvent(eventID);
 		Album album = event.getAlbum();
@@ -727,16 +737,16 @@ public class ServicesEvent implements ServicesEventRemote {
 			throw new ContentNotFoundException();
 		// Associate to album and set pos to content
 		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
-		if (catAlbum == null) {
+		if (catAlbum == null) {	
 			throw new AlbumNotFoundException();
 		}
 		if (!currentContent.getCntCategories().contains(catAlbum)) {
 			currentContent.getCntCategories().add(catAlbum);
-		}
-		if (!catAlbum.getContents().contains(currentContent)) {
-			catAlbum.getContents().add(currentContent);
-		}
-		currentContent.setPosAlbum(contDao.findNextPosInAlbumEvent(event));
+			if (!catAlbum.getContents().contains(currentContent)) {
+				catAlbum.getContents().add(currentContent);
+				currentContent.setPosAlbum(contDao.findNextPosInAlbumEvent(event));
+			}
+		} 	
 	}
 
 	public void changePosInAlbum(int contentID, int eventID, int newPos) {
@@ -763,9 +773,36 @@ public class ServicesEvent implements ServicesEventRemote {
 		currentContent.setPosAlbum(newPos);
 	}
 		
+	public void removeContentFromAlbum(int contentID, int eventID) {
+		Event event = getEvent(eventID);
+		Album album = event.getAlbum();
+		if(album == null)
+			throw new AlbumNotFoundException();
+		// Verify if content exists 
+		Content currentContent = contDao.findByIDInEvent(event, contentID);
+		if (currentContent == null)
+			throw new ContentNotFoundException();
+		// Verify if album exists
+		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
+		if (catAlbum == null) {	
+			throw new AlbumNotFoundException();
+		}
+		// Associate to album and set pos to content
+		if (currentContent.getCntCategories().contains(catAlbum)) {
+			if (catAlbum.getContents().contains(currentContent)) {
+				int posRemoved = currentContent.getPosAlbum();
+				Content lastContent = contDao.findByPosAlbum(event, contDao.findNextPosInAlbumEvent(event)-1);
+				if (lastContent != null) {
+					// Exchange last with position that was removed
+					lastContent.setPosAlbum(posRemoved);
+				}
+				catAlbum.getContents().remove(currentContent);
+				currentContent.getCntCategories().remove(catAlbum);
+				currentContent.setPosAlbum(null);
+			}
+		} 	
+	}
 	
-	
-
 	public int getMyRatingForContent(Integer contentId, String username) {
 		Rating rating = ratingDao.findByContentAndUsername(contentId, username);
 		if (rating != null) {

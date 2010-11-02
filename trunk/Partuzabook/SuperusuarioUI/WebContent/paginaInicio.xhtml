@@ -9,7 +9,50 @@
 
 <ui:composition template="templates/superusuarioUI.xhtml">
 	<ui:define name="title">Pagina Inicio</ui:define>
+	<ui:define name="styles">
+	.main-aside {width:300px;}
+	#container {width:660px;}
+	#content {width:660px;} 
+	</ui:define>
+
 	<ui:define name="body">
+		<h:form id="eventosRecientes">
+			<div id="index-featured2">
+			<div class="home-title">Eventos Recientes</div>
+			<ul class="hfeed posts-quick clearfix">
+				<a4j:repeat var="evento" value="#{paginaInicioMB.eventosRecientes}">
+					<li class="post type-post clearfix">
+					<div class="entry-thumbnails"><h:commandLink
+						action="verEvento" styleClass="entry-thumbnails-link">
+						<f:setPropertyActionListener value="#{evento.evtId}"
+							target="#{eventoMB.eventId}" />
+
+						<h:graphicImage
+							value="/ContentFeeder?id=#{evento.coverId}&#38;thb=115"
+							styleClass="attachment-quick-preview-thumb wp-post-image" />
+					</h:commandLink></div>
+					<h3 class="entry-title"><h:commandLink
+						value="#{evento.evtName}" action="verEvento">
+						<f:setPropertyActionListener value="#{evento.evtId}"
+							target="#{eventoMB.eventId}" />
+					</h:commandLink></h3>
+					<div class="entry-summary">
+					<div class="entry-info"><abbr class="published">#{evento.formattedDate}
+					</abbr></div>
+					#{evento.description}
+					<p class="quick-read-more"><h:commandLink value="Ver evento..."
+						action="verEvento">
+						<f:setPropertyActionListener value="#{evento.evtId}"
+							target="#{eventoMB.eventId}" />
+					</h:commandLink></p>
+					</div>
+					</li>
+				</a4j:repeat>
+			</ul>
+			<!-- .posts-quick --></div>
+			<!-- #index-featured2 -->
+
+		</h:form>
 	
 
 	</ui:define>

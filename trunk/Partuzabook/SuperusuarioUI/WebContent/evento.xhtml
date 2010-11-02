@@ -92,20 +92,6 @@
 		</h:panelGroup>
 		<h:panelGroup id="authorizedContent"
 			rendered="#{eventoMB.validUserForContext || eventoMB.hasAlbum}">
-			<!-- 
-			<div class="pikachoose" style="height:400px;">
-				<h:outputText value="#{eventoMB.selectedCategory.category}" />
-				<ul id="pikame" class="jcarousel-skin-pika">
-					<a4j:repeat value="#{eventoMB.selectedCategory.contents}" var="content">
-						<li><h:graphicImage value="/ContentFeeder?id=#{content.contId}&#38;" />
-							<span>#{content.eventName}</span>
-						</li>
-					</a4j:repeat>
-				</ul>
-				<rich:jQuery selector="#pikame" query="PikaChoose();">
-				</rich:jQuery>
-			</div>
-			-->
 			<a4j:outputPanel id="panelCategories">
 				<h:form id="formCategory">
 					<div 
@@ -130,7 +116,7 @@
 					</div>
 				</h:form>
 			</a4j:outputPanel>
-			<a4j:outputPanel id="panelThumbs">
+			<a4j:outputPanel id="panelThumbs" rendered="#{eventoMB.contentsCount > 0}">
 				<a4j:form id="formThumb">
 					<h:inputHidden id="catName" value="#{eventoMB.selectedCategory.category}"/>	
 					<script>
@@ -148,129 +134,31 @@
 								value="/ContentFeeder?id=#{content.contId}&#38;thb=75" />
 						</a4j:commandLink>
 					</rich:dataGrid>
+					<h:outputText value="#{eventoMB.selectedCategory.category}" />
+		
 				</a4j:form>
 			</a4j:outputPanel>
-			<a4j:outputPanel id="panelContent">
-				<h:panelGroup id="mainImage" layout="block">
-					<h:column>
-						<h:panelGroup id="tagContentPanel">
-							<h:graphicImage value="/ContentFeeder?id=#{eventoMB.contentId}" />
-							<rich:componentControl for="panel" attachTo="tagContentPanel"
-								operation="show" event="onmouseup" />
-						</h:panelGroup>
-						<rich:modalPanel id="panel" width="350" height="100">
-							<f:facet name="header">
-								<h:panelGroup>
-									<h:outputText value="Etiquetar usuario"></h:outputText>
+			<a4j:outputPanel id="panelContent" rendered="#{eventoMB.contentsCount > 0}">
+				<h:form>
+					<h:outputText value="#{eventoMB.selectedContent.contId}" />
+					<h:panelGroup id="mainImage" layout="block">
+						<h:column>
+							<h:panelGroup id="tagContentPanel">
+								<h:graphicImage value="/ContentFeeder?id=#{eventoMB.contentId}" />
+							</h:panelGroup>
+						</h:column>
+						<h:column>
+							<h:panelGroup rendered="#{eventoMB.albumExists}">
+								<h:panelGroup rendered="#{eventoMB.isInAlbum}">
+									<a4j:commandButton value="Quitar del Album" action="#{eventoMB.quitarContenidoAlbum}" reRender="panelContent"/>							
 								</h:panelGroup>
-							</f:facet>
-							<f:facet name="controls">
-								<h:panelGroup>
-									<h:graphicImage value="/images/close.png"
-										style="cursor:pointer" id="hidelink" />
-									<rich:componentControl for="panel" attachTo="hidelink"
-										operation="hide" event="onclick" />
+								<h:panelGroup rendered="#{!eventoMB.isInAlbum}">
+									<a4j:commandButton value="Agregar al Album" action="#{eventoMB.agregarContenidoAlbum}" reRender="panelContent"/>							
 								</h:panelGroup>
-							</f:facet>
-							<h:form id="formTag">
-								<h:inputText id="tag" value="#{eventoMB.suggest}" />
-								<a4j:commandButton value="Etiquetar"
-									action="#{eventoMB.tagUser}" reRender="panelTags">
-								</a4j:commandButton>
-								<h:inputHidden value="#{eventoMB.tagX1}" id="x1" />
-								<h:inputHidden value="#{eventoMB.tagY1}" id="y1" />
-								<h:inputHidden value="#{eventoMB.tagX2}" id="x2" />
-								<h:inputHidden value="#{eventoMB.tagY2}" id="y2" />
-								<rich:suggestionbox id="suggestionBoxId" for="tag" tokens=",["
-									suggestionAction="#{eventoMB.autocomplete}" var="result"
-									nothingLabel="No se encuentran usuarios" columnClasses="center">
-									<h:column>
-										<h:outputText value="#{result.username}" />
-									</h:column>
-									<h:column>
-										<h:outputText value="#{result.name}" />
-									</h:column>
-									<h:column>
-										<h:graphicImage
-											value="/UserImageFeeder?username=#{result.username}&#38;thb=30" />
-									</h:column>
-								</rich:suggestionbox>
-							</h:form>
-						</rich:modalPanel>
-					</h:column>
-				</h:panelGroup>
-			</a4j:outputPanel>
-			<!-- 
-	<rich:jQuery selector="#mainImage img"
-		query="imgAreaSelect({ minWidth:80, minHeight:80, maxWidth:80, maxHeight:80,
-					idx1:'evento:x1', idy1:'evento:y1', idx2:'evento:x2', idy2:'evento:y2',
-					fadeSpeed:200 })" />
-	 -->
-			<a4j:outputPanel id="panelRating">
-				<h:column id="myRating" styleClass="Clear">
-					<h:outputText value="Tu calificación: " />
-					<h:form id="formRating">
-						<a4j:commandButton id="btnRate" action="#{eventoMB.rate}"
-							style="display:none;" reRender="panelRating">
-						</a4j:commandButton>
-						<h:inputHidden id="txtRating" value="#{eventoMB.rating}" />
-						<input type="radio" class="hover-star" name="myRating" value="1"
-							title="Malo" />
-						<input type="radio" class="hover-star" name="myRating" value="2"
-							title="Regular" />
-						<input type="radio" class="hover-star" name="myRating" value="3"
-							title="Bueno" />
-						<input type="radio" class="hover-star" name="myRating" value="4"
-							title="Muy bueno" />
-						<input type="radio" class="hover-star" name="myRating" value="5"
-							title="Excelente!" />
-						<span id="hover-test" style="margin: 0 0 0 20px;"></span>
-						<rich:jQuery selector="#formRating .hover-star"
-							query="rating({
-								focus: function(value, link){
-									var tip = $('#hover-test');
-									tip[0].data = tip[0].data || tip.html();
-									tip.html(link.title || 'value: '+value);
-								},
-								blur: function(value, link){
-									var tip = $('#hover-test');
-									$('#hover-test').html(tip[0].data || '');
-								},
-								callback: function(value, link) {
-									if (value == undefined) value = 0;
-									$('formRating:txtRating').value = value;
-									$('formRating:btnRate').click();
-								}
-							}).rating('select', #{eventoMB.rating} + '', false);"></rich:jQuery>
-					</h:form>
-				</h:column>
-				<h:column styleClass="Clear">
-					<h:outputText value="Calificación global: " />
-					<h:form id="formGlobalRating">
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="0.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="1" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="1.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="2" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="2.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="3" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="3.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="4" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="4.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="5" />
-						<rich:jQuery selector="#formGlobalRating .hover-star"
-							query="rating({}).rating('select', #{eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
-					</h:form>
-				</h:column>
+							</h:panelGroup>
+						</h:column>
+					</h:panelGroup>
+				</h:form>
 			</a4j:outputPanel>
 			<a4j:outputPanel id="panelOtherCategories">
 				<h:outputText styleClass="bold"
@@ -290,6 +178,7 @@
 		</h:panelGroup>
 	</ui:define>
 	<ui:define name="sidebar" rendered="#{eventoMB.validUserForContext}">
+		hola
 		<ul class="xoxo" id="ulSidebar">
 			<li class="multi-sidebar-container">
 			<div

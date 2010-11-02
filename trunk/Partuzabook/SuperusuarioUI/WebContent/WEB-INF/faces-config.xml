@@ -2,32 +2,37 @@
 <faces-config version="1.2" xmlns="http://java.sun.com/xml/ns/javaee"
  xmlns:xi="http://www.w3.org/2001/XInclude"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
-	<managed-bean>
-		<managed-bean-name>EventMB</managed-bean-name>
-		<managed-bean-class>partuzabook.superusuarioUI.EventMB</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>eventoMB</managed-bean-name>
-		<managed-bean-class>partuzabook.superusuarioUI.EventoMB</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>loginMB</managed-bean-name>
-		<managed-bean-class>partuzabook.superusuarioUI.LoginMB</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>SearchEventMB</managed-bean-name>
-		<managed-bean-class>partuzabook.superusuarioUI.SearchEventMB</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>RegisterAdminMB</managed-bean-name>
-		<managed-bean-class>partuzabook.superusuarioUI.RegisterAdminMB</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<!-- Navegación -->
+ <managed-bean>
+  <managed-bean-name>EventMB</managed-bean-name>
+  <managed-bean-class>partuzabook.superusuarioUI.EventMB</managed-bean-class>
+  <managed-bean-scope>session</managed-bean-scope>
+ </managed-bean>
+ <managed-bean>
+  <managed-bean-name>eventoMB</managed-bean-name>
+  <managed-bean-class>partuzabook.superusuarioUI.EventoMB</managed-bean-class>
+  <managed-bean-scope>session</managed-bean-scope>
+ </managed-bean>
+ <managed-bean>
+  <managed-bean-name>loginMB</managed-bean-name>
+  <managed-bean-class>partuzabook.superusuarioUI.LoginMB</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+ </managed-bean>
+ <managed-bean>
+  <managed-bean-name>SearchEventMB</managed-bean-name>
+  <managed-bean-class>partuzabook.superusuarioUI.SearchEventMB</managed-bean-class>
+  <managed-bean-scope>session</managed-bean-scope>
+ </managed-bean>
+ <managed-bean>
+  <managed-bean-name>RegisterAdminMB</managed-bean-name>
+  <managed-bean-class>partuzabook.superusuarioUI.RegisterAdminMB</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+ </managed-bean>
+ <managed-bean>
+  <managed-bean-name>paginaInicioMB</managed-bean-name>
+  <managed-bean-class>partuzabook.superusuarioUI.PaginaInicioMB</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+ </managed-bean>
+ <!-- Navegación -->
 	<navigation-rule> 
 		<from-view-id>/event.xhtml</from-view-id>
 		<navigation-case>
