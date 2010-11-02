@@ -456,7 +456,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		return result;
 	}
 
-	public byte[] getContent(String username, int contentID, int thumbnail) {
+	public byte[] getContent(String username, int contentID, String thumbnail) {
 		Content content = getContentAndVerifyPermission(username, contentID);
 		if (content instanceof Photo) {
 			return fileSystem.readFile(content.getUrl(), thumbnail);
@@ -466,7 +466,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		return null;
 	}
 
-	public byte[] getPublicContent(String type, int pos, int thumbnail) {
+	public byte[] getPublicContent(String type, int pos, String thumbnail) {
 		List<DatatypeContent> contents = null;
 		if (type.equals("bestRanked")) {
 			contents =  getBestRankedContent(pos);

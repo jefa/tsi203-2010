@@ -125,7 +125,7 @@ public interface ServicesUserRemote {
      * @param username		- Id for the user
      * @return				- The image avatar of the specified user
      * */
-    public byte[] getUserAvatar(String username, int thumbnail);
+    public byte[] getUserAvatar(String username, String thumbnail);
     
     /**
      * Returns all the NormalUsers in the server
@@ -146,7 +146,7 @@ public interface ServicesUserRemote {
 	 * @param thumbnail
 	 * @return
 	 */
-	public byte[] getPublicAvatar(String type, int pos, int thumbnail);
+	public byte[] getPublicAvatar(String type, int pos, String thumbnail);
 
 	public List<DatatypeNotification> getUpdateNotificationsReceived(
 			String username);

@@ -212,7 +212,7 @@ public class ServicesUser implements ServicesUserRemote {
 		return getAdminUser(username).getPassword();
 	}
 
-	public byte[] getUserAvatar(String username, int thumbnail) {
+	public byte[] getUserAvatar(String username, String thumbnail) {
 		if (username.startsWith("__unr_"))
 			return fileSystem.readFile(DEFAULT_IMAGE, thumbnail);
 		NormalUser user = getNormalUser(username);
@@ -245,7 +245,7 @@ public class ServicesUser implements ServicesUserRemote {
 		return TranslatorCollection.translateMostTagged(users);
 	}
 
-	public byte[] getPublicAvatar(String type, int pos, int thumbnail) {
+	public byte[] getPublicAvatar(String type, int pos, String thumbnail) {
 		List<String> usernames = null;
 		if (type.equals("mostTagged")) {
 			usernames = getMostTaggedUsernames();
