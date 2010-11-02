@@ -245,7 +245,7 @@
 	     	self.active.addClass('active').fadeTo(200,1);
      		var val = self.active.attr('src').split('id=');
      		document.getElementById('panelThumbs:selectContentId').value = val[1];
-     		//document.getElementById('panelThumbs:btnSelectThumb').click();
+     		document.getElementById('panelThumbs:btnSelectThumb').click();
 	     	var data = $.data(this);
 	 		$('<img />').bind('load', {self:self,data:data}, function()
 			{
@@ -400,7 +400,8 @@
      		this.animating = false;
      		this.image.attr('src',data.source);
      		this.aniDiv.hide();
-     		this.anchor.attr('href',data.clickThrough);
+     		this.anchor.attr('href',data.source);
+     		this.anchor.addClass('image-selected');
      		if(this.options.showCaption)
      		{
      			this.caption.html(data.caption).fadeIn('slow');

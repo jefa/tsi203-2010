@@ -52,22 +52,19 @@
 					styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
 				<h3 class="entry-title">#{eventoMB.evento.evtName}</h3>
 				<div class="entry-summary">
-				<div class="entry-info">
-					<abbr class="published">#{eventoMB.evento.formattedDate}</abbr>
-					<abbr class="published">#{eventoMB.evento.eventCategory}</abbr>
-					<abbr class="published">#{eventoMB.evento.address}</abbr>
-					<abbr class="published">#{eventoMB.evento.duration}</abbr>
-					<abbr class="published">Moderadores: 
-						<a4j:repeat value="#{eventoMB.evento.modsUsernames}" var="mods" >
-							<h:outputText value="#{mods} "/>
-						</a4j:repeat>
-					</abbr>
-					<abbr class="published">Descripción:<br/>#{eventoMB.evento.description}</abbr>
+				<div class="entry-info"><abbr class="published">#{eventoMB.evento.formattedDate}</abbr>
+				<abbr class="published">#{eventoMB.evento.eventCategory}</abbr> <abbr
+					class="published">#{eventoMB.evento.address}</abbr> <abbr
+					class="published">#{eventoMB.evento.duration}</abbr> <abbr
+					class="published">Moderadores: <a4j:repeat
+					value="#{eventoMB.evento.modsUsernames}" var="mods">
+					<h:outputText value="#{mods} " />
+				</a4j:repeat> </abbr> <abbr class="published">Descripción:<br />
+				#{eventoMB.evento.description}</abbr></div>
 				</div>
-				</div>
-				<h:form id="formUploadContent" rendered="#{eventoMB.validUserForContext}">
-					<h:commandButton value="Añadir fotos"
-						action="subirFoto">
+				<h:form id="formUploadContent"
+					rendered="#{eventoMB.validUserForContext}">
+					<h:commandButton value="Añadir fotos" action="subirFoto">
 						<f:setPropertyActionListener value="#{eventoMB.eventId}"
 							target="#{subirFotoMB.idEvento}" />
 					</h:commandButton>
@@ -75,8 +72,7 @@
 						<f:setPropertyActionListener value="#{eventoMB.eventId}"
 							target="#{subirVideoMB.eventId}" />
 					</h:commandButton>
-				</h:form>
-				</li>
+				</h:form></li>
 			</ul>
 			<!-- .posts-quick --></div>
 			<!-- #index-featured2 -->
@@ -87,7 +83,7 @@
 			<h:outputText>Debe loguearse para ver el contenido de este evento.</h:outputText>
 			<br />
 		</h:panelGroup>
-		
+
 		<h:panelGroup id="notAuthorizedContent"
 			rendered="#{!eventoMB.validUserForContext and loginMB.isUserLogged}">
 			<h:outputText>Usted no esta autorizado a ver contenido privado de este evento.</h:outputText>
@@ -100,51 +96,49 @@
 			rendered="#{eventoMB.validUserForContext || eventoMB.hasAlbum}">
 			<a4j:outputPanel id="panelCategories">
 				<h:form id="formCategory">
-					<h:inputHidden id="catName" value="#{eventoMB.selectedCategory.category}"/>	
+					<h:inputHidden id="catName"
+						value="#{eventoMB.selectedCategory.category}" />
 					<script>
 						jQuery("#ulCategories li").removeClass("ui-tabs-selected ui-state-active");
 						jQuery("#ulCategories li." + document.getElementById("formCategory:catName").value).addClass("ui-tabs-selected ui-state-active");
 					</script>
-								
-					<div 
+
+					<div
 						class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
 					<ul id="ulCategories"
-						class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">	
-						<a4j:repeat var="category"
-							value="#{eventoMB.categories}">
-							<li
-								class="ui-state-default ui-corner-top #{category.category}"><a
+						class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+						<a4j:repeat var="category" value="#{eventoMB.categories}">
+							<li class="ui-state-default ui-corner-top #{category.category}"><a
 								href="javascript:null()"
-								onclick="toggleTab('s-'+#{category.category},this)">
-						<a4j:commandLink value="#{category.category}"
-							action="#{eventoMB.updateCategory}"
-							reRender="panelThumbs,panelRating,panelOtherCategories,panelTags,panelComments">
-							<f:setPropertyActionListener target="#{eventoMB.categoryId}"
-								value="#{category.categoryId}" />
-						</a4j:commandLink>
-							</a></li>
+								onclick="toggleTab('s-'+#{category.category},this)"> <a4j:commandLink
+								value="#{category.category}" action="#{eventoMB.updateCategory}"
+								reRender="panelThumbs,panelRating,panelTags,panelComments">
+								<f:setPropertyActionListener target="#{eventoMB.categoryId}"
+									value="#{category.categoryId}" />
+							</a4j:commandLink> </a></li>
 						</a4j:repeat>
 					</ul>
 					</div>
 				</h:form>
 			</a4j:outputPanel>
 			<a4j:form id="panelThumbs">
-			<div class="pikachoose" style="height:620px;">
-				<h:inputHidden id="selectContentId" value="#{eventoMB.contentId}"/>	
-				<a4j:commandButton id="btnSelectThumb"
-					action="#{eventoMB.updateCategory}"
-					reRender="panelRating,panelOtherCategories,panelTags,panelComments"
+				<div class="pikachoose" style="height: 620px;"><h:inputHidden
+					id="selectContentId" value="#{eventoMB.contentId}" /> <a4j:commandButton
+					id="btnSelectThumb" action="#{eventoMB.updateCategory}"
+					reRender="panelRating,panelTags,panelComments"
 					style="display:none;">
 				</a4j:commandButton>
 				<ul id="pikame" class="jcarousel-skin-pika">
-					<a4j:repeat value="#{eventoMB.selectedCategory.contents}" var="content">
-						<li><h:graphicImage value="/ContentFeeder?id=#{content.contId}" name="#{content.contId}" />
-							<span>#{content.description}</span>
+					<a4j:repeat value="#{eventoMB.selectedCategory.contents}"
+						var="content">
+						<li><h:graphicImage
+							value="/ContentFeeder?id=#{content.contId}"
+							name="#{content.contId}" /> <span>#{content.description}</span>
 						</li>
 					</a4j:repeat>
 				</ul>
 				<script>
-					jQuery("#pikame").PikaChoose({speed:7000});
+					jQuery("#pikame").PikaChoose({speed:7000, autoPlay:false});
 					jQuery("#pikame").jcarousel({scroll:5,					
 						initCallback: function(carousel) {
 					        $(carousel.list).find('img').click(function() {
@@ -152,28 +146,10 @@
 				        	});
 					    }
 			    	});
-			    </script>
-			</div>
-			<a onclick="lights();">ETIQUETAR</a>
-			<script>
-				function lights() {
-					jQuery("pika-image").lightBox();
-					jQuery("pika-image").click(showTagBox);
-				}
-				function showTagBox() {
-				    if (jQuery('#lightbox-image').is(':visible')) {
-				        jQuery('#lightbox-image').imgAreaSelect({ 
-				            x1: 10, y1: 10, x2: 100, y2: 100, handles: true,
-				            parent: '#jquery-lightbox'
-				        });
-				        jQuery('#jquery-lightbox').unbind('click');
-				        jQuery('#lightbox-nav').remove();
-				    }
-				    else
-				        setTimeout(showTagBox, 50);
-				}
-			</script>
-		    </a4j:form>
+					var img = jQuery(".pika-image a.image-selected");
+					img.lightBox();
+			    </script></div>
+			</a4j:form>
 			<a4j:outputPanel id="panelRating">
 				<h:column id="myRating" styleClass="Clear">
 					<h:outputText value="Tu calificación: " />
@@ -240,21 +216,6 @@
 					</h:form>
 				</h:column>
 			</a4j:outputPanel>
-			<a4j:outputPanel id="panelOtherCategories">
-				<h:outputText styleClass="bold"
-					value="Este contenido también está en las categorías: " />
-				<a4j:form id="formContentCategory">
-					<a4j:repeat value="#{eventoMB.selectedContent.categories}"
-						var="category">
-						<a4j:commandLink value="#{category.category}"
-							rendered="#{eventoMB.categoryId != category.categoryId}"
-							reRender="panelThumbs,panelRating,panelOtherCategories,panelTags,panelComments">
-							<f:setPropertyActionListener target="#{eventoMB.categoryId}"
-								value="#{category.categoryId}" />
-						</a4j:commandLink>
-					</a4j:repeat>
-				</a4j:form>
-			</a4j:outputPanel>
 		</h:panelGroup>
 	</ui:define>
 	<ui:define name="sidebar" rendered="#{eventoMB.validUserForContext}">
@@ -272,11 +233,38 @@
 				<li class="ui-state-default ui-corner-top"><a
 					href="javascript:null()" onclick="toggleTab('s-twitter',this)"><span>Twitter</span></a></li>
 				<li class="ui-state-default ui-corner-top"><a
-					href="javascript:null()" onclick="toggleTab('s-gmap',this)"><span>Gmap</span></a></li>	
+					href="javascript:null()" onclick="toggleTab('s-gmap',this)"><span>Gmap</span></a></li>
 			</ul>
 			<div id="s-etiquetados"
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
-			<a4j:outputPanel id="panelTags" rendered="#{eventoMB.hasAlbum}">
+			<a4j:outputPanel id="panelTags"
+				rendered="#{eventoMB.hasAlbum || eventoMB.validUserForContext}">
+				<h:form id="formTag">
+					<h:inputText id="tag" value="#{eventoMB.suggest}" />
+					<a4j:commandButton value="Etiquetar" action="#{eventoMB.tagUser}"
+						reRender="panelTags">
+					</a4j:commandButton>
+					<h:inputHidden value="#{eventoMB.tagX1}" id="x1" />
+					<h:inputHidden value="#{eventoMB.tagY1}" id="y1" />
+					<h:inputHidden value="#{eventoMB.tagX2}" id="x2" />
+					<h:inputHidden value="#{eventoMB.tagY2}" id="y2" />
+					<rich:suggestionbox id="suggestionBoxId" for="tag" tokens=",["
+						suggestionAction="#{eventoMB.autocomplete}" var="result"
+						nothingLabel="No se encuentran usuarios" columnClasses="center">
+						<div>
+							<h:column>
+								<h:outputText value="#{result.username}" />
+							</h:column>
+							<h:column>
+								<h:outputText value="#{result.name}" />
+							</h:column>
+							<h:column>
+								<h:graphicImage
+									value="/UserImageFeeder?username=#{result.username}&#38;thb=30" />
+							</h:column>
+						</div>
+					</rich:suggestionbox>
+				</h:form>
 				<h:form id="tagPublicProfile">
 					<div id="index-featured2">
 					<ul class="hfeed posts-quick-tag clearfix">
@@ -290,8 +278,7 @@
 								<h:graphicImage
 									value="/UserImageFeeder?username=#{tag.userName}&#38;thb=50"
 									styleClass="attachment-quick-preview-thumb wp-post-image" />
-							</h:commandLink>
-							<h:graphicImage rendered="#{!tag.isRealUser}"
+							</h:commandLink> <h:graphicImage rendered="#{!tag.isRealUser}"
 								value="/UserImageFeeder?username=__unr_#{tag.userName}&#38;thb=50"
 								styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
 							<h5 class="entry-title"><h:commandLink
@@ -311,7 +298,8 @@
 
 			<div id="s-comentarios"
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-			<a4j:outputPanel id="panelComments" rendered="#{eventoMB.hasAlbum}">
+			<a4j:outputPanel id="panelComments"
+				rendered="#{eventoMB.hasAlbum || eventoMB.validUserForContext}">
 				<h:form id="formCommentContent">
 					<div id="index-featured2">
 					<ul class="hfeed posts-quick-tag clearfix">
@@ -364,12 +352,11 @@
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
 			<h:form id="formTwitter">
 				<h:inputHidden id="hiddenHashtag" value="#{eventoMB.evento.hashtag}" />
-	            <div id="index-featured2">
-	            	<ul id="twitter" class="hfeed posts-quick-tag clearfix">
-					</ul>
+				<div id="index-featured2">
+				<ul id="twitter" class="hfeed posts-quick-tag clearfix">
+				</ul>
 				</div>
-			</h:form>
-			<script type="text/javascript">
+			</h:form> <script type="text/javascript">
 		//<![CDATA[
         var twitterQuery = encodeURIComponent (document.getElementById("formTwitter:hiddenHashtag").value);
         var requestUrl = "http://search.twitter.com/search.json?q=@query&show_user=true&rpp=10&callback=?".
@@ -401,17 +388,19 @@
         });
       //]]>
 		</script></div>
-		<div id="s-gmap" class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-			<div id="gmap">
-				<rich:gmap gmapVar="map" style="width:278px;height:278px" id="map" lat="#{eventoMB.evento.latitude + 0.017}" lng="#{eventoMB.evento.longitude - 0.018}"  enableDoubleClickZoom="true"
-				showGScaleControl="false" zoom="13" mapType="G_NORMAL_MAP" showGMapTypeControl="false" showGLargeMapControl="false"/>
+			<div id="s-gmap"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<div id="gmap"><rich:gmap gmapVar="map"
+				style="width:278px;height:278px" id="map"
+				lat="#{eventoMB.evento.latitude + 0.017}"
+				lng="#{eventoMB.evento.longitude - 0.018}"
+				enableDoubleClickZoom="true" showGScaleControl="false" zoom="13"
+				mapType="G_NORMAL_MAP" showGMapTypeControl="false"
+				showGLargeMapControl="false" /></div>
 			</div>
-		</div>
-		<script>window.onload=function(){
+			<script>window.onload=function(){
 			addMarkerWithInfo(map, "#{eventoMB.evento.latitude}", "#{eventoMB.evento.longitude}", '#{eventoMB.evento.address}', '', '');
-		}</script>
-				
-			</div>
+		}</script></div>
 			</li>
 		</ul>
 	</ui:define>
