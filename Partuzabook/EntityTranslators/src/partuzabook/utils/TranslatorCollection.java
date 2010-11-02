@@ -9,6 +9,7 @@ import java.util.Set;
 
 import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategorySummary;
+import partuzabook.datatypes.DatatypeCntCategory;
 import partuzabook.datatypes.DatatypeComment;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
@@ -27,6 +28,7 @@ import partuzabook.datos.persistencia.beans.Tag;
 import partuzabook.entityTranslators.ITranslatable;
 import partuzabook.entityTranslators.TranslatorAlbum;
 import partuzabook.entityTranslators.TranslatorCategorySummary;
+import partuzabook.entityTranslators.TranslatorCntCategory;
 import partuzabook.entityTranslators.TranslatorComment;
 import partuzabook.entityTranslators.TranslatorContent;
 import partuzabook.entityTranslators.TranslatorContentSummary;
@@ -50,6 +52,9 @@ public class TranslatorCollection {
 		return translateList(from, new TranslatorCategorySummary());
 	}
 	
+	public static List<DatatypeCntCategory> translateCntCategory(List<CntCategory> from) {
+		return translateList(from, new TranslatorCntCategory());
+	}
 	public static List<DatatypeContent> translateContent(List<Content> from) {
 		return translateList(from, new TranslatorContent());
 	}

@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import partuzabook.datos.persistencia.beans.CntCategory;
 import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
 
@@ -38,14 +39,33 @@ public class ContentDAOBean extends JpaDao<Integer, Content> implements ContentD
 		Query namedQuery = em.createNamedQuery("Content.findByIDInEvent");
 		namedQuery.setParameter("event", event);
 		namedQuery.setParameter("content", contentID);
-		return (Content)namedQuery.getSingleResult();	
+		if (namedQuery.getResultList().size() > 0) {
+			return (Content)namedQuery.getSingleResult();	
+		} else {
+			return null;
+		}	
 	}
 
 	public Content findByPosInEvent(Event event, int pos) {
 		Query namedQuery = em.createNamedQuery("Content.findByPosInEvent");
 		namedQuery.setParameter("event", event);
 		namedQuery.setParameter("pos", pos);
-		return (Content)namedQuery.getSingleResult();	
+		if (namedQuery.getResultList().size() > 0) {
+			return (Content)namedQuery.getSingleResult();	
+		} else {
+			return null;
+		}	
+	}
+	
+	public Content findByPosAlbum(Event event, int pos) {
+		Query namedQuery = em.createNamedQuery("Content.findByPosAlbum");
+		namedQuery.setParameter("event", event);
+		namedQuery.setParameter("pos", pos);
+		if (namedQuery.getResultList().size() > 0) {
+			return (Content)namedQuery.getSingleResult();	
+		} else {
+			return null;
+		}	
 	}
 
 	public Integer findNextPosInGalleryEvent(Event event) {

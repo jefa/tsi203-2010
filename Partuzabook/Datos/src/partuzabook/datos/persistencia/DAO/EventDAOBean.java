@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import partuzabook.datos.persistencia.beans.CntCategory;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 
@@ -69,7 +70,11 @@ public class EventDAOBean extends JpaDao<Integer, Event> implements EventDAO {
 	
 	public NormalUser findMostTagged() {
 		Query namedQuery = em.createNamedQuery("Event.findMostTagged");
-		return (NormalUser) namedQuery.getSingleResult();	
+		if (namedQuery.getResultList().size() > 0) {
+			return (NormalUser)namedQuery.getSingleResult();	
+		} else {
+			return null;
+		}	
 	}
 
 	public List<Event> findByDate(Date date) {

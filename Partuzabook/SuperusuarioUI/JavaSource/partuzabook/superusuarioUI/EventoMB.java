@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
+import partuzabook.datatypes.DatatypeCntCategory;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
@@ -34,6 +35,8 @@ public class EventoMB {
 	private List<DatatypeCategorySummary> categories;
 	private Integer eventId;
 	private Integer categoriesCount;
+	private boolean albumExists;
+	private DatatypeCntCategory album;
 
 	private int categoryId;
 	private DatatypeCategory selectedCategory;
@@ -41,6 +44,7 @@ public class EventoMB {
 	
 	private Integer contentId;
 	private DatatypeContent selectedContent;
+	private boolean isInAlbum;
 	
 	private List<Integer> averageRates;
 	private int rating = 0;
@@ -66,6 +70,23 @@ public class EventoMB {
 		this.selectedContent = selectedContent;
 	}
 	
+	public boolean getIsInAlbum(){
+		this.isInAlbum = false;
+		List<DatatypeCategorySummary> catList = this.selectedContent.getCategories();
+		Iterator<DatatypeCategorySummary> it = catList.iterator();
+		while (it.hasNext()) {
+			DatatypeCategorySummary dataCateg = it.next();
+			if (dataCateg.getCategory().equals("Album")){
+				this.isInAlbum = true;	
+			}
+		}
+		return this.isInAlbum;
+	}
+	
+	public void setIsInAlbum(boolean is){
+		this.isInAlbum = is;
+	}
+	
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
 		setSelectedCategory(servicesEvent.getCategoryContents(eventId, categoryId, 1, PAGE_SIZE));
@@ -76,7 +97,11 @@ public class EventoMB {
 	}
 
 	public void updateCategory() {
-		System.out.println("holaaa");
+		setCategoryId(this.categoryId);
+	}
+
+	public void updateContent() {
+		setContentId(this.contentId);
 	}
 
 	public void setContentId(Integer contentId) {
@@ -94,12 +119,15 @@ public class EventoMB {
 
 	public void setSelectedCategory(DatatypeCategory selectedCategory) {
 		this.selectedCategory = selectedCategory;
-		setContentsCount(this.selectedCategory.getContents().size());
-		setContentId(selectedCategory.getContents().get(0).getContId());
+		int cant = this.selectedCategory.getContents().size();
+		setContentsCount(cant);
+		if (cant > 0) {
+			setContentId(selectedCategory.getContents().get(0).getContId());
+		}
 	}
 
 	public DatatypeCategory getSelectedCategory() {
-		setCategoryId(this.categoryId);
+		//setCategoryId(this.categoryId);
 		return selectedCategory;
 	}
 
@@ -129,6 +157,26 @@ public class EventoMB {
 				setContentId(contentId);
 				comentario = "";
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void agregarContenidoAlbum() {
+		try {
+			ServicesEventRemote service = getServicesEvent();
+			service.addContentToAlbum(this.contentId, this.eventId);
+			updateCategory();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void quitarContenidoAlbum() {
+		try {
+			ServicesEventRemote service = getServicesEvent();
+			service.removeContentFromAlbum(this.contentId, this.eventId);
+			updateCategory();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -226,6 +274,37 @@ public class EventoMB {
 		return categoriesCount;
 	}
 
+	public DatatypeCntCategory getAlbum(){
+		try {
+			ServicesEventRemote service = getServicesEvent();
+			DatatypeCntCategory dataCntCateg = service.existsAlbum(this.eventId);
+			this.album = dataCntCateg;
+			return this.album;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public void setAlbum(DatatypeCntCategory alb){
+		this.album = alb;
+	}
+
+	public boolean getAlbumExists(){
+		DatatypeCntCategory album = getAlbum();
+		if (album == null) {	
+			this.albumExists = false;
+		} else {
+			this.album = album;
+			this.albumExists = true;
+		}
+		return this.albumExists;
+	}
+	
+	public void setAlbumExists(boolean exists){
+		this.albumExists = exists;
+	}
+	
 	private ServicesEventRemote getServicesEvent() {
 		if (servicesEvent == null) {
 			try {

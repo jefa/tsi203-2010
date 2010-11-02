@@ -39,10 +39,12 @@ import javax.persistence.OneToMany;
 			query = "SELECT c FROM Content c WHERE c.event = :event AND c.posAlbum IS NOT NULL"),
 	@NamedQuery(name = "Content.findByPosInEvent",
 			query = "SELECT c FROM Content c WHERE c.event = :event AND c.posGallery = :pos"),
+	@NamedQuery(name = "Content.findByPosAlbum",
+			query = "SELECT c FROM Content c WHERE c.event = :event AND c.posAlbum = :pos"),
 	@NamedQuery(name = "Content.findNextPosInGalleryEvent",
 			query = "SELECT c FROM Content c WHERE c.event = :event"),
 	@NamedQuery(name = "Content.findNextPosInAlbumEvent",
-			query = "SELECT max(c.posAlbum)+1 FROM Content c WHERE c.event = :event"),			
+			query = "SELECT c FROM Content c WHERE c.event = :event AND c.posAlbum IS NOT NULL"),			
 	@NamedQuery(name = "Content.getBestRanked",
 			query = "SELECT c.cntIdAuto FROM Content c, IN(c.ratings) r "
 				+"GROUP BY c.cntIdAuto ORDER BY AVG(r.score) DESC"),
