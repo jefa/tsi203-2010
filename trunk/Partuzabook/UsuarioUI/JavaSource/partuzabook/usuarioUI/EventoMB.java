@@ -55,13 +55,13 @@ public class EventoMB {
 	private List<DatatypeUser> results;
 	private String suggest = "";
 	
-	public DatatypeContent getSelectedContent(){
-		selectedContent = servicesEvent.getContentDetails(contentId, userName);
-		return selectedContent;
-	}
-	
 	public void setSelectedContent(DatatypeContent selectedContent){
 		this.selectedContent = selectedContent;
+	}
+	
+	public DatatypeContent getSelectedContent(){
+		//selectedContent = servicesEvent.getContentDetails(contentId, userName);
+		return selectedContent;
 	}
 	
 	public void setCategoryId(int categoryId) {
@@ -97,7 +97,7 @@ public class EventoMB {
 	}
 
 	public DatatypeCategory getSelectedCategory() {
-		setCategoryId(this.categoryId);
+		//setCategoryId(this.categoryId);
 		return selectedCategory;
 	}
 
@@ -201,7 +201,7 @@ public class EventoMB {
 
 	public List<DatatypeCategorySummary> getCategories(){
 		// Actualizar las categorias
-		setEvento(this.evento);
+		//setEvento(this.evento);
 		return this.categories;
 	}
 	
@@ -285,10 +285,12 @@ public class EventoMB {
 	public String tagUser() {
 		try {
 			Context ctx = getContext();
-			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
- 			service.tagUserInContent(eventId, contentId, userName, suggest, tagX1, tagY1);
-			suggest = null;
-			setContentId(contentId);
+			if (suggest != null && suggest != "") {
+				ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
+				service.tagUserInContent(eventId, contentId, userName, suggest, tagX1, tagY1);
+				suggest = null;
+				setContentId(contentId);
+			}
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
