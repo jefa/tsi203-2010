@@ -311,6 +311,25 @@ public interface ServicesEventRemote {
 	 */
 	public List<DatatypeAlbum> getRecentAlbums(int maxAlbums);
 
+	/**
+	 * Removes a content from the event and all rating, comments, tags and categories it belongs to.
+	 * User must have moderator rights.
+	 * @param eventId
+	 * @param contentId
+	 * @param username
+	 * @throws EventNotFoundException
+	 * @throws ContentNotFoundException
+	 * @throws IllegalAccessException
+	 */
+	public void removeContentFromEvent(Integer eventId, Integer contentId, String username)
+		throws EventNotFoundException, ContentNotFoundException, IllegalAccessException;
+	
+	/**
+	 * Retrieves the rating of the user for the current content
+	 * @param contentId
+	 * @param userName
+	 * @return
+	 */
 	public int getMyRatingForContent(Integer contentId, String userName);
 
 	/**
