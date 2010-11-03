@@ -58,6 +58,9 @@ public class EventoMB {
 	private Boolean userToRemoveIsReal;
 	private String userToRemove;
 	
+	private String firstContentType;
+	private String firstContentUrl;
+	
 	public void setSelectedContent(DatatypeContent selectedContent){
 		this.selectedContent = selectedContent;
 	}
@@ -78,6 +81,15 @@ public class EventoMB {
 
 	public void updateCategory() {
 		System.out.println("holaaa");
+		/*
+		for(Iterator<DatatypeCategorySummary> it = categories.iterator(); it.hasNext(); ) {
+			DatatypeCategorySummary cat = it.next();
+			if(cat.getCategoryId() == categoryId) {
+				setFirstContentType(selectedCategory.getContents().get(0).getType() + "");
+				setFirstContentUrl(selectedCategory.getContents().get(0).getUrl());
+			}
+		}
+		*/
 	}
 
 	public void setContentId(Integer contentId) {
@@ -97,10 +109,14 @@ public class EventoMB {
 		this.selectedCategory = selectedCategory;
 		setContentsCount(this.selectedCategory.getContents().size());
 		setContentId(selectedCategory.getContents().get(0).getContId());
+		setFirstContentType(selectedCategory.getContents().get(0).getType() + "");
+		setFirstContentUrl(selectedCategory.getContents().get(0).getUrl());
 	}
 
 	public DatatypeCategory getSelectedCategory() {
 		//setCategoryId(this.categoryId);
+		//setFirstContentType(selectedCategory.getContents().get(0).getType() + "");
+		//setFirstContentUrl(selectedCategory.getContents().get(0).getUrl());
 		return selectedCategory;
 	}
 
@@ -477,5 +493,21 @@ public class EventoMB {
 			return false;
 		} 
 		return getServicesMultimedia().isUserRelatedToEvent(eventId, userName);
+	}
+
+	public void setFirstContentType(String firstContentType) {
+		//this.firstContentType = firstContentType;
+	}
+
+	public String getFirstContentType() {
+		return firstContentType;
+	}
+
+	public void setFirstContentUrl(String firstContentUrl) {
+		//this.firstContentUrl = firstContentUrl;
+	}
+
+	public String getFirstContentUrl() {
+		return firstContentUrl;
 	}
 }

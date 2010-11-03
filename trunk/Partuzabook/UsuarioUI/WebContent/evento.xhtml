@@ -119,6 +119,9 @@
 						</a4j:repeat>
 					</ul>
 					</div>
+					 <h:inputText id="cntType" value="#{eventoMB.firstContentType}"/>
+    				 <h:inputText id="cntUrl" value="#{eventoMB.firstContentUrl}"/>
+    				 
 				</h:form>
 			</a4j:outputPanel>
 			<a4j:form id="panelThumbs">
@@ -133,7 +136,8 @@
 						var="content">
 						<li><h:graphicImage
 							value="/ContentFeeder?id=#{content.contId}"
-							name="#{content.contId}" /> <span>#{content.description}</span>
+							name="#{content.contId}" onclick="document.getElementById('cntType').setAttribute('value','#{content.type}'); document.getElementById('cntUrl').setAttribute('value','#{content.url}');"/>								
+							<span>#{content.description}</span>
 						</li>
 					</a4j:repeat>
 				</ul>
