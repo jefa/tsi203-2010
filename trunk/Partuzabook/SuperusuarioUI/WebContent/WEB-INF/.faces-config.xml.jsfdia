@@ -91,4 +91,11 @@
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#album.xhtml" PATH="/album.xhtml"
   SHAPE="528,1057,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:*:1" PATH="*" SHAPE="48,1281,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:1" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="buscar::#busquedaEventos.xhtml"
+    NAME="output" PATH="/busquedaEventos.xhtml"
+    TARGET="rules:#busquedaEventos.xhtml" TITLE="buscar" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
 </PROCESS>

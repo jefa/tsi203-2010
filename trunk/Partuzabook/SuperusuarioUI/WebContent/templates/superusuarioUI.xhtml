@@ -89,11 +89,30 @@ jQuery.noConflict();
 				<h1 class="blog-name"><a href="paginaInicio.jsf">Partuzabook</a></h1>
 		<h2 class="blog-description">Porque todas las fiestas terminan en eso...</h2>
 			</div>
-	<div id="searchbar"><form method="get" class="searchform clearfix" action="#">
+<!--  
+	<div id="searchbar">
+	<form method="get" class="searchform clearfix" action="#">
  <input type="text" value="Buscar..." name="s" class="s" onfocus="this.value=&#39;&#39;"/>
  <input type="submit" class="searchsubmit" value="Search" title="Buscar evento"/>
 </form>
 </div>
+-->
+	<div id="searchbar">
+ <h:form styleClass="searchform clearfix" id="formSearch">
+ 
+ <h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" styleClass="s"
+ onfocus="if(value=='Buscar...')value=''"
+onblur="if(value=='')value='Buscar...'"
+ 
+ />
+ <script>
+ 	document.getElementById("formSearch:searchField").value="Buscar...";
+ </script>
+ 	<h:commandButton value="Search" action="buscar" styleClass="searchsubmit" />
+							 
+</h:form>
+</div>
+
 	</div><!-- #branding -->
 </div><!-- #header -->
 

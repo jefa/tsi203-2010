@@ -234,6 +234,12 @@ public interface ServicesEventRemote {
 	public List<DatatypeEventSummary> filterPastEvents(int maxEvents);
 
 	/**
+     * Returns a list of maxEvents Events which take place in that date
+     * @param maxEvents				- Max number of events to return 
+     */ 
+	public List<DatatypeEventSummary> filterEventsByDate(java.util.Date date, int maxEvents);
+		
+	/**
      * Returns a list of maxEvents upcoming Events 
      * @param maxEvents				- Max number of events to return 
      */ 
