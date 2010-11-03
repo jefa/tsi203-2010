@@ -53,7 +53,7 @@ public class TranslatorContent implements ITranslatable {
 		}
 		dat.setPosGallery(ent.getPosGallery());
 		dat.setPosAlbum(ent.getPosAlbum());
-		
+		dat.setUrl(ent.getUrl());
 		return dat;
 	}
 }
