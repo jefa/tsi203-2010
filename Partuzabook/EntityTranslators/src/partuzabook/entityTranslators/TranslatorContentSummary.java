@@ -25,6 +25,7 @@ public class TranslatorContentSummary implements ITranslatable {
 		else {
 			dat.setType(DatatypeContent.EXTERNAL);
 		}
+		dat.setUrl(ent.getUrl());
 		return dat;
 	}
 }
