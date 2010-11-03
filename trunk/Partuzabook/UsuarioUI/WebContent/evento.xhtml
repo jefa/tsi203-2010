@@ -299,10 +299,10 @@
 								style="float:right;">
 								<f:setPropertyActionListener
 									value="#{tag.isRealUser ? tag.userName : tag.name}"
-									target="#{eventoMB.userToRemove}" />
+									target="#{eventoMB.tagToRemoveUser}" />
 								<f:setPropertyActionListener
 									value="#{tag.isRealUser}"
-									target="#{eventoMB.userToRemoveIsReal}" />
+									target="#{eventoMB.tagToRemoveUserIsReal}" />
 								<h:graphicImage value="/images/close.png" alt="Eliminar etiqueta" />
 							</a4j:commandLink>
 							<h5 class="entry-title"><h:commandLink
@@ -361,6 +361,19 @@
 										value="/UserImageFeeder?username=#{comment.userId}&#38;thb=50"
 										styleClass="attachment-quick-preview-thumb wp-post-image" />
 								</h:commandLink></div>
+							<a4j:commandLink rendered="#{eventoMB.userIsModerator}"
+								onclick="confirm('¿Eliminar el comentario #{comment.text}?')"
+								action="#{eventoMB.removeComment}"
+								reRender="panelComments"
+								style="float:right;">
+								<f:setPropertyActionListener
+									value="#{comment.userId}"
+									target="#{eventoMB.commentToRemoveUser}" />
+								<f:setPropertyActionListener
+									value="#{comment.text}"
+									target="#{eventoMB.commentToRemoveText}" />
+								<h:graphicImage value="/images/close.png" alt="Eliminar comentario" />
+							</a4j:commandLink>
 								<h5 class="entry-title"><h:commandLink
 									value="#{comment.userName}" action="verPerfil">
 									<f:setPropertyActionListener value="#{comment.userId}"

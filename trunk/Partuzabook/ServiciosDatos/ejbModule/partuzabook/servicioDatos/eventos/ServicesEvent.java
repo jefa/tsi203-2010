@@ -600,6 +600,26 @@ public class ServicesEvent implements ServicesEventRemote {
 		
 		commentDao.persist(com);
 	}
+	
+	public void removeCommentFromContent(int eventId, int contentId, String username,
+		String userCommenter, String textComment)
+			throws ContentNotFoundException, UserNotFoundException, IllegalAccessException {
+		if (!isUserModeratorInEvent(eventId, username)) {
+			throw new IllegalAccessException();
+		}
+		// Verify existence of content
+		Content content = getContentAndVerifyPermission(username, contentId);
+		// Check if user to tag is registered
+		Iterator<Comment> it = content.getComments().iterator();
+		while (it.hasNext()) {
+			Comment comment = (Comment) it.next();
+			if (comment.getUser().getUsername().equals(userCommenter) &&
+				comment.getText().equals(textComment)) {
+				commentDao.remove(comment);
+				break;
+			}
+		}
+	}
 
 	public void rateContent(int contentID, int rating,
 		String userId) throws Exception {

@@ -249,6 +249,20 @@ public interface ServicesEventRemote {
 	public void commentContent(int contentID, String textComment, String userCommenter) throws Exception;
 
 	/**
+	 * Removes a comment from the content.
+	 * @param contentId
+	 * @param username
+	 * @param userCommenter
+	 * @param textComment
+	 * @throws ContentNotFoundException
+	 * @throws UserNotFoundException
+	 * @throws IllegalAccessException
+	 */
+	public void removeCommentFromContent(int eventId, int contentId, String username,
+			String userCommenter, String textComment)
+		throws ContentNotFoundException, UserNotFoundException, IllegalAccessException;
+	
+	/**
 	 * User rates the content
 	 * @param contentID				- Identifier of the content within the event
 	 * @param rating				- Score from 1 to 5 

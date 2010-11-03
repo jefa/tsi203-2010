@@ -19,6 +19,7 @@ import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
+import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.serviciosUI.multimedia.ServicesMultimediaRemote;
 
 public class EventoMB {
@@ -47,6 +48,8 @@ public class EventoMB {
 	private int rating = 0;
 	
 	private String comentario = "Escribe un comentario...";
+	private String commentToRemoveUser;
+	private String commentToRemoveText;
 	
 	private boolean hasAlbum;
 	
@@ -57,8 +60,8 @@ public class EventoMB {
 	private List<DatatypeUser> candidates;
 	private List<DatatypeUser> results;
 	private String suggest = "";
-	private Boolean userToRemoveIsReal;
-	private String userToRemove;
+	private Boolean tagToRemoveUserIsReal;
+	private String tagToRemoveUser;
 	
 	private String firstContentType;
 	private String firstContentUrl;
@@ -155,6 +158,22 @@ public class EventoMB {
 		this.comentario = com;
 	}
 	
+	public String getCommentToRemoveUser() {
+		return commentToRemoveUser;
+	}
+
+	public void setCommentToRemoveUser(String commentToRemoveUser) {
+		this.commentToRemoveUser = commentToRemoveUser;
+	}
+
+	public String getCommentToRemoveText() {
+		return commentToRemoveText;
+	}
+
+	public void setCommentToRemoveText(String commentToRemoveText) {
+		this.commentToRemoveText = commentToRemoveText;
+	}
+
 	public void comentar() {
 		try {
 			ServicesEventRemote service = getServicesEvent();
@@ -165,6 +184,23 @@ public class EventoMB {
 				comentario = "";
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void removeComment() {
+		try {
+			getServicesEvent().removeCommentFromContent(eventId, contentId,
+					userName, commentToRemoveUser, commentToRemoveText);
+			setContentId(getContentId());
+		} catch (ContentNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UserNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -352,15 +388,31 @@ public class EventoMB {
 		try {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			service.removeTagInContent(eventId, contentId, userName, userToRemoveIsReal, userToRemove);
+			service.removeTagInContent(eventId, contentId, userName, tagToRemoveUserIsReal, tagToRemoveUser);
 			suggest = null;
-			setContentId(contentId);
+			setContentId(getContentId());
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	public Boolean getTagToRemoveUserIsReal() {
+		return tagToRemoveUserIsReal;
+	}
+
+	public void setTagToRemoveUserIsReal(Boolean tagToRemoveUserIsReal) {
+		this.tagToRemoveUserIsReal = tagToRemoveUserIsReal;
+	}
+
+	public String getTagToRemoveUser() {
+		return tagToRemoveUser;
+	}
+
+	public void setTagToRemoveUser(String tagToRemoveUser) {
+		this.tagToRemoveUser = tagToRemoveUser;
+	}
+
 	public String getSuggest() {
 		return suggest;
 	}
@@ -368,22 +420,6 @@ public class EventoMB {
  
 	public void setSuggest(String suggest) {
 		this.suggest = suggest;
-	}
-
-	public void setUserToRemoveIsReal(Boolean userToRemoveIsReal) {
-		this.userToRemoveIsReal = userToRemoveIsReal;
-	}
-
-	public Boolean getUserToRemoveIsReal() {
-		return userToRemoveIsReal;
-	}
-
-	public String getUserToRemove() {
-		return userToRemove;
-	}
-
-	public void setUserToRemove(String userToRemove) {
-		this.userToRemove = userToRemove;
 	}
 
 	public boolean getHasAlbum(){
