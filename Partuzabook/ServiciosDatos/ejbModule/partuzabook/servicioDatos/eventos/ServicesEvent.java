@@ -841,6 +841,23 @@ public class ServicesEvent implements ServicesEventRemote {
 		
 	}
 	
+	public void finalizeAlbum(int eventID){
+		Event event = getEvent(eventID);
+		// Search for Album category
+		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
+		if (catAlbum == null) {	
+			throw new AlbumNotFoundException();
+		}
+		Album album = new Album();
+		// TODO: generar la url
+		album.setAlbumUrl("");
+		album.setEvent(event);
+		album.setRegDate(new Timestamp(new java.util.Date().getTime()));
+		// album.setContents(catAlbum.getContents());
+		event.setAlbum(album);
+	}
+	
+	
 	public int getMyRatingForContent(Integer contentId, String username) {
 		Rating rating = ratingDao.findByContentAndUsername(contentId, username);
 		if (rating != null) {

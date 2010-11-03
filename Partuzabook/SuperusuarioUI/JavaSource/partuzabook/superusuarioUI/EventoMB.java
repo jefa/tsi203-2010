@@ -201,6 +201,15 @@ public class EventoMB {
 			e.printStackTrace();
 		}
 	}
+	
+	public void finalizarAlbum(){
+		try{
+			ServicesEventRemote service = getServicesEvent();
+			service.finalizeAlbum(this.eventId);
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 
 	public Integer getPage(){
 		//final Integer index = contentsCategory.getContents().indexOf(this.content);

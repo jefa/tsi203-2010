@@ -257,6 +257,12 @@ public interface ServicesEventRemote {
 	public boolean isAlbumFinalized(int eventID);
 
 	/**
+	 * Finalizes and publishes the album of the event 
+	 * @param eventID
+	 */		
+	public void finalizeAlbum(int eventID);
+	
+	/**
 	 * Adds the content in position pos from the album of the event
 	 * @param contentID
 	 * @param eventID
