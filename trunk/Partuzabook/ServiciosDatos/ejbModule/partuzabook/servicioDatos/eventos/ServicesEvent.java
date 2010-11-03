@@ -894,7 +894,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		album.setAlbumUrl("");
 		album.setEvent(event);
 		album.setRegDate(new Timestamp(new java.util.Date().getTime()));
-		// album.setContents(catAlbum.getContents());
+		albumDao.persist(album);
 		event.setAlbum(album);
 	}
 	
