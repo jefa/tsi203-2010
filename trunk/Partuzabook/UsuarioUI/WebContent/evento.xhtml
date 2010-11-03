@@ -90,7 +90,7 @@
 			<br />
 			<h:outputText>Puede solicitar autorizacion enviando un mensaje al moderador.</h:outputText>
 			<br />
-			<h:commandButton value="Enviar solicitud" />
+			<h:commandButton value="Enviar solicitud" action="#{eventoMB.sendAdmitMail}" />
 		</h:panelGroup>
 		<h:panelGroup id="authorizedContent"
 			rendered="#{eventoMB.validUserForContext || eventoMB.hasAlbum}">
@@ -119,9 +119,9 @@
 						</a4j:repeat>
 					</ul>
 					</div>
-					 <h:inputText id="cntType" value="#{eventoMB.firstContentType}"/>
-    				 <h:inputText id="cntUrl" value="#{eventoMB.firstContentUrl}"/>
-    				 
+					<h:inputHidden id="cntType" value="#{eventoMB.firstContentType}" />
+					<h:inputHidden id="cntUrl" value="#{eventoMB.firstContentUrl}" />
+
 				</h:form>
 			</a4j:outputPanel>
 			<a4j:form id="panelThumbs">
@@ -136,13 +136,13 @@
 						var="content">
 						<li><h:graphicImage
 							value="/ContentFeeder?id=#{content.contId}"
-							name="#{content.contId}" onclick="document.getElementById('cntType').setAttribute('value','#{content.type}'); document.getElementById('cntUrl').setAttribute('value','#{content.url}');"/>								
-							<span>#{content.description}</span>
-						</li>
+							name="#{content.contId}"
+							onclick="document.getElementById('cntType').setAttribute('value','#{content.type}'); document.getElementById('cntUrl').setAttribute('value','#{content.url}');" />
+						<span>#{content.description}</span></li>
 					</a4j:repeat>
 				</ul>
 				<script>
-					jQuery("#pikame").PikaChoose({speed:7000, autoPlay:false});
+					jQuery("#pikame").PikaChoose({speed:7000});
 					jQuery("#pikame").jcarousel({scroll:5,					
 						initCallback: function(carousel) {
 					        $(carousel.list).find('img').click(function() {
@@ -154,11 +154,11 @@
 					img.lightBox();
 			    </script></div>
 				<a4j:commandLink rendered="#{eventoMB.userIsModerator}"
-					onclick="confirm('¿Eliminar el contenido?')"
-					action="#{eventoMB.removeContent}"
+					onclick="if(!confirm('¿Eliminar el contenido?'))return false;"
+					value="Eliminar contenido" action="#{eventoMB.removeContent}"
 					reRender="panelThumbs,panelRating,panelTags,panelComments"
 					style="float:right;">
-					<h:graphicImage value="/images/close.png" alt="Eliminar etiqueta" />
+					<h:graphicImage value="/images/close.png" alt="Eliminar contenido" />
 				</a4j:commandLink>
 			</a4j:form>
 			<a4j:outputPanel id="panelRating">
@@ -262,18 +262,14 @@
 					<rich:suggestionbox id="suggestionBoxId" for="tag" tokens=",["
 						suggestionAction="#{eventoMB.autocomplete}" var="result"
 						nothingLabel="No se encuentran usuarios" columnClasses="center">
-						<div>
-							<h:column>
-								<h:outputText value="#{result.username}" />
-							</h:column>
-							<h:column>
-								<h:outputText value="#{result.name}" />
-							</h:column>
-							<h:column>
-								<h:graphicImage
-									value="/UserImageFeeder?username=#{result.username}&#38;thb=30" />
-							</h:column>
-						</div>
+						<div><h:column>
+							<h:outputText value="#{result.username}" />
+						</h:column> <h:column>
+							<h:outputText value="#{result.name}" />
+						</h:column> <h:column>
+							<h:graphicImage
+								value="/UserImageFeeder?username=#{result.username}&#38;thb=30" />
+						</h:column></div>
 					</rich:suggestionbox>
 				</h:form>
 				<h:form id="tagPublicProfile">
@@ -293,28 +289,25 @@
 								value="/UserImageFeeder?username=__unr_#{tag.userName}&#38;thb=50"
 								styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
 							<a4j:commandLink rendered="#{eventoMB.userIsModerator}"
-								onclick="confirm('¿Eliminar la etiqueta #{tag.name}?')"
-								action="#{eventoMB.removeTag}"
-								reRender="panelTags"
+								onclick="if(!confirm('¿Eliminar la etiqueta #{tag.name}?'))return false;"
+								action="#{eventoMB.removeTag}" reRender="panelTags"
 								style="float:right;">
 								<f:setPropertyActionListener
 									value="#{tag.isRealUser ? tag.userName : tag.name}"
 									target="#{eventoMB.tagToRemoveUser}" />
-								<f:setPropertyActionListener
-									value="#{tag.isRealUser}"
+								<f:setPropertyActionListener value="#{tag.isRealUser}"
 									target="#{eventoMB.tagToRemoveUserIsReal}" />
-								<h:graphicImage value="/images/close.png" alt="Eliminar etiqueta" />
+								<h:graphicImage value="/images/close.png"
+									alt="Eliminar etiqueta" />
 							</a4j:commandLink>
 							<h5 class="entry-title"><h:commandLink
 								rendered="#{tag.isRealUser}" value="#{tag.name}"
 								action="verPerfil">
 								<f:setPropertyActionListener value="#{tag.userName}"
 									target="#{PublicProfile.userId}" />
-							</h:commandLink>
-							</h5>
-							<h5 class="entry-title">
-								<h:commandLink rendered="#{!tag.isRealUser}" value="#{tag.name}" />
-							</h5>
+							</h:commandLink></h5>
+							<h5 class="entry-title"><h:outputText
+								rendered="#{!tag.isRealUser}" value="#{tag.name}" /></h5>
 							</li>
 						</a4j:repeat>
 					</ul>
@@ -347,12 +340,12 @@
 					<!-- #index-featured2 -->
 				</h:form>
 				<h:panelGroup layout="block" id="commentPanel">
-					<h:form id="formComments">
-						<div id="index-featured2">
-						<ul class="hfeed posts-quick-tag clearfix">
-							<a4j:repeat value="#{eventoMB.selectedContent.comments}"
-								var="comment">
-								<li class="post type-post clearfix">
+					<div id="index-featured2">
+					<ul class="hfeed posts-quick-tag clearfix">
+						<a4j:repeat value="#{eventoMB.selectedContent.comments}"
+							var="comment">
+							<li class="post type-post clearfix"><h:form
+								id="formCommentsImage">
 								<div class="entry-thumbnails-tag"><h:commandLink
 									action="verPerfil" styleClass="entry-thumbnails-link">
 									<f:setPropertyActionListener value="#{comment.userId}"
@@ -361,31 +354,31 @@
 										value="/UserImageFeeder?username=#{comment.userId}&#38;thb=50"
 										styleClass="attachment-quick-preview-thumb wp-post-image" />
 								</h:commandLink></div>
-							<a4j:commandLink rendered="#{eventoMB.userIsModerator}"
-								onclick="confirm('¿Eliminar el comentario #{comment.text}?')"
-								action="#{eventoMB.removeComment}"
-								reRender="panelComments"
-								style="float:right;">
-								<f:setPropertyActionListener
-									value="#{comment.userId}"
-									target="#{eventoMB.commentToRemoveUser}" />
-								<f:setPropertyActionListener
-									value="#{comment.text}"
-									target="#{eventoMB.commentToRemoveText}" />
-								<h:graphicImage value="/images/close.png" alt="Eliminar comentario" />
-							</a4j:commandLink>
+							</h:form> <h:form id="formRemoveComment"
+								rendered="#{eventoMB.userIsModerator}">
+								<a4j:commandLink action="#{eventoMB.removeComment}"
+									onclick="if(!confirm('¿Eliminar el comentario #{comment.text}?'))return false;"
+									reRender="panelComments" style="float:right;">
+									<f:setPropertyActionListener value="#{comment.userId}"
+										target="#{eventoMB.commentToRemoveUser}" />
+									<f:setPropertyActionListener value="#{comment.text}"
+										target="#{eventoMB.commentToRemoveText}" />
+									<h:graphicImage value="/images/close.png"
+										alt="Eliminar comentario" />
+								</a4j:commandLink>
+							</h:form> <h:form id="formCommentUser">
 								<h5 class="entry-title"><h:commandLink
 									value="#{comment.userName}" action="verPerfil">
 									<f:setPropertyActionListener value="#{comment.userId}"
 										target="#{PublicProfile.userId}" />
 								</h:commandLink></h5>
-								<div class="entry-summary">#{comment.text}</div>
-								</li>
-							</a4j:repeat>
-						</ul>
-						<!-- .posts-quick --></div>
-						<!-- #index-featured2 -->
-					</h:form>
+							</h:form>
+							<div class="entry-summary">#{comment.text}</div>
+							</li>
+						</a4j:repeat>
+					</ul>
+					<!-- .posts-quick --></div>
+					<!-- #index-featured2 -->
 				</h:panelGroup>
 			</a4j:outputPanel></div>
 			<div id="s-twitter"

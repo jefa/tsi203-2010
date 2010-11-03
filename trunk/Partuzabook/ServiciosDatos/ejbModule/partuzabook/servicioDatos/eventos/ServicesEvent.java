@@ -1160,5 +1160,15 @@ public class ServicesEvent implements ServicesEventRemote {
 			
 			return (DatatypeEventSummary)new TranslatorEventSummary().translate(event);
 		}
+		
 	}
+	
+	public void sendAdmitMail(Integer eventId, String username)
+		throws EventNotFoundException, UserNotFoundException {
+		if (!isUserRelatedToEvent(eventId, username)) {
+			//TODO Javier: Enviar el mail a los administradores diciendo que username quiere
+			//acceder al contenido del evento eventId
+		}
+	}
+
 }

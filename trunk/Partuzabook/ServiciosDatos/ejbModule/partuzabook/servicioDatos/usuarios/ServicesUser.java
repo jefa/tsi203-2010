@@ -28,6 +28,7 @@ import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
 import partuzabook.entityTranslators.TranslatorNotification;
 import partuzabook.entityTranslators.TranslatorUser;
+import partuzabook.servicioDatos.exception.EventNotFoundException;
 import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.utils.TranslatorCollection;
@@ -293,5 +294,5 @@ public class ServicesUser implements ServicesUserRemote {
 		
 		return (DatatypeNotification)new TranslatorNotification().translate(not);
 	}
-	
+
 }
