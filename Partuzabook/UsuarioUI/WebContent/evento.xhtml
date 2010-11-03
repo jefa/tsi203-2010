@@ -153,6 +153,13 @@
 					var img = jQuery(".pika-image a.image-selected");
 					img.lightBox();
 			    </script></div>
+				<a4j:commandLink rendered="#{eventoMB.userIsModerator}"
+					onclick="confirm('¿Eliminar el contenido?')"
+					action="#{eventoMB.removeContent}"
+					reRender="panelThumbs,panelRating,panelTags,panelComments"
+					style="float:right;">
+					<h:graphicImage value="/images/close.png" alt="Eliminar etiqueta" />
+				</a4j:commandLink>
 			</a4j:form>
 			<a4j:outputPanel id="panelRating">
 				<h:column id="myRating" styleClass="Clear">

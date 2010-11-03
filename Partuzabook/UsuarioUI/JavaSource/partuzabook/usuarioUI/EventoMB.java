@@ -17,6 +17,8 @@ import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
+import partuzabook.servicioDatos.exception.ContentNotFoundException;
+import partuzabook.servicioDatos.exception.EventNotFoundException;
 import partuzabook.serviciosUI.multimedia.ServicesMultimediaRemote;
 
 public class EventoMB {
@@ -104,6 +106,22 @@ public class EventoMB {
 	public Integer getContentId() {
 		return contentId;
 	}
+	
+	public void removeContent() {
+		try {
+			getServicesEvent().removeContentFromEvent(eventId, contentId, userName);
+			setCategoryId(getCategoryId());
+		} catch (EventNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ContentNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public void setSelectedCategory(DatatypeCategory selectedCategory) {
 		this.selectedCategory = selectedCategory;
@@ -170,7 +188,9 @@ public class EventoMB {
 	}
 
 	public void setUserIsModerator(boolean userIsModerator) {
-		this.userIsModerator = getServicesEvent().isUserModeratorInEvent(eventId, userName);
+		if (eventId != null && userName != null) {
+			this.userIsModerator = getServicesEvent().isUserModeratorInEvent(eventId, userName);
+		}
 	}
 
 	public void setUserName(String userName) {
