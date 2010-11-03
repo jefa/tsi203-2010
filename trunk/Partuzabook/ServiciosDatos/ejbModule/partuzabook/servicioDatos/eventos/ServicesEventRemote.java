@@ -8,7 +8,6 @@ import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
-import partuzabook.datatypes.DatatypeCntCategory;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
@@ -249,8 +248,14 @@ public interface ServicesEventRemote {
 	 * Returns null if no album has been created for the event
 	 * @param eventID
 	 */
-	public DatatypeCntCategory existsAlbum(int eventID);
+	public DatatypeCategory existsAlbum(int eventID);
 	
+	/**
+	 * Returns true if the album for the event has been created and finalized
+	 * @param eventID
+	 */	
+	public boolean isAlbumFinalized(int eventID);
+
 	/**
 	 * Adds the content in position pos from the album of the event
 	 * @param contentID

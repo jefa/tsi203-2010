@@ -86,7 +86,6 @@
 			<from-outcome>modEvento</from-outcome>
 			<to-view-id>/editEvent.xhtml</to-view-id>
 		</navigation-case>
-
 		<navigation-case>
 			<from-action>#{loginMB.logout}</from-action>
 			<from-outcome>logoutsuccess</from-outcome>
@@ -108,6 +107,13 @@
 			<from-action>#{loginMB.validUser}</from-action>
 			<from-outcome>failure</from-outcome>
 			<to-view-id>/login.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/evento.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>modificarAlbum</from-action>
+			<to-view-id>/album.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 </faces-config>
