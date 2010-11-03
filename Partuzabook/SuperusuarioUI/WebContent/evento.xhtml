@@ -69,6 +69,10 @@
 						<f:setPropertyActionListener value="#{eventoMB.eventId}"
 							target="#{subirVideoMB.eventId}" />
 					</h:commandButton>
+					<h:commandButton value="Modificar Album" action="modificarAlbum">
+						<f:setPropertyActionListener value="#{eventoMB.album}"
+							target="#{eventoMB.selectedCategory}" />							
+					</h:commandButton>
 				</h:form>
 				</li>
 			</ul>
@@ -106,7 +110,7 @@
 								onclick="toggleTab('s-'+#{category.category},this)">
 						<a4j:commandLink value="#{category.category}"
 							action="#{eventoMB.updateCategory}"
-							reRender="panelThumbs,panelContent,panelRating,panelOtherCategories,panelTags,panelComments">
+							reRender="panelThumbs,panelContent,panelRating,panelOtherCategories,panelTags,panelComments,panelCategories,authorizedContent">
 							<f:setPropertyActionListener target="#{eventoMB.categoryId}"
 								value="#{category.categoryId}" />
 						</a4j:commandLink>
@@ -115,6 +119,9 @@
 					</ul>
 					</div>
 				</h:form>
+			</a4j:outputPanel>
+			<a4j:outputPanel id="panelNoContents" rendered="#{eventoMB.contentsCount == 0}">
+			No hay contenidos para esta categ
 			</a4j:outputPanel>
 			<a4j:outputPanel id="panelThumbs" rendered="#{eventoMB.contentsCount > 0}">
 				<a4j:form id="formThumb">
@@ -146,21 +153,20 @@
 							<h:panelGroup id="tagContentPanel">
 								<h:graphicImage value="/ContentFeeder?id=#{eventoMB.contentId}" />
 							</h:panelGroup>
-						</h:column>
-						<h:column>
-							<h:panelGroup rendered="#{eventoMB.albumExists}">
+							<h:panelGroup rendered="#{eventoMB.albumExists and !eventoMB.isAlbumFinalized}">
 								<h:panelGroup rendered="#{eventoMB.isInAlbum}">
-									<a4j:commandButton value="Quitar del Album" action="#{eventoMB.quitarContenidoAlbum}" reRender="panelContent"/>							
+									<a4j:commandButton value="Quitar del Album" action="#{eventoMB.quitarContenidoAlbum}" reRender="panelCategories, panelThumbs, panelContent, panelNoContents"/>							
 								</h:panelGroup>
 								<h:panelGroup rendered="#{!eventoMB.isInAlbum}">
 									<a4j:commandButton value="Agregar al Album" action="#{eventoMB.agregarContenidoAlbum}" reRender="panelContent"/>							
 								</h:panelGroup>
+								<h:outputText value="#{eventoMB.selectedContent.posAlbum}" />
 							</h:panelGroup>
 						</h:column>
 					</h:panelGroup>
 				</h:form>
 			</a4j:outputPanel>
-			<a4j:outputPanel id="panelOtherCategories">
+			<a4j:outputPanel id="panelOtherCategories" rendered="#{eventoMB.contentsCount > 0}">
 				<h:outputText styleClass="bold"
 					value="Este contenido también está en las categorías: " />
 				<a4j:form id="formContentCategory">
@@ -177,7 +183,7 @@
 			</a4j:outputPanel>
 		</h:panelGroup>
 	</ui:define>
-	<ui:define name="sidebar" rendered="#{eventoMB.validUserForContext}">
+	<ui:define name="sidebar" rendered="#{eventoMB.validUserForContext and (eventoMB.contentsCount > 0)}">
 		hola
 		<ul class="xoxo" id="ulSidebar">
 			<li class="multi-sidebar-container">
@@ -195,7 +201,7 @@
 			</ul>
 			<div id="s-etiquetados"
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
-			<a4j:outputPanel id="panelTags">
+			<a4j:outputPanel id="panelTags" rendered="#{eventoMB.contentsCount > 0}">
 				<h:form id="tagPublicProfile">
 					<div id="index-featured2">
 					<ul class="hfeed posts-quick-tag clearfix">
@@ -229,7 +235,7 @@
 
 			<div id="s-comentarios"
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-			<a4j:outputPanel id="panelComments">
+			<a4j:outputPanel id="panelComments" rendered="#{eventoMB.contentsCount > 0}">
 				<h:form id="formCommentContent">
 					<div id="index-featured2">
 					<ul class="hfeed posts-quick-tag clearfix">

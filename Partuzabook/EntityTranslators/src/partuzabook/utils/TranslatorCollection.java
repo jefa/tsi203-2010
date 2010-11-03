@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 import partuzabook.datatypes.DatatypeAlbum;
+import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
-import partuzabook.datatypes.DatatypeCntCategory;
 import partuzabook.datatypes.DatatypeComment;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
@@ -27,8 +27,8 @@ import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.datos.persistencia.beans.Tag;
 import partuzabook.entityTranslators.ITranslatable;
 import partuzabook.entityTranslators.TranslatorAlbum;
+import partuzabook.entityTranslators.TranslatorCategory;
 import partuzabook.entityTranslators.TranslatorCategorySummary;
-import partuzabook.entityTranslators.TranslatorCntCategory;
 import partuzabook.entityTranslators.TranslatorComment;
 import partuzabook.entityTranslators.TranslatorContent;
 import partuzabook.entityTranslators.TranslatorContentSummary;
@@ -52,8 +52,8 @@ public class TranslatorCollection {
 		return translateList(from, new TranslatorCategorySummary());
 	}
 	
-	public static List<DatatypeCntCategory> translateCntCategory(List<CntCategory> from) {
-		return translateList(from, new TranslatorCntCategory());
+	public static List<DatatypeCategory> translateCategory(List<CntCategory> from) {
+		return translateList(from, new TranslatorCategory());
 	}
 	public static List<DatatypeContent> translateContent(List<Content> from) {
 		return translateList(from, new TranslatorContent());

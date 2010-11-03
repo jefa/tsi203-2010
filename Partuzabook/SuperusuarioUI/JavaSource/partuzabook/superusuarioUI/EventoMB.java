@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
-import partuzabook.datatypes.DatatypeCntCategory;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
@@ -36,8 +35,9 @@ public class EventoMB {
 	private Integer eventId;
 	private Integer categoriesCount;
 	private boolean albumExists;
-	private DatatypeCntCategory album;
-
+	private DatatypeCategory album;
+	private boolean isAlbumFinalized;
+	
 	private int categoryId;
 	private DatatypeCategory selectedCategory;
 	private Integer contentsCount;
@@ -97,7 +97,7 @@ public class EventoMB {
 	}
 
 	public void updateCategory() {
-		setCategoryId(this.categoryId);
+		//setCategoryId(this.categoryId);
 	}
 
 	public void updateContent() {
@@ -166,7 +166,7 @@ public class EventoMB {
 		try {
 			ServicesEventRemote service = getServicesEvent();
 			service.addContentToAlbum(this.contentId, this.eventId);
-			updateCategory();
+			//setCategoryId(this.categoryId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -176,12 +176,32 @@ public class EventoMB {
 		try {
 			ServicesEventRemote service = getServicesEvent();
 			service.removeContentFromAlbum(this.contentId, this.eventId);
-			updateCategory();
+			setCategoryId(this.categoryId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	public void moverUnaPosAtras(){
+		try{
+			ServicesEventRemote service = getServicesEvent();
+			service.changePosInAlbum(this.contentId, this.eventId, this.selectedContent.getPosAlbum()-1) ;
+			setCategoryId(this.categoryId);			
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	public void moverUnaPosAdelante(){
+		try{
+			ServicesEventRemote service = getServicesEvent();
+			service.changePosInAlbum(this.contentId, this.eventId, this.selectedContent.getPosAlbum()+1) ;
+			setCategoryId(this.categoryId);			
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+
 	public Integer getPage(){
 		//final Integer index = contentsCategory.getContents().indexOf(this.content);
 		return 1;
@@ -251,7 +271,7 @@ public class EventoMB {
 
 	public List<DatatypeCategorySummary> getCategories(){
 		// Actualizar las categorias
-		setEvento(this.evento);
+		//setEvento(this.evento);
 		return this.categories;
 	}
 	
@@ -274,10 +294,10 @@ public class EventoMB {
 		return categoriesCount;
 	}
 
-	public DatatypeCntCategory getAlbum(){
+	public DatatypeCategory getAlbum(){
 		try {
 			ServicesEventRemote service = getServicesEvent();
-			DatatypeCntCategory dataCntCateg = service.existsAlbum(this.eventId);
+			DatatypeCategory dataCntCateg = service.existsAlbum(this.eventId);
 			this.album = dataCntCateg;
 			return this.album;
 		} catch (Exception e) {
@@ -286,12 +306,12 @@ public class EventoMB {
 		return null;
 	}
 	
-	public void setAlbum(DatatypeCntCategory alb){
+	public void setAlbum(DatatypeCategory alb){
 		this.album = alb;
 	}
 
 	public boolean getAlbumExists(){
-		DatatypeCntCategory album = getAlbum();
+		DatatypeCategory album = getAlbum();
 		if (album == null) {	
 			this.albumExists = false;
 		} else {
@@ -304,6 +324,23 @@ public class EventoMB {
 	public void setAlbumExists(boolean exists){
 		this.albumExists = exists;
 	}
+	
+	public boolean getIsAlbumFinalized() {
+		try {
+			ServicesEventRemote service = getServicesEvent();
+			this.isAlbumFinalized =  service.isAlbumFinalized(this.eventId);
+			return this.isAlbumFinalized;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;	
+	}
+	
+	public void setIsAlbumFinalized(boolean is){
+		this.isAlbumFinalized = is;
+	}
+	
+	
 	
 	private ServicesEventRemote getServicesEvent() {
 		if (servicesEvent == null) {

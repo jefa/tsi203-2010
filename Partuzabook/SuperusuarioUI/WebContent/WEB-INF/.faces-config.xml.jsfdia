@@ -67,7 +67,14 @@
  <PROCESS-ITEM NAME="rules:#busquedaEventos.xhtml"
   PATH="/busquedaEventos.xhtml" SHAPE="240,1057,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#evento.xhtml" PATH="/evento.xhtml"
-  SHAPE="240,833,0,0" model-entity="JSFProcessGroup"/>
+  SHAPE="240,833,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#evento.xhtml:0" NAME="item"
+   PATH="/evento.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID=":modificarAlbum:#album.xhtml" NAME="output"
+    PATH="/album.xhtml" TARGET="rules:#album.xhtml"
+    TITLE="modificarAlbum:[any]" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#event.xhtml" PATH="/event.xhtml"
   SHAPE="48,529,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:#event.xhtml:0" NAME="item"
@@ -82,4 +89,6 @@
     TITLE="#{EventMB.createEvent}:failure" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#album.xhtml" PATH="/album.xhtml"
+  SHAPE="528,1057,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

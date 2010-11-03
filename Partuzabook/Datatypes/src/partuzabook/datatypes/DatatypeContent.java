@@ -15,11 +15,12 @@ public class DatatypeContent implements Serializable {
 	private String eventName;
 	private Integer eventId;
 	private Double avgScore;
+	private Integer posAlbum;
+	private Integer posGallery;
 	private List<DatatypeCategorySummary> categories;
 	private List<DatatypeComment> comments;
 	private List<DatatypeTag> tags;
 	private short type;
-	private int pos;
 	
 	public DatatypeContent() {
 		
@@ -50,6 +51,14 @@ public class DatatypeContent implements Serializable {
 		this.avgScore = avgScore;
 	}
 
+	public Integer getPosAlbum(){
+		return this.posAlbum;
+	}
+	
+	public void setPosAlbum(Integer pos){
+		this.posAlbum = pos;
+	}
+	
 	public void setCategories(List<DatatypeCategorySummary> categories) {
 		this.categories = categories;
 	}
@@ -82,12 +91,12 @@ public class DatatypeContent implements Serializable {
 		this.type = type;
 	}
 
-	public int getPos() {
-		return pos;
+	public int getPosGallery() {
+		return this.posGallery;
 	}
 
-	public void setPos(int pos) {
-		this.pos = pos;
+	public void setPosGallery(int pos) {
+		this.posGallery = pos;
 	}
 
 	public static long getSerialversionuid() {

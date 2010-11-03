@@ -20,7 +20,6 @@ import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
-import partuzabook.datatypes.DatatypeCntCategory;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
@@ -59,7 +58,6 @@ import partuzabook.datos.persistencia.beans.Video;
 import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
 import partuzabook.entityTranslators.TranslatorAlbum;
 import partuzabook.entityTranslators.TranslatorCategory;
-import partuzabook.entityTranslators.TranslatorCntCategory;
 import partuzabook.entityTranslators.TranslatorContent;
 import partuzabook.entityTranslators.TranslatorEvent;
 import partuzabook.entityTranslators.TranslatorEventSummary;
@@ -664,7 +662,14 @@ public class ServicesEvent implements ServicesEventRemote {
 		defaultCategory.setContents(new ArrayList<Content>());
 		defaultCategory.setEvent(evt);
 
+		// Create category for album 
+		CntCategory albumCategory = new CntCategory();
+		albumCategory.setCategory("Album");
+		albumCategory.setContents(new ArrayList<Content>());
+		albumCategory.setEvent(evt);
+
 		evt.setCntCategories(new ArrayList<CntCategory>());
+		evt.getCntCategories().add(albumCategory);
 		evt.getCntCategories().add(defaultCategory);
 		
 		evDao.persist(evt);
@@ -718,28 +723,32 @@ public class ServicesEvent implements ServicesEventRemote {
 		return res;
 	}
 
-	public DatatypeCntCategory existsAlbum(int eventID){
+	public DatatypeCategory existsAlbum(int eventID){
 		Event event = getEvent(eventID);
 		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
 		if (catAlbum == null) return null;
-		TranslatorCntCategory transCntCat = new TranslatorCntCategory();
-		return (DatatypeCntCategory) transCntCat.translate(catAlbum);
+		TranslatorCategory transCat = new TranslatorCategory();
+		return (DatatypeCategory) transCat.translate(catAlbum);
+	}
+	
+	public boolean isAlbumFinalized(int eventID){
+		Event event = getEvent(eventID);
+		Album album = event.getAlbum();
+		return (album != null);
 	}
 	
 	public void addContentToAlbum(int contentID, int eventID) {
 		Event event = getEvent(eventID);
-		Album album = event.getAlbum();
-		if(album == null)
+		// Search for Album category
+		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
+		if (catAlbum == null) {	
 			throw new AlbumNotFoundException();
+		}
 		// Verify if content exists 
 		Content currentContent = contDao.findByIDInEvent(event, contentID);
 		if (currentContent == null)
 			throw new ContentNotFoundException();
 		// Associate to album and set pos to content
-		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
-		if (catAlbum == null) {	
-			throw new AlbumNotFoundException();
-		}
 		if (!currentContent.getCntCategories().contains(catAlbum)) {
 			currentContent.getCntCategories().add(catAlbum);
 			if (!catAlbum.getContents().contains(currentContent)) {
@@ -751,42 +760,40 @@ public class ServicesEvent implements ServicesEventRemote {
 
 	public void changePosInAlbum(int contentID, int eventID, int newPos) {
 		Event event = getEvent(eventID);
-		Album album = event.getAlbum();
-		if(album == null)
-			throw new AlbumNotFoundException();
-		// Verify if content is part of the album
-		Content currentContent = contDao.findByIDInEvent(event, contentID);
-		if (currentContent == null)
-			throw new ContentNotFoundException();
-		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
-		if (catAlbum == null) {
-			throw new AlbumNotFoundException();
-		}
-		if (!currentContent.getCntCategories().contains(catAlbum))
-			throw new ContentNotInAlbumException();
-		int oldPos = currentContent.getPosAlbum();
-		Content otherContent = contDao.findByPosInEvent(event, newPos);
-		if (otherContent == null) 
-			throw new InvalidPositionInAlbumException();
-		// Exchange positions in album
-		otherContent.setPosAlbum(oldPos);
-		currentContent.setPosAlbum(newPos);
-	}
-		
-	public void removeContentFromAlbum(int contentID, int eventID) {
-		Event event = getEvent(eventID);
-		Album album = event.getAlbum();
-		if(album == null)
-			throw new AlbumNotFoundException();
-		// Verify if content exists 
-		Content currentContent = contDao.findByIDInEvent(event, contentID);
-		if (currentContent == null)
-			throw new ContentNotFoundException();
-		// Verify if album exists
+		// Search for Album category
 		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
 		if (catAlbum == null) {	
 			throw new AlbumNotFoundException();
 		}
+		// Verify if content is part of the album
+		Content currentContent = contDao.findByIDInEvent(event, contentID);
+		if (currentContent == null)
+			throw new ContentNotFoundException();
+		if (!currentContent.getCntCategories().contains(catAlbum))
+			throw new ContentNotInAlbumException();
+		int oldPos = currentContent.getPosAlbum();
+		Content otherContent = contDao.findByPosAlbum(event, newPos);
+		if (otherContent == null) 
+			throw new InvalidPositionInAlbumException();
+		// Exchange positions in album
+		int indexOtherContent = catAlbum.getContents().indexOf(otherContent);
+		catAlbum.getContents().get(indexOtherContent).setPosAlbum(oldPos);
+		int indexCurrentContent = catAlbum.getContents().indexOf(currentContent);
+		catAlbum.getContents().get(indexCurrentContent).setPosAlbum(newPos);
+		sortContentsInAlbum(catAlbum);
+	}
+		
+	public void removeContentFromAlbum(int contentID, int eventID) {
+		Event event = getEvent(eventID);
+		// Search for Album category
+		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
+		if (catAlbum == null) {	
+			throw new AlbumNotFoundException();
+		}
+		// Verify if content exists 
+		Content currentContent = contDao.findByIDInEvent(event, contentID);
+		if (currentContent == null)
+			throw new ContentNotFoundException();
 		// Associate to album and set pos to content
 		if (currentContent.getCntCategories().contains(catAlbum)) {
 			if (catAlbum.getContents().contains(currentContent)) {
@@ -799,8 +806,39 @@ public class ServicesEvent implements ServicesEventRemote {
 				catAlbum.getContents().remove(currentContent);
 				currentContent.getCntCategories().remove(catAlbum);
 				currentContent.setPosAlbum(null);
+				sortContentsInAlbum(catAlbum);
 			}
 		} 	
+	}
+	
+	private void sortContentsInAlbum(CntCategory catAlbum){
+		List<Content> contents = catAlbum.getContents();
+		int i = 0;
+		while (i < contents.size()){
+			if (contents.get(i).getPosAlbum() != i) {
+				Content contI = contents.get(i);
+				contents.remove(i);
+				contents.add(contI);
+				int j = i;
+				while (j < contents.size()) {
+					if (contents.get(j).getPosAlbum() == i) {
+						// Exchange content in position i with content in position j
+						Content contJ = contents.get(j);
+						contents.remove(j);
+						contents.add(i, contJ);
+						break;	
+					} else {
+						j++; 
+					}
+				}
+				if (contents.get(i).getPosAlbum() != i) {
+					// No encontre content con esa pos
+					throw new ContentNotFoundException();
+				}
+			}
+			i++;
+		}
+		
 	}
 	
 	public int getMyRatingForContent(Integer contentId, String username) {

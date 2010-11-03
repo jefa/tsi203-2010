@@ -51,7 +51,8 @@ public class TranslatorContent implements ITranslatable {
 		} else {
 			dat.setType(DatatypeContent.EXTERNAL);
 		}
-		dat.setPos(ent.getPosGallery());
+		dat.setPosGallery(ent.getPosGallery());
+		dat.setPosAlbum(ent.getPosAlbum());
 		
 		return dat;
 	}
