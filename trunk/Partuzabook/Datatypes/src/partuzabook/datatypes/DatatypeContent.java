@@ -21,6 +21,7 @@ public class DatatypeContent implements Serializable {
 	private List<DatatypeComment> comments;
 	private List<DatatypeTag> tags;
 	private short type;
+	private String url;
 	
 	public DatatypeContent() {
 		
@@ -129,5 +130,13 @@ public class DatatypeContent implements Serializable {
 	
 	public void setEventId(Integer id){
 		this.eventId = id;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getUrl() {
+		return url;
 	}
 }
