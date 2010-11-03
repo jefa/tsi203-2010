@@ -20,13 +20,15 @@ import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
+import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.serviciosUI.multimedia.ServicesMultimediaRemote;
 
 public class EventoMB {
-	public static final int PAGE_SIZE = 12;
+	public static final int PAGE_SIZE = 100;
 	
 	private ServicesMultimediaRemote servicesMultimedia;
 	private ServicesEventRemote servicesEvent;
+	private ServicesUserRemote servicesUser;
 	
 	private boolean validUserForContext;
 	private boolean userIsModerator;
@@ -129,9 +131,11 @@ public class EventoMB {
 	public void setSelectedCategory(DatatypeCategory selectedCategory) {
 		this.selectedCategory = selectedCategory;
 		setContentsCount(this.selectedCategory.getContents().size());
-		setContentId(selectedCategory.getContents().get(0).getContId());
-		setFirstContentType(selectedCategory.getContents().get(0).getType() + "");
-		setFirstContentUrl(selectedCategory.getContents().get(0).getUrl());
+		if (getContentsCount() > 0) {
+			setContentId(selectedCategory.getContents().get(0).getContId());
+			setFirstContentType(selectedCategory.getContents().get(0).getType() + "");
+			setFirstContentUrl(selectedCategory.getContents().get(0).getUrl());
+		}
 	}
 
 	public DatatypeCategory getSelectedCategory() {
@@ -319,6 +323,20 @@ public class EventoMB {
 			}
 		}
 		return servicesEvent;
+	}
+
+	private ServicesUserRemote getServicesUser() {
+		if (servicesUser == null) {
+			try {
+				Context ctx;
+				ctx = getContext();
+				this.servicesUser = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return servicesUser;
 	}
 
 	private ServicesMultimediaRemote getServicesMultimedia() {
@@ -549,6 +567,10 @@ public class EventoMB {
 			return false;
 		} 
 		return getServicesMultimedia().isUserRelatedToEvent(eventId, userName);
+	}
+	
+	public void sendAdmitMail() {
+		getServicesEvent().sendAdmitMail(eventId, getUserName());
 	}
 
 	public void setFirstContentType(String firstContentType) {

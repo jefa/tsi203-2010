@@ -365,4 +365,13 @@ public interface ServicesEventRemote {
 	public void addCategoryToContent(int cntId, List<DatatypeCategorySummary> catsToAdd);
 
 
+	/**
+	 * If the user is not related to the event, sends a mail to all administrators
+	 * asking for permission to access the event contents.
+	 * @param eventId
+	 * @param userName
+	 * @throws UserNotFoundException
+	 */
+	public void sendAdmitMail(Integer eventId, String userName)
+		throws EventNotFoundException, UserNotFoundException;
 }
