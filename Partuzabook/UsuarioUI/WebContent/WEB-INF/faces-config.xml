@@ -62,14 +62,6 @@
   </navigation-case>
  </navigation-rule>
  <navigation-rule>
-  <display-name>verGaleria</display-name>
-  <from-view-id>/evento.xhtml</from-view-id>
-  <navigation-case>
-   <from-outcome>verGaleria</from-outcome>
-   <to-view-id>/galeria.xhtml</to-view-id>
-  </navigation-case>
- </navigation-rule>
- <navigation-rule>
   <display-name>subirFoto</display-name>
   <from-view-id>/evento.xhtml</from-view-id>
   <navigation-case>
@@ -139,7 +131,7 @@
   <from-view-id>*</from-view-id>
   <navigation-case>
    <from-outcome>buscar</from-outcome>
-     <to-view-id>/busquedaEventos.xhtml</to-view-id>
+   <to-view-id>/busquedaEventos.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
 </faces-config>
