@@ -19,6 +19,8 @@ import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
+import partuzabook.servicioDatos.exception.ContentNotFoundException;
+import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.serviciosUI.multimedia.ServicesMultimediaRemote;
 
 public class EventoMB {
@@ -50,6 +52,8 @@ public class EventoMB {
 	private int rating = 0;
 	
 	private String comentario = "Escribe un comentario...";
+	private String commentToRemoveUser;
+	private String commentToRemoveText;
 	
 	private boolean hasAlbum;
 	
@@ -161,7 +165,40 @@ public class EventoMB {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public String getCommentToRemoveUser() {
+		return commentToRemoveUser;
+	}
+
+	public void setCommentToRemoveUser(String commentToRemoveUser) {
+		this.commentToRemoveUser = commentToRemoveUser;
+	}
+
+	public String getCommentToRemoveText() {
+		return commentToRemoveText;
+	}
+
+	public void setCommentToRemoveText(String commentToRemoveText) {
+		this.commentToRemoveText = commentToRemoveText;
+	}
+
+	public void removeComment() {
+		try {
+			getServicesEvent().removeCommentFromContent(eventId, contentId,
+					userName, commentToRemoveUser, commentToRemoveText);
+			setContentId(getContentId());
+		} catch (ContentNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UserNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public void agregarContenidoAlbum() {
 		try {
 			ServicesEventRemote service = getServicesEvent();

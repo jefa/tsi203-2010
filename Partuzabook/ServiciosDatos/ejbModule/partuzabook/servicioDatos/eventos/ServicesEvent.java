@@ -562,6 +562,13 @@ public class ServicesEvent implements ServicesEventRemote {
 		List<Event> beforeEvents = eventDao.findAllBeforeDate(today);
 		return TranslatorCollection.translateEventSummary(beforeEvents);
 	}
+	
+	public List<DatatypeEventSummary> filterEventsByDate(java.util.Date date, int maxEvents) {
+		Date day = new Date(date.getTime());
+		List<Event> events = eventDao.findByDate(day);
+		return TranslatorCollection.translateEventSummary(events);	
+	}
+
 
 	public List<DatatypeEventSummary> filterNextEvents(int maxEvents) {
 		Date today = new Date(new java.util.Date().getTime());

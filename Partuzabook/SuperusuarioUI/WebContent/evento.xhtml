@@ -236,25 +236,6 @@
 			<div id="s-comentarios"
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
 			<a4j:outputPanel id="panelComments" rendered="#{eventoMB.contentsCount > 0}">
-				<h:form id="formCommentContent">
-					<div id="index-featured2">
-					<ul class="hfeed posts-quick-tag clearfix">
-						<li class="post type-post clearfix">
-						<div class="entry-thumbnails-tag"><h:graphicImage
-							value="/UserImageFeeder?username=#{loginMB.userName}&#38;thb=50"
-							styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
-						<h5 class="entry-title"><h:inputText
-							value="#{eventoMB.comentario}"
-							onfocus="if(value=='Escribe un comentario...')value=''"
-							onblur="if(value=='')value='Escribe un comentario...'" /> <a4j:commandButton
-							value="Comentar" action="#{eventoMB.comentar}"
-							reRender="panelComments">
-						</a4j:commandButton></h5>
-						</li>
-					</ul>
-					<!-- .posts-quick --></div>
-					<!-- #index-featured2 -->
-				</h:form>
 				<h:panelGroup layout="block" id="commentPanel">
 					<h:form id="formComments">
 						<div id="index-featured2">
@@ -270,6 +251,19 @@
 										value="/UserImageFeeder?username=#{comment.userId}&#38;thb=50"
 										styleClass="attachment-quick-preview-thumb wp-post-image" />
 								</h:commandLink></div>
+								<a4j:commandLink onclick="if (!window.confirm('¿Eliminar el comentario #{comment.text}?')) {return false}"
+									action="#{eventoMB.removeComment}"
+									reRender="panelComments"
+									style="float:right;">
+									<f:setPropertyActionListener
+										value="#{comment.userId}"
+										target="#{eventoMB.commentToRemoveUser}" />
+									<f:setPropertyActionListener
+										value="#{comment.text}"
+										target="#{eventoMB.commentToRemoveText}" />
+									<h:graphicImage value="/images/close.png" alt="Eliminar comentario" />
+								</a4j:commandLink>
+								
 								<h5 class="entry-title"><h:commandLink
 									value="#{comment.userName}" action="verPerfil">
 									<f:setPropertyActionListener value="#{comment.userId}"
