@@ -271,6 +271,21 @@ public class ServicesEvent implements ServicesEventRemote {
 		return true;
 	}
 
+	public boolean isUserModeratorInEvent(Integer eventId, String username) throws UserNotFoundException  {
+		// Verify if user is Admin
+		Admin aUser = adminDao.findByID(username);
+		if (aUser ==  null) {
+			// Verify if user is Normal User
+			NormalUser nUser = nUserDao.findByID(username);
+			if (nUser == null) {
+				throw new UserNotFoundException();
+			}
+			Event ev = getEvent(eventId);
+			return ev.getMyMods().contains(nUser);
+		}
+		return true;
+	}
+
 	public DatatypeCategory getCategoryContents(int eventID, int categoryID, int startAt, int count) {
 		// Verify existence of Event
 		Event event = getEvent(eventID);
@@ -352,7 +367,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		// Check if user to tag is registered 
 		User tagged = (User) nUserDao.findByID(userToTag);
 		Tag tag;
-		if (tagged == null) {
+		if (tagged == null || !event.getMyParticipants().contains(tagged)) {
 			// Unregistered user was tagged
 			tag = new TagForNotUser();
 			TagForNotUser tagNotUser = (TagForNotUser) tag;
@@ -410,6 +425,32 @@ public class ServicesEvent implements ServicesEventRemote {
 		}
 	}
 
+	public void removeTagInContent(int eventID, int contentID, String username,
+			Boolean userToRemoveIsReal, String userToRemove)
+		throws ContentNotFoundException, IllegalAccessException {
+		if (!isUserModeratorInEvent(eventID, username)) {
+			throw new IllegalAccessException();
+		}
+		// Verify existence of content
+		Content content = getContentAndVerifyPermission(username, contentID);
+		// Check if user to tag is registered
+		Iterator<Tag> it = content.getTags().iterator();
+		while (it.hasNext()) {
+			Tag tag = (Tag) it.next();
+			if (userToRemoveIsReal && tag instanceof TagForUser) {
+				if (((TagForUser)tag).getUserTagged().getUsername().equals(userToRemove)) {
+					tagDao.remove(tag);
+					break;
+				}
+			}
+			else if (!userToRemoveIsReal && tag instanceof TagForNotUser) {
+				if (((TagForNotUser)tag).getUsrTagCustom().equals(userToRemove)) {
+					tagDao.remove(tag);
+					break;
+				}
+			}
+		}
+	}
 
 	public List<String> uploadContent(int eventID, String username, List<DataTypeFile> files) {
 		if (!isUserRelatedToEvent(eventID, username)) {

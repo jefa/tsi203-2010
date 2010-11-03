@@ -125,6 +125,15 @@ public interface ServicesEventRemote {
 	public boolean isUserRelatedToEvent(int eventID, String user);
 	
 	/**
+	 * Returns true if the User exists, and is moderator for the Event.
+	 * All administrators are moderators for every event.
+	 * @param eventId				- Identifier of the event
+	 * @param userName				- Identifier of the user
+	 * @return						- True if user is moderator for the event
+	 */
+	public boolean isUserModeratorInEvent(Integer eventId, String username) throws UserNotFoundException;
+	
+	/**
 	 * Returns a list of candidate Users for Tagging -participants of the event, who have not already been tagged in the content-
 	 * @param eventID				- Identifier of the event
 	 * @param contentID				- Identifier of the content 
@@ -141,6 +150,16 @@ public interface ServicesEventRemote {
 	 * @param posY					- Position of the tag in the Y axis within the content 
 	 */
 	public void tagUserInContent(int eventID, int contentID, String userTagger, String userToTag, int posX, int posY) throws Exception;
+
+	/**
+	 * Removes the associated tag to userToRemove in the content, username must have moderator privileges
+	 * @param eventID				- Identifier of the event
+	 * @param contentID				- Identifier of the content
+	 * @param username				- Identifier of the user removing the tag
+	 * @param userToRemove			- Identifier of the user tag removed
+	 */
+	public void removeTagInContent(int eventID, int contentID, String username,
+			Boolean userToRemoveIsReal, String userToRemove) throws Exception;
 
 	/**
 	 * Uploads the list of contents and returns confirmation token
@@ -311,6 +330,6 @@ public interface ServicesEventRemote {
 	 * @param catsToAdd			- List of categories to add
 	 * */
 	public void addCategoryToContent(int cntId, List<DatatypeCategorySummary> catsToAdd);
-	
+
 
 }

@@ -25,7 +25,8 @@ public class EventoMB {
 	private ServicesMultimediaRemote servicesMultimedia;
 	private ServicesEventRemote servicesEvent;
 	
-	private boolean validUserForContext;	
+	private boolean validUserForContext;
+	private boolean userIsModerator;
 	private String userName;
 	
 	private DatatypeEvent evento;
@@ -54,6 +55,8 @@ public class EventoMB {
 	private List<DatatypeUser> candidates;
 	private List<DatatypeUser> results;
 	private String suggest = "";
+	private Boolean userToRemoveIsReal;
+	private String userToRemove;
 	
 	public void setSelectedContent(DatatypeContent selectedContent){
 		this.selectedContent = selectedContent;
@@ -138,17 +141,25 @@ public class EventoMB {
 	}
 
 	public boolean isValidUserForContext() {
-		validUserForContext = calcValidUserForContent();
 		return validUserForContext;
 	}
 
-	/*public void setValidUserForContext(boolean validUserForContext) {
-		this.validUserForContext = validUserForContext;
-	}*/
+	public void setValidUserForContext(boolean validUserForContext) {
+		this.validUserForContext = calcValidUserForContent();
+		setUserIsModerator(false);
+	}
+
+	public boolean isUserIsModerator() {
+		return userIsModerator;
+	}
+
+	public void setUserIsModerator(boolean userIsModerator) {
+		this.userIsModerator = getServicesEvent().isUserModeratorInEvent(eventId, userName);
+	}
 
 	public void setUserName(String userName) {
-		System.out.println("EventoMB.setUserName(): "+userName);
 		this.userName = userName;
+		setValidUserForContext(false);
 	}
 
 	public String getUserName() {
@@ -167,7 +178,7 @@ public class EventoMB {
 				newList.add(dataCateg);	
 			}
 		}
-		if (!calcValidUserForContent()) {
+		if (!isValidUserForContext()) {
 			if (!evento.getHasAlbum()) {
 				setCategories(null);
 				setCategoriesCount(0);
@@ -211,7 +222,7 @@ public class EventoMB {
 
 	public void setEventId(Integer eventId){
 		this.eventId = eventId;
-		calcValidUserForContent();
+		setValidUserForContext(false);
 		// Also set the Event
 		setEvento(getServicesEvent().getEventDetails(eventId));
 	}
@@ -300,23 +311,19 @@ public class EventoMB {
 		}
 		return null;
 	}
-
-	/*
-	public List<DatatypeUser> autocomplete(Object suggest) {
-		String pref = (String) suggest;
-		ArrayList<string> result = new ArrayList<string>();
-		Iterator<string> iterator = lista.iterator();
-		while (iterator.hasNext()) {
-			String elem = ((String) iterator.next());
-			if ((elem != null && elem.toLowerCase().indexOf(pref.toLowerCase()) == 0)
-					|| "".equals(pref)) {
-				result.add(elem);
-			}
+	
+	public void removeTag() {
+		try {
+			Context ctx = getContext();
+			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
+			service.removeTagInContent(eventId, contentId, userName, userToRemoveIsReal, userToRemove);
+			suggest = null;
+			setContentId(contentId);
 		}
-		return result;
- 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	*/
 	
 	public String getSuggest() {
 		return suggest;
@@ -325,6 +332,22 @@ public class EventoMB {
  
 	public void setSuggest(String suggest) {
 		this.suggest = suggest;
+	}
+
+	public void setUserToRemoveIsReal(Boolean userToRemoveIsReal) {
+		this.userToRemoveIsReal = userToRemoveIsReal;
+	}
+
+	public Boolean getUserToRemoveIsReal() {
+		return userToRemoveIsReal;
+	}
+
+	public String getUserToRemove() {
+		return userToRemove;
+	}
+
+	public void setUserToRemove(String userToRemove) {
+		this.userToRemove = userToRemove;
 	}
 
 	public boolean getHasAlbum(){

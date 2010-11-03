@@ -281,12 +281,28 @@
 							</h:commandLink> <h:graphicImage rendered="#{!tag.isRealUser}"
 								value="/UserImageFeeder?username=__unr_#{tag.userName}&#38;thb=50"
 								styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
+							<a4j:commandLink rendered="#{eventoMB.userIsModerator}"
+								onclick="confirm('¿Eliminar la etiqueta #{tag.name}?')"
+								action="#{eventoMB.removeTag}"
+								reRender="panelTags"
+								style="float:right;">
+								<f:setPropertyActionListener
+									value="#{tag.isRealUser ? tag.userName : tag.name}"
+									target="#{eventoMB.userToRemove}" />
+								<f:setPropertyActionListener
+									value="#{tag.isRealUser}"
+									target="#{eventoMB.userToRemoveIsReal}" />
+								<h:graphicImage value="/images/close.png" alt="Eliminar etiqueta" />
+							</a4j:commandLink>
 							<h5 class="entry-title"><h:commandLink
 								rendered="#{tag.isRealUser}" value="#{tag.name}"
 								action="verPerfil">
 								<f:setPropertyActionListener value="#{tag.userName}"
 									target="#{PublicProfile.userId}" />
-							</h:commandLink> <h:outputText rendered="#{!tag.isRealUser}" value="#{tag.name}" />
+							</h:commandLink>
+							</h5>
+							<h5 class="entry-title">
+								<h:commandLink rendered="#{!tag.isRealUser}" value="#{tag.name}" />
 							</h5>
 							</li>
 						</a4j:repeat>
