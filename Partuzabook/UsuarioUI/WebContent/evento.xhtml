@@ -41,6 +41,7 @@
 		<script type="text/javascript" src="scripts/jquery.pikachoose.js"></script>
 		<script type="text/javascript" src="scripts/jquery.jcarousel.js"></script>
 		<script type="text/javascript" src="scripts/jquery.lightbox-0.5.js"></script>
+		<script type="text/javascript" src="scripts/googlemaps.js"></script>
 
 		<h:panelGroup id="panelEvento">
 			<div id="index-featured2">
@@ -115,7 +116,7 @@
 								href="javascript:null()"
 								onclick="toggleTab('s-'+#{category.category},this)"> <a4j:commandLink
 								value="#{category.category}" action="#{eventoMB.updateCategory}"
-								reRender="authorizedContent,panelTags,panelComments">
+								reRender="authorizedContent,panelTags,panelComments,panelCategories">
 								<f:setPropertyActionListener target="#{eventoMB.categoryId}"
 									value="#{category.categoryId}" />
 							</a4j:commandLink> </a></li>
