@@ -2,19 +2,12 @@ package partuzabook.serviciosNotificaciones.queue;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.util.Properties;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.MessageProducer;
-import javax.jms.Queue;
-import javax.jms.Session;
 import javax.jms.TextMessage;
-import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
@@ -32,6 +25,8 @@ public class NotificacionesQueue implements MessageListener {
 	
 	private static String EMAIL_MSG_TYPE = "MailMessage";
 	private static String NOTIF_MSG_TYPE = "NotifMessage";
+	
+	private PartuzaMailer mailer = new PartuzaMailer();
 	
     public NotificacionesQueue() {
     }
@@ -54,7 +49,7 @@ public class NotificacionesQueue implements MessageListener {
             			body = body + bodyTmp;
             	}
             	
-    			PartuzaMailer.sendMail(from, to, null, null, subject, body, "text/plain");
+    			mailer.sendMail(from, to, null, null, subject, body, "text/plain");
     			getLogger().log(Priority.DEBUG, "Message sent");
             	
             } else if (NOTIF_MSG_TYPE.equals(msgType)){
