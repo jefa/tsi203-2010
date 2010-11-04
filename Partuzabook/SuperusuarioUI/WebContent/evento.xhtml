@@ -28,21 +28,14 @@
 				jQuery(tab.parentNode).addClass('ui-tabs-selected ui-state-active');
 				jQuery("#ulCategories li." + document.getElementById("formThumb:catName").value).addClass("ui-tabs-selected ui-state-active");
 			}
-		</script> 
+		</script>
 		<link rel="stylesheet" href="styles/pikachoose/styles.css"
 			type="text/css" />
-		<link rel="stylesheet" href="styles/stars/jquery.rating.css"
+		<link rel="stylesheet" href="styles/lightbox/jquery.lightbox-0.5.css"
 			type="text/css" />
-		<link rel="stylesheet" type="text/css"
-			href="styles/imgareaselect-default.css" />
-		<script type="text/javascript" src="scripts/jquery.imgareaselect.js"></script>
-		<script type="text/javascript"
-			src="scripts/jquery.imgareaselect.min.js"></script>
 		<script type="text/javascript" src="scripts/jquery.pikachoose.js"></script>
-		<script type="text/javascript" src="scripts/jquery.jcarousel.min.js"></script>
-		<script type="text/javascript" src="scripts/jquery.rating.js"></script>
-		<script type="text/javascript" src="scripts/jquery.MetaData.js"></script>
-		<script type="text/javascript" src="scripts/documentation.js"></script>
+		<script type="text/javascript" src="scripts/jquery.jcarousel.js"></script>
+		<script type="text/javascript" src="scripts/jquery.lightbox-0.5.js"></script>
 
 		<h:panelGroup id="panelEvento">
 			<div id="index-featured2">
@@ -59,9 +52,9 @@
 				</div>
 				<h:inputHidden id="hiddenHashtag" value="#{eventoMB.evento.hashtag}" />
 				</div>
-				<h:form id="formUploadContent" rendered="#{eventoMB.validUserForContext}">
-					<h:commandButton value="Añadir fotos"
-						action="subirFoto">
+				<h:form id="formUploadContent"
+					rendered="#{eventoMB.validUserForContext}">
+					<h:commandButton value="Añadir fotos" action="subirFoto">
 						<f:setPropertyActionListener value="#{eventoMB.eventId}"
 							target="#{subirFotoMB.idEvento}" />
 					</h:commandButton>
@@ -71,10 +64,9 @@
 					</h:commandButton>
 					<h:commandButton value="Modificar Album" action="modificarAlbum">
 						<f:setPropertyActionListener value="#{eventoMB.album}"
-							target="#{eventoMB.selectedCategory}" />							
+							target="#{eventoMB.selectedCategory}" />
 					</h:commandButton>
-				</h:form>
-				</li>
+				</h:form></li>
 			</ul>
 			<!-- .posts-quick --></div>
 			<!-- #index-featured2 -->
@@ -85,7 +77,7 @@
 			<h:outputText>Debe loguearse para ver el contenido de este evento.</h:outputText>
 			<br />
 		</h:panelGroup>
-		
+
 		<h:panelGroup id="notAuthorizedContent"
 			rendered="#{!eventoMB.validUserForContext and loginMB.isUserLogged}">
 			<h:outputText>Usted no esta autorizado a ver contenido privado de este evento.</h:outputText>
@@ -98,44 +90,44 @@
 			rendered="#{eventoMB.validUserForContext || (eventoMB.hasAlbum and eventoMB.isAlbumFinalized)}">
 			<a4j:outputPanel id="panelCategories">
 				<h:form id="formCategory">
-					<div 
+					<h:inputHidden id="catName"
+						value="#{eventoMB.selectedCategory.category}" />
+					<script>
+						jQuery("#ulCategories li").removeClass("ui-tabs-selected ui-state-active");
+						jQuery("#ulCategories li." + document.getElementById("formCategory:catName").value).addClass("ui-tabs-selected ui-state-active");
+					</script>
+
+					<div
 						class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
 					<ul id="ulCategories"
-						class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">	
-						<a4j:repeat var="category"
-							value="#{eventoMB.categories}">
-							<li
-								class="ui-state-default ui-corner-top #{category.category}"><a
+						class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+						<a4j:repeat var="category" value="#{eventoMB.categories}">
+							<li class="ui-state-default ui-corner-top #{category.category}"><a
 								href="javascript:null()"
-								onclick="toggleTab('s-'+#{category.category},this)">
-						<a4j:commandLink value="#{category.category}"
-							action="#{eventoMB.updateCategory}"
-							reRender="panelThumbs,panelContent,panelRating,panelOtherCategories,panelTags,panelComments,panelCategories,authorizedContent">
-							<f:setPropertyActionListener target="#{eventoMB.categoryId}"
-								value="#{category.categoryId}" />
-						</a4j:commandLink>
-							</a></li>
+								onclick="toggleTab('s-'+#{category.category},this)"> <a4j:commandLink
+								value="#{category.category}" action="#{eventoMB.updateCategory}"
+								reRender="authorizedContent,panelTags,panelComments">
+								<f:setPropertyActionListener target="#{eventoMB.categoryId}"
+									value="#{category.categoryId}" />
+							</a4j:commandLink> </a></li>
 						</a4j:repeat>
 					</ul>
 					</div>
+					<h:inputHidden id="cntType" value="#{eventoMB.firstContentType}" />
+					<h:inputHidden id="cntUrl" value="#{eventoMB.firstContentUrl}" />
+
 				</h:form>
 			</a4j:outputPanel>
-			<a4j:outputPanel id="panelNoContents" rendered="#{eventoMB.contentsCount == 0}">
+			<a4j:outputPanel id="panelNoContents"
+				rendered="#{eventoMB.contentsCount == 0}">
 			No hay contenidos para esta categ
 			</a4j:outputPanel>
-		
-			<a4j:outputPanel  id="panelThumbs" rendered="#{eventoMB.contentsCount > 0}">
-				<a4j:form id="formThumb">
-					<h:inputHidden id="catName" value="#{eventoMB.selectedCategory.category}"/>	
-					<script>
-						jQuery("#ulCategories li").removeClass("ui-tabs-selected ui-state-active");
-						jQuery("#ulCategories li." + document.getElementById("formThumb:catName").value).addClass("ui-tabs-selected ui-state-active");
-					</script>
-			
+
+			<a4j:form id="panelThumbs" rendered="#{eventoMB.contentsCount > 0}">
 				<div class="pikachoose" style="height: 620px;"><h:inputHidden
 					id="selectContentId" value="#{eventoMB.contentId}" /> <a4j:commandButton
 					id="btnSelectThumb" action="#{eventoMB.updateCategory}"
-					reRender="panelRating,panelTags,panelComments, panelThumbs"
+					reRender="panelRating,panelTags,panelComments"
 					style="display:none;">
 				</a4j:commandButton>
 				<ul id="pikame" class="jcarousel-skin-pika">
@@ -149,7 +141,7 @@
 					</a4j:repeat>
 				</ul>
 				<script>
-					jQuery("#pikame").PikaChoose({speed:7000});
+					jQuery("#pikame").PikaChoose();
 					jQuery("#pikame").jcarousel({scroll:5,					
 						initCallback: function(carousel) {
 					        $(carousel.list).find('img').click(function() {
@@ -161,44 +153,68 @@
 					img.lightBox();
 			    </script></div>
 
-							<h:panelGroup rendered="#{eventoMB.albumExists and !eventoMB.isAlbumFinalized}">
-								<h:panelGroup rendered="#{eventoMB.isInAlbum}">
-									<a4j:commandButton value="Quitar del Album" action="#{eventoMB.quitarContenidoAlbum}" reRender="panelCategories, panelThumbs, panelContent, panelNoContents"/>							
-								</h:panelGroup>
-								<h:panelGroup rendered="#{!eventoMB.isInAlbum}">
-									
-									<h:column><a4j:commandButton value="Agregar al Album" action="#{eventoMB.agregarContenidoAlbum}" reRender="panelContent"/></h:column>							
-									<h:column><a4j:commandLink onclick="if(!confirm('¿Eliminar el contenido?'))return false;"
-										value="Eliminar contenido" action="#{eventoMB.removeContent}"
-										reRender="panelThumbs,panelRating,panelTags,panelComments,panelCategories"
-										style="float:right;">
-										<h:graphicImage value="/images/close.png" alt="Eliminar contenido" />
-									</a4j:commandLink></h:column>
-								</h:panelGroup>
-							</h:panelGroup>
+				<h:panelGroup
+					rendered="#{eventoMB.albumExists and !eventoMB.isAlbumFinalized}">
+					<h:panelGroup rendered="#{eventoMB.isInAlbum}">
+						<a4j:commandButton value="Quitar del Album"
+							action="#{eventoMB.quitarContenidoAlbum}"
+							reRender="authorizedContent,panelTags,panelComments" />
+					</h:panelGroup>
+					<h:panelGroup rendered="#{!eventoMB.isInAlbum}">
 
-				</a4j:form>
-			</a4j:outputPanel>
-			
-			<a4j:outputPanel id="panelOtherCategories" rendered="#{eventoMB.contentsCount > 0}">
-				<h:outputText styleClass="bold"
-					value="Este contenido también está en las categorías: " />
-				<a4j:form id="formContentCategory">
-					<a4j:repeat value="#{eventoMB.selectedContent.categories}"
-						var="category">
-						<a4j:commandLink value="#{category.category}"
-							rendered="#{eventoMB.categoryId != category.categoryId}"
-							reRender="panelThumbs,panelContent,panelRating,panelOtherCategories,panelTags,panelComments">
-							<f:setPropertyActionListener target="#{eventoMB.categoryId}"
-								value="#{category.categoryId}" />
-						</a4j:commandLink>
-					</a4j:repeat>
-				</a4j:form>
+						<h:column>
+							<a4j:commandButton value="Agregar al Album"
+								action="#{eventoMB.agregarContenidoAlbum}"
+								reRender="panelContent" />
+						</h:column>
+						<h:column>
+							<a4j:commandLink
+								onclick="if(!confirm('¿Eliminar el contenido?'))return false;"
+								value="Eliminar contenido" action="#{eventoMB.removeContent}"
+								reRender="authorizedContent,panelTags,panelComments,panelCategories"
+								style="float:right;">
+								<h:graphicImage value="/images/close.png"
+									alt="Eliminar contenido" />
+							</a4j:commandLink>
+						</h:column>
+					</h:panelGroup>
+				</h:panelGroup>
+
+			</a4j:form>
+
+			<a4j:outputPanel id="panelRating" rendered="#{eventoMB.contentsCount > 0}">
+				<h:column styleClass="Clear">
+					<h:outputText value="Calificación global: " />
+					<h:form id="formGlobalRating">
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="0.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="1" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="1.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="2" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="2.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="3" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="3.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="4" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="4.5" />
+						<input type="radio" class="hover-star {half:true}"
+							name="globalRating" value="5" />
+						<rich:jQuery selector="#formGlobalRating .hover-star"
+							query="rating({}).rating('select', #{eventoMB.selectedContent == null ? 0 : eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
+					</h:form>
+				</h:column>
 			</a4j:outputPanel>
 		</h:panelGroup>
 	</ui:define>
-	<ui:define name="sidebar" rendered="#{eventoMB.validUserForContext and (eventoMB.contentsCount > 0)}">
-		hola
+	<ui:define name="sidebar"
+		rendered="#{eventoMB.validUserForContext and (eventoMB.contentsCount > 0)}">
 		<ul class="xoxo" id="ulSidebar">
 			<li class="multi-sidebar-container">
 			<div
@@ -215,7 +231,8 @@
 			</ul>
 			<div id="s-etiquetados"
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
-			<a4j:outputPanel id="panelTags" rendered="#{eventoMB.contentsCount > 0}">
+			<a4j:outputPanel id="panelTags"
+				rendered="#{eventoMB.contentsCount > 0}">
 				<h:form id="tagPublicProfile">
 					<div id="index-featured2">
 					<ul class="hfeed posts-quick-tag clearfix">
@@ -249,7 +266,8 @@
 
 			<div id="s-comentarios"
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-			<a4j:outputPanel id="panelComments" rendered="#{eventoMB.contentsCount > 0}">
+			<a4j:outputPanel id="panelComments"
+				rendered="#{eventoMB.contentsCount > 0}">
 				<h:panelGroup layout="block" id="commentPanel">
 					<h:form id="formComments">
 						<div id="index-featured2">
@@ -265,19 +283,18 @@
 										value="/UserImageFeeder?username=#{comment.userId}&#38;thb=50"
 										styleClass="attachment-quick-preview-thumb wp-post-image" />
 								</h:commandLink></div>
-								<a4j:commandLink onclick="if (!window.confirm('¿Eliminar el comentario #{comment.text}?')) {return false}"
-									action="#{eventoMB.removeComment}"
-									reRender="panelComments"
+								<a4j:commandLink
+									onclick="if (!window.confirm('¿Eliminar el comentario #{comment.text}?')) {return false}"
+									action="#{eventoMB.removeComment}" reRender="panelComments"
 									style="float:right;">
-									<f:setPropertyActionListener
-										value="#{comment.userId}"
+									<f:setPropertyActionListener value="#{comment.userId}"
 										target="#{eventoMB.commentToRemoveUser}" />
-									<f:setPropertyActionListener
-										value="#{comment.text}"
+									<f:setPropertyActionListener value="#{comment.text}"
 										target="#{eventoMB.commentToRemoveText}" />
-									<h:graphicImage value="/images/close.png" alt="Eliminar comentario" />
+									<h:graphicImage value="/images/close.png"
+										alt="Eliminar comentario" />
 								</a4j:commandLink>
-								
+
 								<h5 class="entry-title"><h:commandLink
 									value="#{comment.userName}" action="verPerfil">
 									<f:setPropertyActionListener value="#{comment.userId}"
@@ -294,11 +311,15 @@
 			</a4j:outputPanel></div>
 			<div id="s-twitter"
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-			<div id="twitter"></div>
-
-			<script type="text/javascript">
+			<h:form id="formTwitter">
+				<h:inputHidden id="hiddenHashtag" value="#{eventoMB.evento.hashtag}" />
+				<div id="index-featured2">
+				<ul id="twitter" class="hfeed posts-quick-tag clearfix">
+				</ul>
+				</div>
+			</h:form> <script type="text/javascript">
 		//<![CDATA[
-        var twitterQuery = encodeURIComponent (document.getElementById("evento:hiddenHashtag").value);
+        var twitterQuery = encodeURIComponent (document.getElementById("formTwitter:hiddenHashtag").value);
         var requestUrl = "http://search.twitter.com/search.json?q=@query&show_user=true&rpp=10&callback=?".
             replace (/@query/g, twitterQuery);
             
@@ -312,13 +333,17 @@
                 var date_diff  = date_now - date_tweet;
                 var hours      = Math.round(date_diff/(1000*60*60));
 
-                var tweet_html = '<div class="tweet_text">';
-                tweet_html    += '<a href="http://www.twitter.com/';
-                tweet_html    += tweet.from_user + '/status/' + tweet.id + '">';
-                tweet_html    += tweet.text + '<\/a><\/div>';
-                tweet_html    += '<div class="tweet_hours">' + hours;
-                tweet_html    += ' hours ago<\/div>';
-
+                var tweet_html = '<li class="post type-post clearfix">';
+				tweet_html += '<div class="entry-thumbnails-tag">';
+                tweet_html += '<a href="' + tweet.from_user + '" target="_blank">';
+                tweet_html += '<img src="' + tweet.profile_image_url + '" style="display:inline;" /></a>'
+				tweet_html += '<h5 class="entry-title"><a href="http://twitter.com/' + tweet.from_user + '" target="_blank">';
+				tweet_html += tweet.from_user + '</a></h5>';
+				tweet_html += '<div class="entry-summary">' + tweet.text + '</div>';
+                tweet_html += '<div class="tweet_hours">' + hours;
+                tweet_html += ' hours ago</div>';
+				tweet_html += '</div>';
+                tweet_html += '</li>';
                 jQuery('#twitter').append(tweet_html);
 			});
         });

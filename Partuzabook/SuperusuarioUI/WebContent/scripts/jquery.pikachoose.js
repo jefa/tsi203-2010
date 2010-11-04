@@ -399,6 +399,8 @@
 	     {
      		this.animating = false;
      		this.image.attr('src',data.source);
+     		this.image.attr('width',640);
+     		this.image.attr('height',480);
      		this.aniDiv.hide();
      		this.anchor.attr('href',data.source);
      		this.anchor.addClass('image-selected');
