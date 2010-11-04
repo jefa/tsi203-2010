@@ -15,5 +15,6 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/ServiciosDatos"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ServiciosUI"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ServiciosNotificaciones"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>
