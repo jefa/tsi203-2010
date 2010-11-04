@@ -72,6 +72,10 @@
 						<f:setPropertyActionListener value="#{eventoMB.eventId}"
 							target="#{subirVideoMB.eventId}" />
 					</h:commandButton>
+					<h:commandButton value="Añadir contenido externo" action="subirContExterno">
+						<f:setPropertyActionListener value="#{eventoMB.eventId}"
+							target="#{subirContExternoMB.eventId}" />
+					</h:commandButton>
 				</h:form></li>
 			</ul>
 			<!-- .posts-quick --></div>
@@ -112,17 +116,20 @@
 								href="javascript:null()"
 								onclick="toggleTab('s-'+#{category.category},this)"> <a4j:commandLink
 								value="#{category.category}" action="#{eventoMB.updateCategory}"
-								reRender="panelThumbs,panelRating,panelTags,panelComments">
+								reRender="panelThumbs,panelRating,panelTags,panelComments,panelCategories">
 								<f:setPropertyActionListener target="#{eventoMB.categoryId}"
 									value="#{category.categoryId}" />
 							</a4j:commandLink> </a></li>
 						</a4j:repeat>
 					</ul>
 					</div>
-					<h:inputHidden id="cntType" value="#{eventoMB.firstContentType}" />
-					<h:inputHidden id="cntUrl" value="#{eventoMB.firstContentUrl}" />
-
+					
+    			
 				</h:form>
+				
+				<h:inputHidden id="cntType" value="#{eventoMB.firstContentType}"/>
+    			<h:inputHidden id="cntUrl" value="#{eventoMB.firstContentUrl}"/>	  
+				
 			</a4j:outputPanel>
 			<a4j:form id="panelThumbs">
 				<div class="pikachoose" style="height: 620px;"><h:inputHidden
@@ -136,9 +143,9 @@
 						var="content">
 						<li><h:graphicImage
 							value="/ContentFeeder?id=#{content.contId}"
-							name="#{content.contId}"
-							onclick="document.getElementById('cntType').setAttribute('value','#{content.type}'); document.getElementById('cntUrl').setAttribute('value','#{content.url}');" />
-						<span>#{content.description}</span></li>
+							name="#{content.contId}" onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}';"/>
+							<span>#{content.description}</span>
+						</li>
 					</a4j:repeat>
 				</ul>
 				<script>

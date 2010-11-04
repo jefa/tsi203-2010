@@ -20,6 +20,13 @@
     PATH="/subirVideo.xhtml" TARGET="rules:#subirVideo.xhtml"
     TITLE="subirVideo" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
+  <PROCESS-ITEM ID="rules:#evento.xhtml:2" NAME="item2"
+   PATH="/evento.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="subirContExterno::#subirContenidoExterno.xhtml" NAME="output"
+    PATH="/subirContenidoExterno.xhtml"
+    TARGET="rules:#subirContenidoExterno.xhtml" TITLE="subirContExterno" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#subirFoto.xhtml" PATH="/subirFoto.xhtml"
   SHAPE="448,689,0,0" model-entity="JSFProcessGroup"/>
@@ -89,4 +96,6 @@
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#busquedaEventos.xhtml"
   PATH="/busquedaEventos.xhtml" SHAPE="240,1505,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#subirContenidoExterno.xhtml"
+  PATH="/subirContenidoExterno.xhtml" SHAPE="480,577,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

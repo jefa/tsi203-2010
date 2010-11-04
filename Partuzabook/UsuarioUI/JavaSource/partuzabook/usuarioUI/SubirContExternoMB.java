@@ -20,17 +20,20 @@ import partuzabook.datatypes.DatatypeYoutubeToken;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.serviciosUI.multimedia.ServicesUploadRemote;
 
-public class SubirVideoMB{
+public class SubirContExternoMB{
 	
 	private static final String SERVICE_UPLOAD = "PartuzabookEAR/ServicesUpload/remote";
 	private static final String SERVICE_EVENT = "PartuzabookEAR/ServicesEvent/remote";
-	private static final String NEXT_URL = "http://localhost:8080/UsuarioUI/YoutubeRedirect";
+	private static final String INPUT_OBLIG = "Campo obligatorio";
+	private static final String NOT_SPACES = "No deben haber espacios en este campo";
 	private static final String TODAS = "Todas";
+	private static final String VIDEO ="V";
+	private static final String PHOTO ="P";
+	
 	
 	private int eventId;
 	private String description;
 	private List<DatatypeCategorySummary> allCategories;
-	//private List<DatatypeCategorySummary> myCategories;
 	
 	private Map<String,String> categoriesToSelect;
 	private List<String> catsSelected;
@@ -38,11 +41,11 @@ public class SubirVideoMB{
 	private String newCat;
 	private List<String> newCatsAux;
 	
-	private String post_url;
-	private String token_id;
-	private String youtubeFormToken;
+	private String type = "P";
+	private String url;
+	private String urlMessage;
 	
-	public SubirVideoMB() {
+	public SubirContExternoMB() {
 	}
 	
 	private Context getContext() throws NamingException {
@@ -72,20 +75,36 @@ public class SubirVideoMB{
 	}
 
 	public String confirmUpload() {
+
 		try {
 			if(getCatsSelected().size() > 0)
 				getCatsSelected().remove(getCatsSelected().size() - 1);
+			
+			urlMessage = null;
+			
+			if(url == null || url.equals("")) {
+				urlMessage = INPUT_OBLIG;
+				return "subirContExterno";
+			} else if(url.contains(" ")) {
+				urlMessage = NOT_SPACES;
+				return "subirContExterno";
+			}
 			
 			FacesContext context = FacesContext.getCurrentInstance();
 			HttpSession session = (HttpSession) context.getExternalContext()
 					.getSession(true);
 			String username = (String) session.getAttribute("username");
-			String youtube_id = (String) session.getAttribute("youtube_id");
 			
 			Context ctx = getContext();
 			ServicesUploadRemote service = (ServicesUploadRemote)ctx.lookup(SERVICE_UPLOAD);
-			int cnt_id = service.confirmUploadVideo(eventId, username, youtube_id, description);
-			//System.out.println(cnt_id);
+			int cnt_id = 0;
+			if(type.equals(PHOTO))
+				cnt_id = service.confirmUploadExternPhoto(eventId, username, description, url);
+			else if(type.equals(VIDEO))
+				cnt_id = service.confirmUploadExternVideo(eventId, username, description, url);
+			else
+				return "subirContExterno";
+			
 			ServicesEventRemote serE = getServicesEvent();
 			
 			//En catsSelected tengo las categorias seleccionadas, verifiquemos que no hayan nombres repetidos, etc
@@ -114,12 +133,15 @@ public class SubirVideoMB{
 			}
 			
 			serE.addCategoryToContent(cnt_id, categoriasParaAgregar);
-			youtubeFormToken = null;
+			url = "";
+			catsSelected = null;
+			description = "";
 			return "verEvento";
+			
 		} catch (NamingException e) {
 			//TODO: Redirigir a una pagina de error
 			e.printStackTrace();
-			return "subirVideo";
+			return "subirContExterno";
 		}
 	}
 
@@ -139,25 +161,7 @@ public class SubirVideoMB{
 		return description;
 	}
 
-	public String getYoutubeFormToken() {
-			
-		if(youtubeFormToken == null || youtubeFormToken.equals("")) {
-			ServicesUploadRemote service = getServicesUpload(); 
-			DatatypeYoutubeToken token = service.getYoutubeToken();
-			youtubeFormToken = "<form action=\"";
-			youtubeFormToken += token.getPost_url();
-			youtubeFormToken +=	"?nexturl=" + NEXT_URL;
-			youtubeFormToken +=	"\" method =\"post\" enctype=\"multipart/form-data\"><input type=\"file\" name=\"file\"/><input type=\"hidden\" name=\"token\" value=\"";
-			youtubeFormToken +=	token.getToken_id();
-			youtubeFormToken +=	"\"/><input type=\"submit\" value=\"go\" /></form>";
-			this.post_url = token.getPost_url() + "?nexturl=" + NEXT_URL;
-			this.token_id = token.getToken_id();
-		}
-		return youtubeFormToken;
-	}
-	
-	private void setYoutubeFormToken(String youtubeFormToken) {}
-	
+
     public ServicesUploadRemote getServicesUpload() {
         try {
 			Context ctx = getContext();
@@ -182,30 +186,12 @@ public class SubirVideoMB{
 		}
     }
 
-	public void setPost_url(String post_url) {
-		this.post_url = post_url;
-	}
-
-	public String getPost_url() {
-		getYoutubeFormToken();
-		return post_url;
-	}
-
-	public void setToken_id(String token_id) {
-		this.token_id = token_id;
-	}
-
-	public String getToken_id() {
-		getYoutubeFormToken();
-		return token_id;
-	}
-	
 	public void setAllCategories(List<DatatypeCategorySummary> allCategories) {
 		this.allCategories = allCategories;
 	}
 
 	public List<DatatypeCategorySummary> getAllCategories() {
-		if(allCategories == null || allCategories.size() == 0) {
+		//if(allCategories == null || allCategories.size() == 0) {
 			//eventId = 1001; //FIXME esta linea es para realizar pruebas. Hay que comentarla para que funcione adecuadamente
 			allCategories = getServicesEvent().getEventDetails(eventId).getContentCategories();
 			int i = 0;
@@ -217,7 +203,7 @@ public class SubirVideoMB{
 				i++;
 			}
 			allCategories.remove(remove);
-		}
+		//}
 		return allCategories;
 	}
 
@@ -292,6 +278,30 @@ public class SubirVideoMB{
 
 	public String getNewCat() {
 		return newCat;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrlMessage(String urlMessage) {
+		this.urlMessage = urlMessage;
+	}
+
+	public String getUrlMessage() {
+		return urlMessage;
 	}
 	
 	
