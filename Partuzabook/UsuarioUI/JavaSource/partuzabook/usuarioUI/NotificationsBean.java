@@ -16,11 +16,13 @@ import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.serviciosNotificaciones.email.PartuzaMailer;
-import partuzabook.utils.StringUtils;
 
 public class NotificationsBean {
 
 	private static final String INPUT_OBLIG = "Campo obligatorio";
+	private static final Integer PAGE_SIZE = new Integer(5);
+	
+	private Integer page;
 
 	private PartuzaMailer mailer = new PartuzaMailer();
 	private ServicesUserRemote servicesUser;
@@ -41,6 +43,7 @@ public class NotificationsBean {
 	
 	private List<DatatypeNotification> sentNotifications;
 	private List<DatatypeNotification> recvNotifications;
+	private List<DatatypeNotification> gralNotifications;
 	private List<DatatypeNotification> notifActive;
 		
 	public NotificationsBean() {
@@ -94,6 +97,15 @@ public class NotificationsBean {
 
 	public void setNotificacionesRecibidas(ArrayList<DatatypeNotification> list) {
 		this.recvNotifications = list;
+	}
+	
+	public List<DatatypeNotification> getNotificacionesGeneral() {
+		this.gralNotifications = getServicesUser().getUpdateNotifications(getUsername());
+		return this.gralNotifications;	
+	}
+
+	public void setNotificacionesGeneral(ArrayList<DatatypeNotification> list) {
+		this.gralNotifications = list;
 	}
 	
 	public boolean getIsUserLogged(){
@@ -226,5 +238,14 @@ public class NotificationsBean {
 			}
 		}
 		return results;
+	}
+	
+	public Integer getPage(){
+		this.page = this.notifActive.size() % PAGE_SIZE;
+		return this.page;
+	}
+
+	public void setPage(Integer page){
+		this.page = page;
 	}
 }
