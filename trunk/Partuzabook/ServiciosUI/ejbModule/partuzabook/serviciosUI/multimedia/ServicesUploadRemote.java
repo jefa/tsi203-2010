@@ -17,5 +17,8 @@ public interface ServicesUploadRemote {
 
 	public DatatypeYoutubeToken getYoutubeToken();
 	public int confirmUploadVideo(int eventId, String creator, String youtube_id, String description);
+	
+	public int confirmUploadExternVideo(int eventId, String creator, String description, String url);
+	public int confirmUploadExternPhoto(int eventId, String creator, String description, String url);
 }
 
