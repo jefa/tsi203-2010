@@ -574,6 +574,9 @@ public class EventMB {
 	}
 
 	public void setHashtag(String hashtag) {
+		if (!hashtag.startsWith("#")) {
+			hashtag = "#" + hashtag.substring(0, hashtag.length() > 15 ? 15 : hashtag.length());
+		}
 		this.hashtag = hashtag;
 	}
 
