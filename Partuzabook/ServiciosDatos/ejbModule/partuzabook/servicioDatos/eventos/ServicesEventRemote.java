@@ -56,6 +56,15 @@ public interface ServicesEventRemote {
 	
 	
 	/**
+	 * Adds new Users as participants to event with evt_id_auto = evt_id. 
+	 * @param evt_id			- id of the event
+	 * @param newParts			- The new participants to add for the event
+	 * */
+	public DatatypeEventSummary addParticipantstoEvent(int evt_id, List<String> newParts)
+	throws EventNotFoundException, UserNotFoundException;
+
+	
+	/**
 	 * Adds new Users as mods to event with evt_id_auto = evt_id. If the user is only a normal user, it transforms to a client.
 	 * @param evt_id			- id of the event
 	 * @param newMods			- The new mods to add for the event
