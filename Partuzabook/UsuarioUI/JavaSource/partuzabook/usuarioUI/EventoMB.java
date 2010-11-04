@@ -1,6 +1,8 @@
 package partuzabook.usuarioUI;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -21,10 +23,13 @@ import partuzabook.servicioDatos.exception.ContentNotFoundException;
 import partuzabook.servicioDatos.exception.EventNotFoundException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
+import partuzabook.serviciosNotificaciones.email.PartuzaMailer;
 import partuzabook.serviciosUI.multimedia.ServicesMultimediaRemote;
 
 public class EventoMB {
 	public static final int PAGE_SIZE = 100;
+	
+	private PartuzaMailer mailer = new PartuzaMailer();
 	
 	private ServicesMultimediaRemote servicesMultimedia;
 	private ServicesEventRemote servicesEvent;
@@ -184,6 +189,16 @@ public class EventoMB {
 			if (comentario != "") {
 				comentario = comentario.replace("<p>", "").replace("</p>","");
 				service.commentContent(contentId, comentario, userName);
+				
+				//TODO: Javier enviar notificación por mail a los moderadores que hay un nuevo comentario
+				//para el contenido en el evento.
+
+				String emailTo = getServicesUser().getNormalUserMailAddress(userName);
+				mailer.sendFormattedMail(userName, getServicesUser().getName(userName),
+						"Se ha agregado comentario a contenido "+contentId, 
+						new SimpleDateFormat().format(new Date()), null, emailTo, null, null, 
+					"Se ha comentado un evento");
+				
 				setContentId(contentId);
 				comentario = "";
 			}
@@ -389,6 +404,13 @@ public class EventoMB {
 			if (suggest != null && suggest != "") {
 				ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
 				service.tagUserInContent(eventId, contentId, userName, suggest, tagX1, tagY1);
+				
+				String emailTo = getServicesUser().getNormalUserMailAddress(userName);
+				mailer.sendFormattedMail(userName, getServicesUser().getName(userName),
+						"Usuario "+userName+" fue taggeado en contenido "+contentId, 
+						new SimpleDateFormat().format(new Date()), null, emailTo, null, null, 
+					"Ud. ha sido taggeado en evento");
+				
 				suggest = null;
 				setContentId(contentId);
 			}

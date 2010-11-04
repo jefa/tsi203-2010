@@ -1,6 +1,7 @@
 package partuzabook.usuarioUI;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -11,42 +12,40 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 
 import partuzabook.datatypes.DatatypeNotification;
+import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.serviciosNotificaciones.email.PartuzaMailer;
+import partuzabook.utils.StringUtils;
 
 public class NotificationsBean {
 
 	private static final String INPUT_OBLIG = "Campo obligatorio";
 
-	//private ServicesNotificationRemote servicesNotif;
+	private PartuzaMailer mailer = new PartuzaMailer();
 	private ServicesUserRemote servicesUser;
 
-	private ArrayList<String> data;
+    private List<DatatypeUser> results;
+    private List<DatatypeUser> users;
+    private String suggest = "";     
 	
 	// General
 	private boolean isUserLogged;
 	private String toUser;
 	private String toUserMessage;					
-	private String subject;
-	private String subjectMessage;
 	private String body;
 	private String bodyMessage;
 	
-	// Para el usuario logueado
 	private String username;
-	private String include = "includes/messageRcvList.xhtml";
+	private String include = "includes/messageCompose.xhtml";
 	
 	private List<DatatypeNotification> sentNotifications;
 	private List<DatatypeNotification> recvNotifications;
 	private List<DatatypeNotification> notifActive;
 		
 	public NotificationsBean() {
-		data = new ArrayList<String>();
-		for (int i=0; i<20; i++)
-			data.add("dato"+i);
 	}
-
+	
 	private String getUsername() {
 		if(this.username == null){
 			FacesContext context = FacesContext.getCurrentInstance();
@@ -68,19 +67,6 @@ public class NotificationsBean {
 		return this.servicesUser;
 	}
 
-	/*private ServicesNotificationRemote getServicesNotification() {
-		try {
-			if (servicesNotif == null){
-				Context ctx = getContext();
-				this.servicesNotif = (ServicesNotificationRemote) ctx.lookup("PartuzabookEAR/ServicesNotification/remote");
-			}
-			return servicesNotif;
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}*/
-
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
 		properties.put("java.naming.factory.initial",
@@ -92,10 +78,6 @@ public class NotificationsBean {
 		return ctx;
 	}
 	
-	public ArrayList<String> getData(){
-		return data;
-	}
-
 	public List<DatatypeNotification> getNotificacionesEnviadas() {
 		this.sentNotifications = getServicesUser().getUpdateNotificationsSent(getUsername());
 		return this.sentNotifications;	
@@ -141,13 +123,17 @@ public class NotificationsBean {
 
 	private void clearMessages() {
 		setBodyMessage("");
-		setSubjectMessage("");
 		setToUserMessage("");
+	}
+	
+	private void clearAllMessages(){
+		clearMessages();
+		this.toUser = "";
+		this.body = "";
 	}
 
 	private boolean noMessages() {
 		return ((toUserMessage == null || toUserMessage.equals("")) &&
-				(subjectMessage == null || subjectMessage.equals("")) &&
 				(bodyMessage == null || bodyMessage.equals("")));
 	}
 	
@@ -156,8 +142,6 @@ public class NotificationsBean {
 		clearMessages();
 		if(toUser == null || toUser.equals(""))
 			toUserMessage = INPUT_OBLIG;
-		if(subject == null || subject.equals(""))
-			subjectMessage = INPUT_OBLIG;
 		if(body == null || body.equals(""))
 			bodyMessage = INPUT_OBLIG;
 		
@@ -168,9 +152,10 @@ public class NotificationsBean {
 					getUsername(), toUser, Notification.MAIL_NOTIF_TYPE, body);
 				
 				String emailTo = getServicesUser().getNormalUserMailAddress(toUser);
-				
-				if (PartuzaMailer.sendMail(null, emailTo, null, null, 
-						subject, body, "text/plain")){
+				if (mailer.sendFormattedMail(notif.userFrom, getServicesUser().getName(notif.userFrom),
+						notif.text, notif.formattedDate, null, emailTo, null, null, 
+						"Ha recivido un mensaje privado")){
+					clearAllMessages();
 					return "okay";
 				}
 			} catch (Exception e) {
@@ -182,14 +167,6 @@ public class NotificationsBean {
 		}
 	}
 	
-	public String getSubject() {
-		return subject;
-	}
-
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-
 	public String getToUser() {
 		return toUser;
 	}
@@ -214,14 +191,6 @@ public class NotificationsBean {
 		this.toUserMessage = toUserMessage;
 	}
 
-	public String getSubjectMessage() {
-		return subjectMessage;
-	}
-
-	public void setSubjectMessage(String subjectMessage) {
-		this.subjectMessage = subjectMessage;
-	}
-
 	public String getBodyMessage() {
 		return bodyMessage;
 	}
@@ -238,4 +207,24 @@ public class NotificationsBean {
 		this.notifActive = notifActive;
 	}
 
+	private List<DatatypeUser> getUsers(){
+		if (this.users == null){
+			this.users = getServicesUser().findAllNormalUsers();
+		}
+		return this.users;
+	}
+   
+	public List<DatatypeUser> autocomplete(Object suggestParam) {
+		suggest = ((String)suggestParam).toLowerCase();
+		results = new ArrayList<DatatypeUser>();
+		Iterator<DatatypeUser> it = getUsers().iterator();
+		while (it.hasNext()) {
+			DatatypeUser user = (DatatypeUser) it.next();
+			if (user.username.toLowerCase().contains(suggest)
+					|| user.name.toLowerCase().contains(suggest)) {
+				results.add(user);
+			}
+		}
+		return results;
+	}
 }
