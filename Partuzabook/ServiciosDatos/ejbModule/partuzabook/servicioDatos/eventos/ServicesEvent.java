@@ -455,7 +455,19 @@ public class ServicesEvent implements ServicesEventRemote {
 		}
 		List<String> result = new ArrayList<String>();
 		Event event = getEvent(eventID);
-		NormalUser user = normalUserDao.findByID(username);
+		User user;
+		NormalUser nUser = normalUserDao.findByID(username);
+		if (nUser == null) {
+			// Try if user is Admin
+			Admin admin = adminDao.findByID(username);
+			if (admin == null){
+				throw new UserNotFoundException();
+			}
+			user = admin;
+		} else {
+			user = nUser;
+		}
+		
 		Iterator<DataTypeFile> it = files.iterator();
 		while (it.hasNext()) {
 			DataTypeFile file = (DataTypeFile) it.next();

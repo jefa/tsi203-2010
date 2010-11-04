@@ -20,6 +20,7 @@ import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
+import partuzabook.servicioDatos.exception.EventNotFoundException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.serviciosUI.multimedia.ServicesMultimediaRemote;
 
@@ -247,6 +248,23 @@ public class EventoMB {
 			e.printStackTrace();
 		}
 	}
+	
+	public void removeContent() {
+		try {
+			getServicesEvent().removeContentFromEvent(eventId, contentId, userName);
+			setCategoryId(getCategoryId());
+		} catch (EventNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ContentNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 
 	public Integer getPage(){
 		//final Integer index = contentsCategory.getContents().indexOf(this.content);

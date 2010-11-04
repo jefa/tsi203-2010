@@ -84,7 +84,7 @@
 						<a4j:commandButton value="Adelante" action="#{eventoMB.moverUnaPosAdelante}" reRender="panelThumbs, panelContent"/>
 					</a4j:outputPanel>
 				
-					<a4j:commandButton value="Publicar Album" action="#{eventoMB.finalizarAlbum}"/>
+					<a4j:commandButton value="Publicar Album" onclick="if (!window.confirm('¿Confirma que desea publicar el Album? Una vez finalizado no podrá editarse')) {return false}" action="#{eventoMB.finalizarAlbum}"/>
 				
 				</h:form>
 			</a4j:outputPanel>

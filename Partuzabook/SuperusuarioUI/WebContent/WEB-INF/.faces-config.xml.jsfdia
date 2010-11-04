@@ -70,6 +70,18 @@
   SHAPE="240,833,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:#evento.xhtml:0" NAME="item"
    PATH="/evento.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="subirFoto::#subirFoto.xhtml" NAME="output"
+    PATH="/subirFoto.xhtml" TARGET="rules:#subirFoto.xhtml"
+    TITLE="subirFoto" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+  <PROCESS-ITEM ID="rules:#evento.xhtml:1" NAME="item1"
+   PATH="/evento.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="subirVideo::#subirVideo.xhtml" NAME="output"
+    PATH="/subirVideo.xhtml" TARGET="rules:#subirVideo.xhtml"
+    TITLE="subirVideo" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+  <PROCESS-ITEM ID="rules:#evento.xhtml:2" NAME="item2"
+   PATH="/evento.xhtml" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID=":modificarAlbum:#album.xhtml" NAME="output"
     PATH="/album.xhtml" TARGET="rules:#album.xhtml"
     TITLE="modificarAlbum:[any]" model-entity="JSFProcessItemOutput"/>
@@ -98,4 +110,8 @@
     TARGET="rules:#busquedaEventos.xhtml" TITLE="buscar" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#subirVideo.xhtml" PATH="/subirVideo.xhtml"
+  SHAPE="560,1233,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#subirFoto.xhtml" PATH="/subirFoto.xhtml"
+  SHAPE="560,1057,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>
