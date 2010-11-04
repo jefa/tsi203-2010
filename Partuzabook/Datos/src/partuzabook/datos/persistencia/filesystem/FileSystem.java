@@ -3,19 +3,21 @@ package partuzabook.datos.persistencia.filesystem;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import org.apache.commons.lang.SystemUtils;
-
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Properties;
 
 import javax.ejb.Stateless;
 import javax.imageio.ImageIO;
+
+import org.apache.commons.lang.SystemUtils;
 
 import partuzabook.utils.CreateThumbnail;
 
@@ -142,5 +144,41 @@ public class FileSystem implements FileSystemLocal {
 			// e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public String saveExternalFile(String dirlocal, String dirWeb) {
+		
+		try {
+			String uuid = java.util.UUID.randomUUID().toString();
+			String path = getBasePath();
+			int ind = dirWeb.split("\\.").length - 1;
+			String mime = dirWeb.split("\\.")[ind];
+			String extension = "." + mime;
+			
+			new File(path + dirlocal).mkdirs();
+		
+		
+			URL url = new URL(dirWeb);
+			URLConnection urlCon = url.openConnection();
+			
+			InputStream is = urlCon.getInputStream();
+			FileOutputStream fos = new FileOutputStream(path + dirlocal + uuid + extension);
+			
+			// Lectura de la foto de la web y escritura en fichero local
+			byte[] array = new byte[1000];
+			int leido = is.read(array);
+			while (leido > 0) {
+				fos.write(array, 0, leido);
+				leido = is.read(array);
+			}
+
+			is.close();
+			fos.close();
+			
+			return dirlocal + uuid + extension;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 }

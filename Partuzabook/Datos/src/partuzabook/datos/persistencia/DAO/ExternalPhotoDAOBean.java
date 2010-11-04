@@ -9,11 +9,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import partuzabook.datos.persistencia.beans.Comment;
-import partuzabook.datos.persistencia.beans.CommentPK;
+import partuzabook.datos.persistencia.beans.ExternalPhoto;
 
 @Stateless
-public class CommentDAOBean extends JpaDao<CommentPK, Comment> implements CommentDAO {
+public class ExternalPhotoDAOBean extends JpaDao<Integer, ExternalPhoto> implements ExternalPhotoDAO {
 	
 	@PersistenceContext
 	EntityManager em;
@@ -21,9 +20,9 @@ public class CommentDAOBean extends JpaDao<CommentPK, Comment> implements Commen
 	SessionContext sc;
 	
 	@Override
-	public List<Comment> findAll() {
-		Query namedQuery = em.createNamedQuery("Comment.findAll");
-		return (List<Comment>)namedQuery.getResultList();
+	public List<ExternalPhoto> findAll() {
+		Query namedQuery = em.createNamedQuery("ExternalPhoto.findAll");
+		return (List<ExternalPhoto>)namedQuery.getResultList();
 	}
 
 
