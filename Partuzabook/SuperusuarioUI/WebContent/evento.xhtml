@@ -95,7 +95,7 @@
 			<h:commandButton value="Enviar solicitud" />
 		</h:panelGroup>
 		<h:panelGroup id="authorizedContent"
-			rendered="#{eventoMB.validUserForContext || eventoMB.hasAlbum}">
+			rendered="#{eventoMB.validUserForContext || (eventoMB.hasAlbum and eventoMB.isAlbumFinalized)}">
 			<a4j:outputPanel id="panelCategories">
 				<h:form id="formCategory">
 					<div 
@@ -135,7 +135,7 @@
 				<div class="pikachoose" style="height: 620px;"><h:inputHidden
 					id="selectContentId" value="#{eventoMB.contentId}" /> <a4j:commandButton
 					id="btnSelectThumb" action="#{eventoMB.updateCategory}"
-					reRender="panelRating,panelTags,panelComments"
+					reRender="panelRating,panelTags,panelComments, panelThumbs"
 					style="display:none;">
 				</a4j:commandButton>
 				<ul id="pikame" class="jcarousel-skin-pika">
