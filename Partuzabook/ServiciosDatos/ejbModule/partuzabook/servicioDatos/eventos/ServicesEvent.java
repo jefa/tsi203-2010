@@ -826,6 +826,17 @@ public class ServicesEvent implements ServicesEventRemote {
 				throw new UserNotFoundException();
 			newUsers.add(user);
 		}
+		
+		// Verifico que todos sean participantes del evento. En caso negativo, los agrego.
+		if(event.getMyParticipants() == null)
+			event.setMyParticipants(new ArrayList<NormalUser>());
+		for(Iterator<NormalUser> it = newUsers.iterator(); it.hasNext(); ) {
+			NormalUser currentUser = it.next();
+			if (!event.getMyParticipants().contains(currentUser)) {
+				event.getMyParticipants().add(currentUser);
+			}
+		}
+
 		//Generamos una lista con los nombres de los moderados viejos
 		List<String> actualMods = new ArrayList<String>();
 		for(Iterator<NormalUser> it = event.getMyMods().iterator(); it.hasNext(); ) {
