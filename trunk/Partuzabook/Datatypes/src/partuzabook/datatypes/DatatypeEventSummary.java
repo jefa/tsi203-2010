@@ -25,7 +25,7 @@ public class DatatypeEventSummary implements Serializable{
 
 	private String eventCategory;
 	
-	private int coverId;
+	private Integer coverId;
 	
 	private String hashtag;
 	
@@ -98,11 +98,11 @@ public class DatatypeEventSummary implements Serializable{
 		this.eventCategory = eventCategory;
 	}
 	
-	public void setCoverId(int coverId) {
+	public void setCoverId(Integer coverId) {
 		this.coverId = coverId;
 	}
 
-	public int getCoverId() {
+	public Integer getCoverId() {
 		return coverId;
 	}
 

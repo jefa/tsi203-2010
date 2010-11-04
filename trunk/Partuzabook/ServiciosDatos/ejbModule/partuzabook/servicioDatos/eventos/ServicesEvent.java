@@ -499,12 +499,18 @@ public class ServicesEvent implements ServicesEventRemote {
 				categoryTodas.setContents(new ArrayList<Content>());
 			categoryTodas.getContents().add(content);
 			contentDao.persist(content);
+			if (event.getCover() == null) {
+				event.setCover(content);
+			}
 			result.add(content.getCntIdAuto() + "");
 		}
 		return result;
 	}
 
 	public byte[] getContent(String username, int contentID, String thumbnail) {
+		if (contentID == -1) {
+			return fileSystem.readFile("imagen_no_disponible.jpg", thumbnail);
+		}
 		Content content = getContentAndVerifyPermission(username, contentID);
 		if (content instanceof Photo) {
 			return fileSystem.readFile(content.getUrl(), thumbnail);
@@ -592,17 +598,9 @@ public class ServicesEvent implements ServicesEventRemote {
 	public void commentContent(int contentID, String textComment,
 			String userCommenter) throws Exception {		
 		// Verify existence of content
-		Content cont = (Content) contentDao.findByID(contentID);
-		if (cont == null) {
-			throw new ContentNotFoundException();
-		}
-		//TODO verify that user is related to event?
+		Content cont = getContentAndVerifyPermission(userCommenter, contentID);
 		// Verify existence of user who is commenting
-		User user = (User) normalUserDao.findByID(userCommenter);
-		if (user == null || (!(user instanceof NormalUser))) {
-			throw new UserNotFoundException();
-		}
-		NormalUser nUser = (NormalUser) user;
+		NormalUser nUser = normalUserDao.findByID(userCommenter);
 		// Create Comment
 		Comment com = new Comment();
 		com.setContent(cont);
@@ -616,6 +614,9 @@ public class ServicesEvent implements ServicesEventRemote {
 		com.setRegDate(now);
 		com.setText(textComment);
 		com.setUser(nUser);
+		
+		//TODO: Javier enviar notificación por mail a los moderadores que hay un nuevo comentario
+		//para el contenido en el evento.
 		
 		commentDao.persist(com);
 	}
@@ -686,7 +687,8 @@ public class ServicesEvent implements ServicesEventRemote {
 			throw new ContentNotFoundException();
 		}
 		// El cover es publico
-		if (content.getEvent().getCover().equals(content)) {
+		if (content.getEvent().getCover() != null &&
+				content.getEvent().getCover().equals(content)) {
 			return content;
 		}
 		// Si es del album tambien es publico
