@@ -24,10 +24,9 @@ public class EventMB {
 	private static final String SERVICE_EVENT = "PartuzabookEAR/ServicesEvent/remote";
 	private static final String SERVICE_USER = "PartuzabookEAR/ServicesUser/remote";
 	private static final String INPUT_OBLIG = "Campo obligatorio";
-	private static final String INPUT_NOT_ZERO = "La duraciï¿½n no puede ser 0";
 	private static final String MOD_NOT_FOUND = "No existe el usuario ";
-	private static final String NO_MODS = "Se asignï¿½ el evento como moderado, pero no se establecieron moderadores.";
-	private static final String EVENT_NOT_FOUND = "No se encontrï¿½ el evento";
+	private static final String NO_MODS = "Se asignó el evento como moderado, pero no se establecieron moderadores.";
+	private static final String EVENT_NOT_FOUND = "No se encontró el evento";
 	
 	private String name;
 	private String nameMessage;
@@ -102,7 +101,7 @@ public class EventMB {
 		if(description == null || description.equals(""))
 			descriptionMessage = INPUT_OBLIG;
 		if(duration == null || duration.equals(""))
-			durationMessage = INPUT_NOT_ZERO;
+			durationMessage = INPUT_OBLIG;
 		if(address == null || address.equals(""))
 			addressMessage = INPUT_OBLIG;
 		
@@ -419,7 +418,7 @@ public class EventMB {
 		if(description == null || description.equals(""))
 			descriptionMessage = INPUT_OBLIG;
 		if(duration == null || duration.equals(""))
-			durationMessage = INPUT_NOT_ZERO;
+			durationMessage = INPUT_OBLIG;
 		if(address == null || address.equals(""))
 			addressMessage = INPUT_OBLIG;
 		
