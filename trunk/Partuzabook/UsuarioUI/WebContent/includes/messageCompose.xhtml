@@ -42,13 +42,13 @@
 	                    usingSuggestObjects="true" >
 	                    
 	                    <h:column>
-	                        <h:graphicImage value="/UserImageFeeder?username=#{result.username}&#38;thb=50" />
+	                        <h:graphicImage value="/UserImageFeeder?username=#{result.username}&#38;thb=30" />
 	                    </h:column>
 	                    <h:column>
 	                        <h:outputText value="#{result.name}" />
 	                    </h:column>
 	                    <h:column>
-	                        <h:outputText value=" - #{result.username}" style="font-style:italic" />
+	                        <h:outputText value=" #{result.username}" style="font-style:italic" />
 	                    </h:column>
 	                </rich:suggestionbox>
 					
