@@ -4,10 +4,8 @@
     <mbean code="org.jboss.mail.MailService" name="jboss:service=Mail">  
      <attribute name="JNDIName">java:/Mail</attribute>  
    
-     <!-- Replace "someuser@gmail.com" in the next line with your GMail address -->  
      <attribute name="User">partuzabook</attribute>  
    
-     <!-- Replace "SecretPasswordGoesHere" in the next line with your GMail password -->  
      <attribute name="Password">departuza</attribute>  
    
      <attribute name="Configuration">  
