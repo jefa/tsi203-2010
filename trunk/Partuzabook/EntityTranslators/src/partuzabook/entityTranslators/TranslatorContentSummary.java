@@ -2,8 +2,9 @@ package partuzabook.entityTranslators;
 
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datos.persistencia.beans.Content;
+import partuzabook.datos.persistencia.beans.ExternalPhoto;
+import partuzabook.datos.persistencia.beans.ExternalVideo;
 import partuzabook.datos.persistencia.beans.Photo;
-import partuzabook.datos.persistencia.beans.SelfContent;
 import partuzabook.datos.persistencia.beans.Video;
 
 public class TranslatorContentSummary implements ITranslatable {
@@ -15,16 +16,18 @@ public class TranslatorContentSummary implements ITranslatable {
 		dat.setEventId(ent.getEvent().getEvtIdAuto());
 		// Set type
 		if (ent instanceof Photo){
-			dat.setType(DatatypeContent.PHOTO);
-			dat.setDescription(((SelfContent)(ent)).getDescription());
+			dat.setType(DatatypeContent.PHOTO);			
 		}
 		else if (ent instanceof Video) {
 			dat.setType(DatatypeContent.VIDEO);
-			dat.setDescription(((SelfContent)(ent)).getDescription());
 		}
-		else {
-			dat.setType(DatatypeContent.EXTERNAL);
+		else if (ent instanceof ExternalPhoto){
+			dat.setType(DatatypeContent.EXTERNAL_PHOTO);
 		}
+		else if (ent instanceof ExternalVideo){
+			dat.setType(DatatypeContent.EXTERNAL_VIDEO);
+		}
+		dat.setDescription(ent.getDescription());
 		dat.setUrl(ent.getUrl());
 		return dat;
 	}
