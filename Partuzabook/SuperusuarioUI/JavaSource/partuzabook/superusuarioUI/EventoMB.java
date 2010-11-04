@@ -415,9 +415,9 @@ public class EventoMB {
 
 				String emailTo = getServicesUser().getNormalUserMailAddress(userName);
 				mailer.sendFormattedMail(userName, getServicesUser().getName(userName),
-						"Usuario "+userName+" fue taggeado en contenido "+contentId, 
+						"Usuario "+userName+" fue etiquetado en contenido "+contentId, 
 						new SimpleDateFormat().format(new Date()), null, emailTo, null, null, 
-					"Ud. ha sido taggeado en evento");
+					"Ud. ha sido etiquetado en un evento");
 				
 				suggest = null;
 				setContentId(contentId);
