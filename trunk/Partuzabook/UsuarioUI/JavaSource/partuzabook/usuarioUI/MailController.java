@@ -40,7 +40,7 @@ public class MailController extends HttpServlet {
 		          + "Wanna play a game of golf?" + "\n\n"
 			  + "Please confirm: https://localhost:8443/myapp/confirm?token="
 			  + mailToken + "\n\n" + "-Golf USA";
-		 PartuzaMailer.sendMail(null, "javier.fradiletti@sabre.com", null, null, "subject prueba",
+		 new PartuzaMailer().sendMail(null, "javier.fradiletti@sabre.com", null, null, "subject prueba",
 				body, PLAIN);
 		//mailer.sendMsg("recipient@gmail.com", "Golf Invitation!", body);
 		out.println("Message Sent");
