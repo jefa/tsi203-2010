@@ -60,7 +60,7 @@ public class DatatypeUser implements Serializable{
 		this.imagePath = imagePath;
 	}
 	
-	public String getImagePathl() {
+	public String getImagePath() {
 		return imagePath;
 	}
 }
