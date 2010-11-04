@@ -41,7 +41,6 @@
 		<script type="text/javascript" src="scripts/jquery.pikachoose.js"></script>
 		<script type="text/javascript" src="scripts/jquery.jcarousel.js"></script>
 		<script type="text/javascript" src="scripts/jquery.lightbox-0.5.js"></script>
-		<script type="text/javascript" src="scripts/googlemaps.js"></script>
 
 		<h:panelGroup id="panelEvento">
 			<div id="index-featured2">
@@ -116,7 +115,7 @@
 								href="javascript:null()"
 								onclick="toggleTab('s-'+#{category.category},this)"> <a4j:commandLink
 								value="#{category.category}" action="#{eventoMB.updateCategory}"
-								reRender="panelThumbs,panelRating,panelTags,panelComments,panelCategories">
+								reRender="authorizedContent,panelTags,panelComments">
 								<f:setPropertyActionListener target="#{eventoMB.categoryId}"
 									value="#{category.categoryId}" />
 							</a4j:commandLink> </a></li>
@@ -163,7 +162,7 @@
 				<a4j:commandLink rendered="#{eventoMB.userIsModerator}"
 					onclick="if(!confirm('¿Eliminar el contenido?'))return false;"
 					value="Eliminar contenido" action="#{eventoMB.removeContent}"
-					reRender="panelThumbs,panelRating,panelTags,panelComments"
+					reRender="authorizedContent,panelTags,panelComments"
 					style="float:right;">
 					<h:graphicImage value="/images/close.png" alt="Eliminar contenido" />
 				</a4j:commandLink>
@@ -230,7 +229,7 @@
 						<input type="radio" class="hover-star {half:true}"
 							name="globalRating" value="5" />
 						<rich:jQuery selector="#formGlobalRating .hover-star"
-							query="rating({}).rating('select', #{eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
+							query="rating({}).rating('select', #{eventoMB.selectedContent == null ? 0 : eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
 					</h:form>
 				</h:column>
 			</a4j:outputPanel>

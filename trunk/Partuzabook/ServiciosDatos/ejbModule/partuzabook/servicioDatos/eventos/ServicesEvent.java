@@ -349,7 +349,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		// Obtain a set of all users related to the event 
 		List<NormalUser> allUsersInEvent = event.getMyParticipants();
 		if (allUsersInEvent.isEmpty()){
-			return null;
+			return TranslatorCollection.translateNormalUser(allUsersInEvent); 
 		} 
 
 		// Filter users that have already been tagged in this content    	
@@ -1218,7 +1218,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		content.setEvent(event);
 		content.setUser(user);
 		content.setRegDate(new Timestamp(new java.util.Date().getTime()));
-		//Debo modificar la url para que quede como las demás. http://www.youtube.com/watch?v=sdV4xpTiS1s&feature=topvideos
+		//Debo modificar la url para que quede como las demï¿½s. http://www.youtube.com/watch?v=sdV4xpTiS1s&feature=topvideos
 		String urlToSave = YOUTUBE_PRE + url.substring(31,42) + YOUTUBE_POS;
 		content.setUrl(urlToSave);
 		
