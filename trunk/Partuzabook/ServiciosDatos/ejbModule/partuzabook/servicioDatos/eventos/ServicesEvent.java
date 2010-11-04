@@ -768,6 +768,46 @@ public class ServicesEvent implements ServicesEventRemote {
 		return (DatatypeEventSummary)new TranslatorEventSummary().translate(evt);
 	}
 
+	public DatatypeEventSummary addParticipantstoEvent(int evt_id, List<String> newParts)
+	throws EventNotFoundException, UserNotFoundException {
+
+		Event event = getEvent(evt_id);
+
+		if(event.getMyParticipants() == null)
+			event.setMyParticipants(new ArrayList<NormalUser>());
+		
+		//Verificamos que existan todos los usuarios
+		List<NormalUser> newUsers = new ArrayList<NormalUser>();
+		for(Iterator<String> it = newParts.iterator(); it.hasNext(); ) {
+			String username = it.next();
+			NormalUser user = normalUserDao.findByID(username);
+			if(user == null)
+				throw new UserNotFoundException();
+			newUsers.add(user);
+		}
+		
+		//Generamos una lista con los nombres de los participantes viejos
+		List<String> actualParts = new ArrayList<String>();
+		for(Iterator<NormalUser> it = event.getMyParticipants().iterator(); it.hasNext(); ) {
+			actualParts.add(it.next().getUsername());
+		}
+		
+		//Agregamos los nuevos participantes 
+		for(Iterator<NormalUser> it = newUsers.iterator(); it.hasNext(); ) {
+			NormalUser newPart = it.next();
+			if(!actualParts.contains(newPart.getUsername())){
+				event.getMyParticipants().add(newPart);
+				newPart.getMyModeratedEvents().add(event);
+				//nUserDao.persist(newMod);
+			}
+		}
+
+		eventDao.persist(event);
+
+		return (DatatypeEventSummary)new TranslatorEventSummary().translate(event);
+	}
+
+	
 	public DatatypeEventSummary addModtoEvent(int evt_id, List<String> newMods)
 	throws EventNotFoundException, UserNotFoundException {
 
