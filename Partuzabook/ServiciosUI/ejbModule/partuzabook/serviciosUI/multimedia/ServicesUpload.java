@@ -292,5 +292,15 @@ public class ServicesUpload implements ServicesUploadRemote {
 			String youtube_id, String description) {
 		return servicesEvent.uploadYoutubeVideo(eventId, creator, youtube_id, description);
 		
+	}
+
+	public int confirmUploadExternVideo(int eventId, String creator,
+			String description, String url) {
+		return servicesEvent.uploadExternVideo(eventId, creator, description, url);
+	}
+
+	public int confirmUploadExternPhoto(int eventId, String creator,
+			String description, String url) {
+		return servicesEvent.uploadExternPhoto(eventId, creator, description, url);
 	}	
 }
