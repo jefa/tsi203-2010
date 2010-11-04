@@ -113,6 +113,7 @@ public class SubirFotoMB{
 	
 	public String confirmUpload() {
 		//Actualizamos las categorias de los files
+		fileNewCat = filesAux.size() + "";
 		addCat();
 		
 		ServicesUploadRemote servUpload = getServicesUpload();
@@ -275,12 +276,38 @@ public class SubirFotoMB{
 	}
 	
 	public void addCat() {
-		DatatypeFileAux file = filesAux.get(Integer.parseInt(fileNewCat));
-		if(!file.getCatAux().equals("Nueva categoria"))
-			file.getCatsSelected().add(file.getCatAux());
-		else
-			file.getCatsSelected().add("");
 		
+		for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
+			DatatypeFileAux file = it.next();
+			/*
+			if(!file.getCatAux().equals("Nueva categoria"))
+				file.getCatsSelected().add(file.getCatAux());
+			else
+				file.getCatsSelected().add("");
+			*/
+			if(file.getNewCat() != null && !file.getNewCat().equals("")) {
+				boolean agregar = true;
+				for(Iterator<String> it2 = file.getCatsSelected().iterator(); it2.hasNext(); ){
+					if(it2.next().equalsIgnoreCase(file.getNewCat()))
+						agregar = false;
+				}
+				if(agregar) {
+					file.getCatsSelected().add(file.getNewCat());
+					file.getCatsSelected().remove("");
+				}
+				file.setNewCat("");
+			}
+		}
+		try {
+			DatatypeFileAux file = filesAux.get(Integer.parseInt(fileNewCat));
+			if(file != null) {
+				if(!file.getCatAux().equals("Nueva categoria"))
+					file.getCatsSelected().add(file.getCatAux());
+				else
+					file.getCatsSelected().add("");
+			}
+		} catch(IndexOutOfBoundsException ioub) {}
+		/*
 		if(file.getNewCat() != null && !file.getNewCat().equals("")) {
 			boolean agregar = true;
 			for(Iterator<String> it = file.getCatsSelected().iterator(); it.hasNext(); ){
@@ -293,6 +320,8 @@ public class SubirFotoMB{
 			}
 			file.setNewCat("");
 		}
+		
+		*/
 		
 		getCategoriesToSelect();
 	}

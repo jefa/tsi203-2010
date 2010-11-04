@@ -131,7 +131,7 @@ public class EventoMB {
 	public void setSelectedCategory(DatatypeCategory selectedCategory) {
 		this.selectedCategory = selectedCategory;
 		setContentsCount(this.selectedCategory.getContents().size());
-		if (getContentsCount() > 0) {
+		if(getContentsCount() > 0) {
 			setContentId(selectedCategory.getContents().get(0).getContId());
 			setFirstContentType(selectedCategory.getContents().get(0).getType() + "");
 			setFirstContentUrl(selectedCategory.getContents().get(0).getUrl());
@@ -574,7 +574,7 @@ public class EventoMB {
 	}
 
 	public void setFirstContentType(String firstContentType) {
-		//this.firstContentType = firstContentType;
+		this.firstContentType = firstContentType;
 	}
 
 	public String getFirstContentType() {
@@ -582,7 +582,7 @@ public class EventoMB {
 	}
 
 	public void setFirstContentUrl(String firstContentUrl) {
-		//this.firstContentUrl = firstContentUrl;
+		this.firstContentUrl = firstContentUrl;
 	}
 
 	public String getFirstContentUrl() {
