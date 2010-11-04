@@ -7,29 +7,43 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:richx="http://richfaces.org/richx">
 	
+	<style>
+		.hideOnLoad {
+		    display: none;
+		}
+	</style>
+	
+	<script>
+		//function toggleDetails(link, show) {
+		function toggleDetails(link, show) {
+			//alert ("hola: "+(show ? 'block' : 'none'));
+		    //var elementId = determineItSomehowBasedOnGenerated(link.id);
+		    document.getElementById('messagePanel').style.display = (show ? 'block' : 'none');
+		}
+	</script>
+	
 	<rich:panel >
 	    <f:facet name="header">
 	    </f:facet>
 	    <h:form>
-		    <rich:dataGrid value="#{notificationsBean.notifActive}" var="notif" columns="1" elements="5" width="600px">
+		    <rich:dataGrid id="msgList" value="#{notificationsBean.notifActive}" var="notif" columns="1" elements="5" width="600px">
 		        <rich:panel bodyClass="pbody">
-		            <f:facet name="header3">
-		                <h:outputText value="aca iria algo :))"></h:outputText>
-		            </f:facet>
-		            <h:panelGrid columns="2">
-		                <h:outputText value="Fecha: " styleClass="label"></h:outputText>
-		                <h:outputText value="#{notif.formattedDate}" />
-		                <h:outputText value="From: " styleClass="label"></h:outputText>
-		                <h:outputText value="#{notif.userFrom}" />
-		                <h:outputText value="Message: " styleClass="label" style="colspan='2'"></h:outputText>
+	                <h:outputText value="Fecha: " styleClass="label"></h:outputText>
+	                <h:outputText value="#{notif.formattedDate}" /><br />
+	                <h:outputText value="From: " styleClass="label"></h:outputText>
+	                <h:outputText value="#{notif.userFrom}" /><br />
 		                
-		                <h:outputText value="#{notif.text}" />
-		            </h:panelGrid>
+					<a4j:outputPanel id="messagePanel" >
+						<h:outputText value="Message: " styleClass="label"/>
+						<h:outputText value="#{notif.text}" />
+					</a4j:outputPanel><br />
+					<h:outputLink onclick="toggleDetails(this, true); return false;">show</h:outputLink>
+					<h:outputLink onclick="toggleDetails(this, false); return false;">hide</h:outputLink>					
+					
 		        </rich:panel>
-		        <f:facet name="footer2">
-		            <rich:datascroller></rich:datascroller>
-		        </f:facet>
 		    </rich:dataGrid>
+			<rich:datascroller align="left" for="msgList" maxPages="20"
+	            page="#{notificationsBean.page}" id="sc" />
 	    </h:form>
 	</rich:panel>
 	
