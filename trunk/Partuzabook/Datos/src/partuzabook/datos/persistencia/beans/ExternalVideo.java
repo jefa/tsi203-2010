@@ -6,11 +6,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 @Entity
-@DiscriminatorValue("E")
+@DiscriminatorValue("W")
 @NamedQueries({
-	@NamedQuery(name = "ExternalContent.findAll", query = "SELECT o FROM ExternalContent o")
+	@NamedQuery(name = "ExternalVideo.findAll", query = "SELECT o FROM ExternalVideo o")
 	})
-public class ExternalContent extends Content {
+public class ExternalVideo extends Content {
 	private static final long serialVersionUID = 1L;
 
 }

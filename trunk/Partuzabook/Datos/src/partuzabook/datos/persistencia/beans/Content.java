@@ -60,6 +60,8 @@ public abstract class Content implements Serializable {
 	@Column(name="cnt_id_auto")
 	private Integer cntIdAuto;
 
+	private String description;
+	
 	@Column(name="reg_date")
 	private Timestamp regDate;
 
@@ -110,6 +112,14 @@ public abstract class Content implements Serializable {
 
 	public void setCntIdAuto(Integer cntIdAuto) {
 		this.cntIdAuto = cntIdAuto;
+	}
+	
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	public Timestamp getRegDate() {

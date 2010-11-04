@@ -9,10 +9,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import partuzabook.datos.persistencia.beans.ExternalContent;
+import partuzabook.datos.persistencia.beans.ExternalVideo;
 
 @Stateless
-public class ExternalContentDAOBean extends JpaDao<Integer, ExternalContent> implements ExternalContentDAO {
+public class ExternalVideoDAOBean extends JpaDao<Integer, ExternalVideo> implements ExternalVideoDAO {
 	
 	@PersistenceContext
 	EntityManager em;
@@ -20,9 +20,9 @@ public class ExternalContentDAOBean extends JpaDao<Integer, ExternalContent> imp
 	SessionContext sc;
 	
 	@Override
-	public List<ExternalContent> findAll() {
-		Query namedQuery = em.createNamedQuery("ExternalContent.findAll");
-		return (List<ExternalContent>)namedQuery.getResultList();
+	public List<ExternalVideo> findAll() {
+		Query namedQuery = em.createNamedQuery("ExternalVideo.findAll");
+		return (List<ExternalVideo>)namedQuery.getResultList();
 	}
 
 
