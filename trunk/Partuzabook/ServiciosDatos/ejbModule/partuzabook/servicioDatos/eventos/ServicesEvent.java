@@ -31,6 +31,8 @@ import partuzabook.datos.persistencia.DAO.ContentDAO;
 import partuzabook.datos.persistencia.DAO.EventDAO;
 import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.DAO.EvtCategoryDAO;
+import partuzabook.datos.persistencia.DAO.ExternalPhotoDAO;
+import partuzabook.datos.persistencia.DAO.ExternalVideoDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.DAO.RatingDAO;
@@ -44,6 +46,8 @@ import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.EvtCategory;
+import partuzabook.datos.persistencia.beans.ExternalPhoto;
+import partuzabook.datos.persistencia.beans.ExternalVideo;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
 import partuzabook.datos.persistencia.beans.Photo;
@@ -95,6 +99,9 @@ public class ServicesEvent implements ServicesEventRemote {
 	private EvtCategoryDAO eventCategoryDao;
 	private AlbumDAO albumDao; 
 	private VideoDAO videoDao;
+	private ExternalVideoDAO extVideoDao;
+	private ExternalPhotoDAO extPhotoDao;
+	
 
 	public ServicesEvent() {
 
@@ -126,6 +133,8 @@ public class ServicesEvent implements ServicesEventRemote {
 			eventCategoryDao = (EvtCategoryDAO) ctx.lookup("EvtCategoryDAOBean/local");
 			albumDao = (AlbumDAO) ctx.lookup("AlbumDAOBean/local");
 			videoDao = (VideoDAO) ctx.lookup("VideoDAOBean/local");
+			extPhotoDao = (ExternalPhotoDAO) ctx.lookup("ExternalPhotoDAOBean/local");
+			extVideoDao = (ExternalVideoDAO) ctx.lookup("ExternalVideoDAOBean/local");
 		}
         catch (NamingException e) {
 			e.printStackTrace();
@@ -145,6 +154,9 @@ public class ServicesEvent implements ServicesEventRemote {
 		eventCategoryDao = null;
 		albumDao = null;
 		videoDao = null;
+		extVideoDao = null;
+		extPhotoDao = null;
+		
 	}
 
 	private Event getEvent(int eventID) throws EventNotFoundException { 
@@ -512,9 +524,9 @@ public class ServicesEvent implements ServicesEventRemote {
 			return fileSystem.readFile("imagen_no_disponible.jpg", thumbnail);
 		}
 		Content content = getContentAndVerifyPermission(username, contentID);
-		if (content instanceof Photo) {
+		if (content instanceof Photo || content instanceof ExternalPhoto) {
 			return fileSystem.readFile(content.getUrl(), thumbnail);
-		} else if(content instanceof Video) {
+		} else if(content instanceof Video || content instanceof ExternalVideo) {
 			return fileSystem.readFile(DEFAULT_VIDEO_THB_URL, thumbnail);
 		}
 		return null;
@@ -586,7 +598,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		List<Event> events = eventDao.findByDate(day);
 		return TranslatorCollection.translateEventSummary(events);	
 	}
-
+	
 
 	public List<DatatypeEventSummary> filterNextEvents(int maxEvents) {
 		Date today = new Date(new java.util.Date().getTime());
@@ -1190,6 +1202,78 @@ public class ServicesEvent implements ServicesEventRemote {
 			//TODO Javier: Enviar el mail a los administradores diciendo que username quiere
 			//acceder al contenido del evento eventId
 		}
+	}
+
+	public int uploadExternVideo(int eventId, String creator,
+			String description, String url) {
+		
+		if (!isUserRelatedToEvent(eventId, creator)) {
+			throw new UserNotRelatedToEventException();
+		}
+		
+		Event event = getEvent(eventId);
+		
+		NormalUser user = normalUserDao.findByID(creator);	
+		ExternalVideo content = new ExternalVideo();	
+		content.setEvent(event);
+		content.setUser(user);
+		content.setRegDate(new Timestamp(new java.util.Date().getTime()));
+		//Debo modificar la url para que quede como las demás. http://www.youtube.com/watch?v=sdV4xpTiS1s&feature=topvideos
+		String urlToSave = YOUTUBE_PRE + url.substring(31,42) + YOUTUBE_POS;
+		content.setUrl(urlToSave);
+		
+		content.setDescription(description);
+		content.setPosGallery(contentDao.findNextPosInGalleryEvent(event));
+		
+		extVideoDao.persist(content);
+		
+		CntCategory categoryTodas = contentCategoryDao.findByNameInEvent(event, "Todas");
+		
+		if(content.getCntCategories() == null) 
+			content.setCntCategories(new ArrayList<CntCategory>());
+		content.getCntCategories().add(categoryTodas);
+		if(categoryTodas.getContents() == null)
+			categoryTodas.setContents(new ArrayList<Content>());
+		categoryTodas.getContents().add(content);
+		contentDao.persist(content);
+		
+		return content.getCntIdAuto();		
+	}
+
+	public int uploadExternPhoto(int eventId, String creator,
+			String description, String url) {
+		
+		if (!isUserRelatedToEvent(eventId, creator)) {
+			throw new UserNotRelatedToEventException();
+		}
+		
+		Event event = getEvent(eventId);
+		
+		NormalUser user = normalUserDao.findByID(creator);	
+		ExternalPhoto content = new ExternalPhoto();	
+		
+		String urlToSave = fileSystem.saveExternalFile(eventId + "/", url);
+		
+		content.setEvent(event);
+		content.setUser(user);
+		content.setRegDate(new Timestamp(new java.util.Date().getTime()));
+		content.setUrl(urlToSave);
+		content.setDescription(description);
+		content.setPosGallery(contentDao.findNextPosInGalleryEvent(event));
+		
+		extPhotoDao.persist(content);
+		
+		CntCategory categoryTodas = contentCategoryDao.findByNameInEvent(event, "Todas");
+		
+		if(content.getCntCategories() == null) 
+			content.setCntCategories(new ArrayList<CntCategory>());
+		content.getCntCategories().add(categoryTodas);
+		if(categoryTodas.getContents() == null)
+			categoryTodas.setContents(new ArrayList<Content>());
+		categoryTodas.getContents().add(content);
+		contentDao.persist(content);
+		
+		return content.getCntIdAuto();	
 	}
 
 }
