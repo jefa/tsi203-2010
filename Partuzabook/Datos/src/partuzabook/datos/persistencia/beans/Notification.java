@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 @NamedQueries({
 	@NamedQuery(name = "Notification.findAll", query = "SELECT o FROM Notification o"),
 	@NamedQuery(name = "Notification.findByUser", query = "SELECT o FROM Notification o " +
-			"WHERE o.userTo = :user"),
+			"WHERE o.userTo = :user AND o.type <> 1"),
 			@NamedQuery(name = "Notification.findByUserUnread", query = "SELECT o FROM Notification o " +
 			"WHERE o.userTo = :user AND o.read = false"),		
 			@NamedQuery(name = "Notification.findSentByUser", query = "SELECT o FROM Notification o " +
