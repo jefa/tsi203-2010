@@ -1,11 +1,11 @@
 package partuzabook.entityTranslators;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import partuzabook.datatypes.DatatypeContent;
-import partuzabook.datatypes.DatatypeRating;
 import partuzabook.datos.persistencia.beans.Content;
+import partuzabook.datos.persistencia.beans.ExternalPhoto;
+import partuzabook.datos.persistencia.beans.ExternalVideo;
 import partuzabook.datos.persistencia.beans.Photo;
 import partuzabook.datos.persistencia.beans.Rating;
 import partuzabook.datos.persistencia.beans.Video;
@@ -48,8 +48,10 @@ public class TranslatorContent implements ITranslatable {
 			dat.setType(DatatypeContent.PHOTO);
 		} else if (ent instanceof Video) {
 			dat.setType(DatatypeContent.VIDEO);
-		} else {
-			dat.setType(DatatypeContent.EXTERNAL);
+		} else if (ent instanceof ExternalPhoto) {
+			dat.setType(DatatypeContent.EXTERNAL_PHOTO);
+		} else if (ent instanceof ExternalVideo) {
+			dat.setType(DatatypeContent.EXTERNAL_VIDEO); 
 		}
 		dat.setPosGallery(ent.getPosGallery());
 		dat.setPosAlbum(ent.getPosAlbum());
