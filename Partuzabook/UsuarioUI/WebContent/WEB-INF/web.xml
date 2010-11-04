@@ -64,6 +64,11 @@
   <servlet-name>ContentFeeder</servlet-name>
   <servlet-class>partuzabook.usuarioUI.ContentFeeder</servlet-class>
  </servlet>
+  <servlet>
+  <display-name>FacebookConnect</display-name>
+  <servlet-name>FacebookConnect</servlet-name>
+  <servlet-class>partuzabook.usuarioUI.FacebookConnect</servlet-class>
+ </servlet>
  <servlet>
   <display-name>UserImageFeeder</display-name>
   <servlet-name>UserImageFeeder</servlet-name>
@@ -81,6 +86,10 @@
  <servlet-mapping>
   <servlet-name>ContentFeeder</servlet-name>
   <url-pattern>/ContentFeeder</url-pattern>
+ </servlet-mapping>
+  <servlet-mapping>
+  <servlet-name>FacebookConnect</servlet-name>
+  <url-pattern>/FacebookConnect</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>UserImageFeeder</servlet-name>

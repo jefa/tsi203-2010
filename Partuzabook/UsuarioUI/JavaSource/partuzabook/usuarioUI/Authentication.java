@@ -92,6 +92,8 @@ public class Authentication implements Filter {
 		publicURLs.add("/scripts");
 		publicURLs.add("/a4j/");
 		publicURLs.add("/index.jsp");
+		publicURLs.add("/xd_receiver.htm");
+		publicURLs.add("/FacebookConnect");
 	}
 
 }
