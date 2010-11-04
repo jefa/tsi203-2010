@@ -370,6 +370,23 @@ public interface ServicesEventRemote {
 	 * */
 	public void addCategoryToContent(int cntId, List<DatatypeCategorySummary> catsToAdd);
 
+	/**
+	 * Creates a new external video from a youtube video
+	 * @param eventId			- Event for the new content
+	 * @param creator			- username of the NormalUser creator of the content
+	 * @param description		- Description for the video
+	 * @param url				- url of the youtube video
+	 * */
+	public int uploadExternVideo(int eventId, String creator, String description, String url);
+
+	/**
+	 * Creates a new external photo from a photo hosted in another site
+	 * @param eventId			- Event for the new content
+	 * @param creator			- username of the NormalUser creator of the content
+	 * @param description		- Description for the video
+	 * @param url				- url of the photo
+	 * */
+	public int uploadExternPhoto(int eventId, String creator, String description, String url);
 
 	/**
 	 * If the user is not related to the event, sends a mail to all administrators
