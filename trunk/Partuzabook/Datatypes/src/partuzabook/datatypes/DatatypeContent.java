@@ -8,7 +8,8 @@ public class DatatypeContent implements Serializable {
 	
 	public static final short PHOTO = 0;
 	public static final short VIDEO = 1;
-	public static final short EXTERNAL = 2;
+	public static final short EXTERNAL_PHOTO = 2;
+	public static final short EXTERNAL_VIDEO = 3;
 	
 	private Integer contId;
 	private String description;
@@ -112,8 +113,12 @@ public class DatatypeContent implements Serializable {
 		return VIDEO;
 	}
 
-	public static short getExternal() {
-		return EXTERNAL;
+	public static short getExternalVideo() {
+		return EXTERNAL_VIDEO;
+	}
+	
+	public static short getExternalPhoto() {
+		return EXTERNAL_PHOTO;
 	}
 	
 	public String getEventName() {
