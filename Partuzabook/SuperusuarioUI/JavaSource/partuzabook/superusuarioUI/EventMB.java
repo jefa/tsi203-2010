@@ -101,7 +101,7 @@ public class EventMB {
 			nameMessage = INPUT_OBLIG;
 		if(description == null || description.equals(""))
 			descriptionMessage = INPUT_OBLIG;
-		if(duration == null || duration.equals(""));
+		if(duration == null || duration.equals(""))
 			durationMessage = INPUT_NOT_ZERO;
 		if(address == null || address.equals(""))
 			addressMessage = INPUT_OBLIG;
