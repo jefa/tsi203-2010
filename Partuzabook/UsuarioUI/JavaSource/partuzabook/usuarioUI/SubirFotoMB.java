@@ -27,6 +27,7 @@ import partuzabook.serviciosUI.multimedia.ServicesUploadRemote;
 public class SubirFotoMB{
 	
 	private static final String TODAS = "Todas";
+	private static final String ALBUM = "Album";
 	
 	private ArrayList<DatatypeFileAux> filesAux = new ArrayList<DatatypeFileAux>();
 	//private ArrayList<DataTypeFile> files = new ArrayList<DataTypeFile>();
@@ -237,6 +238,8 @@ public class SubirFotoMB{
 			for(Iterator<DatatypeCategorySummary> it = allCategories.iterator(); it.hasNext(); ){
 				DatatypeCategorySummary dat = it.next();
 				if(dat.getCategory().equals(TODAS))
+					remove = i;
+				else if(dat.getCategory().equals(ALBUM))
 					remove = i;
 				i++;
 			}

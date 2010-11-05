@@ -27,6 +27,7 @@ public class SubirContExternoMB{
 	private static final String INPUT_OBLIG = "Campo obligatorio";
 	private static final String NOT_SPACES = "No deben haber espacios en este campo";
 	private static final String TODAS = "Todas";
+	private static final String ALBUM = "Album";
 	private static final String VIDEO ="V";
 	private static final String PHOTO ="P";
 	
@@ -199,6 +200,8 @@ public class SubirContExternoMB{
 			for(Iterator<DatatypeCategorySummary> it = allCategories.iterator(); it.hasNext(); ){
 				DatatypeCategorySummary dat = it.next();
 				if(dat.getCategory().equals(TODAS))
+					remove = i;
+				else if(dat.getCategory().equals(ALBUM))
 					remove = i;
 				i++;
 			}

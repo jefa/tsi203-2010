@@ -26,6 +26,7 @@ public class SubirVideoMB{
 	private static final String SERVICE_EVENT = "PartuzabookEAR/ServicesEvent/remote";
 	private static final String NEXT_URL = "http://localhost:8080/UsuarioUI/YoutubeRedirect";
 	private static final String TODAS = "Todas";
+	private static final String ALBUM = "Album";
 	
 	private int eventId;
 	private String description;
@@ -205,7 +206,7 @@ public class SubirVideoMB{
 	}
 
 	public List<DatatypeCategorySummary> getAllCategories() {
-		if(allCategories == null || allCategories.size() == 0) {
+		//if(allCategories == null || allCategories.size() == 0) {
 			//eventId = 1001; //FIXME esta linea es para realizar pruebas. Hay que comentarla para que funcione adecuadamente
 			allCategories = getServicesEvent().getEventDetails(eventId).getContentCategories();
 			int i = 0;
@@ -214,10 +215,12 @@ public class SubirVideoMB{
 				DatatypeCategorySummary dat = it.next();
 				if(dat.getCategory().equals(TODAS))
 					remove = i;
+				else if(dat.getCategory().equals(ALBUM))
+					remove = i;
 				i++;
 			}
 			allCategories.remove(remove);
-		}
+		//}
 		return allCategories;
 	}
 
