@@ -32,6 +32,12 @@ public class TranslatorEventSummary implements ITranslatable {
 		else
 			dat.setModsUsernames(TranslatorCollection.translateModUser(ent.getMyMods()));
 		
+		if(ent.getMyParticipants() == null)
+			dat.setParticipantsUsernames(null);
+		else
+			dat.setParticipantsUsernames(TranslatorCollection.translateParticipantUser(ent.getMyParticipants()));
+		
+		
 		//dat.setHashtag("#kirchner");
 		if(ent.getHashtag() == null)
 			dat.setHashtag("");
