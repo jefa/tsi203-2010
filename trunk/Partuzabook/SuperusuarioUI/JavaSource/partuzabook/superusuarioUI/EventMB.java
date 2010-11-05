@@ -25,6 +25,7 @@ public class EventMB {
 	private static final String SERVICE_USER = "PartuzabookEAR/ServicesUser/remote";
 	private static final String INPUT_OBLIG = "Campo obligatorio";
 	private static final String MOD_NOT_FOUND = "No existe el usuario ";
+	private static final String PARTICIPANT_NOT_FOUND = "No existe el usuario ";
 	private static final String NO_MODS = "Se asignó el evento como moderado, pero no se establecieron moderadores.";
 	private static final String EVENT_NOT_FOUND = "No se encontró el evento";
 	
@@ -41,6 +42,10 @@ public class EventMB {
 	private boolean moderated = true;
 	private List<String> mods;
 	private String modsMessage;
+	
+	private List<String> participants;
+	private String participantsMessage;
+	
 	private Map<String,String> allCats;
 	private String category;
 	private String hashtag;
@@ -49,10 +54,15 @@ public class EventMB {
 	
 	
 	private String cantMods;
+	private String cantParticipants;
 	
-	private List<DatatypeUser> candidates;
-	private List<DatatypeUser> results;
-	private String suggest = "";
+	private List<DatatypeUser> candidatesMods;
+	private List<DatatypeUser> resultsMods;
+	private String suggestMods = "";
+	
+	private List<DatatypeUser> candidatesParticipants;
+	private List<DatatypeUser> resultsParticipants;
+	private String suggestParticipants = "";
 	
 	
 	//Para la edicion del evento:
@@ -119,9 +129,19 @@ public class EventMB {
 							modsMessage += MOD_NOT_FOUND + mods.get(index) +". ";
 						}			
 					}
+					List<Boolean> existsUsers = serviceUser.existsNormalUser(participants);
+					index = 0;
+					for(ListIterator<Boolean> it = existsUsers.listIterator(); it.hasNext(); index++){
+						if(!it.next()){
+							participantsMessage += PARTICIPANT_NOT_FOUND + participants.get(index) +". ";
+						}			
+					}
 					if(noMessages()) {
 						DatatypeEventSummary event = serviceEvent.createEvent(name, description, date, duration, 
 								address, creator, moderated, category, latitude, longitude, hashtag);
+						
+						//Agregar usuarios
+						serviceEvent.addParticipantstoEvent(event.getEvtId(), participants);
 						
 						serviceEvent.addModtoEvent(event.getEvtId(), mods);
 						
@@ -137,6 +157,8 @@ public class EventMB {
 						moderated = true;
 						mods = null;
 						modsMessage = null;
+						participants = null;
+						participantsMessage = null;
 						category = null;
 						
 						res  = "success";
@@ -146,8 +168,12 @@ public class EventMB {
 					modsMessage = NO_MODS;
 					res = "failure";
 				} else {
-					serviceEvent.createEvent(name, description, date, duration, address, creator, 
+					DatatypeEventSummary event = serviceEvent.createEvent(name, description, date, duration, address, creator, 
 							moderated, category, latitude, longitude, hashtag);
+					
+					//Agregar usuarios
+					serviceEvent.addParticipantstoEvent(event.getEvtId(), participants);
+					
 					res = "success";
 				}				
 			} catch (NamingException e) {
@@ -159,9 +185,11 @@ public class EventMB {
 				clearAll();
 			}
 		}		
-		clearAll();
-		if(res.equals("success"))
+		
+		if(res.equals("success")) {
 			clearMessages();
+			clearAll();
+		}
 		return res;
 	}
 	
@@ -180,6 +208,7 @@ public class EventMB {
 		//addressMessage = "";
 		moderated = true;
 		mods = null;
+		participants = null;
 		//modsMessage = "";
 		latitude = 0;
 		longitude = 0;
@@ -290,47 +319,50 @@ public class EventMB {
 		}
 		return allCats;
 	}
-	public void setSuggest(String suggest) {
-		this.suggest = suggest;
-	}
-	public String getSuggest() {
-		return this.suggest;
-	}
 	
-	private void setCandidates() {
-		if (candidates == null) {
-			try {
-				Context ctx = getContext();
-				ServicesUserRemote service = (ServicesUserRemote) ctx.lookup(SERVICE_USER);	
-				candidates = service.findAllNormalUsers();
-			} catch (NamingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-
-	
-	public List<DatatypeUser> autocomplete(Object suggestParam) {
-		setCandidates();
-		suggest = ((String)suggestParam).toLowerCase();
-		results = new ArrayList<DatatypeUser>();
-		Iterator<DatatypeUser> it = candidates.iterator();
+	public List<DatatypeUser> autocompleteMods(Object suggestParam) {
+		setCandidatesMods();
+		suggestMods = ((String)suggestParam).toLowerCase();
+		resultsMods = new ArrayList<DatatypeUser>();
+		Iterator<DatatypeUser> it = candidatesMods.iterator();
 		while (it.hasNext()) {
 			DatatypeUser user = (DatatypeUser) it.next();
-			if (user.username.toLowerCase().contains(suggest)
-					|| user.name.toLowerCase().contains(suggest)) {
-				results.add(user);
+			if (user.username.toLowerCase().contains(suggestMods)
+					|| user.name.toLowerCase().contains(suggestMods)) {
+				resultsMods.add(user);
 			}
 		}
-		return results;
+		return resultsMods;
+	}
+	
+	public List<DatatypeUser> autocompleteParticipants(Object suggestParam) {
+		setCandidatesParticipants();
+		suggestParticipants = ((String)suggestParam).toLowerCase();
+		resultsParticipants = new ArrayList<DatatypeUser>();
+		Iterator<DatatypeUser> it = candidatesParticipants.iterator();
+		while (it.hasNext()) {
+			DatatypeUser user = (DatatypeUser) it.next();
+			if (user.username.toLowerCase().contains(suggestParticipants)
+					|| user.name.toLowerCase().contains(suggestParticipants)) {
+				resultsParticipants.add(user);
+			}
+		}
+		return resultsParticipants;
 	}
 	
 	public void addMod() {
-		if(suggest != null && !suggest.equals("")) {
+		if(suggestMods != null && !suggestMods.equals("")) {
 			if(getMods() == null)
 				setMods(new ArrayList<String>());
-			getMods().add(suggest);
+			getMods().add(suggestMods);
+		}
+	}
+	
+	public void addParticipant() {
+		if(suggestParticipants != null && !suggestParticipants.equals("")) {
+			if(getParticipants() == null)
+				setParticipants(new ArrayList<String>());
+			getParticipants().add(suggestParticipants);
 		}
 	}
 	
@@ -339,10 +371,22 @@ public class EventMB {
 		modsMessage = null;
 	}
 	
+
+	public void resetParticipants() {
+		participants = null;
+		participantsMessage = null;
+	}
+	
 	public int getCantMods() {
 		if(getMods() == null)
 			return 0;
 		return getMods().size();
+	}
+	
+	public int getCantParticipants() {
+		if(getParticipants() == null)
+			return 0;
+		return getParticipants().size();
 	}
 
 	public void setNameMessage(String nameMessage) {
@@ -436,11 +480,20 @@ public class EventMB {
 							modsMessage += MOD_NOT_FOUND + mods.get(index) +". ";
 						}			
 					}
+					List<Boolean> existsUsers = serviceUser.existsNormalUser(participants);
+					index = 0;
+					for(ListIterator<Boolean> it = existsUsers.listIterator(); it.hasNext(); index++){
+						if(!it.next()){
+							participantsMessage += PARTICIPANT_NOT_FOUND + participants.get(index) +". ";
+						}			
+					}
 					if(noMessages()) {
 						DatatypeEventSummary event = serviceEvent.updateEvent(evt_id, name, description, date, 
 								duration, address, creator, category, latitude, longitude, hashtag);
 						
-						
+						//Agregar usuarios
+						serviceEvent.addParticipantstoEvent(evt_id, participants);
+												
 						serviceEvent.updateModsEvent(evt_id, mods);
 						
 						name = null;
@@ -455,6 +508,8 @@ public class EventMB {
 						moderated = true;
 						mods = null;
 						modsMessage = null;
+						participants = null;
+						participantsMessage = null;
 						category = null;
 						evt_id = -1;
 						eventToModify = null;
@@ -467,6 +522,11 @@ public class EventMB {
 				} else {
 					serviceEvent.updateEvent(evt_id, name, description, date, duration, address, creator, 
 							category, latitude, longitude, hashtag);
+					
+					//Agregar usuarios
+					serviceEvent.addParticipantstoEvent(evt_id, participants);
+					
+					
 					res = "success";
 				}				
 			} catch (NamingException e) {
@@ -478,9 +538,12 @@ public class EventMB {
 				clearAll();
 			}
 		}		
-		clearAll();
-		if(res.equals("success"))
+		
+		if(res.equals("success")) {
 			clearMessages();
+			clearAll();
+		}
+		
 		return res;
 	}
 	
@@ -498,6 +561,7 @@ public class EventMB {
 			setLongitude(eventToModify.getLongitude());
 			setModerated(eventToModify.getModsUsernames() != null);
 			setMods(eventToModify.getModsUsernames());
+			setParticipants(eventToModify.getParticipantsUsernames());
 			setName(eventToModify.getEvtName());
 			setHashtag(eventToModify.getHashtag());
 		} catch(NamingException e) {
@@ -560,8 +624,10 @@ public class EventMB {
 				initEventToModify();
 			}
 		}
-		if(!find);
+		if(!find)
 			findEventMessage = EVENT_NOT_FOUND; 
+		else
+			findName = null;
 	}
 
 	public void setFindEventMessage(String findEventMessage) {
@@ -583,5 +649,96 @@ public class EventMB {
 		if(evt_id != -1 && eventToModify == null)
 			initEventToModify();
 		return hashtag;
+	}
+
+	public void setCandidatesMods() {
+		if (candidatesMods == null) {
+			try {
+				Context ctx = getContext();
+				ServicesUserRemote service = (ServicesUserRemote) ctx.lookup(SERVICE_USER);	
+				candidatesMods = service.findAllNormalUsers();
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public List<DatatypeUser> getCandidatesMods() {
+		return candidatesMods;
+	}
+
+	public void setResultsMods(List<DatatypeUser> resultsMods) {
+		this.resultsMods = resultsMods;
+	}
+
+	public List<DatatypeUser> getResultsMods() {
+		return resultsMods;
+	}
+
+	public void setSuggestMods(String suggestMods) {
+		this.suggestMods = suggestMods;
+	}
+
+	public String getSuggestMods() {
+		return suggestMods;
+	}
+
+	public void setCandidatesParticipants() {
+		if (candidatesParticipants == null) {
+			try {
+				Context ctx = getContext();
+				ServicesUserRemote service = (ServicesUserRemote) ctx.lookup(SERVICE_USER);	
+				candidatesParticipants = service.findAllNormalUsers();
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public List<DatatypeUser> getCandidatesParticipants() {
+		return candidatesParticipants;
+	}
+
+	public void setResultsParticipants(List<DatatypeUser> resultsParticipants) {
+		this.resultsParticipants = resultsParticipants;
+	}
+
+	public List<DatatypeUser> getResultsParticipants() {
+		return resultsParticipants;
+	}
+
+	public void setSuggestParticipants(String suggestParticipants) {
+		this.suggestParticipants = suggestParticipants;
+	}
+
+	public String getSuggestParticipants() {
+		return suggestParticipants;
+	}
+
+	public void setParticipants(List<String> participants) {
+		this.participants = participants;
+		if(evt_id != -1) {
+			if(eventToModify == null)
+				initEventToModify();
+			eventToModify.setParticipantsUsernames(participants);
+		}
+	}
+
+	public List<String> getParticipants() {
+		if(evt_id != -1 && eventToModify == null)
+			initEventToModify();
+		if(participants == null)
+			participants = new ArrayList<String>();
+		return participants;
+	}
+
+	public void setParticipantsMessage(String participantsMessage) {
+		this.participantsMessage = participantsMessage;
+	}
+
+	public String getParticipantsMessage() {
+		return participantsMessage;
 	}
 }

@@ -128,7 +128,7 @@ function showAddress(street, gmap, hidden_lat, hidden_lng) {
 	    { 
 	      // If that was successful
 	      if (result.Status.code == G_GEO_SUCCESS) {
-	        alert("Found " +result.Placemark.length +" results");
+	        alert("Se encontraron " +result.Placemark.length +" resultados");
 	        // Loop through the results, placing markers
 	        markAddress = new Array(result.Placemark.length);
 	        resetRow();
@@ -150,11 +150,11 @@ function showAddress(street, gmap, hidden_lat, hidden_lng) {
 	      }
 	      // ====== Decode the error status ======
 	      else {
-	        var reason="Code "+result.Status.code;
+	        var reason="Codigo "+result.Status.code;
 	        if (reasons[result.Status.code]) {
 	          reason = reasons[result.Status.code];
 	        } 
-	        alert('Could not find "'+search+ '" ' + reason);
+	        alert('No se pudo encontrar "'+search+ '" ' + reason);
 	      }
 	    }
 	 );
@@ -169,7 +169,7 @@ function showAddress3(street, city, country, gmap, div) {
 	    { 
 	      // If that was successful
 	      if (result.Status.code == G_GEO_SUCCESS) {
-	        alert("Found " +result.Placemark.length +" results");
+	        alert("Se encontraron " +result.Placemark.length +" resultados");
 	        // Loop through the results, placing markers
 	        markAddress = new Array(result.Placemark.length);
 	        for (var i=0; i<result.Placemark.length; i++) {
@@ -190,11 +190,11 @@ function showAddress3(street, city, country, gmap, div) {
 	      }
 	      // ====== Decode the error status ======
 	      else {
-	        var reason="Code "+result.Status.code;
+	        var reason="Codigo "+result.Status.code;
 	        if (reasons[result.Status.code]) {
 	          reason = reasons[result.Status.code];
 	        } 
-	        alert('Could not find "'+search+ '" ' + reason);
+	        alert('No se pudo encontrar "'+search+ '" ' + reason);
 	      }
 	    }
 	 );
