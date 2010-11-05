@@ -83,6 +83,10 @@ public class TranslatorCollection {
 	public static List<String> translateModUser(List<NormalUser> from) {
 		return translateList(from, new TranslatorModUser());
 	}
+	
+	public static List<String> translateParticipantUser(List<NormalUser> from) {
+		return translateList(from, new TranslatorModUser());
+	}
 
 	public static List<DatatypeMostTagged> translateMostTagged(List<NormalUser> from) {
 		return translateList(from, new TranslatorMostTagged());
