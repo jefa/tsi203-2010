@@ -233,7 +233,7 @@ public class Event implements Serializable {
 		return this.myParticipants;
 	}
 
-	public void Participants(List<NormalUser> myParticipants) {
+	public void setMyParticipants(List<NormalUser> myParticipants) {
 		this.myParticipants = myParticipants;
 	}
 	
