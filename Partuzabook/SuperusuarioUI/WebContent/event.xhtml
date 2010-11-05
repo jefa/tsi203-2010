@@ -36,7 +36,7 @@
 						<rich:calendar value="#{EventMB.date}"
 		                    datePattern="d/MMM/y"  showApplyButton="false"  
 		                    cellWidth="24px" cellHeight="22px" style="width:200px"/><br/>
-						<h:outputText value="Duración:"></h:outputText><br/>
+						<h:outputText value="Horario:"></h:outputText><br/>
 						<h:inputText value="#{EventMB.duration}"></h:inputText>
 							<h:outputText value="#{EventMB.durationMessage}" style="color:red"></h:outputText><br/>
 						<h:outputText value="Dirección:"></h:outputText><br/>
@@ -74,16 +74,42 @@
 			        </h:panelGroup>
 				</h:panelGrid>
 				
+				<a4j:outputPanel id="participantsPanel">
+						<h:inputText id="newParticipant" value="#{EventMB.suggestParticipants}" />
+						<a4j:commandButton value="Agregar como participante" action="#{EventMB.addParticipant}" reRender="participantsPanel"/>
+						<a4j:commandButton value="Limpiar lista" action="#{EventMB.resetParticipants}" reRender="participantsPanel"/>
+						<rich:suggestionbox id="suggestionBoxIdParticipant" for="newParticipant" tokens=",["
+							suggestionAction="#{EventMB.autocompleteParticipants}" var="result"
+							nothingLabel="No hay usuarios que coincidan" columnClasses="center">
+							<h:column>
+								<h:outputText value="#{result.username}" />
+							</h:column>
+							<h:column>
+								<h:outputText value="#{result.name}" />
+							</h:column>
+						</rich:suggestionbox>
+						<rich:panel style="width:50%">
+				            <f:facet name="header">
+				                <h:outputText value="Participantes"/>
+				            </f:facet>
+				            <rich:dataList value="#{EventMB.participants}" var="pickList" rendered="#{EventMB.cantParticipants>0}">
+				            	<h:outputText value="#{pickList}"/>
+				            </rich:dataList> 
+				        </rich:panel>
+				        <h:outputText value="#{EventMB.participantsMessage}" style="color:red"></h:outputText><br/>
+				</a4j:outputPanel>
+				
+				<a4j:outputPanel id="modPanel">
 				<h:outputText value="Evento es moderado:"/>
-						<h:selectBooleanCheckbox value="#{EventMB.moderated}" 
-						onclick="toggleVisibility('divNewMod');" /><br/><br/>
+						<h:selectBooleanCheckbox id="check" value="#{EventMB.moderated}" 
+						onclick="toggleVisibility('divNewMod','EditEvent:check');" /><br/><br/>
 						<div id="divNewMod">
-						<h:inputText id="newMod" value="#{EventMB.suggest}" />
-						<h:commandButton value="Agregar como moderador" action="#{EventMB.addMod}"/>
-						<h:commandButton value="Limpiar lista" action="#{EventMB.resetMod}"/>
-						<rich:suggestionbox id="suggestionBoxId" for="newMod" tokens=",["
-							suggestionAction="#{EventMB.autocomplete}" var="result"
-							nothingLabel="No user matches" columnClasses="center">
+						<h:inputText id="newMod" value="#{EventMB.suggestMods}" />
+						<a4j:commandButton value="Agregar como moderador" action="#{EventMB.addMod}" reRender="modPanel"/>
+						<a4j:commandButton value="Limpiar lista" action="#{EventMB.resetMod}" reRender="modPanel"/>
+						<rich:suggestionbox id="suggestionBoxIdMod" for="newMod" tokens=",["
+							suggestionAction="#{EventMB.autocompleteMods}" var="result"
+							nothingLabel="No hay usuarios que coincidan" columnClasses="center">
 							<h:column>
 								<h:outputText value="#{result.username}" />
 							</h:column>
@@ -101,6 +127,8 @@
 				        </rich:panel>
 				        <h:outputText value="#{EventMB.modsMessage}" style="color:red"></h:outputText><br/>
 				        </div>
+				</a4j:outputPanel>	 
+				
 			   <!--Inicilizamos el geoCoder-->
 			   <script>window.onload=function(){initGeoCoder(map, 'CreateEvent:hidden_coord_lat', 'CreateEvent:hidden_coord_lng');}</script>
 			   
