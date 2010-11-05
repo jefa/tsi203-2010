@@ -764,6 +764,8 @@ public class ServicesEvent implements ServicesEventRemote {
 		evt.getCntCategories().add(defaultCategory);
 		
 		eventDao.persist(evt);
+		contentCategoryDao.persist(defaultCategory);
+		contentCategoryDao.persist(albumCategory);
 		
 		return (DatatypeEventSummary)new TranslatorEventSummary().translate(evt);
 	}
@@ -797,7 +799,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			NormalUser newPart = it.next();
 			if(!actualParts.contains(newPart.getUsername())){
 				event.getMyParticipants().add(newPart);
-				newPart.getMyModeratedEvents().add(event);
+				newPart.getMyEvents().add(event);
 				//nUserDao.persist(newMod);
 			}
 		}
