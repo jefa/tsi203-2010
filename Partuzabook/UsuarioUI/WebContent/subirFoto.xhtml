@@ -26,7 +26,7 @@
 						</f:facet>
 						<h:outputText value="No se han agregado archivos"
 							rendered="#{subirFotoMB.size==0}" />
-						<a4j:repeat value="#{subirFotoMB.filesAux}" var="file"	>
+						<a4j:repeat value="#{subirFotoMB.filesAux}" var="file"  rowKeyVar="row"	>
 							<rich:panel bodyClass="rich-laguna-panel-no-header">								
 									<a4j:mediaOutput element="img" mimeType="#{file.mime}"
 										createContent="#{subirFotoMB.paint}" value="#{row}"
