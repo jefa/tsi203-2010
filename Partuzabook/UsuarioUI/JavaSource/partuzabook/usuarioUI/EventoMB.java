@@ -37,7 +37,6 @@ public class EventoMB {
 	
 	private boolean validUserForContext;
 	private boolean userIsModerator;
-	private String userName;
 	
 	private DatatypeEvent evento;
 	private List<DatatypeCategorySummary> categories;
@@ -107,10 +106,9 @@ public class EventoMB {
 	public void setContentId(Integer contentId) {
 		this.contentId = contentId;
 		suggest = null;
-		if (this.userName != null){
-			setSelectedContent(servicesEvent.getContentDetails(contentId, userName));
-			setRating(servicesEvent.getMyRatingForContent(contentId, userName));
-		}
+		
+			setSelectedContent(servicesEvent.getContentDetails(contentId, getUserName()));
+			setRating(servicesEvent.getMyRatingForContent(contentId, getUserName()));
 	}
 
 	public Integer getContentId() {
@@ -119,7 +117,7 @@ public class EventoMB {
 	
 	public void removeContent() {
 		try {
-			getServicesEvent().removeContentFromEvent(eventId, contentId, userName);
+			getServicesEvent().removeContentFromEvent(eventId, contentId, getUserName());
 			setCategoryId(getCategoryId());
 		} catch (EventNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -188,13 +186,13 @@ public class EventoMB {
 			ServicesEventRemote service = getServicesEvent();
 			if (comentario != "") {
 				comentario = comentario.replace("<p>", "").replace("</p>","");
-				service.commentContent(contentId, comentario, userName);
+				service.commentContent(contentId, comentario, getUserName());
 				
 				//TODO: Javier enviar notificación por mail a los moderadores que hay un nuevo comentario
 				//para el contenido en el evento.
 
-				String emailTo = getServicesUser().getNormalUserMailAddress(userName);
-				mailer.sendFormattedMail(userName, getServicesUser().getName(userName),
+				String emailTo = getServicesUser().getNormalUserMailAddress(getUserName());
+				mailer.sendFormattedMail(getUserName(), getServicesUser().getName(getUserName()),
 						"Se ha agregado comentario a contenido "+contentId, 
 						new SimpleDateFormat().format(new Date()), null, emailTo, null, null, 
 					"Se ha comentado un evento");
@@ -210,7 +208,7 @@ public class EventoMB {
 	public void removeComment() {
 		try {
 			getServicesEvent().removeCommentFromContent(eventId, contentId,
-					userName, commentToRemoveUser, commentToRemoveText);
+					getUserName(), commentToRemoveUser, commentToRemoveText);
 			setContentId(getContentId());
 		} catch (ContentNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -243,18 +241,20 @@ public class EventoMB {
 	}
 
 	public void setUserIsModerator(boolean userIsModerator) {
-		if (eventId != null && userName != null) {
-			this.userIsModerator = getServicesEvent().isUserModeratorInEvent(eventId, userName);
+		if (eventId != null) {
+			this.userIsModerator = getServicesEvent().isUserModeratorInEvent(eventId, getUserName());
 		}
 	}
 
-	public void setUserName(String userName) {
+	/*public void setUserName(String userName) {
 		this.userName = userName;
 		setValidUserForContext(false);
-	}
+	}*/
 
 	public String getUserName() {
-		return this.userName;
+		FacesContext context = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+		return (String) session.getAttribute("username");
 	}
 
 	public void setEvento(DatatypeEvent evento) {
@@ -403,11 +403,11 @@ public class EventoMB {
 			Context ctx = getContext();
 			if (suggest != null && suggest != "") {
 				ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-				service.tagUserInContent(eventId, contentId, userName, suggest, tagX1, tagY1);
+				service.tagUserInContent(eventId, contentId, getUserName(), suggest, tagX1, tagY1);
 				
-				String emailTo = getServicesUser().getNormalUserMailAddress(userName);
-				mailer.sendFormattedMail(userName, getServicesUser().getName(userName),
-						"Usuario "+userName+" fue taggeado en contenido "+contentId, 
+				String emailTo = getServicesUser().getNormalUserMailAddress(getUserName());
+				mailer.sendFormattedMail(getUserName(), getServicesUser().getName(getUserName()),
+						"Usuario "+getUserName()+" fue taggeado en contenido "+contentId, 
 						new SimpleDateFormat().format(new Date()), null, emailTo, null, null, 
 					"Ud. ha sido taggeado en evento");
 				
@@ -428,7 +428,7 @@ public class EventoMB {
 		try {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			service.removeTagInContent(eventId, contentId, userName, tagToRemoveUserIsReal, tagToRemoveUser);
+			service.removeTagInContent(eventId, contentId, getUserName(), tagToRemoveUserIsReal, tagToRemoveUser);
 			suggest = null;
 			setContentId(getContentId());
 		}
@@ -543,7 +543,7 @@ public class EventoMB {
 	
 	public void rate() {
 		try {
-			getServicesEvent().rateContent(contentId, rating, userName);
+			getServicesEvent().rateContent(contentId, rating, getUserName());
 			setContentId(getContentId());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -582,13 +582,8 @@ public class EventoMB {
 	}*/
 
 	private Boolean calcValidUserForContent() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-		this.userName = (String) session.getAttribute("username");		
-		if (userName == null) {
-			return false;
-		} 
-		return getServicesMultimedia().isUserRelatedToEvent(eventId, userName);
+		
+		return getServicesMultimedia().isUserRelatedToEvent(eventId, getUserName());
 	}
 	
 	public void sendAdmitMail() {
