@@ -11,3 +11,4 @@ function addMarkerWithInfo(googlemap, lat, long, info) {
 function eraseMarkers(googlemap) {	
 	googlemap.clearOverlays();
 }
+

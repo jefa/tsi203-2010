@@ -28,6 +28,7 @@
 				jQuery(tab.parentNode).addClass('ui-tabs-selected ui-state-active');
 				jQuery("#ulCategories li." + document.getElementById("formCategory:catName").value).addClass("ui-tabs-selected ui-state-active");
 			}
+			
 		</script>
 		<link rel="stylesheet" href="styles/pikachoose/styles.css"
 			type="text/css" />
@@ -128,7 +129,8 @@
 				</h:form>
 				
 				<h:inputHidden id="cntType" value="#{eventoMB.firstContentType}"/>
-    			<h:inputHidden id="cntUrl" value="#{eventoMB.firstContentUrl}"/>	  
+    			<h:inputHidden id="cntUrl" value="#{eventoMB.firstContentUrl}"/>
+    			<h:inputHidden id="cntId" value="#{eventoMB.contentId}"/>  
 				
 			</a4j:outputPanel>
 			<a4j:form id="panelThumbs">
@@ -141,11 +143,13 @@
 				<ul id="pikame" class="jcarousel-skin-pika">
 					<a4j:repeat value="#{eventoMB.selectedCategory.contents}"
 						var="content">
-						<li><h:graphicImage
-							value="/ContentFeeder?id=#{content.contId}&#38;thb=74"
-							name="#{content.contId}" onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}';"/>
+						<li>
+							<h:graphicImage rendered="#{content.type eq 0 || content.type eq 2}" value="/ContentFeeder?id=#{content.contId}&#38;thb=74"
+							name="#{content.contId}" onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';"/>
+							<h:graphicImage rendered="#{content.type eq 1 || content.type eq 3}" value="#{content.youtubeUrlScreen}"
+							name="#{content.contId}" onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';"/>
 							<span>#{content.description}<br />Subido por: #{content.uploadedBy}</span>
-						</li>
+						</li> 
 					</a4j:repeat>
 				</ul>
 				<script>
