@@ -9,6 +9,30 @@
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Private Profile</ui:define>
 	<ui:define name="body">
+	
+		<rich:modalPanel id="panel" width="425" height="345">
+			<f:facet name="header">
+		    	<h:panelGroup>
+		        	<h:outputText value="Subir imagen de perfil"></h:outputText>
+		    	</h:panelGroup>
+			</f:facet>
+			<a4j:form id="modalUpload">
+				<rich:fileUpload fileUploadListener="#{PublicProfile.listener}"
+			       maxFilesQuantity="#{PublicProfile.cantUploads}"
+			       id="upload"
+			       immediateUpload="true"
+			       acceptedTypes="jpg, gif, png, bmp">
+			   	</rich:fileUpload>
+				<br/>
+				<h:commandButton value="Confirmar" action="#{PublicProfile.confirmAvatarChange}"/>
+				<h:panelGroup>
+					<h:commandButton value="Cancelar" id="hidelink"/>
+					<rich:componentControl for="panel" attachTo="hidelink" operation="hide" event="onclick"/>
+				</h:panelGroup>
+			</a4j:form>
+		</rich:modalPanel>
+	
+	
 	<h:form id="privateProfile">
 		<f:view>
 				<rich:panel>
@@ -17,7 +41,15 @@
 					</f:facet>					
 						<div>
 						<h:panelGrid columns="2" width="100%">
-							<h:graphicImage value="/UserImageFeeder?username=#{PublicProfile.userId}" />
+							<h:panelGroup>
+								
+									<h:graphicImage value="/UserImageFeeder?username=#{PublicProfile.userId}" /><br/>
+								    <h:outputLink value="#" id="link">
+								        Cambiar imagen de perfil
+								        <rich:componentControl for="panel" attachTo="link" operation="show" event="onclick"/>
+								    </h:outputLink>
+							    	
+							</h:panelGroup>								
 								<rich:panel style="width:750px">
 									<f:facet name="header">
 										<h:outputText value="Información personal"></h:outputText>
