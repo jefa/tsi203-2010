@@ -21,7 +21,7 @@
 			<div class="featured clearfix">
 			<div id="controls"><a href="" class="prev">Prev</a> <a href=""
 				class="next">Next</a></div>
-			<div id="featured-slideshow" style="height: 250px;"><a4j:repeat
+			<div id="featured-slideshow" style="height: 250px;margin-bottom:20px"><a4j:repeat
 				var="album" value="#{paginaInicioMB.albumsRecientes}">
 
 				<div class="featured-slideshow-inner"
@@ -75,8 +75,9 @@ jQuery('#featured-slideshow').cycle({
 		<h:form id="formMisEventos" rendered="#{paginaInicioMB.isUserLogged}">
 			<div id="index-featured1">
 			<div class="home-title">Mis Eventos Recientes</div>
-			<ul class="hfeed posts-default clearfix">
-				<a4j:repeat var="evento"
+			
+			<ul class="hfeed posts-default clearfix" style="margin-bottom:0px">
+				<a4j:repeat  var="evento"
 					value="#{paginaInicioMB.misEventosRecientes}">
 					<li class="post type-post clearfix">
 					<div class="entry-thumbnails"><h:commandLink
@@ -99,9 +100,20 @@ jQuery('#featured-slideshow').cycle({
 					</li>
 				</a4j:repeat>
 			</ul>
+			
+<a4j:outputPanel rendered="#{paginaInicioMB.totalPaginas != 1}"> <div class="wp-pagenavi">
+<span class="pages">Pag. #{paginaInicioMB.paginaActual + 1} de #{paginaInicioMB.totalPaginas}</span>
+<a4j:repeat  var="pagina" value="#{paginaInicioMB.paginas}">
+	<h:outputText value="#{pagina + 1}" rendered="#{pagina == paginaInicioMB.paginaActual}" styleClass="current"/>
+	<h:commandLink value="#{pagina + 1}" rendered="#{pagina != paginaInicioMB.paginaActual}">
+		<f:setPropertyActionListener value="#{pagina}" target="#{paginaInicioMB.paginaActual}" />
+	</h:commandLink>
+</a4j:repeat>
+</div>
+</a4j:outputPanel>
+			
 			<!-- .posts-default --></div>
 			<!-- #index-featured1 -->
-
 		</h:form>
 
 		<h:form id="eventosRecientes">
