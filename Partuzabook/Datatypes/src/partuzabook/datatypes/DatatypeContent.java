@@ -15,10 +15,11 @@ public class DatatypeContent implements Serializable {
 	private String description;
 	private String eventName;
 	private Integer eventId;
+	private String uploadedBy;
 	private Double avgScore;
 	private Integer posAlbum;
 	private Integer posGallery;
-	private List<DatatypeCategorySummary> categories;
+	//private List<DatatypeCategorySummary> categories;
 	private List<DatatypeComment> comments;
 	private List<DatatypeTag> tags;
 	private short type;
@@ -44,6 +45,14 @@ public class DatatypeContent implements Serializable {
 		return description;
 	}
 
+	public void setUploadedBy(String uploadedBy) {
+		this.uploadedBy = uploadedBy;
+	}
+
+	public String getUploadedBy() {
+		return uploadedBy;
+	}
+
 	public Double getAvgScore() {
 		Double avg = (Double) (Math.round(avgScore * 2.0) / 2.0);
 		return avg;
@@ -61,13 +70,13 @@ public class DatatypeContent implements Serializable {
 		this.posAlbum = pos;
 	}
 	
-	public void setCategories(List<DatatypeCategorySummary> categories) {
-		this.categories = categories;
-	}
-
-	public List<DatatypeCategorySummary> getCategories() {
-		return categories;
-	}
+//	public void setCategories(List<DatatypeCategorySummary> categories) {
+//		this.categories = categories;
+//	}
+//
+//	public List<DatatypeCategorySummary> getCategories() {
+//		return categories;
+//	}
 
 	public List<DatatypeComment> getComments() {
 		return comments;

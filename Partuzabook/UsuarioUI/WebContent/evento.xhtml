@@ -144,7 +144,7 @@
 						<li><h:graphicImage
 							value="/ContentFeeder?id=#{content.contId}&#38;thb=74"
 							name="#{content.contId}" onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}';"/>
-							<span>#{content.description}</span>
+							<span>#{content.description}<br />Subido por: #{content.uploadedBy}</span>
 						</li>
 					</a4j:repeat>
 				</ul>

@@ -620,15 +620,7 @@ public class EventoMB {
 	}
 
 	public boolean getIsInAlbum(){
-		this.isInAlbum = false;
-		List<DatatypeCategorySummary> catList = this.selectedContent.getCategories();
-		Iterator<DatatypeCategorySummary> it = catList.iterator();
-		while (it.hasNext()) {
-			DatatypeCategorySummary dataCateg = it.next();
-			if (dataCateg.getCategory().equals("Album")){
-				this.isInAlbum = true;	
-			}
-		}
+		this.isInAlbum = selectedContent.getPosAlbum() != null;
 		return this.isInAlbum;
 	}
 	
