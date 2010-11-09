@@ -181,4 +181,14 @@ public class FileSystem implements FileSystemLocal {
 		}
 		return "";
 	}
+	
+	public void deleteFile(String fileName) {
+		try {
+			File f = new File(getBasePath() + fileName);
+			if(f.exists())
+				f.delete();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+	}
 }
