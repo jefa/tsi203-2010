@@ -2,6 +2,7 @@ package partuzabook.datos.persistencia.beans;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -20,6 +21,12 @@ import javax.persistence.OneToMany;
 public class NormalUser extends User {
 	private static final long serialVersionUID = 1L;
 
+	@Column(name="facebook_id")
+	private Integer facebookId;
+
+	@Column(name="facebook_user")
+	private Boolean facebookUser;
+	
 	//bi-directional many-to-one association to Comment
 	@OneToMany(mappedBy="user")
 	private List<Comment> comments;
@@ -54,6 +61,23 @@ public class NormalUser extends User {
 	          inverseJoinColumns=@JoinColumn(name="evt_id"))
 	private List<Event> myModeratedEvents;
 
+    
+	public Integer getFacebookId() {
+		return this.facebookId;
+	}
+
+	public void setFacebookId(Integer facebookId) {
+		this.facebookId = facebookId;
+	}
+
+	public Boolean isFacebookUser() {
+		return this.facebookUser;
+	}
+
+	public void setFacebookUser(Boolean facebookUser) {
+		this.facebookUser = facebookUser;
+	}    
+    
 	public List<Comment> getComments() {
 		return this.comments;
 	}
