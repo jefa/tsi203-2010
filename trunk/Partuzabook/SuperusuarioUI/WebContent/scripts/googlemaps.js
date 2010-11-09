@@ -53,6 +53,9 @@ function addMarkerWithInfo(googlemap, lat, long, info, hidden_input_lat, hidden_
 	GEvent.addListener(marker, "dragstart", function() {  
 		map.closeInfoWindow();
 		});
+	
+	googlemap.setZoom(15);
+	googlemap.setCenter(marker.getLatLng());
 	googlemap.addOverlay(marker);
 }
 
