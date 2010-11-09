@@ -120,7 +120,7 @@ public class SubirFotoMB{
 			FacesContext context = FacesContext.getCurrentInstance();
 			HttpSession session = (HttpSession) context.getExternalContext()
 					.getSession(true);
-			String username = (String) session.getAttribute("username");
+			String username = SessionUtils.getUsername();
 			List<DataTypeFile> files  = new ArrayList<DataTypeFile>();
 			for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
 				files.add((DataTypeFile)it.next());
@@ -230,7 +230,7 @@ public class SubirFotoMB{
 	private List<DatatypeCategorySummary> getAllCategories() {
 		//if(allCategories == null || allCategories.size() == 0) {
 			//eventId = 1001; //FIXME esta linea es para realizar pruebas. Hay que comentarla para que funcione adecuadamente
-			allCategories = getServicesEvent().getEventDetails(idEvento).getContentCategories();
+			allCategories = getServicesEvent().getEventDetails(idEvento, true).getContentCategories();
 			int i = 0;
 			int remove = 0;
 			for(Iterator<DatatypeCategorySummary> it = allCategories.iterator(); it.hasNext(); ){

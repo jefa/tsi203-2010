@@ -142,7 +142,7 @@
 					<a4j:repeat value="#{eventoMB.selectedCategory.contents}"
 						var="content">
 						<li><h:graphicImage
-							value="/ContentFeeder?id=#{content.contId}"
+							value="/ContentFeeder?id=#{content.contId}&#38;thb=74"
 							name="#{content.contId}" onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}';"/>
 							<span>#{content.description}</span>
 						</li>
@@ -150,7 +150,7 @@
 				</ul>
 				<script>
 					jQuery("#pikame").PikaChoose();
-					jQuery("#pikame").jcarousel({scroll:5,					
+					jQuery("#pikame").jcarousel({scroll:5,
 						initCallback: function(carousel) {
 					        $(carousel.list).find('img').click(function() {
 				          		carousel.scroll(parseInt($(this).ancestors()[1].getAttribute('jcarouselindex')));

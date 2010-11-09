@@ -91,10 +91,7 @@ public class SubirContExternoMB{
 				return "subirContExterno";
 			}
 			
-			FacesContext context = FacesContext.getCurrentInstance();
-			HttpSession session = (HttpSession) context.getExternalContext()
-					.getSession(true);
-			String username = (String) session.getAttribute("username");
+			String username = SessionUtils.getUsername();
 			
 			Context ctx = getContext();
 			ServicesUploadRemote service = (ServicesUploadRemote)ctx.lookup(SERVICE_UPLOAD);
@@ -194,7 +191,7 @@ public class SubirContExternoMB{
 	public List<DatatypeCategorySummary> getAllCategories() {
 		//if(allCategories == null || allCategories.size() == 0) {
 			//eventId = 1001; //FIXME esta linea es para realizar pruebas. Hay que comentarla para que funcione adecuadamente
-			allCategories = getServicesEvent().getEventDetails(eventId).getContentCategories();
+			allCategories = getServicesEvent().getEventDetails(eventId, false).getContentCategories();
 			int i = 0;
 			int remove = 0;
 			for(Iterator<DatatypeCategorySummary> it = allCategories.iterator(); it.hasNext(); ){

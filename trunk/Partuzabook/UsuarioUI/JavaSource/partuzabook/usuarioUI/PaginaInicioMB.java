@@ -56,11 +56,9 @@ public class PaginaInicioMB {
 		return paginaActual;
 	}
 	
-
 	public void setPaginaActual(int paginaActual) {
 		this.paginaActual = paginaActual;
 	}
-	
 	
 	public int getTotalPaginas() {
 		return misEventosRecientes.size() / 6 + 1;
@@ -252,10 +250,8 @@ public class PaginaInicioMB {
 	}
 	
 	public boolean checkIfUserLogged(){
-		FacesContext context = FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-		String user = (String) session.getAttribute("username");		
-		return (user != null );
+		String user = SessionUtils.getUsername();		
+		return user != null && user != "";
 	}
 
 	public List<DatatypeAlbum> getAlbumsRecientes() {

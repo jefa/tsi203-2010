@@ -33,7 +33,7 @@ public class MailController extends HttpServlet {
 		String mailToken = "token";
 		
 		HttpSession session = (HttpSession) request.getSession(true);
-		String username = (String) session.getAttribute("username");
+		String username = SessionUtils.getUsername();
 		String toAddr = request.getParameter("to");
 		
 		String body = "Hello there, " + "\n\n"

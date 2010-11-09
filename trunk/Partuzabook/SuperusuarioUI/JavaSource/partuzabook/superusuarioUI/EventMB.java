@@ -26,8 +26,8 @@ public class EventMB {
 	private static final String INPUT_OBLIG = "Campo obligatorio";
 	private static final String MOD_NOT_FOUND = "No existe el usuario ";
 	private static final String PARTICIPANT_NOT_FOUND = "No existe el usuario ";
-	private static final String NO_MODS = "Se asignó el evento como moderado, pero no se establecieron moderadores.";
-	private static final String EVENT_NOT_FOUND = "No se encontró el evento";
+	private static final String NO_MODS = "Se asignï¿½ el evento como moderado, pero no se establecieron moderadores.";
+	private static final String EVENT_NOT_FOUND = "No se encontrï¿½ el evento";
 	
 	private String name;
 	private String nameMessage;
@@ -551,7 +551,7 @@ public class EventMB {
 		try {
 			Context ctx = getContext();
 			ServicesEventRemote serviceEvent = (ServicesEventRemote)ctx.lookup(SERVICE_EVENT);
-			eventToModify = serviceEvent.getEventDetails(evt_id);
+			eventToModify = serviceEvent.getEventDetails(evt_id, true);
 			setAddress(eventToModify.getAddress());
 			setCategory(eventToModify.getEventCategory());
 			setDate(eventToModify.getDate());

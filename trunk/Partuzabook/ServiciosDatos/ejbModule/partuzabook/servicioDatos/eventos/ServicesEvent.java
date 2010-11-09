@@ -63,7 +63,6 @@ import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
 import partuzabook.entityTranslators.TranslatorAlbum;
 import partuzabook.entityTranslators.TranslatorCategory;
 import partuzabook.entityTranslators.TranslatorContent;
-import partuzabook.entityTranslators.TranslatorEvent;
 import partuzabook.entityTranslators.TranslatorEventSummary;
 import partuzabook.servicioDatos.exception.AlbumNotFoundException;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
@@ -181,9 +180,20 @@ public class ServicesEvent implements ServicesEventRemote {
 		return TranslatorCollection.translateEventSummary(list);
 	}
 	
-	public DatatypeEvent getEventDetails(int eventID) {
+	public DatatypeEvent getEventDetails(int eventID, boolean isSuperUser) {
 		Event event = getEvent(eventID);
-		return (DatatypeEvent)new TranslatorEvent().translate(event);
+		DatatypeEvent dat = new DatatypeEvent((DatatypeEventSummary) new TranslatorEventSummary().translate(event));
+		if (!isSuperUser && !isAlbumFinalized(eventID)) {
+			CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
+			ArrayList<CntCategory> categories = new ArrayList<CntCategory>(event.getCntCategories());
+			categories.remove(catAlbum);
+			dat.setContentCategories(TranslatorCollection.translateContentCategoriesSummary(categories));
+		}
+		else {
+			dat.setContentCategories(TranslatorCollection.
+					translateContentCategoriesSummary(event.getCntCategories()));			
+		}
+		return dat;
 	}
 
 	public DatatypeAlbum getAlbumDetails(int eventID) {
@@ -276,18 +286,23 @@ public class ServicesEvent implements ServicesEventRemote {
 		else {
 			// Verify if user is Normal User
 			NormalUser nUser = normalUserDao.findByID(username);
-			return nUser.getMyEvents().contains(ev);
+			if (nUser == null) {
+				return false;
+			}
+			else {
+				return nUser.getMyEvents().contains(ev);
+			}
 		}
 	}
 
-	public boolean isUserModeratorInEvent(Integer eventId, String username) throws UserNotFoundException  {
+	public boolean isUserModeratorInEvent(Integer eventId, String username) {
 		// Verify if user is Admin
 		Admin aUser = adminDao.findByID(username);
 		if (aUser ==  null) {
 			// Verify if user is Normal User
 			NormalUser nUser = normalUserDao.findByID(username);
 			if (nUser == null) {
-				throw new UserNotFoundException();
+				return false;
 			}
 			Event ev = getEvent(eventId);
 			return ev.getMyMods().contains(nUser);
