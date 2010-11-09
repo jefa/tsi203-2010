@@ -40,6 +40,8 @@ import partuzabook.utils.TranslatorCollection;
 public class ServicesUser implements ServicesUserRemote {
 
 	private static final String DEFAULT_IMAGE = "profile/avatar_default.png";
+	private static final String AVATAR_PATH = "profile";
+	
 	
 	private NormalUserDAO nUserDao;
 	private AdminDAO adminDao;
@@ -115,7 +117,7 @@ public class ServicesUser implements ServicesUserRemote {
 		return (DatatypeUser)new TranslatorUser().translate(newUser);
 	}
 	
-	public DatatypeUser updateNormalUser(String username, String password, String mail, String name, String img_path) throws UserNotFoundException {
+	public DatatypeUser updateNormalUser(String username, String password, String mail, String name) throws UserNotFoundException {
 		if(!existsNormalUser(username))
 			throw new UserNotFoundException();
 		
@@ -123,7 +125,6 @@ public class ServicesUser implements ServicesUserRemote {
 		nu.setPassword(password);
 		nu.setEmail(mail);
 		nu.setName(name);
-		nu.setImgPath(img_path);
 		nUserDao.persist(nu);
 		return (DatatypeUser)new TranslatorUser().translate(nu);
 	}
@@ -293,6 +294,22 @@ public class ServicesUser implements ServicesUserRemote {
 		notifDao.flush();
 		
 		return (DatatypeNotification)new TranslatorNotification().translate(not);
+	}
+
+	public DatatypeUser updateUserAvatar(String username, byte[] data, String mime)
+			throws UserNotFoundException {
+		
+		if(!existsNormalUser(username))
+			throw new UserNotFoundException();
+		
+		NormalUser nu = nUserDao.findByID(username);
+		String imgPath = fileSystem.writeFile(data, mime, AVATAR_PATH + "/" + username + "/");
+		String oldImage = nu.getImgPath();
+		if(oldImage != null && !oldImage.equals("") && !oldImage.equals(DEFAULT_IMAGE))
+			fileSystem.deleteFile(oldImage);
+		nu.setImgPath(imgPath);
+		nUserDao.persist(nu);
+		return (DatatypeUser)new TranslatorUser().translate(nu);
 	}
 
 }
