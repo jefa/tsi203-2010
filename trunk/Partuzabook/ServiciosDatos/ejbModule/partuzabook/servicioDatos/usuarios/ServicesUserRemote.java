@@ -44,8 +44,17 @@ public interface ServicesUserRemote {
      * @param mail							- User new email
      * @param name							- User new full name
      */
-	public DatatypeUser updateNormalUser(String username, String password, String mail, String name, String img_path) throws UserNotFoundException;
+	public DatatypeUser updateNormalUser(String username, String password, String mail, String name) throws UserNotFoundException;
 	
+	/**
+     * Updates an user account with id username
+     * @throws UserNotFoundException		- if id username doesn't exist
+     * @param username						- User's username for the account
+     * @param password						- User new password
+     * @param mail							- User new email
+     * @param name							- User new full name
+     */
+	public DatatypeUser updateUserAvatar(String username, byte[] data, String mime) throws UserNotFoundException;
 	
 	/**
 	 * Returns true if exists a normal user with id username
