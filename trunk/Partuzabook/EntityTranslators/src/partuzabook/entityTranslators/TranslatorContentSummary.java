@@ -29,6 +29,7 @@ public class TranslatorContentSummary implements ITranslatable {
 		}
 		dat.setDescription(ent.getDescription());
 		dat.setUrl(ent.getUrl());
+		dat.setUploadedBy(ent.getUser().getName());
 		return dat;
 	}
 }
