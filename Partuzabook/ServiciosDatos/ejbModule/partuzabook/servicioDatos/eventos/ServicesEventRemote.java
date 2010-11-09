@@ -98,11 +98,12 @@ public interface ServicesEventRemote {
 	 * @param eventID				- Identifier of the event
 	 * @return						- Details for the event including its categories
      */ 
-	public DatatypeEvent getEventDetails(int eventID);
+	public DatatypeEvent getEventDetails(int eventID, boolean isSuperUser);
 
     /**
      * Returns the full details of the album associated to the event
 	 * @param eventID				- Identifier of the event
+	 * @param isSuperUser			- True if it's being invoked from SuperUser UI
 	 * @return						- Details for album and its contents
      */ 
 	public DatatypeAlbum getAlbumDetails(int eventID);
@@ -140,7 +141,7 @@ public interface ServicesEventRemote {
 	 * @param userName				- Identifier of the user
 	 * @return						- True if user is moderator for the event
 	 */
-	public boolean isUserModeratorInEvent(Integer eventId, String username) throws UserNotFoundException;
+	public boolean isUserModeratorInEvent(Integer eventId, String username);
 	
 	/**
 	 * Returns a list of candidate Users for Tagging -participants of the event, who have not already been tagged in the content-

@@ -130,7 +130,7 @@ public class ServicesUser implements ServicesUserRemote {
 	}
 	
 	public boolean existsNormalUser(String username) {
-		return nUserDao.findByID(username) !=null;
+		return nUserDao.findByID(username) != null;
 	}
 	
 	public String getName(String username){

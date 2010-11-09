@@ -20,8 +20,8 @@
 .pika-imgnav a {position: absolute; text-indent: -5000px; display: block;z-index:3;}
 	.pika-imgnav a.previous {background: url(../../images/pikachoose/prev.png) no-repeat left 50%; height: 480px; width: 50px; top: 9px; left: 9px;cursor:pointer;}
 	.pika-imgnav a.next {background: url(../../images/pikachoose/next.png) no-repeat right 50%; height: 480px; width: 50px; top: 9px; right: 9px;cursor:pointer;}
-	.pika-imgnav a.play {background: url(../../images/pikachoose/play.png) no-repeat 50% 50%; height: 100px; width: 40px;top:0;left:50%;display: none;cursor:pointer;}
-	.pika-imgnav a.pause {background: url(../../images/pikachoose/pause.png) no-repeat 50% 50%; height: 100px; width: 40px;top:0;left:50%;display:none;cursor:pointer;}
+	.pika-imgnav a.play {background: url(../images/pikachoose/play.png) no-repeat 50% 50%; height: 100px; width: 40px;top:0;left:50%;display: none;cursor:pointer;}
+	.pika-imgnav a.pause {background: url(../images/pikachoose/pause.png) no-repeat 50% 50%; height: 100px; width: 40px;top:0;left:50%;display:none;cursor:pointer;}
 
 .pika-textnav {overflow: hidden; margin: 10px 0 0 0;}
 .pika-textnav a {font-size: 12px; text-decoration: none; font-family:  helvetica, arial, sans-serif; color: #333; padding: 4px;}

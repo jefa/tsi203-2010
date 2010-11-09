@@ -48,12 +48,12 @@ public class FileSystem implements FileSystemLocal {
 				// return config.getString("imagesPathWindows") +
 				// "/Partuzabook/";
 				this.basePath = config.getProperty("imagesPathWindows")
-						+ "/Partuzabook/";
+				+ "/Partuzabook/";
 
 			if (SystemUtils.IS_OS_LINUX)
 				// return config.getString("imagesPathLinux") + "/Partuzabook/";
 				this.basePath = config.getProperty("imagesPathLinux")
-						+ "/Partuzabook/";
+				+ "/Partuzabook/";
 
 			// TODO: aca seria mas prolijo tirar un excepcion
 
@@ -69,12 +69,20 @@ public class FileSystem implements FileSystemLocal {
 			String uuid = java.util.UUID.randomUUID().toString();
 			String path = getBasePath();
 			String extension = "." + mimeType.split("/")[1];
-			extension.replace("unknown", "jpeg");
+			extension = extension.replace("unknown", "jpg");
 			new File(path + dir).mkdirs();
 			FileOutputStream fstream = new FileOutputStream(path + dir + uuid
 					+ extension);
 			fstream.write(data);
 			fstream.close();
+			
+			if (mimeType.contains("image")) {
+				data = getThumbnail(dir + uuid + extension, "M960,600");
+				fstream = new FileOutputStream(path + dir + uuid
+						+ extension);
+				fstream.write(data);
+				fstream.close();
+			}
 			return dir + uuid + extension;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -112,23 +120,43 @@ public class FileSystem implements FileSystemLocal {
 			File checkExists = new File(getBasePath() + filename);
 			byte[] bytesOut = null;
 			BufferedImage bi = null;
-			int dir = CreateThumbnail.CLIP_AND_SCALE;
+			int dir = 0;
+			if (thumbnailSize.charAt(0) >= 48 && thumbnailSize.charAt(0) <= 57) {
+				thumbnailSize = "S" + thumbnailSize;
+			}
 			String tipo = thumbnailSize.substring(0,1);
-			int tamanio = Integer.parseInt(thumbnailSize.substring(1));
-			
-			if (tamanio == 1) tamanio = 50; // por si acaso en algunos lugares sigue diciendo 1
-			
-			if (tipo.equals("H")) dir = CreateThumbnail.HORIZONTAL;
-			else if (tipo.equals("V")) dir = CreateThumbnail.VERTICAL;
-			else tamanio = Integer.parseInt(thumbnailSize);
-			
+			String[] params = thumbnailSize.substring(1).split(",");
+
+			int width = Integer.parseInt(params[0]);
+			int height = 0;
+
+			if (tipo.equals("F")) {
+				height = Integer.parseInt(params[1]);
+				dir = CreateThumbnail.FIXED_SIZE_SCALE_DOWN_ONLY;
+			}
+			else if (tipo.equals("M")) {
+				height = Integer.parseInt(params[1]);
+				dir = CreateThumbnail.MAX_DIMENSIONS;
+			}
+			else if (tipo.equals("m")) {
+				height = Integer.parseInt(params[1]);
+				dir = CreateThumbnail.MIN_DIMENSIONS;
+			}
+			else {
+				height = width;
+				if (tipo.equals("H")) {
+					dir = CreateThumbnail.HORIZONTAL;
+				}
+				else if (tipo.equals("V")) {
+					dir = CreateThumbnail.VERTICAL;
+				}
+				else if (tipo.equals("S")) {
+					dir = CreateThumbnail.CLIP_AND_SCALE;
+				}
+			}
+
 			if (checkExists.exists()) {
-				Image img = ct.getThumbnail(tamanio,dir);
-				bi = new BufferedImage(img.getWidth(null), img.getHeight(null),
-						BufferedImage.TYPE_INT_RGB);
-				Graphics2D g2d = bi.createGraphics();
-				g2d.drawImage(img, 0, 0, null);
-				g2d.dispose();
+				bi = ct.getThumbnail(width, height, dir);
 			} else {
 				bi = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
 			}
@@ -145,25 +173,25 @@ public class FileSystem implements FileSystemLocal {
 		}
 		return null;
 	}
-	
+
 	public String saveExternalFile(String dirlocal, String dirWeb) {
-		
+
 		try {
 			String uuid = java.util.UUID.randomUUID().toString();
 			String path = getBasePath();
 			int ind = dirWeb.split("\\.").length - 1;
 			String mime = dirWeb.split("\\.")[ind];
 			String extension = "." + mime;
-			
+
 			new File(path + dirlocal).mkdirs();
-		
-		
+
+
 			URL url = new URL(dirWeb);
 			URLConnection urlCon = url.openConnection();
-			
+
 			InputStream is = urlCon.getInputStream();
 			FileOutputStream fos = new FileOutputStream(path + dirlocal + uuid + extension);
-			
+
 			// Lectura de la foto de la web y escritura en fichero local
 			byte[] array = new byte[1000];
 			int leido = is.read(array);
@@ -174,7 +202,7 @@ public class FileSystem implements FileSystemLocal {
 
 			is.close();
 			fos.close();
-			
+
 			return dirlocal + uuid + extension;
 		} catch (Exception e) {
 			e.printStackTrace();

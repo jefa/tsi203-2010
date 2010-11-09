@@ -76,11 +76,8 @@ public class SubirVideoMB{
 			if(getCatsSelected().size() > 0)
 				getCatsSelected().remove(getCatsSelected().size() - 1);
 			
-			FacesContext context = FacesContext.getCurrentInstance();
-			HttpSession session = (HttpSession) context.getExternalContext()
-					.getSession(true);
-			String username = (String) session.getAttribute("username");
-			String youtube_id = (String) session.getAttribute("youtube_id");
+			String username = SessionUtils.getUsername();
+			String youtube_id = (String) SessionUtils.getAttribute("youtube_id");
 			
 			Context ctx = getContext();
 			ServicesUploadRemote service = (ServicesUploadRemote)ctx.lookup(SERVICE_UPLOAD);
@@ -207,7 +204,7 @@ public class SubirVideoMB{
 	public List<DatatypeCategorySummary> getAllCategories() {
 		if(allCategories == null || allCategories.size() == 0) {
 			//eventId = 1001; //FIXME esta linea es para realizar pruebas. Hay que comentarla para que funcione adecuadamente
-			allCategories = getServicesEvent().getEventDetails(eventId).getContentCategories();
+			allCategories = getServicesEvent().getEventDetails(eventId, true).getContentCategories();
 			int i = 0;
 			int remove = 0;
 			for(Iterator<DatatypeCategorySummary> it = allCategories.iterator(); it.hasNext(); ){

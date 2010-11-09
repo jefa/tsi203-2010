@@ -41,7 +41,7 @@ public class PaginaInicioMB {
 	public PaginaInicioMB(){
     	FacesContext context = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-		this.username = (String) session.getAttribute("username");		
+		this.username = SessionUtils.getUsername();
 	}
 	
 	private Context getContext() throws NamingException {
@@ -226,7 +226,7 @@ public class PaginaInicioMB {
 	public boolean checkIfUserLogged(){
 		FacesContext context = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-		String user = (String) session.getAttribute("username");		
+		String user = SessionUtils.getUsername();		
 		return (user != null );
 	}
 

@@ -252,9 +252,7 @@ public class EventoMB {
 	}*/
 
 	public String getUserName() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-		return (String) session.getAttribute("username");
+		return SessionUtils.getUsername();
 	}
 
 	public void setEvento(DatatypeEvent evento) {
@@ -315,7 +313,7 @@ public class EventoMB {
 		this.eventId = eventId;
 		setValidUserForContext(false);
 		// Also set the Event
-		setEvento(getServicesEvent().getEventDetails(eventId));
+		setEvento(getServicesEvent().getEventDetails(eventId, false));
 	}
 
 	public void setCategoriesCount(Integer categoriesCount) {
@@ -352,20 +350,6 @@ public class EventoMB {
 			}
 		}
 		return servicesUser;
-	}
-
-	private ServicesMultimediaRemote getServicesMultimedia() {
-		try {
-			if (servicesMultimedia == null){
-				Context ctx = getContext();
-				this.servicesMultimedia = (ServicesMultimediaRemote) ctx.lookup("PartuzabookEAR/ServicesMultimedia/remote");
-			}
-			return servicesMultimedia;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	private void setCandidates() {
@@ -467,7 +451,7 @@ public class EventoMB {
 		try {
 			ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			this.hasAlbum = service.getEventDetails(eventId).getHasAlbum(); 
+			this.hasAlbum = service.getEventDetails(eventId, false).getHasAlbum(); 
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -583,7 +567,7 @@ public class EventoMB {
 
 	private Boolean calcValidUserForContent() {
 		
-		return getServicesMultimedia().isUserRelatedToEvent(eventId, getUserName());
+		return getServicesEvent().isUserRelatedToEvent(eventId, getUserName());
 	}
 	
 	public void sendAdmitMail() {

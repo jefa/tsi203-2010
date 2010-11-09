@@ -28,7 +28,7 @@
      * @param o {Hash|String} A set of key/value pairs to set as configuration properties or a method name to call on a formerly created instance.
      */
  	var defaults = {
-		autoPlay: true,
+		autoPlay: false,
 		speed: 5000,
 		text: { play: "", stop: "", previous: "Anterior", next: "Siguiente" },
 		transition:[0],
@@ -131,7 +131,11 @@
 			this.active		= this.thumbs.eq(0);
 
 			//fill in info for first image
-			this.finishAnimating({'source':this.active.attr('ref') || this.active.attr('src'),'caption':this.active.parents('li:first').find('span:first').html(), 'clickThrough':this.active.parent().attr('href') || ""});
+			var src = this.active.attr('src');
+			if (src != null) {
+				src = src.replace('thb=74','thb=F640,480');
+        	}
+			this.finishAnimating({'source':this.active.attr('ref') || src,'caption':this.active.parents('li:first').find('span:first').html(), 'clickThrough':this.active.parent().attr('href') || ""});
 		
 			//process all the thumbnails
 			this.thumbs.each(this.createThumb);
@@ -150,7 +154,7 @@
         	if($(this).parent('a').length > 0){ $(this).unwrap(); }
         	$.data(this,'caption',$(this).next('span').html() || "");
         	$(this).next('span').remove();
-        	$.data(this,'source',$(this).attr('ref') || $(this).attr('src'));
+        	$.data(this,'source',$(this).attr('ref') || $(this).attr('src').replace('thb=74', 'thb=F640,480'));
 			//gets each items index to iterate through them. Thanks to Tushar for the fix.
 			$.data(this,'order',$(this).closest('ul').find('li').index($(this).parents('li')));
     		//pass data so it can enter the load scope
@@ -186,6 +190,8 @@
 					width: width+"px",
 					height: height+"px"
 				};
+				self.width = width;
+				self.height = height;
 				self.css(imgcss);
 				self.hover(
 					function(){$(this).stop(true,true).fadeTo(250,1);},
@@ -244,7 +250,7 @@
 	     	self.active = $(this);
 	     	self.active.addClass('active').fadeTo(200,1);
      		var val = self.active.attr('src').split('id=');
-     		document.getElementById('panelThumbs:selectContentId').value = val[1];
+     		document.getElementById('panelThumbs:selectContentId').value = val[1].split('&')[0];
      		document.getElementById('panelThumbs:btnSelectThumb').click();
 	     	var data = $.data(this);
 	 		$('<img />').bind('load', {self:self,data:data}, function()
@@ -385,7 +391,7 @@
 						//fade out then in
 						self.aniDiv.hide();
 						self.image.fadeOut('slow',function(){
-							self.image.attr('src',data.source).fadeIn('slow',function()
+							self.image.attr('src',data.source == null ? null : data.source.replace('thb=74','thb=F640,480')).fadeIn('slow',function()
 							{
 								self.finishAnimating(data);
 							});
@@ -398,11 +404,11 @@
 	     finishAnimating: function(data)
 	     {
      		this.animating = false;
-     		this.image.attr('src',data.source);
+     		this.image.attr('src',data.source == null ? null : data.source.replace('thb=74','thb=F640,480'));
      		this.image.attr('width',640);
      		this.image.attr('height',480);
      		this.aniDiv.hide();
-     		this.anchor.attr('href',data.source);
+     		this.anchor.attr('href',data.source == null ? '' : data.source.replace('thb=74', 'thb=M960,600'));
      		this.anchor.addClass('image-selected');
      		if(this.options.showCaption)
      		{

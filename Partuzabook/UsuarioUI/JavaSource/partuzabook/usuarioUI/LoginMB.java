@@ -22,7 +22,7 @@ public class LoginMB {
 	
 	public boolean getIsUserLogged(){
 		this.userName = getUserName();
-		this.isUserLogged = this.userName != null;
+		this.isUserLogged = this.userName != null && this.userName != "";
 		return this.isUserLogged;
 	}
 
@@ -30,7 +30,7 @@ public class LoginMB {
 		FacesContext context = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
 		if (session != null)
-			userName = (String) session.getAttribute("username");
+			userName = SessionUtils.getUsername();
 		return userName;
 	}
 

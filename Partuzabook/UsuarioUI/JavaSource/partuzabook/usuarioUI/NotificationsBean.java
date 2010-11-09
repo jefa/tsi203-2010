@@ -53,7 +53,7 @@ public class NotificationsBean {
 		FacesContext context = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) context.getExternalContext()
 				.getSession(true);
-		return (String) session.getAttribute("username");
+		return SessionUtils.getUsername();
 	}
 
 	private ServicesUserRemote getServicesUser() {
@@ -120,10 +120,7 @@ public class NotificationsBean {
 	}
 
 	public boolean checkIfUserLogged() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) context.getExternalContext()
-				.getSession(true);
-		String user = (String) session.getAttribute("username");
+		String user = SessionUtils.getUsername();
 		return (user != null);
 	}
 

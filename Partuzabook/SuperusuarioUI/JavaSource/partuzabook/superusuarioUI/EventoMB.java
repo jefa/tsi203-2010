@@ -323,7 +323,7 @@ public class EventoMB {
 		this.eventId = eventId;
 		setValidUserForContext(false);
 		// Also set the Event
-		setEvento(getServicesEvent().getEventDetails(eventId));
+		setEvento(getServicesEvent().getEventDetails(eventId, true));
 	}
 
 	public void setCategoriesCount(Integer categoriesCount) {
@@ -475,7 +475,7 @@ public class EventoMB {
 		try {
 			ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			this.hasAlbum = service.getEventDetails(eventId).getHasAlbum(); 
+			this.hasAlbum = service.getEventDetails(eventId, true).getHasAlbum(); 
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -592,7 +592,7 @@ public class EventoMB {
 	private Boolean calcValidUserForContent() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-		this.userName = (String) session.getAttribute("username");		
+		this.userName = SessionUtils.getUsername();		
 		if (userName == null) {
 			return false;
 		} 
