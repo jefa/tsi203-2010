@@ -133,7 +133,7 @@
 			//fill in info for first image
 			var src = this.active.attr('src');
 			if (src != null) {
-				src = src.replace('thb=74','thb=F640,480');
+				src = src.replace('thb=74','thb=F625,480');
         	}
 			this.finishAnimating({'source':this.active.attr('ref') || src,'caption':this.active.parents('li:first').find('span:first').html(), 'clickThrough':this.active.parent().attr('href') || ""});
 		
@@ -154,7 +154,7 @@
         	if($(this).parent('a').length > 0){ $(this).unwrap(); }
         	$.data(this,'caption',$(this).next('span').html() || "");
         	$(this).next('span').remove();
-        	$.data(this,'source',$(this).attr('ref') || $(this).attr('src').replace('thb=74', 'thb=F640,480'));
+        	$.data(this,'source',$(this).attr('ref') || $(this).attr('src').replace('thb=74', 'thb=F625,480'));
 			//gets each items index to iterate through them. Thanks to Tushar for the fix.
 			$.data(this,'order',$(this).closest('ul').find('li').index($(this).parents('li')));
     		//pass data so it can enter the load scope
@@ -394,7 +394,7 @@
 						//fade out then in
 						self.aniDiv.hide();
 						self.image.fadeOut('slow',function(){
-							self.image.attr('src',data.source == null ? null : data.source.replace('thb=74','thb=F640,480')).fadeIn('slow',function()
+							self.image.attr('src',data.source == null ? null : data.source.replace('thb=74','thb=F625,480')).fadeIn('slow',function()
 							{
 								self.finishAnimating(data);
 							});
@@ -407,11 +407,11 @@
 	     finishAnimating: function(data)
 	     {
      		this.animating = false;
-     		this.image.attr('src',data.source == null ? null : data.source.replace('thb=74','thb=F640,480'));
-     		this.image.attr('width',640);
+     		this.image.attr('src',data.source == null ? null : data.source.replace('thb=74','thb=F625,480'));
+     		this.image.attr('width',625);
      		this.image.attr('height',480);
      		this.aniDiv.hide();
-     		var ref = data.source.replace('thb=F640,480', 'thb=M960,600');
+     		var ref = data.source.replace('thb=F625,480', 'thb=M960,600');
      		this.anchor.attr('href',ref);
      		this.anchor.addClass('image-selected');
      		if(this.options.showCaption)

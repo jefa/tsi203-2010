@@ -242,6 +242,19 @@
 	</ui:define>
 	<ui:define name="sidebar" rendered="#{eventoMB.validUserForContext}">
 		<ul class="xoxo" id="ulSidebar">
+			<li class="widgetcontainer clearfix"><h5 class="widgettitle"><img style="border:0" width="14" height="14" src="./template_files/rss.png"/>GMaps</h5>
+			<div id="gmap"><rich:gmap gmapVar="map"
+				style="width:278px;height:278px" id="map"
+				lat="#{eventoMB.evento.latitude}"
+				lng="#{eventoMB.evento.longitude}"
+				enableDoubleClickZoom="true" showGScaleControl="false" zoom="15"
+				mapType="G_NORMAL_MAP" showGMapTypeControl="false"
+				showGLargeMapControl="false" /></div>
+
+			<script>window.onload=function(){
+			addMarkerWithInfo(map, "#{eventoMB.evento.latitude}", "#{eventoMB.evento.longitude}", '#{eventoMB.evento.address}', '', '');
+		}</script>			
+			</li>
 			<li class="multi-sidebar-container">
 			<div
 				class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
@@ -254,8 +267,7 @@
 					href="javascript:null()" onclick="toggleTab('s-comentarios',this)"><span>Comentarios</span></a></li>
 				<li class="ui-state-default ui-corner-top"><a
 					href="javascript:null()" onclick="toggleTab('s-twitter',this)"><span>Twitter</span></a></li>
-				<li class="ui-state-default ui-corner-top"><a
-					href="javascript:null()" onclick="toggleTab('s-gmap',this)"><span>Gmap</span></a></li>
+
 			</ul>
 			<div id="s-etiquetados"
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
@@ -432,19 +444,8 @@
         });
       //]]>
 		</script></div>
-			<div id="s-gmap"
-				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-			<div id="gmap"><rich:gmap gmapVar="map"
-				style="width:278px;height:278px" id="map"
-				lat="#{eventoMB.evento.latitude + 0.017}"
-				lng="#{eventoMB.evento.longitude - 0.018}"
-				enableDoubleClickZoom="true" showGScaleControl="false" zoom="13"
-				mapType="G_NORMAL_MAP" showGMapTypeControl="false"
-				showGLargeMapControl="false" /></div>
-			</div>
-			<script>window.onload=function(){
-			addMarkerWithInfo(map, "#{eventoMB.evento.latitude}", "#{eventoMB.evento.longitude}", '#{eventoMB.evento.address}', '', '');
-		}</script></div>
+
+</div>
 			</li>
 		</ul>
 	</ui:define>
