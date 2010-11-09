@@ -66,6 +66,10 @@
 						<f:setPropertyActionListener value="#{eventoMB.album}"
 							target="#{eventoMB.selectedCategory}" />
 					</h:commandButton>
+					<h:commandButton value="Modificar Evento" action="modEvento">
+						<f:setPropertyActionListener value="#{eventoMB.eventId}"
+								target="#{EventMB.evt_id}" />
+					</h:commandButton>
 				</h:form></li>
 			</ul>
 			<!-- .posts-quick --></div>

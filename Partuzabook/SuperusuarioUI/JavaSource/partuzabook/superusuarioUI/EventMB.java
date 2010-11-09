@@ -29,43 +29,42 @@ public class EventMB {
 	private static final String NO_MODS = "Se asignï¿½ el evento como moderado, pero no se establecieron moderadores.";
 	private static final String EVENT_NOT_FOUND = "No se encontrï¿½ el evento";
 	
-	private String name;
-	private String nameMessage;
-	private String description;
-	private String descriptionMessage;
-	private Date date = new Date();
-	private String duration;
-	private String durationMessage;
-	private String address;
-	private String addressMessage;
-	private String creator;
-	private boolean moderated = true;
-	private List<String> mods;
-	private String modsMessage;
+	//Para la creación de eventos:
+	private String nameC;
+	private String nameMessageC;
+	private String descriptionC;
+	private String descriptionMessageC;
+	private Date dateC = new Date();
+	private String durationC;
+	private String durationMessageC;
+	private String addressC;
+	private String addressMessageC;
+	private String creatorC;
+	private boolean moderatedC = true;
+	private List<String> modsC;
+	private String modsMessageC;
+	private String hashtagC;
+	private double latitudeC;
+	private double longitudeC;
+	private List<String> participantsC;
+	private String participantsMessageC;
+	private String categoryC;
 	
-	private List<String> participants;
-	private String participantsMessage;
+	private String cantModsC;
+	private String cantParticipantsC;
 	
+	private List<DatatypeUser> candidatesModsC;
+	private List<DatatypeUser> resultsModsC;
+	private String suggestModsC = "";
+	
+	private List<DatatypeUser> candidatesParticipantsC;
+	private List<DatatypeUser> resultsParticipantsC;
+	private String suggestParticipantsC = "";
+	
+	//Para todos:
 	private Map<String,String> allCats;
-	private String category;
-	private String hashtag;
-	private double latitude;
-	private double longitude;
 	
-	
-	private String cantMods;
-	private String cantParticipants;
-	
-	private List<DatatypeUser> candidatesMods;
-	private List<DatatypeUser> resultsMods;
-	private String suggestMods = "";
-	
-	private List<DatatypeUser> candidatesParticipants;
-	private List<DatatypeUser> resultsParticipants;
-	private String suggestParticipants = "";
-	
-	
-	//Para la edicion del evento:
+	//Para la edicion de eventos:
 	private int evt_id = -1;
 	private DatatypeEvent eventToModify = null;
 	
@@ -74,6 +73,38 @@ public class EventMB {
 	private List<DatatypeEventSummary> eventResults;
 	private String eventSuggest = "";
 	private String findEventMessage;
+	
+	private String nameM;
+	private String nameMessageM;
+	private String descriptionM;
+	private String descriptionMessageM;
+	private Date dateM = new Date();
+	private String durationM;
+	private String durationMessageM;
+	private String addressM;
+	private String addressMessageM;
+	private String creatorM;
+	private boolean moderatedM = true;
+	private List<String> modsM;
+	private String modsMessageM;
+	private String hashtagM;
+	private double latitudeM;
+	private double longitudeM;
+	private List<String> participantsM;
+	private String participantsMessageM;
+	private String categoryM;
+	
+	private String cantModsM;
+	private String cantParticipantsM;
+	
+	private List<DatatypeUser> candidatesModsM;
+	private List<DatatypeUser> resultsModsM;
+	private String suggestModsM = "";
+	
+	private List<DatatypeUser> candidatesParticipantsM;
+	private List<DatatypeUser> resultsParticipantsM;
+	private String suggestParticipantsM = "";
+	
 	
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
@@ -86,216 +117,224 @@ public class EventMB {
 		return ctx;
 	}
 	
-	private void clearMessages() {
-		setNameMessage("");
-		setDescriptionMessage("");
-		setDurationMessage("");
-		setAddressMessage("");
-		setModsMessage("");
+	private void clearMessagesC() {
+		setNameMessageC("");
+		setDescriptionMessageC("");
+		setDurationMessageC("");
+		setAddressMessageC("");
+		setModsMessageC("");
+		setParticipantsMessageC("");
 	}
 	
-	private boolean noMessages() {
-		return ((nameMessage == null || nameMessage.equals("")) &&
-				(descriptionMessage == null || descriptionMessage.equals("")) &&
-				(durationMessage == null || durationMessage.equals("")) &&
-				(addressMessage == null || addressMessage.equals("")) &&
-				(modsMessage == null || modsMessage.equals("")));
+	private boolean noMessagesC() {
+		return ((nameMessageC == null || nameMessageC.equals("")) &&
+				(descriptionMessageC == null || descriptionMessageC.equals("")) &&
+				(durationMessageC == null || durationMessageC.equals("")) &&
+				(addressMessageC == null || addressMessageC.equals("")) &&
+				(modsMessageC == null || modsMessageC.equals("")) &&
+				(participantsMessageC == null || participantsMessageC.equals("")));
+	}
+	
+	private void clearMessagesM() {
+		setNameMessageM("");
+		setDescriptionMessageM("");
+		setDurationMessageM("");
+		setAddressMessageM("");
+		setModsMessageM("");
+		setParticipantsMessageM("");
+	}
+	
+	private boolean noMessagesM() {
+		return ((nameMessageM == null || nameMessageM.equals("")) &&
+				(descriptionMessageM == null || descriptionMessageM.equals("")) &&
+				(durationMessageM == null || durationMessageM.equals("")) &&
+				(addressMessageM == null || addressMessageM.equals("")) &&
+				(modsMessageM == null || modsMessageM.equals("")) &&
+				(participantsMessageM == null || participantsMessageM.equals("")));
 	}
 	
 	public String createEvent() {
 		String res = "failure";
 		//Limpiamos los mensajes
-		clearMessages();
-		if(name == null || name.equals(""))
-			nameMessage = INPUT_OBLIG;
-		if(description == null || description.equals(""))
-			descriptionMessage = INPUT_OBLIG;
-		if(duration == null || duration.equals(""))
-			durationMessage = INPUT_OBLIG;
-		if(address == null || address.equals(""))
-			addressMessage = INPUT_OBLIG;
+		clearMessagesC();
+		if(nameC == null || nameC.equals(""))
+			nameMessageC = INPUT_OBLIG;
+		if(descriptionC == null || descriptionC.equals(""))
+			descriptionMessageC = INPUT_OBLIG;
+		if(durationC == null || durationC.equals(""))
+			durationMessageC = INPUT_OBLIG;
+		if(addressC == null || addressC.equals(""))
+			addressMessageC = INPUT_OBLIG;
 		
-		if(noMessages() && creator != null && category != null && !creator.equals("") && !category.equals("")) {
+		if(noMessagesC() && creatorC != null && categoryC != null && !creatorC.equals("") && !categoryC.equals("")) {
 			Context ctx;
 			try {
 				ctx = getContext();
 				ServicesEventRemote serviceEvent = (ServicesEventRemote)ctx.lookup(SERVICE_EVENT);
 				ServicesUserRemote serviceUser = (ServicesUserRemote) ctx.lookup(SERVICE_USER);
-				if(moderated && mods.size()>0) {
-					List<Boolean> existsMods = serviceUser.existsNormalUser(mods);
+				if(moderatedC && modsC.size()>0) {
+					List<Boolean> existsMods = serviceUser.existsNormalUser(modsC);
 					int index = 0;
 					for(ListIterator<Boolean> it = existsMods.listIterator(); it.hasNext(); index++){
 						if(!it.next()){
-							modsMessage += MOD_NOT_FOUND + mods.get(index) +". ";
+							modsMessageC += MOD_NOT_FOUND + modsC.get(index) +". ";
 						}			
 					}
-					List<Boolean> existsUsers = serviceUser.existsNormalUser(participants);
+					List<Boolean> existsUsers = serviceUser.existsNormalUser(participantsC);
 					index = 0;
 					for(ListIterator<Boolean> it = existsUsers.listIterator(); it.hasNext(); index++){
 						if(!it.next()){
-							participantsMessage += PARTICIPANT_NOT_FOUND + participants.get(index) +". ";
+							participantsMessageC += PARTICIPANT_NOT_FOUND + participantsC.get(index) +". ";
 						}			
 					}
-					if(noMessages()) {
-						DatatypeEventSummary event = serviceEvent.createEvent(name, description, date, duration, 
-								address, creator, moderated, category, latitude, longitude, hashtag);
+					if(noMessagesC()) {
+						DatatypeEventSummary event = serviceEvent.createEvent(nameC, descriptionC, dateC, durationC, 
+								addressC, creatorC, moderatedC, categoryC, latitudeC, longitudeC, hashtagC);
 						
 						//Agregar usuarios
-						serviceEvent.addParticipantstoEvent(event.getEvtId(), participants);
+						serviceEvent.addParticipantstoEvent(event.getEvtId(), participantsC);
 						
-						serviceEvent.addModtoEvent(event.getEvtId(), mods);
+						serviceEvent.addModtoEvent(event.getEvtId(), modsC);
 						
-						name = null;
-						nameMessage  = null;
-						description  = null;
-						descriptionMessage  = null;
-						date = new Date();
-						duration  = null;
-						durationMessage  = null;
-						address  = null;
-						addressMessage  = null;
-						moderated = true;
-						mods = null;
-						modsMessage = null;
-						participants = null;
-						participantsMessage = null;
-						category = null;
+						nameC = null;
+						nameMessageC  = null;
+						descriptionC  = null;
+						descriptionMessageC  = null;
+						dateC = new Date();
+						durationC = null;
+						durationMessageC  = null;
+						addressC  = null;
+						addressMessageC  = null;
+						moderatedC = true;
+						modsC = null;
+						modsMessageC = null;
+						participantsC = null;
+						participantsMessageC = null;
+						categoryC = null;
 						
 						res  = "success";
 					}						
-				} else if(moderated){
+				} else if(moderatedC){
 					//Es moderado pero no tiene mods.
-					modsMessage = NO_MODS;
+					modsMessageC = NO_MODS;
 					res = "failure";
 				} else {
-					DatatypeEventSummary event = serviceEvent.createEvent(name, description, date, duration, address, creator, 
-							moderated, category, latitude, longitude, hashtag);
+					DatatypeEventSummary event = serviceEvent.createEvent(nameC, descriptionC, dateC, durationC, addressC, creatorC, 
+							moderatedC, categoryC, latitudeC, longitudeC, hashtagC);
 					
 					//Agregar usuarios
-					serviceEvent.addParticipantstoEvent(event.getEvtId(), participants);
+					serviceEvent.addParticipantstoEvent(event.getEvtId(), participantsC);
 					
 					res = "success";
 				}				
 			} catch (NamingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				clearAll();
+				clearAllC();
 			} catch (Exception e) {
 				e.printStackTrace();
-				clearAll();
+				clearAllC();
 			}
 		}		
 		
 		if(res.equals("success")) {
-			clearMessages();
-			clearAll();
+			clearMessagesC();
+			clearAllC();
 		}
 		return res;
-	}
+	}	
 	
-	
-	
-	
-	private void clearAll() {
-		name = "";
+	private void clearAllC() {
+		nameC = "";
 		//nameMessage = "";
-		description = "";
+		descriptionC = "";
 		//descriptionMessage = "";
-		date = new Date();
-		duration = null;
+		dateC = new Date();
+		durationC = null;
 		//durationMessage = "";
-		address = "";
+		addressC = "";
 		//addressMessage = "";
-		moderated = true;
-		mods = null;
-		participants = null;
+		moderatedC = true;
+		modsC = null;
+		participantsC = null;
 		//modsMessage = "";
-		latitude = 0;
-		longitude = 0;
+		latitudeC = 0;
+		longitudeC = 0;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	private void clearAllM() {
+		nameM = "";
+		//nameMessage = "";
+		descriptionM = "";
+		//descriptionMessage = "";
+		dateM = new Date();
+		durationM = null;
+		//durationMessage = "";
+		addressM = "";
+		//addressMessage = "";
+		moderatedM = true;
+		modsM = null;
+		participantsM = null;
+		//modsMessage = "";
+		latitudeM = 0;
+		longitudeM = 0;
 	}
-	public String getName() {
-		if(evt_id != -1 && eventToModify == null)
-			initEventToModify();
-		return name;
+	
+	public void setNameC(String nameC) {
+		this.nameC = nameC;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public String getNameC() {
+		return nameC;
 	}
-	public String getDescription() {
-		if(evt_id != -1 && eventToModify == null)
-			initEventToModify();
-		return description;
+	public void setDescriptionC(String descriptionC) {
+		this.descriptionC = descriptionC;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+	public String getDescriptionC() {
+		return descriptionC;
 	}
-	public Date getDate() {
-		if(evt_id != -1 && eventToModify == null)
-			initEventToModify();
-		return date;
+	public void setDateC(Date dateC) {
+		this.dateC = dateC;
 	}
-	public void setDuration(String duration) {
-		this.duration = duration;
+	public Date getDateC() {
+		return dateC;
 	}
-	public String getDuration() {
-		if(evt_id != -1 && eventToModify == null)
-			initEventToModify();
-		return duration;
+	public void setDurationC(String durationC) {
+		this.durationC = durationC;
 	}
-	public void setAddress(String address) {
-		this.address = address;
+	public String getDurationC() {
+		return durationC;
 	}
-	public String getAddress() {
-		if(evt_id != -1 && eventToModify == null)
-			initEventToModify();
-		return address;
+	public void setAddressC(String addressC) {
+		this.addressC = addressC;
 	}
-	public void setCreator(String creator) {
-		this.creator = creator;
+	public String getAddressC() {
+		return addressC;
 	}
-	public String getCreator() {
-		if(evt_id != -1) {
-			if(eventToModify == null)
-				initEventToModify();
-			return "";
-		}
-		return creator;
+	public void setCreatorC(String creatorC) {
+		this.creatorC = creatorC;
 	}
-	public void setModerated(boolean moderated) {
-		this.moderated = moderated;
+	public String getCreatorC() {
+		return creatorC;
 	}
-	public boolean isModerated() {
-		if(evt_id != -1 && eventToModify == null)
-			initEventToModify();
-		return moderated;
+	public void setModeratedC(boolean moderatedC) {
+		this.moderatedC = moderatedC;
 	}
-	public void setMods(List<String> mods) {
-		this.mods = mods;
-		if(evt_id != -1) {
-			if(eventToModify == null)
-				initEventToModify();
-			eventToModify.setModsUsernames(mods);
-		}
-		
+	public boolean isModeratedC() {
+		return moderatedC;
 	}
-	public List<String> getMods() {
-		if(evt_id != -1 && eventToModify == null)
-			initEventToModify();
-		if(mods == null)
-			mods = new ArrayList<String>();
-		return mods;
+	public void setModsC(List<String> modsC) {
+		this.modsC = modsC;		
 	}
-	public void setCategory(String category) {
-		this.category = category;
+	public List<String> getModsC() {
+		if(modsC == null)
+			modsC = new ArrayList<String>();
+		return modsC;
 	}
-	public String getCategory() {
-		if(evt_id != -1 && eventToModify == null)
-			initEventToModify();
-		return category;
+	public void setCategoryC(String categoryC) {
+		this.categoryC = categoryC;
+	}
+	public String getCategoryC() {
+		return categoryC;
 	}
 	
 	public void setAllCats(Map<String,String> allCats) {
@@ -320,134 +359,221 @@ public class EventMB {
 		return allCats;
 	}
 	
-	public List<DatatypeUser> autocompleteMods(Object suggestParam) {
-		setCandidatesMods();
-		suggestMods = ((String)suggestParam).toLowerCase();
-		resultsMods = new ArrayList<DatatypeUser>();
-		Iterator<DatatypeUser> it = candidatesMods.iterator();
+	public List<DatatypeUser> autocompleteModsC(Object suggestParam) {
+		setCandidatesModsC();
+		suggestModsC = ((String)suggestParam).toLowerCase();
+		resultsModsC = new ArrayList<DatatypeUser>();
+		Iterator<DatatypeUser> it = candidatesModsC.iterator();
 		while (it.hasNext()) {
 			DatatypeUser user = (DatatypeUser) it.next();
-			if (user.username.toLowerCase().contains(suggestMods)
-					|| user.name.toLowerCase().contains(suggestMods)) {
-				resultsMods.add(user);
+			if (user.username.toLowerCase().contains(suggestModsC)
+					|| user.name.toLowerCase().contains(suggestModsC)) {
+				resultsModsC.add(user);
 			}
 		}
-		return resultsMods;
+		return resultsModsC;
 	}
 	
-	public List<DatatypeUser> autocompleteParticipants(Object suggestParam) {
-		setCandidatesParticipants();
-		suggestParticipants = ((String)suggestParam).toLowerCase();
-		resultsParticipants = new ArrayList<DatatypeUser>();
-		Iterator<DatatypeUser> it = candidatesParticipants.iterator();
+	public List<DatatypeUser> autocompleteParticipantsC(Object suggestParam) {
+		setCandidatesParticipantsC();
+		suggestParticipantsC = ((String)suggestParam).toLowerCase();
+		resultsParticipantsC = new ArrayList<DatatypeUser>();
+		Iterator<DatatypeUser> it = candidatesParticipantsC.iterator();
 		while (it.hasNext()) {
 			DatatypeUser user = (DatatypeUser) it.next();
-			if (user.username.toLowerCase().contains(suggestParticipants)
-					|| user.name.toLowerCase().contains(suggestParticipants)) {
-				resultsParticipants.add(user);
+			if (user.username.toLowerCase().contains(suggestParticipantsC)
+					|| user.name.toLowerCase().contains(suggestParticipantsC)) {
+				resultsParticipantsC.add(user);
 			}
 		}
-		return resultsParticipants;
+		return resultsParticipantsC;
 	}
 	
-	public void addMod() {
-		if(suggestMods != null && !suggestMods.equals("")) {
-			if(getMods() == null)
-				setMods(new ArrayList<String>());
-			getMods().add(suggestMods);
+	public void addModC() {
+		if(suggestModsC != null && !suggestModsC.equals("")) {
+			if(getModsC() == null)
+				setModsC(new ArrayList<String>());
+			getModsC().add(suggestModsC);
 		}
 	}
 	
-	public void addParticipant() {
-		if(suggestParticipants != null && !suggestParticipants.equals("")) {
-			if(getParticipants() == null)
-				setParticipants(new ArrayList<String>());
-			getParticipants().add(suggestParticipants);
+	public void addParticipantC() {
+		if(suggestParticipantsC != null && !suggestParticipantsC.equals("")) {
+			if(getParticipantsC() == null)
+				setParticipantsC(new ArrayList<String>());
+			getParticipantsC().add(suggestParticipantsC);
+		}
+	}	
+	public void resetModC() {
+		modsC = null;
+		modsMessageC = null;
+	}
+	public void resetParticipantsC() {
+		participantsC = null;
+		participantsMessageC = null;
+	}
+	
+	public int getCantModsC() {
+		if(getModsC() == null)
+			return 0;
+		return getModsC().size();
+	}
+	
+	public int getCantParticipantsC() {
+		if(getParticipantsC() == null)
+			return 0;
+		return getParticipantsC().size();
+	}
+
+	public void setNameMessageC(String nameMessageC) {
+		this.nameMessageC = nameMessageC;
+	}
+
+	public String getNameMessageC() {
+		return nameMessageC;
+	}
+
+	public void setDescriptionMessageC(String descriptionMessageC) {
+		this.descriptionMessageC = descriptionMessageC;
+	}
+
+	public String getDescriptionMessageC() {
+		return descriptionMessageC;
+	}
+
+	public void setDurationMessageC(String durationMessageC) {
+		this.durationMessageC = durationMessageC;
+	}
+
+	public String getDurationMessageC() {
+		return durationMessageC;
+	}
+
+	public void setAddressMessageC(String addressMessageC) {
+		this.addressMessageC = addressMessageC;
+	}
+
+	public String getAddressMessageC() {
+		return addressMessageC;
+	}
+
+	public void setModsMessageC(String modsMessageC) {
+		this.modsMessageC = modsMessageC;
+	}
+
+	public String getModsMessageC() {
+		return modsMessageC;
+	}
+
+	public void setLatitudeC(double latitudeC) {
+		this.latitudeC = latitudeC;
+	}
+
+	public double getLatitudeC() {
+		return latitudeC;
+	}
+	public void setLongitudeC(double longitudeC) {
+		this.longitudeC = longitudeC;
+	}
+
+	public double getLongitudeC() {
+		return longitudeC;
+	}	
+	
+	public void setHashtagC(String hashtagC) {
+		if (!hashtagC.startsWith("#")) {
+			hashtagC = "#" + hashtagC.substring(0, hashtagC.length() > 15 ? 15 : hashtagC.length());
+		}
+		this.hashtagC = hashtagC;
+	}
+
+	public String getHashtagC() {
+		return hashtagC;
+	}
+
+	public void setCandidatesModsC() {
+		if (candidatesModsC == null) {
+			try {
+				Context ctx = getContext();
+				ServicesUserRemote service = (ServicesUserRemote) ctx.lookup(SERVICE_USER);	
+				candidatesModsC = service.findAllNormalUsers();
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
-	
-	public void resetMod() {
-		mods = null;
-		modsMessage = null;
-	}
-	
 
-	public void resetParticipants() {
-		participants = null;
-		participantsMessage = null;
-	}
-	
-	public int getCantMods() {
-		if(getMods() == null)
-			return 0;
-		return getMods().size();
-	}
-	
-	public int getCantParticipants() {
-		if(getParticipants() == null)
-			return 0;
-		return getParticipants().size();
+	public List<DatatypeUser> getCandidatesModsC() {
+		return candidatesModsC;
 	}
 
-	public void setNameMessage(String nameMessage) {
-		this.nameMessage = nameMessage;
+	public void setResultsModsC(List<DatatypeUser> resultsModsC) {
+		this.resultsModsC = resultsModsC;
 	}
 
-	public String getNameMessage() {
-		return nameMessage;
+	public List<DatatypeUser> getResultsModsC() {
+		return resultsModsC;
 	}
 
-	public void setDescriptionMessage(String descriptionMessage) {
-		this.descriptionMessage = descriptionMessage;
+	public void setSuggestModsC(String suggestModsC) {
+		this.suggestModsC = suggestModsC;
 	}
 
-	public String getDescriptionMessage() {
-		return descriptionMessage;
+	public String getSuggestModsC() {
+		return suggestModsC;
 	}
 
-	public void setDurationMessage(String durationMessage) {
-		this.durationMessage = durationMessage;
+	public void setCandidatesParticipantsC() {
+		if (candidatesParticipantsC == null) {
+			try {
+				Context ctx = getContext();
+				ServicesUserRemote service = (ServicesUserRemote) ctx.lookup(SERVICE_USER);	
+				candidatesParticipantsC = service.findAllNormalUsers();
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
-	public String getDurationMessage() {
-		return durationMessage;
+	public List<DatatypeUser> getCandidatesParticipantsC() {
+		return candidatesParticipantsC;
 	}
 
-	public void setAddressMessage(String addressMessage) {
-		this.addressMessage = addressMessage;
+	public void setResultsParticipantsC(List<DatatypeUser> resultsParticipantsC) {
+		this.resultsParticipantsC = resultsParticipantsC;
 	}
 
-	public String getAddressMessage() {
-		return addressMessage;
+	public List<DatatypeUser> getResultsParticipantsC() {
+		return resultsParticipantsC;
 	}
 
-	public void setModsMessage(String modsMessage) {
-		this.modsMessage = modsMessage;
+	public void setSuggestParticipantsC(String suggestParticipantsC) {
+		this.suggestParticipantsC = suggestParticipantsC;
 	}
 
-	public String getModsMessage() {
-		return modsMessage;
+	public String getSuggestParticipantsC() {
+		return suggestParticipantsC;
 	}
 
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
+	public void setParticipantsC(List<String> participantsC) {
+		this.participantsC = participantsC;
 	}
 
-	public double getLatitude() {
-		if(evt_id != -1 && eventToModify == null)
-			initEventToModify();
-		return latitude;
-	}
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
+	public List<String> getParticipantsC() {
+		if(participantsC == null)
+			participantsC = new ArrayList<String>();
+		return participantsC;
 	}
 
-	public double getLongitude() {
-		if(evt_id != -1 && eventToModify == null)
-			initEventToModify();
-		return longitude;
+	public void setParticipantsMessageC(String participantsMessageC) {
+		this.participantsMessageC = participantsMessageC;
 	}
-	
+
+	public String getParticipantsMessageC() {
+		return participantsMessageC;
+	}
 	
 	
 	public String updateEvent(){
@@ -456,75 +582,75 @@ public class EventMB {
 		
 		String res = "failure";
 		//Limpiamos los mensajes
-		clearMessages();
-		if(name == null || name.equals(""))
-			nameMessage = INPUT_OBLIG;
-		if(description == null || description.equals(""))
-			descriptionMessage = INPUT_OBLIG;
-		if(duration == null || duration.equals(""))
-			durationMessage = INPUT_OBLIG;
-		if(address == null || address.equals(""))
-			addressMessage = INPUT_OBLIG;
+		clearMessagesM();
+		if(nameM == null || nameM.equals(""))
+			nameMessageM = INPUT_OBLIG;
+		if(descriptionM == null || descriptionM.equals(""))
+			descriptionMessageM = INPUT_OBLIG;
+		if(durationM == null || durationM.equals(""))
+			durationMessageM = INPUT_OBLIG;
+		if(addressM == null || addressM.equals(""))
+			addressMessageM = INPUT_OBLIG;
 		
-		if(noMessages() && creator != null && category != null && !creator.equals("") && !category.equals("")) {
+		if(noMessagesM() && categoryM != null && !categoryM.equals("") && creatorM != null && !creatorM.equals("")) {
 			Context ctx;
 			try {
 				ctx = getContext();
 				ServicesEventRemote serviceEvent = (ServicesEventRemote)ctx.lookup(SERVICE_EVENT);
 				ServicesUserRemote serviceUser = (ServicesUserRemote) ctx.lookup(SERVICE_USER);
-				if(moderated && mods.size()>0) {
-					List<Boolean> existsMods = serviceUser.existsNormalUser(mods);
+				if(moderatedM && modsM.size()>0) {
+					List<Boolean> existsMods = serviceUser.existsNormalUser(modsM);
 					int index = 0;
 					for(ListIterator<Boolean> it = existsMods.listIterator(); it.hasNext(); index++){
 						if(!it.next()){
-							modsMessage += MOD_NOT_FOUND + mods.get(index) +". ";
+							modsMessageM += MOD_NOT_FOUND + modsM.get(index) +". ";
 						}			
 					}
-					List<Boolean> existsUsers = serviceUser.existsNormalUser(participants);
+					List<Boolean> existsUsers = serviceUser.existsNormalUser(participantsM);
 					index = 0;
 					for(ListIterator<Boolean> it = existsUsers.listIterator(); it.hasNext(); index++){
 						if(!it.next()){
-							participantsMessage += PARTICIPANT_NOT_FOUND + participants.get(index) +". ";
+							participantsMessageM += PARTICIPANT_NOT_FOUND + participantsM.get(index) +". ";
 						}			
 					}
-					if(noMessages()) {
-						DatatypeEventSummary event = serviceEvent.updateEvent(evt_id, name, description, date, 
-								duration, address, creator, category, latitude, longitude, hashtag);
+					if(noMessagesM()) {
+						DatatypeEventSummary event = serviceEvent.updateEvent(evt_id, nameM, descriptionM, dateM, 
+								durationM, addressM, creatorM, categoryM, latitudeM, longitudeM, hashtagM);
 						
 						//Agregar usuarios
-						serviceEvent.addParticipantstoEvent(evt_id, participants);
+						serviceEvent.addParticipantstoEvent(evt_id, participantsM);
 												
-						serviceEvent.updateModsEvent(evt_id, mods);
+						serviceEvent.updateModsEvent(evt_id, modsM);
 						
-						name = null;
-						nameMessage  = null;
-						description  = null;
-						descriptionMessage  = null;
-						date = new Date();
-						duration  = null;
-						durationMessage  = null;
-						address  = null;
-						addressMessage  = null;
-						moderated = true;
-						mods = null;
-						modsMessage = null;
-						participants = null;
-						participantsMessage = null;
-						category = null;
+						nameM = null;
+						nameMessageM  = null;
+						descriptionM  = null;
+						descriptionMessageM  = null;
+						dateM = new Date();
+						durationM  = null;
+						durationMessageM  = null;
+						addressM  = null;
+						addressMessageM  = null;
+						moderatedM = true;
+						modsM = null;
+						modsMessageM = null;
+						participantsM = null;
+						participantsMessageM = null;
+						categoryM = null;
 						evt_id = -1;
 						eventToModify = null;
 						res  = "success";
 					}						
-				} else if(moderated){
+				} else if(moderatedM){
 					//Es moderado pero no tiene mods.
-					modsMessage = NO_MODS;
+					modsMessageM = NO_MODS;
 					res = "failure";
 				} else {
-					serviceEvent.updateEvent(evt_id, name, description, date, duration, address, creator, 
-							category, latitude, longitude, hashtag);
+					serviceEvent.updateEvent(evt_id, nameM, descriptionM, dateM, durationM, addressM, creatorM, 
+							categoryM, latitudeM, longitudeM, hashtagM);
 					
 					//Agregar usuarios
-					serviceEvent.addParticipantstoEvent(evt_id, participants);
+					serviceEvent.addParticipantstoEvent(evt_id, participantsM);
 					
 					
 					res = "success";
@@ -532,16 +658,16 @@ public class EventMB {
 			} catch (NamingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				clearAll();
+				clearAllM();
 			} catch (Exception e) {
 				e.printStackTrace();
-				clearAll();
+				clearAllM();
 			}
 		}		
 		
 		if(res.equals("success")) {
-			clearMessages();
-			clearAll();
+			clearMessagesM();
+			clearAllM();
 		}
 		
 		return res;
@@ -552,18 +678,18 @@ public class EventMB {
 			Context ctx = getContext();
 			ServicesEventRemote serviceEvent = (ServicesEventRemote)ctx.lookup(SERVICE_EVENT);
 			eventToModify = serviceEvent.getEventDetails(evt_id, true);
-			setAddress(eventToModify.getAddress());
-			setCategory(eventToModify.getEventCategory());
-			setDate(eventToModify.getDate());
-			setDescription(eventToModify.getDescription());
-			setDuration(eventToModify.getDuration());
-			setLatitude(eventToModify.getLatitude());
-			setLongitude(eventToModify.getLongitude());
-			setModerated(eventToModify.getModsUsernames() != null);
-			setMods(eventToModify.getModsUsernames());
-			setParticipants(eventToModify.getParticipantsUsernames());
-			setName(eventToModify.getEvtName());
-			setHashtag(eventToModify.getHashtag());
+			setAddressM(eventToModify.getAddress());
+			setCategoryM(eventToModify.getEventCategory());
+			setDateM(eventToModify.getDate());
+			setDescriptionM(eventToModify.getDescription());
+			setDurationM(eventToModify.getDuration());
+			setLatitudeM(eventToModify.getLatitude());
+			setLongitudeM(eventToModify.getLongitude());
+			setModeratedM(eventToModify.getModsUsernames() != null && eventToModify.getModsUsernames().size() > 0);
+			setModsM(eventToModify.getModsUsernames());
+			setParticipantsM(eventToModify.getParticipantsUsernames());
+			setNameM(eventToModify.getEvtName());
+			setHashtagM(eventToModify.getHashtag());
 		} catch(NamingException e) {
 			
 		}
@@ -571,6 +697,8 @@ public class EventMB {
 
 	public void setEvt_id(int evt_id) {
 		this.evt_id = evt_id;
+		if(evt_id != -1)
+			initEventToModify();
 	}
 
 	public int getEvt_id() {
@@ -637,26 +765,238 @@ public class EventMB {
 	public String getFindEventMessage() {
 		return findEventMessage;
 	}
-
-	public void setHashtag(String hashtag) {
-		if (!hashtag.startsWith("#")) {
-			hashtag = "#" + hashtag.substring(0, hashtag.length() > 15 ? 15 : hashtag.length());
+	
+	/****************/
+	
+	public void setNameM(String nameM) {
+		this.nameM = nameM;
+	}
+	public String getNameM() {
+		if(evt_id == -1)
+			return "";
+		return nameM;
+	}
+	public void setDescriptionM(String descriptionM) {
+		this.descriptionM = descriptionM;
+	}
+	public String getDescriptionM() {
+		if(evt_id == -1)
+			return "";
+		return descriptionM;
+	}
+	public void setDateM(Date dateM) {
+		this.dateM = dateM;
+	}
+	public Date getDateM() {
+		if(evt_id == -1)
+			return new Date();
+		return dateM;
+	}
+	public void setDurationM(String durationM) {
+		this.durationM = durationM;
+	}
+	public String getDurationM() {
+		if(evt_id == -1)
+			return "";
+		return durationM;
+	}
+	public void setAddressM(String addressM) {
+		this.addressM = addressM;
+	}
+	public String getAddressM() {
+		if(evt_id == -1)
+			return "";
+		return addressM;
+	}
+	public void setModeratedM(boolean moderatedM) {
+		this.moderatedM = moderatedM;
+	}
+	public boolean isModeratedM() {
+		if(evt_id == -1)
+			return true;
+		return moderatedM;
+	}
+	public void setModsM(List<String> modsM) {
+		this.modsM = modsM;
+		//eventToModify.setModsUsernames(modsM);
+	}
+	public List<String> getModsM() {
+		if(evt_id == -1)
+			return new ArrayList<String>();
+		if(modsM == null)
+			modsM = new ArrayList<String>();
+		return modsM;
+	}
+	public void setCategoryM(String categoryM) {
+		this.categoryM = categoryM;
+	}
+	public String getCategoryM() {
+		if(evt_id == -1)
+			return "";
+		return categoryM;
+	}
+	
+	public List<DatatypeUser> autocompleteModsM(Object suggestParam) {
+		setCandidatesModsM();
+		suggestModsM = ((String)suggestParam).toLowerCase();
+		resultsModsM = new ArrayList<DatatypeUser>();
+		Iterator<DatatypeUser> it = candidatesModsM.iterator();
+		while (it.hasNext()) {
+			DatatypeUser user = (DatatypeUser) it.next();
+			if (user.username.toLowerCase().contains(suggestModsM)
+					|| user.name.toLowerCase().contains(suggestModsM)) {
+				resultsModsM.add(user);
+			}
 		}
-		this.hashtag = hashtag;
+		return resultsModsM;
+	}
+	
+	public List<DatatypeUser> autocompleteParticipantsM(Object suggestParam) {
+		setCandidatesParticipantsM();
+		suggestParticipantsM = ((String)suggestParam).toLowerCase();
+		resultsParticipantsM = new ArrayList<DatatypeUser>();
+		Iterator<DatatypeUser> it = candidatesParticipantsM.iterator();
+		while (it.hasNext()) {
+			DatatypeUser user = (DatatypeUser) it.next();
+			if (user.username.toLowerCase().contains(suggestParticipantsM)
+					|| user.name.toLowerCase().contains(suggestParticipantsM)) {
+				resultsParticipantsM.add(user);
+			}
+		}
+		return resultsParticipantsM;
+	}
+	
+	public void addModM() {
+		if(suggestModsM != null && !suggestModsM.equals("")) {
+			if(getModsM() == null)
+				setModsM(new ArrayList<String>());
+			getModsM().add(suggestModsM);
+		}
+	}
+	
+	public void addParticipantM() {
+		if(suggestParticipantsM != null && !suggestParticipantsM.equals("")) {
+			if(getParticipantsM() == null)
+				setParticipantsM(new ArrayList<String>());
+			getParticipantsM().add(suggestParticipantsM);
+		}
+	}
+	
+	public void resetModM() {
+		modsM = null;
+		modsMessageM = null;
+	}
+	
+
+	public void resetParticipantsM() {
+		participantsM = null;
+		participantsMessageM = null;
+	}
+	
+	public int getCantModsM() {
+		if(evt_id == -1)
+			return 0;
+		if(getModsM() == null)
+			return 0;
+		return getModsM().size();
+	}
+	
+	public int getCantParticipantsM() {
+		if(evt_id == -1)
+			return 0;
+		if(getParticipantsM() == null)
+			return 0;
+		return getParticipantsM().size();
 	}
 
-	public String getHashtag() {
-		if(evt_id != -1 && eventToModify == null)
-			initEventToModify();
-		return hashtag;
+	public void setNameMessageM(String nameMessageM) {
+		this.nameMessageM = nameMessageM;
 	}
 
-	public void setCandidatesMods() {
-		if (candidatesMods == null) {
+	public String getNameMessageM() {
+		if(evt_id == -1)
+			return "";
+		return nameMessageM;
+	}
+
+	public void setDescriptionMessageM(String descriptionMessageM) {
+		this.descriptionMessageM = descriptionMessageM;
+	}
+
+	public String getDescriptionMessageM() {
+		if(evt_id == -1)
+			return "";
+		return descriptionMessageM;
+	}
+
+	public void setDurationMessageM(String durationMessageM) {
+		this.durationMessageM = durationMessageM;
+	}
+
+	public String getDurationMessageM() {
+		if(evt_id == -1)
+			return "";
+		return durationMessageM;
+	}
+
+	public void setAddressMessageM(String addressMessageM) {
+		this.addressMessageM = addressMessageM;
+	}
+
+	public String getAddressMessageM() {
+		if(evt_id == -1)
+			return "";
+		return addressMessageM;
+	}
+
+	public void setModsMessageM(String modsMessageM) {
+		this.modsMessageM = modsMessageM;
+	}
+
+	public String getModsMessageM() {
+		if(evt_id == -1)
+			return "";
+		return modsMessageM;
+	}
+
+	public void setLatitudeM(double latitudeM) {
+		this.latitudeM = latitudeM;
+	}
+
+	public double getLatitudeM() {
+		if(evt_id == -1)
+			return 0;
+		return latitudeM;
+	}
+	public void setLongitudeM(double longitudeM) {
+		this.longitudeM = longitudeM;
+	}
+
+	public double getLongitudeM() {
+		if(evt_id == -1)
+			return 0;
+		return longitudeM;
+	}
+	
+	public void setHashtagM(String hashtagM) {
+		if (!hashtagM.startsWith("#")) {
+			hashtagM = "#" + hashtagM.substring(0, hashtagM.length() > 15 ? 15 : hashtagM.length());
+		}
+		this.hashtagM = hashtagM;
+	}
+
+	public String getHashtagM() {
+		if(evt_id == -1)
+			return "";
+		return hashtagM;
+	}
+
+	public void setCandidatesModsM() {
+		if (candidatesModsM == null) {
 			try {
 				Context ctx = getContext();
 				ServicesUserRemote service = (ServicesUserRemote) ctx.lookup(SERVICE_USER);	
-				candidatesMods = service.findAllNormalUsers();
+				candidatesModsM = service.findAllNormalUsers();
 			} catch (NamingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -664,32 +1004,32 @@ public class EventMB {
 		}
 	}
 
-	public List<DatatypeUser> getCandidatesMods() {
-		return candidatesMods;
+	public List<DatatypeUser> getCandidatesModsM() {
+		return candidatesModsM;
 	}
 
-	public void setResultsMods(List<DatatypeUser> resultsMods) {
-		this.resultsMods = resultsMods;
+	public void setResultsModsM(List<DatatypeUser> resultsModsM) {
+		this.resultsModsM = resultsModsM;
 	}
 
-	public List<DatatypeUser> getResultsMods() {
-		return resultsMods;
+	public List<DatatypeUser> getResultsModsM() {
+		return resultsModsM;
 	}
 
-	public void setSuggestMods(String suggestMods) {
-		this.suggestMods = suggestMods;
+	public void setSuggestModsM(String suggestModsM) {
+		this.suggestModsM = suggestModsM;
 	}
 
-	public String getSuggestMods() {
-		return suggestMods;
+	public String getSuggestModsM() {
+		return suggestModsM;
 	}
 
-	public void setCandidatesParticipants() {
-		if (candidatesParticipants == null) {
+	public void setCandidatesParticipantsM() {
+		if (candidatesParticipantsM == null) {
 			try {
 				Context ctx = getContext();
 				ServicesUserRemote service = (ServicesUserRemote) ctx.lookup(SERVICE_USER);	
-				candidatesParticipants = service.findAllNormalUsers();
+				candidatesParticipantsM = service.findAllNormalUsers();
 			} catch (NamingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -697,48 +1037,52 @@ public class EventMB {
 		}
 	}
 
-	public List<DatatypeUser> getCandidatesParticipants() {
-		return candidatesParticipants;
+	public List<DatatypeUser> getCandidatesParticipantsM() {
+		return candidatesParticipantsM;
 	}
 
-	public void setResultsParticipants(List<DatatypeUser> resultsParticipants) {
-		this.resultsParticipants = resultsParticipants;
+	public void setResultsParticipantsM(List<DatatypeUser> resultsParticipantsM) {
+		this.resultsParticipantsM = resultsParticipantsM;
 	}
 
-	public List<DatatypeUser> getResultsParticipants() {
-		return resultsParticipants;
+	public List<DatatypeUser> getResultsParticipantsM() {
+		return resultsParticipantsM;
 	}
 
-	public void setSuggestParticipants(String suggestParticipants) {
-		this.suggestParticipants = suggestParticipants;
+	public void setSuggestParticipantsM(String suggestParticipantsM) {
+		this.suggestParticipantsM = suggestParticipantsM;
 	}
 
-	public String getSuggestParticipants() {
-		return suggestParticipants;
+	public String getSuggestParticipantsM() {
+		return suggestParticipantsM;
 	}
 
-	public void setParticipants(List<String> participants) {
-		this.participants = participants;
-		if(evt_id != -1) {
-			if(eventToModify == null)
-				initEventToModify();
-			eventToModify.setParticipantsUsernames(participants);
-		}
+	public void setParticipantsM(List<String> participantsM) {
+		this.participantsM = participantsM;
+		//eventToModify.setParticipantsUsernames(participantsM);
 	}
 
-	public List<String> getParticipants() {
-		if(evt_id != -1 && eventToModify == null)
-			initEventToModify();
-		if(participants == null)
-			participants = new ArrayList<String>();
-		return participants;
+	public List<String> getParticipantsM() {
+		if(evt_id == -1)
+			return new ArrayList<String>();
+		if(participantsM == null)
+			participantsM = new ArrayList<String>();
+		return participantsM;
 	}
 
-	public void setParticipantsMessage(String participantsMessage) {
-		this.participantsMessage = participantsMessage;
+	public void setParticipantsMessageM(String participantsMessageM) {
+		this.participantsMessageM = participantsMessageM;
 	}
 
-	public String getParticipantsMessage() {
-		return participantsMessage;
+	public String getParticipantsMessageM() {
+		if(evt_id == -1)
+			return "";
+		return participantsMessageM;
+	}
+	public void setCreatorM(String creatorM) {
+		this.creatorM = creatorM;
+	}
+	public String getCreatorM() {
+		return creatorM;
 	}
 }

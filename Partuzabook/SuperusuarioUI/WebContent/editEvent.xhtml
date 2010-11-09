@@ -20,7 +20,7 @@
 				</f:facet>
 				
 				<h:outputText value="Busqueda de evento:"/><br/>
-				<h:inputText id="findEvent" value="#{EventMB.findName}" size="50" style="margin-right:5px"/>
+				<h:inputText id="findEvent" value="#{EventMB.findName}" size="50"/>
 				<h:commandButton value="Buscar Evento" action="#{EventMB.searchEvent}"/><br/>
 				<h:outputText vaue="#{EventMB.findEventMessage}"/>
 				<rich:suggestionbox id="eventSuggestionBoxId" for="findEvent" tokens=",["
@@ -35,45 +35,48 @@
 				</rich:suggestionbox>
 			
 				<br/><br/>
-				
+				<center>
 				<h:panelGrid columns="2">
 					<h:panelGroup>
 						<h:outputText value="Nombre del evento:"></h:outputText><br/>
-						<h:inputText value="#{EventMB.name}" size="60" style="margin-right:5px"></h:inputText>
-							<h:outputText value="#{EventMB.nameMessage}" style="color:red"></h:outputText><br/>
+						<h:inputText value="#{EventMB.nameM}" size="60" style="margin-right:5px"></h:inputText>
+							<h:outputText value="#{EventMB.nameMessageM}" style="color:red"></h:outputText><br/>
 						
-						<h:outputText value="Categoría:"/><br/>
-						<h:selectOneMenu value="#{EventMB.category}">
+						<br/><h:outputText value="Categoría:"/><br/>
+						<h:selectOneMenu value="#{EventMB.categoryM}">
 							<f:selectItems value="#{EventMB.allCats}" />
 						</h:selectOneMenu><br/><br/>	
 							
 						<h:outputText value="Descripción:"></h:outputText><br/>
-						<h:inputText value="#{EventMB.description}" size="60"></h:inputText>
-							<h:outputText value="#{EventMB.descriptionMessage}" style="color:red"></h:outputText><br/>
-						<h:outputText value="Fecha:"></h:outputText><br/>				
-						<rich:calendar value="#{EventMB.date}"
+						<h:inputText value="#{EventMB.descriptionM}" size="60"></h:inputText>
+							<h:outputText value="#{EventMB.descriptionMessageM}" style="color:red"></h:outputText><br/>
+						<br/><h:outputText value="Fecha:"></h:outputText><br/>				
+						<rich:calendar value="#{EventMB.dateM}"
 		                    datePattern="d/MMM/y"  showApplyButton="false"  
 		                    cellWidth="24px" cellHeight="22px" style="width:200px"/><br/>
-						<h:outputText value="Horario:"></h:outputText><br/>
-						<h:inputText value="#{EventMB.duration}" size="60"></h:inputText>
-							<h:outputText value="#{EventMB.durationMessage}" style="color:red"></h:outputText><br/>
-						<h:outputText value="Dirección:"></h:outputText><br/>
-						<h:inputText id="address" value="#{EventMB.address}" size="60"></h:inputText>
-							<h:outputText value="#{EventMB.addressMessage}" style="color:red"></h:outputText><br/>
+						<br/><h:outputText value="Horario:"></h:outputText><br/>
+						<h:inputText value="#{EventMB.durationM}" size="60"></h:inputText>
+							<h:outputText value="#{EventMB.durationMessageM}" style="color:red"></h:outputText><br/>
+						<br/><h:outputText value="Dirección:"></h:outputText><br/>
+						<h:inputText id="address" value="#{EventMB.addressM}" size="60"></h:inputText>
+							<h:outputText value="#{EventMB.addressMessageM}" style="color:red"></h:outputText><br/>
 						
 						<input type="button" value="Buscar Dirección" onclick="showAddress('EditEvent:address', map, 'EditEvent:hidden_coord_lat', 'EditEvent:hidden_coord_lng');"/>
 			        	<input type="button" value="Borrar Marcadores" onclick="eraseMarkers(map,'EditEvent:hidden_coord_lat', 'EditEvent:hidden_coord_lng');"/><br/>
 			        	
-			            <h:inputHidden id="hidden_coord_lat" value="#{EventMB.latitude}" /><br/>
-			            <h:inputHidden id="hidden_coord_lng" value="#{EventMB.longitude}"/><br/>
+			            <h:inputHidden id="hidden_coord_lat" value="#{EventMB.latitudeM}" /><br/>
+			            <h:inputHidden id="hidden_coord_lng" value="#{EventMB.longitudeM}"/>
 			            
-			            <h:outputText value="Hashtag de Twitter:"/><br/>
-						<h:inputText value="#{EventMB.hashtag}" size="60"></h:inputText>
-						
 			            <table border='1' id='markerTable'>
 						<tbody>
 						</tbody>
-						</table>					
+						</table>
+						<br/>
+			            
+			            <h:outputText value="Hashtag de Twitter:"/><br/>
+						<h:inputText value="#{EventMB.hashtagM}" size="60"></h:inputText>
+						
+			            					
 						
 					 </h:panelGroup>
 					<h:panelGroup>
@@ -81,15 +84,16 @@
 			        zoom="11" mapType="G_NORMAL_MAP"/>
 			        </h:panelGroup>
 				</h:panelGrid>
-				
+				</center>
 				<br/><br/>
 				
 				<a4j:outputPanel id="participantsPanel">
-						<h:inputText id="newParticipant" value="#{EventMB.suggestParticipants}" />
-						<a4j:commandButton value="Agregar como participante" action="#{EventMB.addParticipant}" reRender="participantsPanel"/>
-						<a4j:commandButton value="Limpiar lista" action="#{EventMB.resetParticipants}" reRender="participantsPanel"/>
+					<rich:panel style="width:87%;margin-left:60px">
+						<h:inputText id="newParticipant" value="#{EventMB.suggestParticipantsM}" size="60"/>
+						<a4j:commandButton value="Agregar como participante" action="#{EventMB.addParticipantM}" reRender="participantsPanel"/>
+						<a4j:commandButton value="Limpiar lista" action="#{EventMB.resetParticipantsM}" reRender="participantsPanel"/>
 						<rich:suggestionbox id="suggestionBoxIdParticipant" for="newParticipant" tokens=",["
-							suggestionAction="#{EventMB.autocompleteParticipants}" var="result"
+							suggestionAction="#{EventMB.autocompleteParticipantsM}" var="result"
 							nothingLabel="No hay usuarios que coincidan" columnClasses="center">
 							<h:column>
 								<h:outputText value="#{result.username}" />
@@ -98,27 +102,31 @@
 								<h:outputText value="#{result.name}" />
 							</h:column>
 						</rich:suggestionbox>
-						<rich:panel style="width:50%">
+						
 				            <f:facet name="header">
-				                <h:outputText value="Participantes"/>
+				                <h:outputText value="Participantes del evento"/>
 				            </f:facet>
-				            <rich:dataList value="#{EventMB.participants}" var="pickList" rendered="#{EventMB.cantParticipants>0}">
+				            <br/><br/>
+				           <h:outputText value="El evento no tiene ningún participante" style="font-style:italic" rendered="#{EventMB.cantParticipantsM eq 0}"/>
+				            <rich:dataList value="#{EventMB.participantsM}" var="pickList" rendered="#{EventMB.cantParticipantsM>0}">
 				            	<h:outputText value="#{pickList}"/>
 				            </rich:dataList> 
 				        </rich:panel>
-				        <h:outputText value="#{EventMB.participantsMessage}" style="color:red"></h:outputText><br/>
+				        <h:outputText value="#{EventMB.participantsMessageM}" style="color:red"></h:outputText><br/>
 				</a4j:outputPanel>
 				
-				<a4j:outputPanel id="modPanel">
+				<a4j:outputPanel id="modPanel" style="margin-left:60px">
 				<h:outputText value="Evento es moderado:"/>
-						<h:selectBooleanCheckbox id="check" value="#{EventMB.moderated}" 
-						onclick="toggleVisibility('divNewMod','EditEvent:check');" /><br/><br/>
+						<h:selectBooleanCheckbox id="effCheck" value="#{EventMB.moderatedM}" 
+						onclick="if(document.getElementById('EditEvent:effCheck').checked) showDiv(); else hideDiv({duration:0.7});" /><br/><br/>
 						<div id="divNewMod">
-						<h:inputText id="newMod" value="#{EventMB.suggestMods}" />
-						<a4j:commandButton value="Agregar como moderador" action="#{EventMB.addMod}" reRender="modPanel"/>
-						<a4j:commandButton value="Limpiar lista" action="#{EventMB.resetMod}" reRender="modPanel"/>
+						<rich:panel style="width:87%;margin-left:60px" id="richModPanel">
+						
+						<h:inputText id="newMod" value="#{EventMB.suggestModsM}" size="60"/>
+						<a4j:commandButton value="Agregar como moderador" action="#{EventMB.addModM}" reRender="modPanel"/>
+						<a4j:commandButton value="Limpiar lista" action="#{EventMB.resetModM}" reRender="modPanel"/>
 						<rich:suggestionbox id="suggestionBoxIdMod" for="newMod" tokens=",["
-							suggestionAction="#{EventMB.autocompleteMods}" var="result"
+							suggestionAction="#{EventMB.autocompleteModsM}" var="result"
 							nothingLabel="No hay usuarios que coincidan" columnClasses="center">
 							<h:column>
 								<h:outputText value="#{result.username}" />
@@ -127,30 +135,39 @@
 								<h:outputText value="#{result.name}" />
 							</h:column>
 						</rich:suggestionbox>
-						<rich:panel style="width:50%">
+						
 				            <f:facet name="header">
 				                <h:outputText value="Moderadores"/>
 				            </f:facet>
-				            <rich:dataList value="#{EventMB.mods}" var="pickList" rendered="#{EventMB.cantMods>0}">
+				            <br/><br/>
+				            <h:outputText value="El evento no tiene ningún moderador" style="font-style:italic" rendered="#{EventMB.cantModsM eq 0}"/>
+				            <rich:dataList value="#{EventMB.modsM}" var="pickList" rendered="#{EventMB.cantModsM>0}">
 				            	<h:outputText value="#{pickList}"/>
 				            </rich:dataList> 
 				        </rich:panel>
-				        <h:outputText value="#{EventMB.modsMessage}" style="color:red"></h:outputText><br/>
+				        <h:outputText value="#{EventMB.modsMessageM}" style="color:red"></h:outputText><br/>
 				        </div>
 				</a4j:outputPanel>	        
 				        
 			   <!--Inicializamos el geoCoder-->
 			   <script>window.onload=function(){
 				   initGeoCoder(map, 'EditEvent:hidden_coord_lat', 'EditEvent:hidden_coord_lng');
-				   toggleVisibility('divNewMod','EditEvent:check');
-				   addMarkerWithInfo(map, "#{EventMB.latitude}", "#{EventMB.longitude}", '', 'EditEvent:hidden_coord_lat', 'EditEvent:hidden_coord_lng');
+				   addMarkerWithInfo(map, "#{EventMB.latitudeM}", "#{EventMB.longitudeM}", '', 'EditEvent:hidden_coord_lat', 'EditEvent:hidden_coord_lng');
+				   if(document.getElementById('EditEvent:effCheck').checked) 
+						showDiv(); 
+					else 
+						hideDiv({duration:0.7});
 				}</script>
 					   
+				<rich:effect  name="hideDiv"  for="richModPanel" type="BlindUp" />
+				<rich:effect  name="showDiv"  for="richModPanel" type="BlindDown" />	   
+				
+    
 				<center>
 				        
 				<h:commandButton value="Confirmar cambios" action="#{EventMB.updateEvent}">
 					<f:setPropertyActionListener value="#{loginMB.userName}"
-								target="#{EventMB.creator}" />
+								target="#{EventMB.creatorM}" />
 				</h:commandButton>
 				<br/>
 				</center>
