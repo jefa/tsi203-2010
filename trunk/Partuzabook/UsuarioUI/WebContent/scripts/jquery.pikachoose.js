@@ -250,7 +250,10 @@
 	     	self.active = $(this);
 	     	self.active.addClass('active').fadeTo(200,1);
      		var val = self.active.attr('src').split('id=');
-     		document.getElementById('panelThumbs:selectContentId').value = val[1].split('&')[0];
+     		if(val.size > 1)
+     			document.getElementById('panelThumbs:selectContentId').value = val[1].split('&')[0];
+     		else
+     			document.getElementById('panelThumbs:selectContentId').value = document.getElementById('cntId');
      		document.getElementById('panelThumbs:btnSelectThumb').click();
 	     	var data = $.data(this);
 	 		$('<img />').bind('load', {self:self,data:data}, function()

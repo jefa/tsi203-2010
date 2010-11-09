@@ -71,6 +71,7 @@ public class EventoMB {
 	
 	private String firstContentType;
 	private String firstContentUrl;
+	private String firstContentId;
 	
 	public void setSelectedContent(DatatypeContent selectedContent){
 		this.selectedContent = selectedContent;

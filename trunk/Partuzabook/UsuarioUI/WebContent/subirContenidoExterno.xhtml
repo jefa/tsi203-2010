@@ -22,7 +22,7 @@
 		
 		<br/>
 		<h:outputText value="Dirección del contenido:" /><br/>
-				<h:inputText value="#{subirContExternoMB.url}"/>
+				<h:inputText value="#{subirContExternoMB.url}" size="60"/>
 				<h:outputText value="#{subirContExternoMB.urlMessage}" style="color:red"/>
 				<br/>
 		
@@ -47,7 +47,7 @@
 		</a4j:outputPanel>
 				<br/><br/>
 			<h:outputText value="Descripción del contenido:" /><br/>
-				<h:inputText value="#{subirContExternoMB.description}"/>
+				<h:inputText value="#{subirContExternoMB.description}" size="60"/>
 			<br/><br/>
 			<h:commandButton value="Confirmar el nuevo contenido" action="#{subirContExternoMB.confirmUpload}"/>
 			
