@@ -8,7 +8,12 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.richfaces.event.UploadEvent;
+import org.richfaces.model.UploadItem;
+
+import partuzabook.datatypes.DataTypeFile;
 import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeFileAux;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
@@ -32,6 +37,11 @@ public class PublicProfile {
 	private String confirmNewPasswordMessage;
 	private String emailMessage;
 	private String message;
+	
+	//Para el cambio de avatar
+	private byte[] imgData;
+	private String mime;
+	private int cantUploads;
 	
 	public void setUserId(String userId) {
 		System.out.println("Llame a setUserName");
@@ -159,10 +169,42 @@ public class PublicProfile {
 		System.out.println("Llame a enviarPM");
 		return "";
 	}
+
 	
-	public String cambiarAvatar() {
-		System.out.println("Llame a cambiarAvatar");
-		return "";
+	public void listener(UploadEvent event) throws Exception{
+	    UploadItem item = event.getUploadItem();
+	    String name = item.getFileName();
+	    String mime = "";
+	    int extDot = name.lastIndexOf('.');
+		if(extDot > 0){
+			String extension = name.substring(extDot +1);
+			if("bmp".equals(extension)){
+				mime="image/bmp";
+			} else if("jpg".equals(extension)){
+				mime="image/jpeg";
+			} else if("gif".equals(extension)){
+				mime="image/gif";
+			} else if("png".equals(extension)){
+				mime="image/png";
+			} else {
+				mime = "image/unknown";
+			}
+		}
+		imgData = item.getData();
+		this.mime = mime;
+	    
+	}
+	
+	public String confirmAvatarChange() {
+		try {
+			Context ctx = getContext();
+			ServicesUserRemote servicesUser = (ServicesUserRemote)ctx.lookup(SERVICES_USER_REMOTE);
+			user = servicesUser.updateUserAvatar(user.username, imgData, mime);
+	    } catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return "verMiPerfil";
 	}
 	
 	private boolean noMessages() {
@@ -216,7 +258,7 @@ public class PublicProfile {
 					//Hubo errores, debo recuperar el user desde base
 					user = servicesUser.getUserForPublicProfile(user.username);
 				} else {
-					DatatypeUser nu = servicesUser.updateNormalUser(user.username, newPassword, user.email, user.name, user.imagePath);
+					DatatypeUser nu = servicesUser.updateNormalUser(user.username, newPassword, user.email, user.name);
 					user = nu;
 					message = "Usuario modificado con éxito";
 				}
@@ -227,5 +269,14 @@ public class PublicProfile {
 		}
 		
 		return "success";
+	}
+
+	public void setCantUploads(int cantUploads) {
+		this.cantUploads = cantUploads;
+	}
+
+	public int getCantUploads() {
+		//return cantUploads;
+		return 5;
 	}
 }
