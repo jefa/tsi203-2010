@@ -24,6 +24,7 @@ public class DatatypeContent implements Serializable {
 	private List<DatatypeTag> tags;
 	private short type;
 	private String url;
+	private String youtubeUrlScreen;
 	
 	public DatatypeContent() {
 		
@@ -152,5 +153,24 @@ public class DatatypeContent implements Serializable {
 
 	public String getUrl() {
 		return url;
+	}
+
+	public void setYoutubeUrlScreen(String youtubeUrlScreen) {
+		this.youtubeUrlScreen = youtubeUrlScreen;
+	}
+
+	public String getYoutubeUrlScreen() {
+		return getScreen(this.url, "big"); 
+	}
+	
+	private String getScreen(String url, String size ) {
+		if(url == null){ return ""; }
+		size = (size == null) ? "big" : size;
+		String vid = url.substring(25, 36);
+		if(size == "small"){
+			return "http://img.youtube.com/vi/"+vid+"/2.jpg";
+		} else {
+			return "http://img.youtube.com/vi/"+vid+"/0.jpg";
+		}
 	}
 }
