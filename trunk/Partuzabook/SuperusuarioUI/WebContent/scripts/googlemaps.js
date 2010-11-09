@@ -197,7 +197,7 @@ function showAddress3(street, city, country, gmap, div) {
 	        if (reasons[result.Status.code]) {
 	          reason = reasons[result.Status.code];
 	        } 
-	        alert('No se pudo encontrar "'+search+ '" ' + reason);
+	        alert('No se pudo encontrar "'+search+ '". ' + reason);
 	      }
 	    }
 	 );
@@ -221,12 +221,12 @@ function  initGeoCoder(map, hidden_lat, hidden_lng) {
 	  // ====== Array for decoding the failure codes ======
 	  reasons=[];
 	  reasons[G_GEO_SUCCESS]            = "Exito.";
-	  reasons[G_GEO_MISSING_ADDRESS]    = "Dirección faltante: No se escribió una dirección.";
-	  reasons[G_GEO_UNKNOWN_ADDRESS]    = "Dirección desconocida:  No se pudo encontrar una locación geografica para la dirección ingresada.";
-	  reasons[G_GEO_UNAVAILABLE_ADDRESS]= "Dirección no disponible:  La coordenadas para la dirección ingresada no pueden ser mostradas por condiciones legales.";
-	  reasons[G_GEO_BAD_KEY]            = "Key errónea: La API key es inválida o no corresponde para el dominio dado.";
+	  reasons[G_GEO_MISSING_ADDRESS]    = "Direccion faltante: No se escribio una direccion.";
+	  reasons[G_GEO_UNKNOWN_ADDRESS]    = "Direccion desconocida:  No se pudo encontrar una locación geografica para la dirección ingresada.";
+	  reasons[G_GEO_UNAVAILABLE_ADDRESS]= "Direccion no disponible:  La coordenadas para la dirección ingresada no pueden ser mostradas por condiciones legales.";
+	  reasons[G_GEO_BAD_KEY]            = "Key erronea: La API key es invalida o no corresponde para el dominio dado.";
 	  reasons[G_GEO_TOO_MANY_QUERIES]   = "Demasiadas consultas: La cutoa de consutlas diarias para este sitio fue excedida..";
-	  reasons[G_GEO_SERVER_ERROR]       = "Error del servidor: El pedido no pudo ser prcesado satisfactoriamente.";
+	  reasons[G_GEO_SERVER_ERROR]       = "Error del servidor: El pedido no pudo ser procesado satisfactoriamente.";
 	  
 	} else {
 	  alert("Lo sentimos, pero googleMap no es compatible con este navegador.");

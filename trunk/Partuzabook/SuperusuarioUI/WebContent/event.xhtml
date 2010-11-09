@@ -18,39 +18,40 @@
 				<f:facet name="header">
 					<h:outputText value="Nuevo Evento"></h:outputText>
 				</f:facet>
+				<center>
 				<h:panelGrid columns="2">
 					<h:panelGroup>
 						<h:outputText value="Nombre del evento:"></h:outputText><br/>
-						<h:inputText value="#{EventMB.name}" size="60" style="margin-right:5px"></h:inputText>
-							<h:outputText value="#{EventMB.nameMessage}" style="color:red"></h:outputText><br/>
+						<h:inputText value="#{EventMB.nameC}" size="60" style="margin-right:5px"></h:inputText>
+							<h:outputText value="#{EventMB.nameMessageC}" style="color:red"></h:outputText><br/>
 						<br/>
 						<h:outputText value="Categoría:"/><br/>
-						<h:selectOneMenu value="#{EventMB.category}">
+						<h:selectOneMenu value="#{EventMB.categoryC}">
 							<f:selectItems value="#{EventMB.allCats}" />
 						</h:selectOneMenu><br/><br/>	
 							
 						<h:outputText value="Descripción:"></h:outputText><br/>
-						<h:inputText  value="#{EventMB.description}" size="60"></h:inputText>
-							<h:outputText value="#{EventMB.descriptionMessage}" style="color:red"></h:outputText><br/>
+						<h:inputText  value="#{EventMB.descriptionC}" size="60"></h:inputText>
+							<h:outputText value="#{EventMB.descriptionMessageC}" style="color:red"></h:outputText><br/>
 						<br/>
 						<h:outputText value="Fecha:"></h:outputText><br/>				
-						<rich:calendar value="#{EventMB.date}"
+						<rich:calendar value="#{EventMB.dateC}"
 		                    datePattern="d/MMM/y"  showApplyButton="false"  
 		                    cellWidth="24px" cellHeight="22px" style="width:200px"/><br/>
 						<br/>
 						<h:outputText value="Horario:"></h:outputText><br/>
-						<h:inputText value="#{EventMB.duration}" size="60"></h:inputText>
-							<h:outputText value="#{EventMB.durationMessage}" style="color:red"></h:outputText><br/>
+						<h:inputText value="#{EventMB.durationC}" size="60"></h:inputText>
+							<h:outputText value="#{EventMB.durationMessageC}" style="color:red"></h:outputText><br/>
 						<br/>
 						<h:outputText value="Dirección:"></h:outputText><br/>
-						<h:inputText id="address" value="#{EventMB.address}" size="60"></h:inputText>
-							<h:outputText value="#{EventMB.addressMessage}" style="color:red"></h:outputText><br/>
+						<h:inputText id="address" value="#{EventMB.addressC}" size="60"></h:inputText>
+							<h:outputText value="#{EventMB.addressMessageC}" style="color:red"></h:outputText><br/>
 						
 						<input type="button" value="Buscar Dirección" onclick="showAddress('CreateEvent:address', map, 'CreateEvent:hidden_coord_lat', 'CreateEvent:hidden_coord_lng');"/>
 			        	<input type="button" value="Borrar Marcadores" onclick="eraseMarkers(map, 'CreateEvent:hidden_coord_lat', 'CreateEvent:hidden_coord_lng');"/>
 			        	
-			            <h:inputHidden id="hidden_coord_lat" value="#{EventMB.latitude}" /><br/>
-			            <h:inputHidden id="hidden_coord_lng" value="#{EventMB.longitude}"/><br/>
+			            <h:inputHidden id="hidden_coord_lat" value="#{EventMB.latitudeC}" /><br/>
+			            <h:inputHidden id="hidden_coord_lng" value="#{EventMB.longitudeC}"/><br/>
 			            
 			            <table border='1' id='markerTable'>
 						<tbody>
@@ -60,7 +61,7 @@
 						<br/>
 						
 			            <h:outputText value="Hashtag de Twitter:"></h:outputText><br/>
-						<h:inputText value="#{EventMB.hashtag}" size="60"></h:inputText>
+						<h:inputText value="#{EventMB.hashtagC}" size="60"></h:inputText>
 						
 			            
 			            				
@@ -80,18 +81,19 @@
 			        	
 			        </h:panelGroup>
 				</h:panelGrid>
-				
+				</center>
 				<br/>				
 				
 				<br/>
 				<a4j:outputPanel id="participantsPanel">
-					<rich:panel style="width:80%">
 				
-						<h:inputText id="newParticipant" value="#{EventMB.suggestParticipants}" size="60"/>
-						<a4j:commandButton value="Agregar como participante" action="#{EventMB.addParticipant}" reRender="participantsPanel"/>
-						<a4j:commandButton value="Limpiar lista" action="#{EventMB.resetParticipants}" reRender="participantsPanel"/>
+					<rich:panel style="width:87%;margin-left:60px">
+				
+						<h:inputText id="newParticipant" value="#{EventMB.suggestParticipantsC}" size="60"/>
+						<a4j:commandButton value="Agregar como participante" action="#{EventMB.addParticipantC}" reRender="participantsPanel"/>
+						<a4j:commandButton value="Limpiar lista" action="#{EventMB.resetParticipantsC}" reRender="participantsPanel"/>
 						<rich:suggestionbox id="suggestionBoxIdParticipant" for="newParticipant" tokens=",["
-							suggestionAction="#{EventMB.autocompleteParticipants}" var="result"
+							suggestionAction="#{EventMB.autocompleteParticipantsC}" var="result"
 							nothingLabel="No hay usuarios que coincidan" columnClasses="center">
 							<h:column>
 								<h:outputText value="#{result.username}" />
@@ -105,30 +107,30 @@
 				                <h:outputText value="Participantes del evento"/>
 				            </f:facet>
 				            <br/><br/>
-				            <h:outputText value="El evento no tiene ningún participante" style="font-style:italic" rendered="#{EventMB.cantParticipants eq 0}"/>
-				            <rich:dataList value="#{EventMB.participants}" var="pickList" rendered="#{EventMB.cantParticipants>0}">
+				            <h:outputText value="El evento no tiene ningún participante" style="font-style:italic" rendered="#{EventMB.cantParticipantsC eq 0}"/>
+				            <rich:dataList value="#{EventMB.participantsC}" var="pickList" rendered="#{EventMB.cantParticipantsC>0}">
 				            	<h:outputText value="#{pickList}"/>
 				            </rich:dataList> 
 				        </rich:panel>
-				        <h:outputText value="#{EventMB.participantsMessage}" style="color:red"></h:outputText><br/>
+				        <h:outputText value="#{EventMB.participantsMessageC}" style="color:red"></h:outputText><br/>
 				</a4j:outputPanel>
 				
 				<hr/>
 				
-				<a4j:outputPanel id="modPanel">
+				<a4j:outputPanel id="modPanel" style="margin-left:60px">
 				<h:outputText value="Evento es moderado:"/>
 					
-						<h:selectBooleanCheckbox id="effCheck" value="#{EventMB.moderated}" 
+						<h:selectBooleanCheckbox id="effCheck" value="#{EventMB.moderatedC}" 
 						onclick="if(document.getElementById('CreateEvent:effCheck').checked) showDiv(); else hideDiv({duration:0.7});" />
 
 					<div id="divNewMod">
-					<rich:panel style="width:80%" id="richModPanel">
+					<rich:panel style="width:87%;margin-left:60px" id="richModPanel">
 						
-						<h:inputText id="newMod" value="#{EventMB.suggestMods}"  size="60"/>
-						<a4j:commandButton value="Agregar como moderador" action="#{EventMB.addMod}" reRender="modPanel"/>
-						<a4j:commandButton value="Limpiar lista" action="#{EventMB.resetMod}" reRender="modPanel"/>
+						<h:inputText id="newMod" value="#{EventMB.suggestModsC}"  size="60"/>
+						<a4j:commandButton value="Agregar como moderador" action="#{EventMB.addModC}" reRender="modPanel"/>
+						<a4j:commandButton value="Limpiar lista" action="#{EventMB.resetModC}" reRender="modPanel"/>
 						<rich:suggestionbox id="suggestionBoxIdMod" for="newMod" tokens=",["
-							suggestionAction="#{EventMB.autocompleteMods}" var="result"
+							suggestionAction="#{EventMB.autocompleteModsC}" var="result"
 							nothingLabel="No hay usuarios que coincidan" columnClasses="center">
 							<h:column>
 								<h:outputText value="#{result.username}" />
@@ -142,12 +144,12 @@
 				                <h:outputText value="Moderadores del evento"/>
 				            </f:facet>
 				            <br/><br/>
-				            <h:outputText value="El evento no tiene ningún moderador" style="font-style:italic" rendered="#{EventMB.cantMods eq 0}"/>
-				            <rich:dataList value="#{EventMB.mods}" var="pickList" rendered="#{EventMB.cantMods>0}">
+				            <h:outputText value="El evento no tiene ningún moderador" style="font-style:italic" rendered="#{EventMB.cantModsC eq 0}"/>
+				            <rich:dataList value="#{EventMB.modsC}" var="pickList" rendered="#{EventMB.cantModsC>0}">
 				            	<h:outputText value="#{pickList}"/>
 				            </rich:dataList> 
 				        </rich:panel>
-				        <h:outputText value="#{EventMB.modsMessage}" style="color:red"></h:outputText><br/>
+				        <h:outputText value="#{EventMB.modsMessageC}" style="color:red"></h:outputText><br/>
 				        </div>
 				</a4j:outputPanel>	 
 				
@@ -158,13 +160,14 @@
 				
 				<rich:effect  name="hideDiv"  for="richModPanel" type="BlindUp" />
 				<rich:effect  name="showDiv"  for="richModPanel" type="BlindDown" />
+				
 
 				<center>
 				<br/>
 				<br/>	        
 				<h:commandButton value="Crear el evento" action="#{EventMB.createEvent}">
 					<f:setPropertyActionListener value="#{loginMB.userName}"
-								target="#{EventMB.creator}" />
+								target="#{EventMB.creatorC}" />
 				</h:commandButton>
 				
 				</center>
