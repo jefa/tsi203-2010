@@ -1,7 +1,10 @@
 package partuzabook.usuarioUI;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
 
 import javax.faces.context.FacesContext;
@@ -32,17 +35,37 @@ public class PaginaInicioMB {
 	private List<DatatypeAlbum> albumsRecientes;
 	
 	// Para el usuario logueado
-	private String username;
 	private List<DatatypeEventSummary> misEventosRecientes;
 	private List<DatatypeNotification> misNotificaciones;
 	private List<DatatypeNotification> misNotificacionesNoLeidas;
+	private int paginaActual = 0;
+	private ArrayList<Integer> paginas =null; 
+		
 	
-	
-	public PaginaInicioMB(){
-    	FacesContext context = FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-		this.username = (String) session.getAttribute("username");		
+	public ArrayList<Integer> getPaginas() {
+		return paginas;
 	}
+
+
+	public void setPaginas(ArrayList<Integer> paginas) {
+		this.paginas = paginas;
+	}
+
+
+	public int getPaginaActual() {
+		return paginaActual;
+	}
+	
+
+	public void setPaginaActual(int paginaActual) {
+		this.paginaActual = paginaActual;
+	}
+	
+	
+	public int getTotalPaginas() {
+		return misEventosRecientes.size() / 6 + 1;
+	}
+
 	
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
@@ -169,12 +192,17 @@ public class PaginaInicioMB {
 		try {
 			Context ctx = getContext();
 			ServicesUserRemote service = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");
-			this.misEventosRecientes = service.getEventSummaryByUser(username);
+			this.misEventosRecientes = service.getEventSummaryByUser(getUsername());
+			paginas = new ArrayList<Integer>();
+			
+			for (int i = 0; i < this.getTotalPaginas(); i++) {
+				paginas.add(new Integer(i));
+			}
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
-		return this.misEventosRecientes;	
+		return this.misEventosRecientes.subList(paginaActual*6, Math.min((paginaActual+1)*6,misEventosRecientes.size()));	
 	}
 
 	public void setMisEventosRecientes(ArrayList<DatatypeEventSummary> list) {
@@ -185,7 +213,7 @@ public class PaginaInicioMB {
 		try {
 			Context ctx = getContext();
 			ServicesUserRemote service = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");	
-			this.misNotificaciones = service.getUpdateNotifications(username);
+			this.misNotificaciones = service.getUpdateNotifications(getUsername());
 		} catch(NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
@@ -201,7 +229,7 @@ public class PaginaInicioMB {
 		try {
 			Context ctx = getContext();
 			ServicesUserRemote service = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");	
-			this.misNotificacionesNoLeidas = service.getUpdateNotificationsUnread(username);
+			this.misNotificacionesNoLeidas = service.getUpdateNotificationsUnread(getUsername());
 		} catch(NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
@@ -245,6 +273,13 @@ public class PaginaInicioMB {
 
 	public void setAlbumsRecientes(ArrayList<DatatypeAlbum> albumsRecientes) {
 		this.albumsRecientes = albumsRecientes;
+	}
+	
+	public String getUsername()
+	{
+		FacesContext context = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+		return (String) session.getAttribute("username");		
 	}
 
 }
