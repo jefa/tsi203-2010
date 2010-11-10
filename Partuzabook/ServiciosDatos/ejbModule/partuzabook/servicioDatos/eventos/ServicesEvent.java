@@ -23,28 +23,29 @@ import partuzabook.datatypes.DatatypeCategorySummary;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
 import partuzabook.datatypes.DatatypeEventSummary;
+import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
+import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.DAO.AlbumDAO;
 import partuzabook.datos.persistencia.DAO.CommentDAO;
 import partuzabook.datos.persistencia.DAO.ContentCategoryDAO;
 import partuzabook.datos.persistencia.DAO.ContentDAO;
 import partuzabook.datos.persistencia.DAO.EventDAO;
-import partuzabook.datos.persistencia.DAO.AdminDAO;
 import partuzabook.datos.persistencia.DAO.EvtCategoryDAO;
 import partuzabook.datos.persistencia.DAO.ExternalPhotoDAO;
 import partuzabook.datos.persistencia.DAO.ExternalVideoDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.DAO.RatingDAO;
-import partuzabook.datos.persistencia.DAO.VideoDAO;
 import partuzabook.datos.persistencia.DAO.TagDAO;
+import partuzabook.datos.persistencia.DAO.VideoDAO;
+import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.Album;
 import partuzabook.datos.persistencia.beans.CntCategory;
 import partuzabook.datos.persistencia.beans.Comment;
 import partuzabook.datos.persistencia.beans.CommentPK;
 import partuzabook.datos.persistencia.beans.Content;
 import partuzabook.datos.persistencia.beans.Event;
-import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.EvtCategory;
 import partuzabook.datos.persistencia.beans.ExternalPhoto;
 import partuzabook.datos.persistencia.beans.ExternalVideo;
@@ -73,7 +74,10 @@ import partuzabook.servicioDatos.exception.InvalidPositionInAlbumException;
 import partuzabook.servicioDatos.exception.UnrecognizedFileTypeException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.servicioDatos.exception.UserNotRelatedToEventException;
+import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.utils.TranslatorCollection;
+
+import partuzabook.serviciosNotificaciones.email.PartuzaMailer;
 
 /**
  * Session Bean implementation class Event
@@ -84,6 +88,10 @@ public class ServicesEvent implements ServicesEventRemote {
 	private static final String YOUTUBE_PRE = "http://www.youtube.com/v/";
 	private static final String YOUTUBE_POS = "?fs=1&amp;hl=es_ES";
 	private static final String DEFAULT_VIDEO_THB_URL = "video.jpg";
+	private static final String PRE_ADMIT_MAIL = "El usuario ";
+	private static final String MID_ADMIT_MAIL = " ha solicitado ser agegado al evento ";
+	private static final String POS_ADMIT_MAIL = ".";
+	private static final String ADMIT_MAIL_SUBJECT = "Solicitud para evento";
 	
 	private EventDAO eventDao;
 	private ContentCategoryDAO contentCategoryDao;
@@ -100,7 +108,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	private VideoDAO videoDao;
 	private ExternalVideoDAO extVideoDao;
 	private ExternalPhotoDAO extPhotoDao;
-	
+	private ServicesUserRemote servicesUser;
 
 	public ServicesEvent() {
 
@@ -134,6 +142,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			videoDao = (VideoDAO) ctx.lookup("VideoDAOBean/local");
 			extPhotoDao = (ExternalPhotoDAO) ctx.lookup("ExternalPhotoDAOBean/local");
 			extVideoDao = (ExternalVideoDAO) ctx.lookup("ExternalVideoDAOBean/local");
+			servicesUser = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");
 		}
         catch (NamingException e) {
 			e.printStackTrace();
@@ -155,7 +164,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		videoDao = null;
 		extVideoDao = null;
 		extPhotoDao = null;
-		
+		servicesUser = null;
 	}
 
 	private Event getEvent(int eventID) throws EventNotFoundException { 
@@ -1266,9 +1275,21 @@ public class ServicesEvent implements ServicesEventRemote {
 	
 	public void sendAdmitMail(Integer eventId, String username)
 		throws EventNotFoundException, UserNotFoundException {
+		
 		if (!isUserRelatedToEvent(eventId, username)) {
 			//TODO Javier: Enviar el mail a los administradores diciendo que username quiere
 			//acceder al contenido del evento eventId
+			
+			NormalUser user = normalUserDao.findByID(username);
+			if(user == null)
+				throw new UserNotFoundException("No existe el usuario " + username);
+						
+			Event event = getEvent(eventId);
+			Admin admin = event.getCreator();
+			String body = PRE_ADMIT_MAIL + '[' + username + "] " + user.getName() + MID_ADMIT_MAIL + '[' + eventId + "] " + event.getEvtName() + POS_ADMIT_MAIL;
+			
+			servicesUser.createNotification(username, admin.getUsername(), Notification.OTHER_NOTIF_TYPE, body, ADMIT_MAIL_SUBJECT);
+		
 		}
 	}
 
