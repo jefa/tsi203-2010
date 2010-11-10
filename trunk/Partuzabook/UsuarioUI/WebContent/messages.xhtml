@@ -9,59 +9,163 @@
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Mensajeria</ui:define>
 	<ui:define name="body">
-		<style>
-		.label{
-		font-weight:bold;
-		}
-		.pbody{
-		    width:200px;
-		}
-		</style>
+	
+		<rich:modalPanel id="panel" width="700" height="400">
+			<f:facet name="header">
+		        	<h:outputText value="Mensaje"/>
+			</f:facet>
+						
+				<h:panelGrid columns="2" elements="1" width="100%">
+					<h:column>
+						<h:graphicImage value="/UserImageFeeder?username=#{loginMB.userName}&#38;thb=150" style="padding-bottom: 4px; vertical-align: middle;"/>
+					</h:column>
+					<h:column>
+						<div id="modalSubject"/>
+						<hr/>
+						<div id="modalInfo"/>
+						<br/>
+						<div id="modalBody"/>
+					</h:column>
+					
+				</h:panelGrid>
+			
+			<center>
+				<h:commandButton value="Cerrar" id="hidelink"/>
+				<rich:componentControl for="panel" attachTo="hidelink" operation="hide" event="onclick"/>
+			</center>
+		</rich:modalPanel>
+	
+		<center>		
+			
+				<h:graphicImage id="w1" value="images/msg_write.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+				<h:outputText id="w2" value="Redactar" style="margin-right:15px; margin-left:5px"/>
+				<rich:effect event="onclick"  for="w1"  type="BlindDown" targetId="write"/>
+				<rich:effect event="onclick"  for="w1"  type="Fade" targetId="inbox"/>
+				<rich:effect event="onclick"  for="w1"  type="Fade" targetId="sentbox"/>
+				<rich:effect event="onclick"  for="w1"  type="Fade" targetId="notif"/>
+				<rich:effect event="onclick"  for="w2"  type="BlindDown" targetId="write"/>
+				<rich:effect event="onclick"  for="w2"  type="Fade" targetId="inbox"/>
+				<rich:effect event="onclick"  for="w2"  type="Fade" targetId="sentbox"/>
+				<rich:effect event="onclick"  for="w2"  type="Fade" targetId="notif"/>
+				<h:graphicImage id="i1" value="images/msg_inbox.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+				<h:outputText id="i2" value="Bandeja de Entrada" style="margin-right:15px; margin-left:5px"/>
+				<rich:effect event="onclick"  for="i1"  type="Fade" targetId="write"/>
+				<rich:effect event="onclick"  for="i1"  type="BlindDown" targetId="inbox"/>
+				<rich:effect event="onclick"  for="i1"  type="Fade" targetId="sentbox"/>
+				<rich:effect event="onclick"  for="i1"  type="Fade" targetId="notif"/>
+				<rich:effect event="onclick"  for="i2"  type="Fade" targetId="write"/>
+				<rich:effect event="onclick"  for="i2"  type="BlindDown" targetId="inbox"/>
+				<rich:effect event="onclick"  for="i2"  type="Fade" targetId="sentbox"/>
+				<rich:effect event="onclick"  for="i2"  type="Fade" targetId="notif"/>
+				<h:graphicImage id="s1" value="images/msg_sentbox.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+				<h:outputText id="s2" value="Elementos Enviados" style="margin-right:15px; margin-left:5px"/>
+				<rich:effect event="onclick"  for="s1"  type="Fade" targetId="write"/>
+				<rich:effect event="onclick"  for="s1"  type="Fade" targetId="inbox"/>
+				<rich:effect event="onclick"  for="s1"  type="BlindDown" targetId="sentbox"/>
+				<rich:effect event="onclick"  for="s1"  type="Fade" targetId="notif"/>
+				<rich:effect event="onclick"  for="s2"  type="Fade" targetId="write"/>
+				<rich:effect event="onclick"  for="s2"  type="Fade" targetId="inbox"/>
+				<rich:effect event="onclick"  for="s2"  type="BlindDown" targetId="sentbox"/>
+				<rich:effect event="onclick"  for="s2"  type="Fade" targetId="notif"/>
+				<h:graphicImage id="n1" value="images/msg_notif.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+				<h:outputText id="n2" value="Notificaciones" style="margin-left:5px"/>
+				<rich:effect event="onclick"  for="n1"  type="Fade" targetId="write"/>
+				<rich:effect event="onclick"  for="n1"  type="Fade" targetId="inbox"/>
+				<rich:effect event="onclick"  for="n1"  type="Fade" targetId="sentbox"/>
+				<rich:effect event="onclick"  for="n1"  type="BlindDown" targetId="notif"/>
+				<rich:effect event="onclick"  for="n2"  type="Fade" targetId="write"/>
+				<rich:effect event="onclick"  for="n2"  type="Fade" targetId="inbox"/>
+				<rich:effect event="onclick"  for="n2"  type="Fade" targetId="sentbox"/>
+				<rich:effect event="onclick"  for="n2"  type="BlindDown" targetId="notif"/>
+		</center>
 		
-		<!-- width="980" sidebarPosition="left" sidebarWidth="300" -->
-		
-	    <rich:page>
-	        <f:facet name="header">
-				<div>
-					<h2>Inbox</h2>
-				</div>
-	        </f:facet>
-	        <f:facet name="sidebar">
-	        	<h:form>
-					<li><a4j:commandLink value="Compose"
-						reRender="messagesContentArea">
-						<f:setPropertyActionListener value="includes/messageCompose.xhtml"
-							target="#{notificationsBean.include}" />
-					</a4j:commandLink></li>
-					<li><a4j:commandLink value="Received"
-						reRender="messagesContentArea">
-						<f:setPropertyActionListener value="includes/messageRcvList.xhtml"
-							target="#{notificationsBean.include}" />
-						<f:setPropertyActionListener value="#{notificationsBean.notificacionesRecibidas}"
-							target="#{notificationsBean.notifActive}" />
-					</a4j:commandLink></li>
-					<li><a4j:commandLink value="Sent"
-						reRender="messagesContentArea">
-						<f:setPropertyActionListener value="includes/messageRcvList.xhtml"
-							target="#{notificationsBean.include}" />
-						<f:setPropertyActionListener value="#{notificationsBean.notificacionesEnviadas}"
-							target="#{notificationsBean.notifActive}" />
-					</a4j:commandLink></li>
-					<li><a4j:commandLink value="Notifications"
-						reRender="messagesContentArea">
-						<f:setPropertyActionListener value="includes/messageRcvList.xhtml"
-							target="#{notificationsBean.include}" />
-						<f:setPropertyActionListener value="#{notificationsBean.notificacionesGeneral}"
-							target="#{notificationsBean.notifActive}" />
-					</a4j:commandLink></li>
-	        	</h:form>
-	        </f:facet>
-	        <h:panelGroup id="messagesContentArea">
-				<ui:include src="#{notificationsBean.include}" />
-	        </h:panelGroup>
-	        <f:facet name="footer">
-	        </f:facet>   
-	    </rich:page>		
+			<rich:panel id="write">	
+				<f:facet name="header">
+					<h:outputText value="Redactar nuevo Mensaje Privado"/>
+				</f:facet>
+				<h:form>
+					<h:outputText value="Para:" style="margin-right:23px"/>
+					<h:inputText id="toField" value="#{notificationsBean.toUser}" size="60"/>
+					<h:outputText value="#{notificationsBean.toUserMessage}" style="color:red"/>
+					<rich:suggestionbox width="360" id="suggestionBoxId" for="toField" tokens=",[]"
+	                   suggestionAction="#{notificationsBean.autocomplete}" var="result"
+	                   fetchValue="#{result.username}"
+						nothingLabel="No hay usuarios que coincidan" columnClasses="center">
+	                    <h:column>
+	                        <h:graphicImage value="/UserImageFeeder?username=#{result.username}&#38;thb=30" />
+	                    </h:column>
+	                    <h:column>
+	                        <h:outputText value="#{result.name}" />
+	                    </h:column>
+	                    <h:column>
+	                        <h:outputText value=" #{result.username}" style="font-style:italic" />
+	                    </h:column>
+	                </rich:suggestionbox>
+					<br/><br/>
+					<h:outputText value="Asunto:" style="margin-right:10px"/>
+					<h:inputText value="#{notificationsBean.subject}" size="60"/><br/><br/>
+					<h:outputText value="Mensaje: "/>
+					<h:outputText value="#{notificationsBean.bodyMessage}" style="color:red"/><br/>
+					<h:inputText value="#{notificationsBean.body}" size="60"/><br/>
+					<center>
+						<h:commandButton value="Enviar Mensaje" action="#{notificationsBean.sendMail}"/>
+					</center>
+				</h:form>		
+			</rich:panel>
+			
+			
+				<rich:panel id="inbox">
+					<f:facet name="header">
+						<h:outputText value="Bandeja de Entrada"/>
+					</f:facet>
+					
+					<rich:dataGrid value="#{notificationsBean.notificacionesRecibidas}" var="notif" columns="1" elements="10" width="938px" 
+					onRowClick="document.getElementById('modalSubject').innerHTML = '#{notif.subject}'; 
+					document.getElementById('modalInfo').innerHTML = 'De #{notif.userFrom} Para #{loginMB.name}, #{notif.formattedDate}'; 
+					document.getElementById('modalBody').innerHTML = '#{notif.text}'; #{rich:component('panel')}.show()">
+						<a4j:commandLink reRender="panel">
+				        	<h:graphicImage value="images/msg_write.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+				        	<h:outputText value="#{notif.subject}" style="margin-left:5px"/><br />
+				        	<h:outputText value="#{notif.userFrom} - " style="font-style:italic"/>
+			                <h:outputText value="#{notif.formattedDate}" />
+		                </a4j:commandLink>
+			    	</rich:dataGrid>
+				</rich:panel>
+				
+				<rich:panel id="sentbox">
+					<f:facet name="header">
+						<h:outputText value="Elementos Enviados"></h:outputText>
+					</f:facet>
+					<rich:dataGrid value="#{notificationsBean.notificacionesEnviadas}" var="notif" columns="1" elements="10" width="938px"
+					onRowClick="document.getElementById('modalSubject').innerHTML = '#{notif.subject}'; 
+					document.getElementById('modalInfo').innerHTML = 'De #{notif.userFrom} Para #{loginMB.name}, #{notif.formattedDate}'; 
+					document.getElementById('modalBody').innerHTML = '#{notif.text}'; #{rich:component('panel')}.show()">
+			        	<h:graphicImage value="images/msg_write.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+			        	<h:outputText value="#{notif.subject}" style="margin-left:5px"/><br />
+			        	<h:outputText value="#{notif.userFrom} - " style="font-style:italic"/>
+		                <h:outputText value="#{notif.formattedDate}" />					
+			    	</rich:dataGrid>
+				</rich:panel>
+				
+				<rich:panel id="notif">
+					<f:facet name="header">
+						<h:outputText value="Notificaciones Recibidas"></h:outputText>
+					</f:facet>
+					<rich:dataGrid value="#{notificationsBean.notificacionesGeneral}" var="notif" columns="1" elements="10" width="938px"
+					onRowClick="document.getElementById('modalSubject').innerHTML = '#{notif.subject}'; 
+					document.getElementById('modalInfo').innerHTML = 'De #{notif.userFrom} Para #{loginMB.name}, #{notif.formattedDate}'; 
+					document.getElementById('modalBody').innerHTML = '#{notif.text}'; #{rich:component('panel')}.show()">
+			        	<h:graphicImage value="images/msg_write.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+			        	<h:outputText value="#{notif.subject}" style="margin-left:5px"/><br />
+			        	<h:outputText value="#{notif.userFrom} - " style="font-style:italic"/>
+		                <h:outputText value="#{notif.formattedDate}" />					
+			    	</rich:dataGrid>
+				</rich:panel>
+				
+				<rich:effect for="window" event="onload" type="Fade" params="targetId:'write'"/>
+				<rich:effect for="window" event="onload" type="Fade" params="targetId:'sentbox'"/>
+				<rich:effect for="window" event="onload" type="Fade" params="targetId:'notif'"/>
+							   		
 	</ui:define>
 </ui:composition>
 </html>

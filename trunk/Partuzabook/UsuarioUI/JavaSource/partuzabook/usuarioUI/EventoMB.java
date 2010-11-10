@@ -574,7 +574,7 @@ public class EventoMB {
 	public void sendAdmitMail() {
 		getServicesEvent().sendAdmitMail(eventId, getUserName());
 	}
-
+	
 	public void setFirstContentType(String firstContentType) {
 		this.firstContentType = firstContentType;
 	}
