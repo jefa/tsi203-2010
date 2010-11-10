@@ -37,6 +37,7 @@ public class NotificationsBean {
 	private String toUserMessage;
 	private String body;
 	private String bodyMessage;
+	private String subject;
 
 	private String include = "includes/messageCompose.xhtml";
 
@@ -91,9 +92,16 @@ public class NotificationsBean {
 	}
 
 	public List<DatatypeNotification> getNotificacionesRecibidas() {
-		this.recvNotifications = getServicesUser()
-				.getUpdateNotificationsReceived(getUsername());
-		return this.recvNotifications;
+		
+		recvNotifications = new ArrayList<DatatypeNotification>();
+			
+		List<DatatypeNotification> aux = getServicesUser().getUpdateNotificationsReceived(getUsername());
+		for(Iterator<DatatypeNotification> it = aux.iterator(); it.hasNext(); ) {
+			DatatypeNotification actual = it.next();
+			if(actual.getType() == Notification.MAIL_NOTIF_TYPE)
+				recvNotifications.add(actual);
+		}
+		return recvNotifications;
 	}
 
 	public void setNotificacionesRecibidas(ArrayList<DatatypeNotification> list) {
@@ -101,9 +109,15 @@ public class NotificationsBean {
 	}
 
 	public List<DatatypeNotification> getNotificacionesGeneral() {
-		this.gralNotifications = getServicesUser().getUpdateNotifications(
-				getUsername());
-		return this.gralNotifications;
+		gralNotifications = new ArrayList<DatatypeNotification>();
+		
+		List<DatatypeNotification> aux = getServicesUser().getUpdateNotificationsReceived(getUsername());
+		for(Iterator<DatatypeNotification> it = aux.iterator(); it.hasNext(); ) {
+			DatatypeNotification actual = it.next();
+			if(actual.getType() != Notification.MAIL_NOTIF_TYPE)
+				gralNotifications.add(actual);
+		}
+		return gralNotifications;
 	}
 
 	public void setNotificacionesGeneral(ArrayList<DatatypeNotification> list) {
@@ -163,16 +177,18 @@ public class NotificationsBean {
 
 				DatatypeNotification notif = getServicesUser()
 						.createNotification(getUsername(), toUser,
-								Notification.MAIL_NOTIF_TYPE, body);
+								Notification.MAIL_NOTIF_TYPE, body, subject);
 
 				String emailTo = getServicesUser().getNormalUserMailAddress(
 						toUser);
-				if (mailer.sendFormattedMail(notif.userFrom, getServicesUser()
-						.getName(notif.userFrom), notif.text,
-						notif.formattedDate, null, emailTo, null, null,
-						"Ha recivido un mensaje privado")) {
+				if (mailer.sendFormattedMail(notif.userFrom, getServicesUser().getName(notif.userFrom), notif.text,
+						notif.formattedDate, null, emailTo, null, null, subject)) {
 					clearAllMessages();
 					return "okay";
+				} else {
+					//TODO: Aclarar que no se pudo enviar una copia al mail. (se tiene que enviar una copia al mail??)
+					System.out.println("No se pudo enviar el mail");
+					clearAllMessages();					
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -251,5 +267,13 @@ public class NotificationsBean {
 
 	public void setPage(Integer page) {
 		this.page = page;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public String getSubject() {
+		return subject;
 	}
 }
