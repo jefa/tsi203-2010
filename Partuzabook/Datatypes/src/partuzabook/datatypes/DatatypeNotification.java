@@ -15,6 +15,8 @@ public class DatatypeNotification implements Serializable{
 	
 	public String formattedDate;
 	
+	public String subject;
+	
 	public String text;
 	
 	public Boolean read;
@@ -67,6 +69,14 @@ public class DatatypeNotification implements Serializable{
 	
 	public void setText(String text){
 		this.text = text;
+	}
+	
+	public String getSubject(){
+		return this.subject;
+	}
+	
+	public void setSubject(String subject){
+		this.subject = subject;
 	}
 	
 	public Boolean getRead(){
