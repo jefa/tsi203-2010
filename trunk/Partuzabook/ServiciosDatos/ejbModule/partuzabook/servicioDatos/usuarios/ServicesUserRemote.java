@@ -7,7 +7,7 @@ import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
-import partuzabook.servicioDatos.exception.EventNotFoundException;
+import partuzabook.servicioDatos.exception.MessageTooLongException;
 import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 
@@ -163,7 +163,7 @@ public interface ServicesUserRemote {
 
 	public List<DatatypeNotification> getUpdateNotificationsSent(String username);
 
-	public DatatypeNotification createNotification(String fromUser, String toUser, Integer type, String message) throws UserNotFoundException;
+	public DatatypeNotification createNotification(String fromUser, String toUser, Integer type, String message, String subject) throws UserNotFoundException, MessageTooLongException;
 
 	
 }

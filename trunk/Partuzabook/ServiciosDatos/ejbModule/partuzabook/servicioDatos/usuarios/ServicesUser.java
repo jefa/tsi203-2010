@@ -25,10 +25,11 @@ import partuzabook.datos.persistencia.beans.Admin;
 import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
+import partuzabook.datos.persistencia.beans.User;
 import partuzabook.datos.persistencia.filesystem.FileSystemLocal;
 import partuzabook.entityTranslators.TranslatorNotification;
 import partuzabook.entityTranslators.TranslatorUser;
-import partuzabook.servicioDatos.exception.EventNotFoundException;
+import partuzabook.servicioDatos.exception.MessageTooLongException;
 import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.utils.TranslatorCollection;
@@ -271,13 +272,32 @@ public class ServicesUser implements ServicesUserRemote {
 	}
 	
 	public DatatypeNotification createNotification(String fromUser, String toUser, 
-			Integer type, String message) throws UserNotFoundException{
-		if (!existsNormalUser(fromUser) || !existsNormalUser(toUser)) {
-			throw new UserNotFoundException("from="+fromUser+". to="+toUser);
+			Integer type, String message, String subject) throws UserNotFoundException, MessageTooLongException{
+		
+		User fUser;
+		User tUser;
+		
+		if(subject != null && subject.length() > 200)
+			throw new MessageTooLongException("El asunto del mensaje debe tener menos de 200 caracteres.");
+		
+		if(message.length() > 5000)
+			throw new MessageTooLongException("El mensaje debe tener menos de 5000 caracteres.");
+		
+		if(existsNormalUser(fromUser)) {
+			fUser = nUserDao.findByID(fromUser);
+		} else if(existsAdminUser(fromUser)) {
+			fUser = adminDao.findByID(fromUser);
+		} else {
+			throw new UserNotFoundException("No existe el usuario " + fromUser);
 		}
 		
-		NormalUser fUser = nUserDao.findByID(fromUser);
-		NormalUser tUser = nUserDao.findByID(toUser);
+		if(existsNormalUser(toUser)) {
+			tUser = nUserDao.findByID(toUser);
+		} else if(existsAdminUser(toUser)) {
+			tUser = adminDao.findByID(toUser);
+		} else {
+			throw new UserNotFoundException("No existe el usuario " + toUser);
+		}
 		
 		Notification not = new Notification();
 		not.setNotDate(new Timestamp((new java.util.Date()).getTime()));
@@ -287,6 +307,7 @@ public class ServicesUser implements ServicesUserRemote {
 		not.setType(type);
 		not.setUserFrom(fUser);
 		not.setUserTo(tUser);
+		not.setSubject(subject);
 		
 		notifDao.persist(not);
 		
