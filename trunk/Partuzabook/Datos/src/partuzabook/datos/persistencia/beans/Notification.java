@@ -49,6 +49,8 @@ public class Notification implements Serializable {
 	@Column(name="reg_date")
 	private Timestamp regDate;
 
+	private String subject;
+	
 	private String text;
 
 	//bi-directional many-to-one association to User
@@ -59,7 +61,7 @@ public class Notification implements Serializable {
 	//bi-directional many-to-one association to User
     @ManyToOne
 	@JoinColumn(name="usr_to_id")
-	private NormalUser userTo;
+	private User userTo;
 
     public Notification() {
     }
@@ -128,12 +130,20 @@ public class Notification implements Serializable {
 		this.userFrom = userFrom;
 	}
 	
-	public NormalUser getUserTo() {
+	public User getUserTo() {
 		return this.userTo;
 	}
 
-	public void setUserTo(NormalUser userTo) {
+	public void setUserTo(User userTo) {
 		this.userTo = userTo;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public String getSubject() {
+		return subject;
 	}
 	
 }

@@ -51,6 +51,10 @@ public class User implements Serializable {
 	@OneToMany(mappedBy="userFrom")
 	private List<Notification> notificationsCreated;
 	
+	//bi-directional many-to-one association to Notification
+	@OneToMany(mappedBy="userTo")
+	private List<Notification> notificationsReceived;
+	
     public User() {
     }
 
@@ -117,6 +121,12 @@ public class User implements Serializable {
 	public void setNotificationsCreated(List<Notification> notificationsCreated) {
 		this.notificationsCreated = notificationsCreated;
 	}
-
 	
+	public List<Notification> getNotificationsReceived() {
+		return this.notificationsReceived;
+	}
+
+	public void setNotifications2(List<Notification> notificationsReceived) {
+		this.notificationsReceived = notificationsReceived;
+	}	
 }

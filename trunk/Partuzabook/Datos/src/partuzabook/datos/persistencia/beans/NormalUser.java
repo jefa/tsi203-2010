@@ -30,10 +30,6 @@ public class NormalUser extends User {
 	//bi-directional many-to-one association to Comment
 	@OneToMany(mappedBy="user")
 	private List<Comment> comments;
-	
-	//bi-directional many-to-one association to Notification
-	@OneToMany(mappedBy="userTo")
-	private List<Notification> notificationsReceived;
 
 	//bi-directional many-to-one association to Rating
 	@OneToMany(mappedBy="user")
@@ -86,13 +82,7 @@ public class NormalUser extends User {
 		this.comments = comments;
 	}
 
-	public List<Notification> getNotificationsReceived() {
-		return this.notificationsReceived;
-	}
-
-	public void setNotifications2(List<Notification> notificationsReceived) {
-		this.notificationsReceived = notificationsReceived;
-	}
+	
 	public List<Rating> getRatings() {
 		return this.ratings;
 	}
