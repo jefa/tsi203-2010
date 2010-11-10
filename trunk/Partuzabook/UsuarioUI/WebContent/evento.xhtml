@@ -247,9 +247,9 @@
 				style="width:278px;height:278px" id="map"
 				lat="#{eventoMB.evento.latitude}"
 				lng="#{eventoMB.evento.longitude}"
-				enableDoubleClickZoom="true" showGScaleControl="false" zoom="15"
-				mapType="G_NORMAL_MAP" showGMapTypeControl="false"
-				showGLargeMapControl="false" /></div>
+				enableDoubleClickZoom="true" showGScaleControl="true" zoom="16"
+				mapType="G_NORMAL_MAP" showGMapTypeControl="true"
+				showGLargeMapControl="true" /></div>
 
 			<script>window.onload=function(){
 			addMarkerWithInfo(map, "#{eventoMB.evento.latitude}", "#{eventoMB.evento.longitude}", '#{eventoMB.evento.address}', '', '');
