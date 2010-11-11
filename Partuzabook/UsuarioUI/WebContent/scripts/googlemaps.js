@@ -12,3 +12,9 @@ function eraseMarkers(googlemap) {
 	googlemap.clearOverlays();
 }
 
+
+function noStrong(str) {
+	var array1 = str.split("<");
+	var array2 = array1[1].split(">");
+	return array2[1];
+}

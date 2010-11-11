@@ -44,12 +44,17 @@ public class NotificationsBean {
 
 	private List<DatatypeNotification> sentNotifications;
 	private int sentNotificationsPage = 1;
+	private int maxSentNotificationsPage = 1;
 	private List<DatatypeNotification> recvNotifications;
 	private int recvNotificationsPage = 1;
+	private int maxRecvNotificationsPage = 1;
 	private List<DatatypeNotification> gralNotifications;
 	private int gralNotificationsPage = 1;
+	private int maxGralNotificationsPage = 1;
 	private List<DatatypeNotification> notifActive;
 
+	
+	
 	public NotificationsBean() {
 	}
 
@@ -283,7 +288,7 @@ public class NotificationsBean {
 	}
 
 	public Integer getPage() {
-		this.page = this.notifActive.size() % PAGE_SIZE;
+		//this.page = this.notifActive.size() % PAGE_SIZE;
 		return this.page;
 	}
 
@@ -324,10 +329,7 @@ public class NotificationsBean {
 	}
 	
 	public void sentNotificationNextPage() {
-		int max_sent_page = sentNotifications.size() / PAGE_SIZE;
-		if(sentNotifications.size() % PAGE_SIZE > 0)
-			max_sent_page++;
-		if(sentNotificationsPage < max_sent_page)
+		if(sentNotificationsPage < maxSentNotificationsPage)
 			sentNotificationsPage += 1;
 	}
 	
@@ -337,10 +339,8 @@ public class NotificationsBean {
 	}
 	
 	public void recvNotificationsNextPage() {
-		int max_recv_page = recvNotifications.size() / PAGE_SIZE;
-		if(recvNotifications.size() % PAGE_SIZE > 0)
-			max_recv_page++;
-		if(recvNotificationsPage < max_recv_page)
+		
+		if(recvNotificationsPage < maxRecvNotificationsPage)
 			recvNotificationsPage += 1;
 	}
 	
@@ -350,15 +350,51 @@ public class NotificationsBean {
 	}
 	
 	public void gralNotificationsNextPage() {
-		int max_gral_page = gralNotifications.size() / PAGE_SIZE;
-		if(gralNotifications.size() % PAGE_SIZE > 0)
-			max_gral_page++;
-		if(gralNotificationsPage < max_gral_page)
+		if(gralNotificationsPage < maxGralNotificationsPage)
 			gralNotificationsPage += 1;
 	}
 	
 	public void gralNotificationsPreviousPage() {
 		if(gralNotificationsPage > 1)
 			gralNotificationsPage -= 1;
+	}
+
+	public void setMaxSentNotificationsPage(int maxSentNotificationsPage) {
+		this.maxSentNotificationsPage = maxSentNotificationsPage;
+	}
+
+	public int getMaxSentNotificationsPage() {
+		if(sentNotifications == null)
+			getNotificacionesEnviadas();
+		maxSentNotificationsPage = sentNotifications.size() / PAGE_SIZE;
+		if(sentNotifications.size() % PAGE_SIZE > 0 || sentNotifications.size() == 0)
+			maxSentNotificationsPage ++;
+		return maxSentNotificationsPage;
+	}
+
+	public void setMaxRecvNotificationsPage(int maxRecvNotificationsPage) {
+		this.maxRecvNotificationsPage = maxRecvNotificationsPage;
+	}
+
+	public int getMaxRecvNotificationsPage() {
+		if(recvNotifications == null)
+			getNotificacionesRecibidas();
+		maxRecvNotificationsPage = recvNotifications.size() / PAGE_SIZE;
+		if(recvNotifications.size() % PAGE_SIZE > 0 || recvNotifications.size() == 0)
+			maxRecvNotificationsPage ++;
+		return maxRecvNotificationsPage;
+	}
+
+	public void setMaxGralNotificationsPage(int maxGralNotificationsPage) {
+		this.maxGralNotificationsPage = maxGralNotificationsPage;
+	}
+
+	public int getMaxGralNotificationsPage() {
+		if(gralNotifications == null)
+			getNotificacionesGeneral();
+		int maxGralNotificationsPage = gralNotifications.size() / PAGE_SIZE;
+		if(gralNotifications.size() % PAGE_SIZE > 0 || gralNotifications.size() == 0)
+			maxGralNotificationsPage++;
+		return maxGralNotificationsPage;
 	}
 }

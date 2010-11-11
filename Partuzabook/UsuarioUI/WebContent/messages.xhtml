@@ -2,13 +2,15 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:h="http://java.sun.com/jsf/html" 
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Mensajeria</ui:define>
 	<ui:define name="body">
+	
+		<script type="text/javascript" src="scripts/googlemaps.js"></script>
 	
 		<rich:modalPanel id="panel" width="700" height="400">
 			<f:facet name="header">
@@ -25,11 +27,19 @@
 						<div id="modalInfo"/>
 						<br/>
 						<div id="modalBody"/>
+						<div id="modalTo" style="display: none"/>
 					</h:column>
 					
 				</h:panelGrid>
 			
 			<center>
+				<a4j:commandButton reRender="write" value="Responder" id="reply" 
+					onclick="document.getElementById('j_id71:toField').value = document.getElementById('modalTo').innerHTML; document.getElementById('j_id71:subjectField').value = 'Re: ' + noStrong(document.getElementById('modalSubject').innerHTML); "/>
+				<rich:componentControl for="panel" attachTo="reply" operation="hide" event="onclick"/>
+				<rich:effect event="onclick"  for="reply"  type="BlindDown" targetId="write"/>
+				<rich:effect event="onclick"  for="reply"  type="Fade" targetId="inbox"/>
+				<rich:effect event="onclick"  for="reply"  type="Fade" targetId="sentbox"/>
+				<rich:effect event="onclick"  for="reply"  type="Fade" targetId="notif"/>
 				<h:commandButton value="Cerrar" id="hidelink"/>
 				<rich:componentControl for="panel" attachTo="hidelink" operation="hide" event="onclick"/>
 			</center>
@@ -37,7 +47,7 @@
 	
 		<center>		
 			
-				<h:graphicImage id="w1" value="images/msg_write.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+				<h:graphicImage id="w1" value="images/messages/msg_write.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
 				<h:outputText id="w2" value="Redactar" style="margin-right:15px; margin-left:5px"/>
 				<rich:effect event="onclick"  for="w1"  type="BlindDown" targetId="write"/>
 				<rich:effect event="onclick"  for="w1"  type="Fade" targetId="inbox"/>
@@ -47,7 +57,7 @@
 				<rich:effect event="onclick"  for="w2"  type="Fade" targetId="inbox"/>
 				<rich:effect event="onclick"  for="w2"  type="Fade" targetId="sentbox"/>
 				<rich:effect event="onclick"  for="w2"  type="Fade" targetId="notif"/>
-				<h:graphicImage id="i1" value="images/msg_inbox.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+				<h:graphicImage id="i1" value="images/messages/msg_inbox.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
 				<h:outputText id="i2" value="Bandeja de Entrada" style="margin-right:15px; margin-left:5px"/>
 				<rich:effect event="onclick"  for="i1"  type="Fade" targetId="write"/>
 				<rich:effect event="onclick"  for="i1"  type="BlindDown" targetId="inbox"/>
@@ -57,7 +67,7 @@
 				<rich:effect event="onclick"  for="i2"  type="BlindDown" targetId="inbox"/>
 				<rich:effect event="onclick"  for="i2"  type="Fade" targetId="sentbox"/>
 				<rich:effect event="onclick"  for="i2"  type="Fade" targetId="notif"/>
-				<h:graphicImage id="s1" value="images/msg_sentbox.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+				<h:graphicImage id="s1" value="images/messages/msg_sentbox.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
 				<h:outputText id="s2" value="Elementos Enviados" style="margin-right:15px; margin-left:5px"/>
 				<rich:effect event="onclick"  for="s1"  type="Fade" targetId="write"/>
 				<rich:effect event="onclick"  for="s1"  type="Fade" targetId="inbox"/>
@@ -67,7 +77,7 @@
 				<rich:effect event="onclick"  for="s2"  type="Fade" targetId="inbox"/>
 				<rich:effect event="onclick"  for="s2"  type="BlindDown" targetId="sentbox"/>
 				<rich:effect event="onclick"  for="s2"  type="Fade" targetId="notif"/>
-				<h:graphicImage id="n1" value="images/msg_notif.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+				<h:graphicImage id="n1" value="images/messages/msg_notif.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
 				<h:outputText id="n2" value="Notificaciones" style="margin-left:5px"/>
 				<rich:effect event="onclick"  for="n1"  type="Fade" targetId="write"/>
 				<rich:effect event="onclick"  for="n1"  type="Fade" targetId="inbox"/>
@@ -103,10 +113,11 @@
 	                </rich:suggestionbox>
 					<br/><br/>
 					<h:outputText value="Asunto:" style="margin-right:10px"/>
-					<h:inputText value="#{notificationsBean.subject}" size="60"/><br/><br/>
+					<h:inputText id="subjectField" value="#{notificationsBean.subject}" size="60"/><br/><br/>
 					<h:outputText value="Mensaje: "/>
 					<h:outputText value="#{notificationsBean.bodyMessage}" style="color:red"/><br/>
-					<h:inputText value="#{notificationsBean.body}" size="60"/><br/>
+					<h:inputTextarea value="#{notificationsBean.body}" cols="113" rows="9"/><br/>
+					
 					<center>
 						<h:commandButton value="Enviar Mensaje" action="#{notificationsBean.sendMail}"/>
 					</center>
@@ -119,19 +130,22 @@
 						<h:outputText value="Bandeja de Entrada"/>
 					</f:facet>
 					<a4j:form>
-						<a4j:commandButton value="Anterior" reRender="inbox" action="#{notificationsBean.recvNotificationsPreviousPage}"/>
-						<em><h:outputText value=" Pagina #{notificationsBean.page} "/></em>
-						<a4j:commandButton value="Siguiente;" reRender="inbox" action="#{notificationsBean.recvNotificationsNextPage}"/><br/>
+						<p align="right">
+							<a4j:commandButton value="Anterior" reRender="inbox" action="#{notificationsBean.recvNotificationsPreviousPage}"/>
+							<em><h:outputText value=" Pagina #{notificationsBean.recvNotificationsPage} de #{notificationsBean.maxRecvNotificationsPage} "/></em>
+							<a4j:commandButton value="Siguiente" reRender="inbox" action="#{notificationsBean.recvNotificationsNextPage}"/><br/>
+						</p>
 						<rich:dataGrid id="inboxDataGrid" value="#{notificationsBean.notificacionesRecibidas}" var="notif" columns="1" elements="10" width="938px" 
-						onRowClick="document.getElementById('modalSubject').innerHTML = '#{notif.subject}'; 
+						onRowClick="document.getElementById('modalSubject').innerHTML = '&lt;strong&gt;#{notif.subject}&lt;/strong&gt;'; 
 						document.getElementById('modalInfo').innerHTML = 'De #{notif.userFrom} Para #{notif.userTo}, #{notif.formattedDate}'; 
-						document.getElementById('modalBody').innerHTML = '#{notif.text}'; #{rich:component('panel')}.show()">
+						document.getElementById('modalBody').innerHTML = '#{notif.HTMLText}'; document.getElementById('modalTo').innerHTML = '#{notif.userFrom}';
+						#{rich:component('panel')}.show()">
 							
-					        	<h:graphicImage value="images/msg_write.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+					        	<h:graphicImage value="images/messages/msg_write.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
 					        	<strong><h:outputText value="#{notif.subject}" style="margin-left:5px"/></strong><br />
 					        	<h:outputText value="#{notif.userFrom} - " style="font-style:italic"/>
 				                <h:outputText value="#{notif.formattedDate}" />
-			                
+			                	
 				    	</rich:dataGrid>
 			    	</a4j:form>
 				</rich:panel>
@@ -140,30 +154,44 @@
 					<f:facet name="header">
 						<h:outputText value="Elementos Enviados"></h:outputText>
 					</f:facet>
-					<rich:dataGrid value="#{notificationsBean.notificacionesEnviadas}" var="notif" columns="1" elements="10" width="938px"
-					onRowClick="document.getElementById('modalSubject').innerHTML = '#{notif.subject}'; 
-					document.getElementById('modalInfo').innerHTML = 'De #{notif.userFrom} Para #{notif.userTo}, #{notif.formattedDate}'; 
-					document.getElementById('modalBody').innerHTML = '#{notif.text}'; #{rich:component('panel')}.show()">
-			        	<h:graphicImage value="images/msg_write.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
-			        	<h:outputText value="#{notif.subject}" style="margin-left:5px"/><br />
-			        	<h:outputText value="#{notif.userFrom} - " style="font-style:italic"/>
-		                <h:outputText value="#{notif.formattedDate}" />					
-			    	</rich:dataGrid>
+					<a4j:form>
+						<p align="right">
+							<a4j:commandButton value="Anterior" reRender="sentbox" action="#{notificationsBean.sentNotificationPreviousPage}"/>
+							<em><h:outputText value=" Pagina #{notificationsBean.sentNotificationsPage} de #{notificationsBean.maxSentNotificationsPage} "/></em>
+							<a4j:commandButton value="Siguiente" reRender="sentbox" action="#{notificationsBean.sentNotificationNextPage}"/><br/>
+						</p>
+						<rich:dataGrid value="#{notificationsBean.notificacionesEnviadas}" var="notif" columns="1" elements="10" width="938px"
+						onRowClick="document.getElementById('modalSubject').innerHTML = '&lt;strong&gt;#{notif.subject}&lt;/strong&gt;'; 
+						document.getElementById('modalInfo').innerHTML = 'De #{notif.userFrom} Para #{notif.userTo}, #{notif.formattedDate}'; 
+						document.getElementById('modalBody').innerHTML = '#{notif.HTMLText}'; #{rich:component('panel')}.show()">
+				        	<h:graphicImage value="images/messages/msg_write.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+				        	<strong><h:outputText value="#{notif.subject}" style="margin-left:5px"/><br /></strong>
+				        	<h:outputText value="#{notif.userFrom} - " style="font-style:italic"/>
+			                <h:outputText value="#{notif.formattedDate}" />					
+				    	</rich:dataGrid>
+				    </a4j:form>
 				</rich:panel>
 				
 				<rich:panel id="notif">
 					<f:facet name="header">
 						<h:outputText value="Notificaciones Recibidas"></h:outputText>
 					</f:facet>
-					<rich:dataGrid value="#{notificationsBean.notificacionesGeneral}" var="notif" columns="1" elements="10" width="938px"
-					onRowClick="document.getElementById('modalSubject').innerHTML = '#{notif.subject}'; 
-					document.getElementById('modalInfo').innerHTML = 'De #{notif.userFrom} Para #{notif.userTo}, #{notif.formattedDate}'; 
-					document.getElementById('modalBody').innerHTML = '#{notif.text}'; #{rich:component('panel')}.show()">
-			        	<h:graphicImage value="images/msg_write.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
-			        	<h:outputText value="#{notif.subject}" style="margin-left:5px"/><br />
-			        	<h:outputText value="#{notif.userFrom} - " style="font-style:italic"/>
-		                <h:outputText value="#{notif.formattedDate}" />					
-			    	</rich:dataGrid>
+					<a4j:form>
+						<p align="right">
+							<a4j:commandButton value="Anterior" reRender="notif" action="#{notificationsBean.gralNotificationsPreviousPage}"/>
+							<em><h:outputText value=" Pagina #{notificationsBean.gralNotificationsPage} de #{notificationsBean.maxGralNotificationsPage} "/></em>
+							<a4j:commandButton value="Siguiente" reRender="notif" action="#{notificationsBean.gralNotificationsNextPage}"/><br/>
+						</p>
+						<rich:dataGrid value="#{notificationsBean.notificacionesGeneral}" var="notif" columns="1" elements="10" width="938px"
+						onRowClick="document.getElementById('modalSubject').innerHTML = '&lt;strong&gt;#{notif.subject}&lt;/strong&gt;'; 
+						document.getElementById('modalInfo').innerHTML = 'De #{notif.userFrom} Para #{notif.userTo}, #{notif.formattedDate}'; 
+						document.getElementById('modalBody').innerHTML = '#{notif.HTMLText}'; #{rich:component('panel')}.show()">
+				        	<h:graphicImage value="images/messages/msg_write.gif" style="padding-bottom: 4px; vertical-align: middle;"/>
+				        	<strong><h:outputText value="#{notif.subject}" style="margin-left:5px"/><br /></strong>
+				        	<h:outputText value="#{notif.userFrom} - " style="font-style:italic"/>
+			                <h:outputText value="#{notif.formattedDate}" />					
+				    	</rich:dataGrid>
+				    </a4j:form>
 				</rich:panel>
 				
 				<rich:effect for="window" event="onload" type="Fade" params="targetId:'write'"/>
