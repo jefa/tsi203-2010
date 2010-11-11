@@ -171,11 +171,11 @@ jQuery('#featured-slideshow').cycle({
 					<rich:dataList var="resultado"
 						rendered="#{not empty paginaInicioMB.misNotificacionesNoLeidas}"
 						value="#{paginaInicioMB.misNotificacionesNoLeidas}" rows="10">
-						<h:outputText value="Fecha:"></h:outputText>
+						<h:outputText value="Fecha: "></h:outputText>
 						<h:outputText value="#{resultado.formattedDate}"></h:outputText>
 						<br />
-						<h:outputText value="Notificacion:"></h:outputText>
-						<h:outputText value="#{resultado.text } "></h:outputText>
+						<h:outputText rendered="#{resultado.type eq 2}" value="Notificacion: #{resultado.subject}"></h:outputText>
+						<h:outputText rendered="#{resultado.type eq 1}" value="Mensaje de #{resultado.userFrom}: #{resultado.subject}"></h:outputText>
 						<br />
 					</rich:dataList>
 					<h:outputText value="No unread notifications"
