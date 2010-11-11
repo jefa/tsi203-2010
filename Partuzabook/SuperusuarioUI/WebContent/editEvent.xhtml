@@ -45,21 +45,21 @@
 						<br/><h:outputText value="Categoría:"/><br/>
 						<h:selectOneMenu value="#{EventMB.categoryM}">
 							<f:selectItems value="#{EventMB.allCats}" />
-						</h:selectOneMenu><br/><br/>	
+						</h:selectOneMenu><br/><br/>
 							
-						<h:outputText value="Descripción:"></h:outputText><br/>
-						<h:inputText value="#{EventMB.descriptionM}" size="60"></h:inputText>
-							<h:outputText value="#{EventMB.descriptionMessageM}" style="color:red"></h:outputText><br/>
-						<br/><h:outputText value="Fecha:"></h:outputText><br/>				
+						<h:outputText value="Descripción:"/><br/>
+						<h:inputTextarea value="#{EventMB.descriptionM}" cols="45" rows="3"/>
+							<h:outputText value="#{EventMB.descriptionMessageM}" style="color:red"/><br/>
+						<br/><h:outputText value="Fecha:"/><br/>				
 						<rich:calendar value="#{EventMB.dateM}"
 		                    datePattern="d/MMM/y"  showApplyButton="false"  
 		                    cellWidth="24px" cellHeight="22px" style="width:200px"/><br/>
-						<br/><h:outputText value="Horario:"></h:outputText><br/>
-						<h:inputText value="#{EventMB.durationM}" size="60"></h:inputText>
-							<h:outputText value="#{EventMB.durationMessageM}" style="color:red"></h:outputText><br/>
-						<br/><h:outputText value="Dirección:"></h:outputText><br/>
-						<h:inputText id="address" value="#{EventMB.addressM}" size="60"></h:inputText>
-							<h:outputText value="#{EventMB.addressMessageM}" style="color:red"></h:outputText><br/>
+						<br/><h:outputText value="Horario:"/><br/>
+						<h:inputText value="#{EventMB.durationM}" size="60"/>
+							<h:outputText value="#{EventMB.durationMessageM}" style="color:red"/><br/>
+						<br/><h:outputText value="Dirección:"/><br/>
+						<h:inputText id="address" value="#{EventMB.addressM}" size="60"/>
+							<h:outputText value="#{EventMB.addressMessageM}" style="color:red"/><br/>
 						
 						<input type="button" value="Buscar Dirección" onclick="showAddress('EditEvent:address', map, 'EditEvent:hidden_coord_lat', 'EditEvent:hidden_coord_lng');"/>
 			        	<input type="button" value="Borrar Marcadores" onclick="eraseMarkers(map,'EditEvent:hidden_coord_lat', 'EditEvent:hidden_coord_lng');"/><br/>

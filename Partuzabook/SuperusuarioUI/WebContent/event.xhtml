@@ -16,36 +16,36 @@
 		<f:view>
 			<rich:panel>
 				<f:facet name="header">
-					<h:outputText value="Nuevo Evento"></h:outputText>
+					<h:outputText value="Nuevo Evento"/>
 				</f:facet>
 				<center>
 				<h:panelGrid columns="2">
 					<h:panelGroup>
-						<h:outputText value="Nombre del evento:"></h:outputText><br/>
-						<h:inputText value="#{EventMB.nameC}" size="60" style="margin-right:5px"></h:inputText>
-							<h:outputText value="#{EventMB.nameMessageC}" style="color:red"></h:outputText><br/>
+						<h:outputText value="Nombre del evento:"/><br/>
+						<h:inputText value="#{EventMB.nameC}" size="60" style="margin-right:5px"/>
+							<h:outputText value="#{EventMB.nameMessageC}" style="color:red"/><br/>
 						<br/>
 						<h:outputText value="Categoría:"/><br/>
 						<h:selectOneMenu value="#{EventMB.categoryC}">
 							<f:selectItems value="#{EventMB.allCats}" />
 						</h:selectOneMenu><br/><br/>	
 							
-						<h:outputText value="Descripción:"></h:outputText><br/>
-						<h:inputText  value="#{EventMB.descriptionC}" size="60"></h:inputText>
-							<h:outputText value="#{EventMB.descriptionMessageC}" style="color:red"></h:outputText><br/>
+						<h:outputText value="Descripción:"/><br/>
+						<h:inputTextarea  value="#{EventMB.descriptionC}" cols="45" rows="3"/>
+							<h:outputText value="#{EventMB.descriptionMessageC}" style="color:red"/><br/>
 						<br/>
-						<h:outputText value="Fecha:"></h:outputText><br/>				
+						<h:outputText value="Fecha:"/><br/>				
 						<rich:calendar value="#{EventMB.dateC}"
 		                    datePattern="d/MMM/y"  showApplyButton="false"  
 		                    cellWidth="24px" cellHeight="22px" style="width:200px"/><br/>
 						<br/>
-						<h:outputText value="Horario:"></h:outputText><br/>
-						<h:inputText value="#{EventMB.durationC}" size="60"></h:inputText>
-							<h:outputText value="#{EventMB.durationMessageC}" style="color:red"></h:outputText><br/>
+						<h:outputText value="Horario:"/><br/>
+						<h:inputText value="#{EventMB.durationC}" size="60"/>
+							<h:outputText value="#{EventMB.durationMessageC}" style="color:red"/><br/>
 						<br/>
-						<h:outputText value="Dirección:"></h:outputText><br/>
-						<h:inputText id="address" value="#{EventMB.addressC}" size="60"></h:inputText>
-							<h:outputText value="#{EventMB.addressMessageC}" style="color:red"></h:outputText><br/>
+						<h:outputText value="Dirección:"/><br/>
+						<h:inputText id="address" value="#{EventMB.addressC}" size="60"/>
+							<h:outputText value="#{EventMB.addressMessageC}" style="color:red"/><br/>
 						
 						<input type="button" value="Buscar Dirección" onclick="showAddress('CreateEvent:address', map, 'CreateEvent:hidden_coord_lat', 'CreateEvent:hidden_coord_lng');"/>
 			        	<input type="button" value="Borrar Marcadores" onclick="eraseMarkers(map, 'CreateEvent:hidden_coord_lat', 'CreateEvent:hidden_coord_lng');"/>
@@ -60,8 +60,8 @@
 							
 						<br/>
 						
-			            <h:outputText value="Hashtag de Twitter:"></h:outputText><br/>
-						<h:inputText value="#{EventMB.hashtagC}" size="60"></h:inputText>
+			            <h:outputText value="Hashtag de Twitter:"/><br/>
+						<h:inputText value="#{EventMB.hashtagC}" size="60"/>
 						
 			            
 			            				
@@ -112,7 +112,7 @@
 				            	<h:outputText value="#{pickList}"/>
 				            </rich:dataList> 
 				        </rich:panel>
-				        <h:outputText value="#{EventMB.participantsMessageC}" style="color:red"></h:outputText><br/>
+				        <h:outputText value="#{EventMB.participantsMessageC}" style="color:red"/><br/>
 				</a4j:outputPanel>
 				
 				<hr/>
@@ -149,7 +149,7 @@
 				            	<h:outputText value="#{pickList}"/>
 				            </rich:dataList> 
 				        </rich:panel>
-				        <h:outputText value="#{EventMB.modsMessageC}" style="color:red"></h:outputText><br/>
+				        <h:outputText value="#{EventMB.modsMessageC}" style="color:red"/><br/>
 				        </div>
 				</a4j:outputPanel>	 
 				
