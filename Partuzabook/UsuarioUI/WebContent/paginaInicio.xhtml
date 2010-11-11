@@ -185,8 +185,11 @@ jQuery('#featured-slideshow').cycle({
 			</h:form>
 
 			<li class="multi-sidebar-container">
-			<div
-				class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
+			<divioMB.misNotificacionesNoLeidas}" />
+				</a4j:outputPanel></li>
+			</h:form>
+
+			<li c
 			<script type="">
 			function toggleTab(control, tab)
 			{
@@ -203,23 +206,26 @@ jQuery('#featured-slideshow').cycle({
 					class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a
 					href="javascript:null()" onclick="toggleTab('s-calificadas',this)"><span>Mejor
 				calificadas</span></a></li>
-				<li class="ui-state-default ui-corner-top"><a
-					href="javascript:null()" onclick="toggleTab('s-comentadas',this)"><span>Mas
+				<li class="ui-state-default ui-corner-top"><aoggleTab('s-calificadas',this)"><span>Mejor
+				calificadas</span></a></li>
+				<
 				comentadas</span></a></li>
 				<li class="ui-state-default ui-corner-top"><a
 					href="javascript:null()" onclick="toggleTab('s-figureti',this)"><span>Figureti</span></a></li>
 
 			</ul>
-			<div id="s-calificadas"
-				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
+			<div id="s-calificadas"rios:</strong>
+					#{fn:length(contenido.comments)}</span></li>
+				</a4j:repeat>
+		">
 
 
 			<h:form id="fotosMejorCalificadas">
 				<a4j:repeat var="contenido" rowKeyVar="rk" rows="5"
 					value="#{paginaInicioMB.fotosMejorCalificadas}">
 					<li id="rating" class="clearfix Clear"><span class="thumb" style="height: 36px"><h:graphicImage
-						value="/ContentFeeder?bestRanked=1&#38;pos=#{rk+1}&#38;thb=36"
-						styleClass="attachment-sidebar-thumb wp-post-image" width="36px"
+						value="/ContentFeeder?bestRanked=1&#38;pos=#{rk+1}&#38;thb=36"<span class="thumb" style="height: 36px"><h:graphicImage
+						value="/
 						height="36px" /></span> <h:commandLink value="#{contenido.eventName}"
 						action="verEvento">
 						<f:setPropertyActionListener value="#{contenido.eventId}"
@@ -252,14 +258,17 @@ jQuery('#featured-slideshow').cycle({
 				</a4j:repeat>
 			</h:form></div>
 
-			<div id="s-comentadas"
-				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<div id="s-comentadas"rios:</strong>
+					#{fn:length(contenido.comments)}</span></li>
+				</a4j:repeat>
+			</h:form></div
 			<h:form id="fotosMasComentadas">
 				<a4j:repeat var="contenido" rowKeyVar="rk"
-					value="#{paginaInicioMB.fotosMasComentadas}" rows="5">
-					<li class="clearfix"><span class="thumb" style="height: 36px"><h:graphicImage
-						value="/ContentFeeder?mostCommented=1&#38;pos=#{rk+1}&#38;thb=36"
-						styleClass="attachment-sidebar-thumb wp-post-image" width="36px"
+					value="#{paginaInicioMB.fotosMasComentadas}" rows="5">tosMasComentadas">
+				<a4j:repeat var="contenido" rowKeyVar="rk"
+					value="#{pag
+						value="/ContentFeeder?mostCommented=1&#38;pos=#{rk+1}&#38;thb=36"<span class="thumb" style="height: 36px"><h:graphicImage
+						value="/
 						height="36px" /></span> <h:commandLink value="#{contenido.eventName}"
 						action="verEvento">
 						<f:setPropertyActionListener value="#{contenido.eventId}"
@@ -269,15 +278,18 @@ jQuery('#featured-slideshow').cycle({
 					#{fn:length(contenido.comments)}</span></li>
 				</a4j:repeat>
 			</h:form></div>
-			<div id="s-figureti"
-				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<div id="s-figureti"rios:</strong>
+					#{fn:length(contenido.comments)}</span></li>
+				</a4j:repeat>
+			</h:form></div
 
 			<h:form id="usuariosMasTaggeados">
 				<a4j:repeat var="usuarioTaggeado" rowKeyVar="rk" rows="5"
-					value="#{paginaInicioMB.usuariosMasTaggeados}">
-					<li class="clearfix"><span class="thumb" style="height: 36px"><h:graphicImage
-						value="/UserImageFeeder?mostTagged=1&#38;pos=#{rk+1}&#38;thb=36"
-						styleClass="attachment-sidebar-thumb wp-post-image" width="36px"
+					value="#{paginaInicioMB.usuariosMasTaggeados}">tosMasComentadas">
+				<a4j:repeat var="contenido" rowKeyVar="rk"
+					value="#{pag="#{paginaInicioMB.usuariosMasTaggeados}">
+					<li class="clearfix"><s<span class="thumb" style="height: 36px"><h:graphicImage
+						value="/
 						height="36px" /></span><h:commandLink
 						value="#{usuarioTaggeado.user.name}" action="verPerfil">
 						<f:setPropertyActionListener
