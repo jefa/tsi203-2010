@@ -21,6 +21,7 @@ public class NotificationsBean {
 
 	private static final String INPUT_OBLIG = "Campo obligatorio";
 	private static final Integer PAGE_SIZE = new Integer(5);
+	
 
 	private Integer page;
 
@@ -42,8 +43,11 @@ public class NotificationsBean {
 	private String include = "includes/messageCompose.xhtml";
 
 	private List<DatatypeNotification> sentNotifications;
+	private int sentNotificationsPage = 1;
 	private List<DatatypeNotification> recvNotifications;
+	private int recvNotificationsPage = 1;
 	private List<DatatypeNotification> gralNotifications;
+	private int gralNotificationsPage = 1;
 	private List<DatatypeNotification> notifActive;
 
 	public NotificationsBean() {
@@ -84,7 +88,12 @@ public class NotificationsBean {
 	public List<DatatypeNotification> getNotificacionesEnviadas() {
 		this.sentNotifications = getServicesUser().getUpdateNotificationsSent(
 				getUsername());
-		return this.sentNotifications;
+		
+		int from = (sentNotificationsPage - 1) * PAGE_SIZE;
+		int to = from + PAGE_SIZE;
+		if(this.sentNotifications.size() < to)
+			to = this.sentNotifications.size();
+		return this.sentNotifications.subList(from, to);
 	}
 
 	public void setNotificacionesEnviadas(ArrayList<DatatypeNotification> list) {
@@ -101,7 +110,12 @@ public class NotificationsBean {
 			if(actual.getType() == Notification.MAIL_NOTIF_TYPE)
 				recvNotifications.add(actual);
 		}
-		return recvNotifications;
+		
+		int from = (recvNotificationsPage - 1) * PAGE_SIZE;
+		int to = from + PAGE_SIZE;
+		if(this.recvNotifications.size() < to)
+			to = this.recvNotifications.size();
+		return this.recvNotifications.subList(from, to);
 	}
 
 	public void setNotificacionesRecibidas(ArrayList<DatatypeNotification> list) {
@@ -117,7 +131,14 @@ public class NotificationsBean {
 			if(actual.getType() != Notification.MAIL_NOTIF_TYPE)
 				gralNotifications.add(actual);
 		}
-		return gralNotifications;
+		
+		int from = (gralNotificationsPage - 1) * PAGE_SIZE;
+		
+		int to = from + PAGE_SIZE;
+		if(this.gralNotifications.size() < to)
+			to = this.gralNotifications.size();
+		return this.gralNotifications.subList(from, to);
+		
 	}
 
 	public void setNotificacionesGeneral(ArrayList<DatatypeNotification> list) {
@@ -156,6 +177,7 @@ public class NotificationsBean {
 	private void clearAllMessages() {
 		clearMessages();
 		this.toUser = "";
+		this.subject = "";
 		this.body = "";
 	}
 
@@ -275,5 +297,68 @@ public class NotificationsBean {
 
 	public String getSubject() {
 		return subject;
+	}
+
+	public void setSentNotificationsPage(int sentNotificationsPage) {
+		this.sentNotificationsPage = sentNotificationsPage;
+	}
+
+	public int getSentNotificationsPage() {
+		return sentNotificationsPage;
+	}
+
+	public void setRecvNotificationsPage(int recvNotificationsPage) {
+		this.recvNotificationsPage = recvNotificationsPage;
+	}
+
+	public int getRecvNotificationsPage() {
+		return recvNotificationsPage;
+	}
+
+	public void setGralNotificationsPage(int gralNotificationsPage) {
+		this.gralNotificationsPage = gralNotificationsPage;
+	}
+
+	public int getGralNotificationsPage() {
+		return gralNotificationsPage;
+	}
+	
+	public void sentNotificationNextPage() {
+		int max_sent_page = sentNotifications.size() / PAGE_SIZE;
+		if(sentNotifications.size() % PAGE_SIZE > 0)
+			max_sent_page++;
+		if(sentNotificationsPage < max_sent_page)
+			sentNotificationsPage += 1;
+	}
+	
+	public void sentNotificationPreviousPage() {
+		if(sentNotificationsPage > 1)
+			sentNotificationsPage -= 1;
+	}
+	
+	public void recvNotificationsNextPage() {
+		int max_recv_page = recvNotifications.size() / PAGE_SIZE;
+		if(recvNotifications.size() % PAGE_SIZE > 0)
+			max_recv_page++;
+		if(recvNotificationsPage < max_recv_page)
+			recvNotificationsPage += 1;
+	}
+	
+	public void recvNotificationsPreviousPage() {
+		if(recvNotificationsPage > 1)
+			recvNotificationsPage -= 1;
+	}
+	
+	public void gralNotificationsNextPage() {
+		int max_gral_page = gralNotifications.size() / PAGE_SIZE;
+		if(gralNotifications.size() % PAGE_SIZE > 0)
+			max_gral_page++;
+		if(gralNotificationsPage < max_gral_page)
+			gralNotificationsPage += 1;
+	}
+	
+	public void gralNotificationsPreviousPage() {
+		if(gralNotificationsPage > 1)
+			gralNotificationsPage -= 1;
 	}
 }
