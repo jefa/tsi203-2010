@@ -2,7 +2,9 @@ package partuzabook.datos.persistencia.beans;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -113,9 +115,32 @@ public class User implements Serializable {
 	public void setContentsCreated(List<Content> contentsCreated) {
 		this.contentsCreated = contentsCreated;
 	}
+	
+	private void insertOrdered(List<Notification> res, Notification not) {
+		
+		if(res.size() == 0)
+			res.add(not);
+		else {
+			int i = 0;
+			for(ListIterator<Notification> it = res.listIterator(); it.hasNext(); ) {
+				Notification notActual = it.next();
+				if(not.getRegDate().getTime() > notActual.getRegDate().getTime()){
+					res.add(i, not);
+					return;
+				}					
+				i++;
+			}
+			res.add(not);
+		}
+	}
 		
 	public List<Notification> getNotificationsCreated() {
-		return this.notificationsCreated;
+		List<Notification> res = new ArrayList<Notification>();
+		for(ListIterator<Notification> it = this.notificationsCreated.listIterator(); it.hasNext(); ) {
+			Notification not = it.next();
+			insertOrdered(res, not);
+		}
+		return res;
 	}
 
 	public void setNotificationsCreated(List<Notification> notificationsCreated) {
@@ -123,10 +148,15 @@ public class User implements Serializable {
 	}
 	
 	public List<Notification> getNotificationsReceived() {
-		return this.notificationsReceived;
+		List<Notification> res = new ArrayList<Notification>();
+		for(ListIterator<Notification> it = this.notificationsReceived.listIterator(); it.hasNext(); ) {
+			Notification not = it.next();
+			insertOrdered(res, not);
+		}
+		return res;
 	}
 
-	public void setNotifications2(List<Notification> notificationsReceived) {
+	public void setNotificationsReceived(List<Notification> notificationsReceived) {
 		this.notificationsReceived = notificationsReceived;
 	}	
 }
