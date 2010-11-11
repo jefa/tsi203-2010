@@ -92,6 +92,12 @@ public class DatatypeEventSummary implements Serializable{
 		this.description = description;
 	}
 
+	public String getHTMLDescription() {
+		return description.replace("\n", "<br/>").replace("\r", "");
+	}
+	
+	public void setHTMLDescription(String HTMLDescription) {}
+	
 	public String getEventCategory() {
 		return eventCategory;
 	}
