@@ -319,13 +319,28 @@ public interface ServicesEventRemote {
 	public void addContentToAlbum(int contentID, int eventID);
 	
 	/**
+	 * Retrieve contents included in album of eventID 
+	 * ordered by posAlbum
+	 * @param eventID
+	 */
+	public List<DatatypeContent> getAlbumContents(int eventID);
+	
+	/**
+	 * Modifies the position of each content in the album to 
+	 * the positions determined by the list newOrder
+	 * @param eventID
+	 * @param newOrder
+	 */
+	public void changeAlbumOrder(int eventID, int[] newOrder);
+	
+	/**
 	 * Modifies the position of the content in the album. 
 	 * Contents in oldPos and newPos are exchanged.
 	 * @param contentID
 	 * @param eventID
 	 * @param pos
+	private void changePosInAlbum(int contentID, int eventID, int newPos);
 	 */
-	public void changePosInAlbum(int contentID, int eventID, int newPos);
 	
 	/**
 	 * Removes the content from the album of the event. 
