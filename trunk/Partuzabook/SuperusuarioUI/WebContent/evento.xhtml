@@ -131,11 +131,11 @@
 				<div class="pikachoose" style="height: 620px;"><h:inputHidden
 					id="selectContentId" value="#{eventoMB.contentId}" /> <a4j:commandButton
 					id="btnSelectThumb" action="#{eventoMB.updateCategory}"
-					reRender="panelRating,panelTags,panelComments"
+					reRender="panelRating,panelTags,panelComments,panelAlbum"
 					style="display:none;">
 				</a4j:commandButton>
 				<ul id="pikame" class="jcarousel-skin-pika">
-					<a4j:repeat value="#{eventoMB.selectedCategory.contents}"
+					<a4j:repeat value="#{eventoMB.contents}"
 						var="content">
 						<li><h:graphicImage
 							value="/ContentFeeder?id=#{content.contId}"
@@ -157,19 +157,23 @@
 					img.lightBox();
 			    </script></div>
 
+									
+			</a4j:form>
+
+			<a4j:form id="panelAlbum" >		
 				<h:panelGroup
 					rendered="#{eventoMB.albumExists and !eventoMB.isAlbumFinalized}">
 					<h:panelGroup rendered="#{eventoMB.isInAlbum}">
 						<a4j:commandButton value="Quitar del Album"
 							action="#{eventoMB.quitarContenidoAlbum}"
-							reRender="authorizedContent,panelTags,panelComments" />
+							reRender="authorizedContent,panelTags,panelComments,panelAlbum" />
 					</h:panelGroup>
 					<h:panelGroup rendered="#{!eventoMB.isInAlbum}">
 
 						<h:column>
 							<a4j:commandButton value="Agregar al Album"
 								action="#{eventoMB.agregarContenidoAlbum}"
-								reRender="panelContent" />
+								reRender="panelContent,panelAlbum" />
 						</h:column>
 						<h:column>
 							<a4j:commandLink
@@ -183,11 +187,31 @@
 						</h:column>
 					</h:panelGroup>
 				</h:panelGroup>
-
+				
 			</a4j:form>
 
 			<a4j:outputPanel id="panelRating" rendered="#{eventoMB.contentsCount > 0}">
-				<h:column styleClass="Clear">
+					<h:form id="formRating">
+						<span id="hover-test" style="margin: 0 0 0 20px;"></span>
+						<rich:jQuery selector="#formRating .hover-star"
+							query="rating({
+								focus: function(value, link){
+									var tip = jQuery('#hover-test');
+									tip[0].data = tip[0].data || tip.html();
+									tip.html(link.title || 'value: '+value);
+								},
+								blur: function(value, link){
+									var tip = jQuery('#hover-test');
+									jQuery('#hover-test').html(tip[0].data || '');
+								},
+								callback: function(value, link) {
+									if (value == undefined) value = 0;
+									$('formRating:txtRating').value = value;
+									$('formRating:btnRate').click();
+								}
+							}).rating('select', #{eventoMB.rating} + '', false);"></rich:jQuery>
+					</h:form>
+
 					<h:outputText value="Calificación global: " />
 					<h:form id="formGlobalRating">
 						<input type="radio" class="hover-star {half:true}"
@@ -213,9 +237,26 @@
 						<rich:jQuery selector="#formGlobalRating .hover-star"
 							query="rating({}).rating('select', #{eventoMB.selectedContent == null ? 0 : eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
 					</h:form>
-				</h:column>
+
 			</a4j:outputPanel>
+			
+			<br/>
+			<a4j:outputPanel id="panelTagsCount" >			
+				<div id="index-featured2">
+				<ul class="hfeed posts-quick-tag clearfix">
+					<h:outputText value="Cantidad de etiquetados: #{eventoMB.tagsCount}"/>
+				</ul></div>
+			</a4j:outputPanel>
+
+			<a4j:outputPanel id="panelCommentsCount" >			
+				<div id="index-featured2">
+				<ul class="hfeed posts-quick-tag clearfix">
+					<h:outputText value="Cantidad de comentarios: #{eventoMB.commentsCount}"/>
+				</ul></div>
+			</a4j:outputPanel>
+							
 		</h:panelGroup>
+
 	</ui:define>
 	<ui:define name="sidebar"
 		rendered="#{eventoMB.validUserForContext and (eventoMB.contentsCount > 0)}">

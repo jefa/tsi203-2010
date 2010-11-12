@@ -14,6 +14,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 
+import org.richfaces.component.Dropzone;
+import org.richfaces.event.DropEvent;
+
 import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
@@ -50,7 +53,10 @@ public class EventoMB {
 
 	private int categoryId;
 	private DatatypeCategory selectedCategory;
+	private List<DatatypeContent> contents;
 	private Integer contentsCount;
+	private int tagsCount;
+	private int commentsCount;
 	
 	private Integer contentId;
 	private DatatypeContent selectedContent;
@@ -80,11 +86,34 @@ public class EventoMB {
 	private boolean albumExists;
 	private DatatypeCategory album;
 	private boolean isAlbumFinalized;
-	
+
 	private boolean isInAlbum;
+	
+	private String orderedList = "";
+	
+	public void setOrderedList(String list){
+		this.orderedList = list;
+	}
+	
+	public String getOrderedList(){
+		return this.orderedList;
+	}
+	
+	public void updateOrder() {
+		System.out.println(orderedList);
+		String[] ordList = orderedList.split(",");
+		int[] ord = new int[ordList.length];
+		for(int i = 0; i < ordList.length; i++){
+			ord[i] = Integer.parseInt(ordList[i].substring(8));
+			System.out.println(ord[i]);
+		}
+		
+	}
 	
 	public void setSelectedContent(DatatypeContent selectedContent){
 		this.selectedContent = selectedContent;
+		setTagsCount(selectedContent.getTags().size());
+		setCommentsCount(selectedContent.getComments().size());
 	}
 	
 	public DatatypeContent getSelectedContent(){
@@ -102,7 +131,7 @@ public class EventoMB {
 	}
 
 	public void updateCategory() {
-		System.out.println("holaaa");
+		System.out.println("Category Update");
 		/*
 		for(Iterator<DatatypeCategorySummary> it = categories.iterator(); it.hasNext(); ) {
 			DatatypeCategorySummary cat = it.next();
@@ -113,7 +142,7 @@ public class EventoMB {
 		}
 		*/
 	}
-
+	
 	public void setContentId(Integer contentId) {
 		this.contentId = contentId;
 		suggest = null;
@@ -145,6 +174,12 @@ public class EventoMB {
 
 	public void setSelectedCategory(DatatypeCategory selectedCategory) {
 		this.selectedCategory = selectedCategory;
+		if (selectedCategory.getCategory().equals("Album")) {
+			ServicesEventRemote service = getServicesEvent();
+			setContents(service.getAlbumContents(this.eventId));
+		} else {
+			setContents(selectedCategory.getContents());			
+		}
 		setContentsCount(this.selectedCategory.getContents().size());
 		if (getContentsCount() > 0) {
 			setContentId(selectedCategory.getContents().get(0).getContId());
@@ -160,6 +195,14 @@ public class EventoMB {
 		return selectedCategory;
 	}
 
+	public void setContents(List<DatatypeContent> list){
+		this.contents = list;
+		setContentsCount(this.contents.size());
+	}
+	
+	public List<DatatypeContent> getContents(){
+		return this.contents;
+	}
 	
 	public void setContentsCount(Integer contentsCount) {
 		this.contentsCount = contentsCount;
@@ -167,6 +210,22 @@ public class EventoMB {
 
 	public Integer getContentsCount() {
 		return contentsCount;
+	}
+	
+	public void setTagsCount(int count){
+		this.tagsCount = count;
+	}
+	
+	public int getTagsCount(){
+		return this.tagsCount;
+	}
+
+	public void setCommentsCount(int count){
+		this.commentsCount = count;
+	}
+	
+	public int getCommentsCount(){
+		return this.commentsCount;
 	}
 
 	public String getComentario(){
@@ -297,7 +356,9 @@ public class EventoMB {
 			}
 			setCategories(newList);
 			setCategoriesCount(newList.size());
-			setCategoryId(newList.get(0).getCategoryId());
+			if (getCategoriesCount() > 0) {
+				setCategoryId(newList.get(0).getCategoryId());				
+			}
 		}
 	}
 
@@ -323,7 +384,7 @@ public class EventoMB {
 		this.eventId = eventId;
 		setValidUserForContext(false);
 		// Also set the Event
-		setEvento(getServicesEvent().getEventDetails(eventId, true));
+		setEvento(getServicesEvent().getEventDetails(eventId,true));
 	}
 
 	public void setCategoriesCount(Integer categoriesCount) {
@@ -415,9 +476,9 @@ public class EventoMB {
 
 				String emailTo = getServicesUser().getNormalUserMailAddress(userName);
 				mailer.sendFormattedMail(userName, getServicesUser().getName(userName),
-						"Usuario "+userName+" fue etiquetado en contenido "+contentId, 
+						"Usuario "+userName+" fue taggeado en contenido "+contentId, 
 						new SimpleDateFormat().format(new Date()), null, emailTo, null, null, 
-					"Ud. ha sido etiquetado en un evento");
+					"Ud. ha sido taggeado en evento");
 				
 				suggest = null;
 				setContentId(contentId);
@@ -475,7 +536,7 @@ public class EventoMB {
 		try {
 			ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			this.hasAlbum = service.getEventDetails(eventId, true).getHasAlbum(); 
+			this.hasAlbum = service.getEventDetails(eventId,true).getHasAlbum(); 
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -620,8 +681,7 @@ public class EventoMB {
 	}
 
 	public boolean getIsInAlbum(){
-		this.isInAlbum = selectedContent.getPosAlbum() != null;
-		return this.isInAlbum;
+		return this.selectedContent.getPosAlbum() != null;
 	}
 	
 	public void setIsInAlbum(boolean is){
@@ -697,7 +757,7 @@ public class EventoMB {
 	public void moverUnaPosAtras(){
 		try{
 			ServicesEventRemote service = getServicesEvent();
-			service.changePosInAlbum(this.contentId, this.eventId, this.selectedContent.getPosAlbum()-1) ;
+		//	service.changePosInAlbum(this.contentId, this.eventId, this.selectedContent.getPosAlbum()-1) ;
 			setCategoryId(this.categoryId);			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -707,7 +767,7 @@ public class EventoMB {
 	public void moverUnaPosAdelante(){
 		try{
 			ServicesEventRemote service = getServicesEvent();
-			service.changePosInAlbum(this.contentId, this.eventId, this.selectedContent.getPosAlbum()+1) ;
+		//	service.changePosInAlbum(this.contentId, this.eventId, this.selectedContent.getPosAlbum()+1) ;
 			setCategoryId(this.categoryId);			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -715,12 +775,30 @@ public class EventoMB {
 	}
 	
 	public void finalizarAlbum(){
+		System.out.println(orderedList);
+		String[] ordList = orderedList.split(",");
+		int[] ord = new int[ordList.length];
+		for(int i = 0; i < ordList.length; i++){
+			ord[i] = Integer.parseInt(ordList[i].substring(8));
+			System.out.println(ord[i]);
+		}
 		try{
 			ServicesEventRemote service = getServicesEvent();
+			service.changeAlbumOrder(this.eventId, ord);
 			service.finalizeAlbum(this.eventId);
 		} catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 
+	public void processDrop(DropEvent dropEvent) {
+		Dropzone dropzone = (Dropzone) dropEvent.getComponent();
+		Object dragValue = dropEvent.getDragValue();
+		Object dropValue = dropzone.getDropValue();
+		ServicesEventRemote service = getServicesEvent();
+		DatatypeContent draggedCont = (DatatypeContent) dragValue;
+		DatatypeContent droppedCont = (DatatypeContent) dropValue;
+//		service.changePosInAlbum(draggedCont.getContId(), this.eventId, 
+//				droppedCont.getPosAlbum()) ;
+	}
 }

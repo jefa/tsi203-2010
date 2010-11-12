@@ -29,7 +29,7 @@ public class EventMB {
 	private static final String NO_MODS = "Se asignï¿½ el evento como moderado, pero no se establecieron moderadores.";
 	private static final String EVENT_NOT_FOUND = "No se encontrï¿½ el evento";
 	
-	//Para la creación de eventos:
+	//Para la creaciï¿½n de eventos:
 	private String nameC;
 	private String nameMessageC;
 	private String descriptionC;
@@ -685,7 +685,7 @@ public class EventMB {
 			setDurationM(eventToModify.getDuration());
 			setLatitudeM(eventToModify.getLatitude());
 			setLongitudeM(eventToModify.getLongitude());
-			setModeratedM(eventToModify.getModsUsernames() != null && eventToModify.getModsUsernames().size() > 0);
+			setModeratedM(eventToModify.getModsUsernames() != null  && eventToModify.getModsUsernames().size() > 0);
 			setModsM(eventToModify.getModsUsernames());
 			setParticipantsM(eventToModify.getParticipantsUsernames());
 			setNameM(eventToModify.getEvtName());
