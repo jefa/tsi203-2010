@@ -1,19 +1,20 @@
 package partuzabook.datos.persistencia;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import partuzabook.datos.persistencia.DAO.AdminDAO;
+import partuzabook.datos.persistencia.DAO.ContentDAO;
+import partuzabook.datos.persistencia.DAO.EventDAO;
 import partuzabook.datos.persistencia.DAO.NormalUserDAO;
 import partuzabook.datos.persistencia.DAO.NotificationDAO;
 import partuzabook.datos.persistencia.beans.Admin;
+import partuzabook.datos.persistencia.beans.Event;
 import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.datos.persistencia.beans.Notification;
 
@@ -43,9 +44,9 @@ public class Main {
     
     static void addNotification() {
     	try {
- 			NormalUserDAO nuDao = (NormalUserDAO)c.lookup("PruebaDeploy/NormalUserDAOBean/local");
-			AdminDAO adminDao = (AdminDAO)c.lookup("PruebaDeploy/AdminDAOBean/local");
-			NotificationDAO notDao = (NotificationDAO)c.lookup("PruebaDeploy/NotificationDAOBean/local");
+ 			NormalUserDAO nuDao = (NormalUserDAO)c.lookup("NormalUserDAOBean/local");
+			AdminDAO adminDao = (AdminDAO)c.lookup("AdminDAOBean/local");
+			NotificationDAO notDao = (NotificationDAO)c.lookup("NotificationDAOBean/local");
 			
 			NormalUser nu = nuDao.findByID("Normla User");
 			Admin admin = adminDao.findByID("admin");
@@ -78,25 +79,26 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    	//new Main();
+    	new Main();
     	//TestUserService();
     	//TestAdminDAOBean();
     	//TestNormalUserDAOBean();
     	//TestClientDAOBean();
     	//TestGetNormalClient();
+    	TestAlbum();
     	
     	//addNotification();
-    	String email = "ggismero@gmail.jjojojo.com";
-		boolean res = true;
-		String regex = "[a-zA-Z0-9]+(\\.-\\w)*@[a-zA-Z0-9]+(\\.-\\w)*(\\.\\w{2,4})+";
-		System.out.println(email.matches(regex));
+//    	String email = "ggismero@gmail.jjojojo.com";
+//		boolean res = true;
+//		String regex = "[a-zA-Z0-9]+(\\.-\\w)*@[a-zA-Z0-9]+(\\.-\\w)*(\\.\\w{2,4})+";
+//		System.out.println(email.matches(regex));
     	
     }
     
     static String TestUserService() {
     	try {
     		
-			UserServiceRemote aDAO=(UserServiceRemote) c.lookup("PruebaDeploy/UserService/remote");
+			UserServiceRemote aDAO=(UserServiceRemote) c.lookup("UserService/remote");
 			/*
 			Admin a = new Admin();
 			a.setUsername("admin");
@@ -118,7 +120,7 @@ public class Main {
     static String TestAdminDAOBean() {
     	try {
     		
-			UserServiceRemote uSer =(UserServiceRemote) c.lookup("PruebaDeploy/UserService/remote");
+			UserServiceRemote uSer =(UserServiceRemote) c.lookup("UserService/remote");
 			
 			//uSer.addUser1();
 			uSer.getAllUsers();
@@ -133,7 +135,7 @@ public class Main {
     
     static String TestNormalUserDAOBean() {
     	try {
-    		NormalUserDAO nuDAO=(NormalUserDAO) c.lookup("PruebaDeploy/NormalUserDAOBean/remote");
+    		NormalUserDAO nuDAO=(NormalUserDAO) c.lookup("NormalUserDAOBean/remote");
     		NormalUser nu = new NormalUser();
 			nu.setUsername("Normla User");
 	        nu.setPassword("my pass");
@@ -146,9 +148,25 @@ public class Main {
 		}    	
     }
     
+    static String TestAlbum() {
+		try {
+			ContentDAO contentDao = (ContentDAO)c.lookup("PartuzabookEAR/ContentDAOBean/local");
+			EventDAO eventDao = (EventDAO) c.lookup("PartuzabookEAR/EventDAOBean/local");
+			Event event = eventDao.findByID(101);
+			System.out.println(contentDao.getOrderedAlbum(event));
+			return "OK";
+		}
+		catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "ERROR";
+		}
+		
+    }
+    
     static String TestClientDAOBean() {
 //    	try {
-//    		ClientDAO cliDAO=(ClientDAO) c.lookup("PruebaDeploy/ClientDAOBean/remote");
+//    		ClientDAO cliDAO=(ClientDAO) c.lookup("ClientDAOBean/local");
 //    		Client cli = new Client();
 //			cli.setUsername("client1");
 //			cli.setPassword("my pass");
@@ -165,7 +183,7 @@ public class Main {
     static String TestGetNormalClient() {
     	try {
     		
-			NormalUserDAO nuDAO=(NormalUserDAO) c.lookup("PruebaDeploy/NormalUserDAOBean/remote");
+			NormalUserDAO nuDAO=(NormalUserDAO) c.lookup("NormalUserDAOBean/local");
 			/*
 			Admin a = new Admin();
 			a.setUsername("admin");

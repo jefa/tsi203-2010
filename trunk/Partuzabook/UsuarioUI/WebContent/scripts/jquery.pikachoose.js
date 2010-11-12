@@ -250,7 +250,7 @@
 	     	self.active = $(this);
 	     	self.active.addClass('active').fadeTo(200,1);
      		var val = self.active.attr('src').split('id=');
-     		if(val.size > 1)
+     		if(val.size() > 1)
      			document.getElementById('panelThumbs:selectContentId').value = val[1].split('&')[0];
      		else
      			document.getElementById('panelThumbs:selectContentId').value = document.getElementById('cntId');

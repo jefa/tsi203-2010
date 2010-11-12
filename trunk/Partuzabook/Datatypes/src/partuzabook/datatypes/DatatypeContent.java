@@ -173,4 +173,22 @@ public class DatatypeContent implements Serializable {
 			return "http://img.youtube.com/vi/"+vid+"/0.jpg";
 		}
 	}
+	
+	public String toString() {
+		String ret = "";
+		ret += "contId:" + contId + ", ";
+		ret += "description:" + description + ", ";
+		ret += "eventName:" + eventName + ", ";
+		ret += "eventId:" + eventId + ", ";
+		ret += "uploadedBy:" + uploadedBy + ", ";
+		ret += "avgScore:" + avgScore + ", ";
+		ret += "posAlbum:" + posAlbum + ", ";
+		ret += "posGallery:" + posGallery + ", ";
+		ret += "comments:" + comments.toString() + ", ";
+		ret += "tags:" + comments.toString() + ", ";
+		ret += "type:" + type + ", ";
+		ret += "url:" + url + ", ";
+		ret += "youtubeUrlScreen:" + youtubeUrlScreen;
+		return "{" + ret + "}";
+	}
 }

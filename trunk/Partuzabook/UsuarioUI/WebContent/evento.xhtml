@@ -34,14 +34,13 @@
 			type="text/css" />
 		<link rel="stylesheet" href="styles/lightbox/jquery.lightbox-0.5.css"
 			type="text/css" />
-		<link rel="stylesheet" type="text/css"
-			href="styles/imgareaselect-default.css" />
-		<script type="text/javascript" src="scripts/jquery.imgareaselect.js"></script>
-		<script type="text/javascript"
-			src="scripts/jquery.imgareaselect.min.js"></script>
+		<link rel="stylesheet" href="styles/annotation/annotation.css"
+			type="text/css" />
+		<script type="text/javascript" src="scripts/jquery-ui-1.7.1.js"></script>
 		<script type="text/javascript" src="scripts/jquery.pikachoose.js"></script>
 		<script type="text/javascript" src="scripts/jquery.jcarousel.js"></script>
 		<script type="text/javascript" src="scripts/jquery.lightbox-0.5.js"></script>
+		<script type="text/javascript" src="scripts/jquery.annotate.js"></script>
 		<script type="text/javascript" src="scripts/googlemaps.js"></script>
 
 		<h:panelGroup id="panelEvento">
@@ -134,6 +133,21 @@
 				
 			</a4j:outputPanel>
 			<a4j:form id="panelThumbs">
+				<div id="container-image-annotate-text" style="display:none">
+					<h:inputText id="image-annotate-text" />
+				</div>
+				<rich:suggestionbox id="suggestionBoxId" for="image-annotate-text" tokens=",["
+					suggestionAction="#{eventoMB.autocomplete}" var="result"
+					nothingLabel="No se encuentran usuarios" columnClasses="center">
+					<div><h:column>
+						<h:outputText value="#{result.username}" style="display:none" />
+					</h:column> <h:column>
+						<h:outputText value="#{result.name}" />
+					</h:column> <h:column>
+						<h:graphicImage
+							value="/UserImageFeeder?username=#{result.username}&#38;thb=30" />
+					</h:column></div>
+				</rich:suggestionbox>
 				<div class="pikachoose" style="height: 620px;"><h:inputHidden
 					id="selectContentId" value="#{eventoMB.contentId}" /> <a4j:commandButton
 					id="btnSelectThumb" action="#{eventoMB.updateCategory}"
@@ -148,7 +162,7 @@
 							name="#{content.contId}" onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';"/>
 							<h:graphicImage rendered="#{content.type eq 1 || content.type eq 3}" value="#{content.youtubeUrlScreen}"
 							name="#{content.contId}" onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';"/>
-							<span>#{content.description}<br />Subido por: #{content.uploadedBy}</span>
+							<span>#{content.description}<br />Por: #{content.uploadedBy}</span>
 						</li> 
 					</a4j:repeat>
 				</ul>
@@ -161,9 +175,52 @@
 				        	});
 					    }
 			    	});
-					var img = jQuery(".pika-image a.image-selected");
-					img.lightBox();
-			    </script></div>
+					var aimgclone = null;
+					initTag();
+					function beginTag() {
+						jQuery('#panelThumbs\\:btnBeginTag').hide();
+						jQuery('#panelThumbs\\:btnEndTag').show();
+						
+						jQuery("div.pika-image div.image-annotate-canvas").remove();
+				    	var aimg = jQuery("div.pika-image a.image-selected");
+						aimgclone = aimg.clone();
+						aimg.unbind();
+				    	aimg.removeAttr('href');
+				    	jQuery("div.image-annotate-canvas").remove();
+						var img = jQuery("div.pika-image img");
+						img.show();
+						img.annotateImage({
+							editable: true,
+							useAjax: true,
+							getUrl: "GetTagsForContent",
+							saveUrl: "SendTagsForContent",
+							deleteUrl: "DeleteTagsForContent",
+							pickFromButton: false,
+							photoId: document.getElementById("panelThumbs:selectContentId").value
+						});
+						jQuery("#image-annotate-add").removeAttr('href');
+					}
+					function endTag() {
+						jQuery('#panelThumbs\\:btnBeginTag').show();
+						jQuery('#panelThumbs\\:btnEndTag').hide();
+						
+						var div = jQuery("div.pika-image");
+						jQuery("div.pika-image a.image-selected").remove();
+						div.prepend(aimgclone);
+						initTag();
+					}
+					function initTag() {
+				    	var aimg = jQuery("div.pika-image a.image-selected");
+						aimg.lightBox();
+						var img = jQuery("div.pika-image img");
+						img.annotateImage({
+							editable: false,
+							useAjax: true,
+							getUrl: "GetTagsForContent",
+							photoId: document.getElementById("panelThumbs:selectContentId").value
+						});
+					}
+				</script></div>
 				<a4j:commandLink rendered="#{eventoMB.userIsModerator}"
 					onclick="if(!confirm('¿Eliminar el contenido?'))return false;"
 					value="Eliminar contenido" action="#{eventoMB.removeContent}"
@@ -171,6 +228,8 @@
 					style="float:right;">
 					<h:graphicImage value="/images/close.png" alt="Eliminar contenido" />
 				</a4j:commandLink>
+				<a4j:commandButton id="btnBeginTag" onclick="beginTag();" value="Etiquetar" />
+				<a4j:commandButton id="btnEndTag" onclick="endTag();" value="Finalizar etiquetado" style="display:none " />
 			</a4j:form>
 			<a4j:outputPanel id="panelRating">
 				<h:column id="myRating" styleClass="Clear">

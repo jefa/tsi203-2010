@@ -30,9 +30,13 @@ public class Main {
 	        Context ctx = new InitialContext(properties);
 	        System.out.println("Got context - Main");
 	        ServicesUserRemote usr = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");
+	        ServicesEventRemote evt = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");
 	        if (usr != null) {
 	        	System.out.println("**** Testeando CU Ver pagina de Inicio ****");
-	        	String usuario = "veromanduk";
+	        	String usuario = "rrivem";
+	        	System.out.println("0. Album para " + usuario);
+	        	List<DatatypeContent> album = evt.getOrderedAlbum(101);
+	        	System.out.println(album);
 	        	System.out.println("1. Invocando getUpdateNotifications para " + usuario);
 	        	List<DatatypeNotification> list = usr.getUpdateNotifications(usuario);
 		        if (list == null){
@@ -57,7 +61,6 @@ public class Main {
 		        System.out.println("ServicesUserRemote was not found");    	
 	        }
 	        
-	        ServicesEventRemote evt = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");
 	        if (evt != null) {
 	        	System.out.println("3. Invocando getSummaryEvents");
 	        	int maxEvents = 10;
@@ -126,7 +129,7 @@ public class Main {
 				        		System.out.println("  Usuario: " + users.get(i).username );
 				        	}	
 				        	System.out.println("2. Invocando tagUserInContent");				        	
-				        	evt.tagUserInContent(eventID, cont.getContId(), usuario, users.get(pos).username, 1, 1);	        		        	
+				        	evt.tagUserInContent(cont.getContId(), usuario, users.get(pos).username, 1, 1);	        		        	
 				        	System.out.println("3. Invocando nuevamente para ver si quedo el tag");				        	
 				        	cont = evt.getContentDetails(cont.getContId(), usuario);	
 					        System.out.println("   Tags para el contenido con ID " +  cont.getContId());
