@@ -77,7 +77,6 @@ import partuzabook.servicioDatos.exception.UserNotRelatedToEventException;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.utils.TranslatorCollection;
 
-
 /**
  * Session Bean implementation class Event
  */
@@ -388,15 +387,14 @@ public class ServicesEvent implements ServicesEventRemote {
 		return TranslatorCollection.translateNormalUser(allUsersInEvent);
 	} 
 
-	public void tagUserInContent(int eventID, int contentID, String userTagger, String userToTag,
+	public void tagUserInContent(int contentID, String userTagger, String userToTag,
 			int posX, int posY) throws EventNotFoundException, ContentNotFoundException, UserNotFoundException {
-		// Verify existence of Event
-		Event event = getEvent(eventID);
 		// Verify existence of content
-		Content cont = (Content) contentDao.findByIDInEvent(event, contentID);
+		Content cont = (Content) contentDao.findByID(contentID);
 		if (cont == null) {
 			throw new ContentNotFoundException();
 		}
+		Event event = cont.getEvent();
 		// Verify existence of user who is tagging and user who will be tagged
 		User tagger = (User) normalUserDao.findByID(userTagger);
 		if (tagger == null || (!(tagger instanceof NormalUser))) {
@@ -464,14 +462,14 @@ public class ServicesEvent implements ServicesEventRemote {
 		}
 	}
 
-	public void removeTagInContent(int eventID, int contentID, String username,
+	public void removeTagInContent(int contentID, String username,
 			Boolean userToRemoveIsReal, String userToRemove)
 		throws ContentNotFoundException, IllegalAccessException {
-		if (!isUserModeratorInEvent(eventID, username)) {
-			throw new IllegalAccessException();
-		}
 		// Verify existence of content
 		Content content = getContentAndVerifyPermission(username, contentID);
+		if (!isUserModeratorInEvent(content.getEvent().getEvtIdAuto(), username)) {
+			throw new IllegalAccessException();
+		}
 		// Check if user to tag is registered
 		Iterator<Tag> it = content.getTags().iterator();
 		while (it.hasNext()) {
@@ -897,6 +895,12 @@ public class ServicesEvent implements ServicesEventRemote {
 		return res;
 	}
 
+	public List<DatatypeContent> getOrderedAlbum(int eventId) {
+		Event event = getEvent(eventId);
+		List<Content> contents = contentDao.getOrderedAlbum(event);
+		return TranslatorCollection.translateContent(contents);
+	}
+	
 	public DatatypeCategory existsAlbum(int eventID){
 		Event event = getEvent(eventID);
 		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");

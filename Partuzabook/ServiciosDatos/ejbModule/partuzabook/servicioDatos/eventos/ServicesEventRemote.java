@@ -159,16 +159,15 @@ public interface ServicesEventRemote {
 	 * @param posX					- Position of the tag in the X axis within the content
 	 * @param posY					- Position of the tag in the Y axis within the content 
 	 */
-	public void tagUserInContent(int eventID, int contentID, String userTagger, String userToTag, int posX, int posY) throws Exception;
+	public void tagUserInContent(int contentID, String userTagger, String userToTag, int posX, int posY) throws Exception;
 
 	/**
 	 * Removes the associated tag to userToRemove in the content, username must have moderator privileges
-	 * @param eventID				- Identifier of the event
 	 * @param contentID				- Identifier of the content
 	 * @param username				- Identifier of the user removing the tag
 	 * @param userToRemove			- Identifier of the user tag removed
 	 */
-	public void removeTagInContent(int eventID, int contentID, String username,
+	public void removeTagInContent(int contentID, String username,
 			Boolean userToRemoveIsReal, String userToRemove) throws Exception;
 
 	/**
@@ -291,6 +290,9 @@ public interface ServicesEventRemote {
 	 * Returns the public content, used in the main page.
 	 * */
 	public byte[] getPublicContent(String type, int pos, String thumbnail);
+	
+	public List<DatatypeContent> getOrderedAlbum(int eventId);
+	
 	
 	/**
 	 * If true, returns the Album category associated to the event

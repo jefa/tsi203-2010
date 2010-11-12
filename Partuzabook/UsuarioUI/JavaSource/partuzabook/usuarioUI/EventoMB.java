@@ -388,7 +388,7 @@ public class EventoMB {
 			Context ctx = getContext();
 			if (suggest != null && suggest != "") {
 				ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-				service.tagUserInContent(eventId, contentId, getUserName(), suggest, tagX1, tagY1);
+				service.tagUserInContent(contentId, getUserName(), suggest, tagX1, tagY1);
 				
 				String emailTo = getServicesUser().getNormalUserMailAddress(getUserName());
 				mailer.sendFormattedMail(getUserName(), getServicesUser().getName(getUserName()),
@@ -413,7 +413,7 @@ public class EventoMB {
 		try {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			service.removeTagInContent(eventId, contentId, getUserName(), tagToRemoveUserIsReal, tagToRemoveUser);
+			service.removeTagInContent(contentId, getUserName(), tagToRemoveUserIsReal, tagToRemoveUser);
 			suggest = null;
 			setContentId(getContentId());
 		}

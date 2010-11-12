@@ -18,6 +18,8 @@ public interface ContentDAO extends Dao<Integer, Content>{
 	
 	public Content findByPosAlbum(Event event, int pos);
 	
+	public List<Content> getOrderedAlbum(Event event);
+	
 	public Integer findNextPosInGalleryEvent(Event event);
 
 	public Integer findNextPosInAlbumEvent(Event event);

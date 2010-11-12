@@ -19,13 +19,13 @@
   <param-value>com.sun.facelets.FaceletViewHandler</param-value>
  </context-param>
  <context-param>
-<param-name>org.richfaces.CONTROL_SKINNING</param-name>
-<param-value>disable</param-value>
-</context-param>
-<context-param>
-<param-name>org.richfaces.CONTROL_SKINNING_LEVEL</param-name>
-<param-value>basic</param-value>
-</context-param>
+  <param-name>org.richfaces.CONTROL_SKINNING</param-name>
+  <param-value>disable</param-value>
+ </context-param>
+ <context-param>
+  <param-name>org.richfaces.CONTROL_SKINNING_LEVEL</param-name>
+  <param-value>basic</param-value>
+ </context-param>
  <filter>
   <display-name>RichFaces Filter</display-name>
   <filter-name>richfaces</filter-name>
@@ -64,10 +64,25 @@
   <servlet-name>ContentFeeder</servlet-name>
   <servlet-class>partuzabook.usuarioUI.ContentFeeder</servlet-class>
  </servlet>
-  <servlet>
+ <servlet>
   <display-name>FacebookConnect</display-name>
   <servlet-name>FacebookConnect</servlet-name>
   <servlet-class>partuzabook.usuarioUI.FacebookConnect</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>GetTagsForContent</display-name>
+  <servlet-name>GetTagsForContent</servlet-name>
+  <servlet-class>partuzabook.usuarioUI.GetTagsForContent</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>SendTagsForContent</display-name>
+  <servlet-name>SendTagsForContent</servlet-name>
+  <servlet-class>partuzabook.usuarioUI.SendTagsForContent</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>DeleteTagsForContent</display-name>
+  <servlet-name>DeleteTagsForContent</servlet-name>
+  <servlet-class>partuzabook.usuarioUI.DeleteTagsForContent</servlet-class>
  </servlet>
  <servlet>
   <display-name>UserImageFeeder</display-name>
@@ -79,6 +94,10 @@
   <servlet-name>YoutubeRedirect</servlet-name>
   <servlet-class>partuzabook.usuarioUI.YoutubeRedirect</servlet-class>
  </servlet>
+ <servlet>
+  <servlet-name>MailController</servlet-name>
+  <servlet-class>partuzabook.usuarioUI.MailController</servlet-class>
+ </servlet>
  <servlet-mapping>
   <servlet-name>Faces Servlet</servlet-name>
   <url-pattern>*.jsf</url-pattern>
@@ -87,7 +106,19 @@
   <servlet-name>ContentFeeder</servlet-name>
   <url-pattern>/ContentFeeder</url-pattern>
  </servlet-mapping>
-  <servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>GetTagsForContent</servlet-name>
+  <url-pattern>/GetTagsForContent</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>SendTagsForContent</servlet-name>
+  <url-pattern>/SendTagsForContent</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>DeleteTagsForContent</servlet-name>
+  <url-pattern>/DeleteTagsForContent</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
   <servlet-name>FacebookConnect</servlet-name>
   <url-pattern>/FacebookConnect</url-pattern>
  </servlet-mapping>
@@ -95,10 +126,6 @@
   <servlet-name>UserImageFeeder</servlet-name>
   <url-pattern>/UserImageFeeder</url-pattern>
  </servlet-mapping>
- <servlet>
-  <servlet-name>MailController</servlet-name>
-  <servlet-class>partuzabook.usuarioUI.MailController</servlet-class>
- </servlet>
  <servlet-mapping>
   <servlet-name>MailController</servlet-name>
   <url-pattern>/sendmail</url-pattern>
@@ -110,4 +137,4 @@
  <welcome-file-list>
   <welcome-file>/index.jsp</welcome-file>
  </welcome-file-list>
-</web-app> 
+</web-app>
