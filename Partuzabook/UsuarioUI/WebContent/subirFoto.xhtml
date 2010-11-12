@@ -76,7 +76,17 @@
 				</h:panelGroup>
 			</h:panelGrid>
 		</a4j:form>
+
+		<a4j:form>
+			<p class="quick-read-more"><h:commandLink value="Volver al evento..."
+				action="verEvento">
+				<f:setPropertyActionListener value="#{subirFotoMB.idEvento}"
+					target="#{eventoMB.eventId}" />
+			</h:commandLink></p>
+		</a4j:form>
+
 	</ui:define>
+
 </ui:composition>
 </body>
 </html>
