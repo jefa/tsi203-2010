@@ -7,9 +7,8 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 
-
-
 <ui:composition template="templates/superusuarioUI.xhtml">
+
 	<ui:define name="title">Modificar Album</ui:define>
 	<ui:define name="styles">
 	.main-aside {width:300px;}
@@ -17,7 +16,12 @@
 	#content {width:660px;} 
 	</ui:define>
 
+<iframe src="whereToSubmit.html" name="myIframe" frameborder="0" height="1" width="1" />
+
 	<ui:define name="body">
+		<link rel="stylesheet" href="styles/floating-gallery.css"
+			type="text/css" />
+		<script type="text/javascript" src="scripts/floating-gallery.js"></script>
 		<script type="text/javascript" src="scripts/documentation.js"></script>
 
 		<h:panelGroup id="panelEvento">
@@ -27,7 +31,8 @@
 				<div class="entry-thumbnails"><h:graphicImage
 					value="/ContentFeeder?id=#{eventoMB.evento.coverId}&#38;thb=115"
 					styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
-				<h3 class="entry-title">Album del evento #{eventoMB.evento.evtName}</h3>
+				<h3 class="entry-title">Album del evento
+				#{eventoMB.evento.evtName}</h3>
 				<div class="entry-summary">
 				<div class="entry-info"><abbr class="published">#{eventoMB.evento.formattedDate}</abbr>
 				</div>
@@ -37,36 +42,59 @@
 				</div>
 				</li>
 			</ul>
-			<!-- .posts-quick --></div>
-			<!-- #index-featured2 -->
+			</div>
 		</h:panelGroup>
 
-		<h:panelGroup id="AlbumFinalized" rendered="#{eventoMB.isAlbumFinalized}">
+		<h:panelGroup id="AlbumFinalized"
+			rendered="#{eventoMB.isAlbumFinalized}">
 			<h:outputText>No puede realizar modificaciones sobre albums finalizados</h:outputText>
 			<br />
 		</h:panelGroup>
-		
-		<h:panelGroup id="NotAlbumFinalized" rendered="#{!eventoMB.isAlbumFinalized}">			
-			<a4j:outputPanel id="panelNoContents" rendered="#{eventoMB.contentsCount == 0}">
+
+		<h:panelGroup id="NotAlbumFinalized"
+			rendered="#{!eventoMB.isAlbumFinalized}">
+			<a4j:outputPanel id="panelNoContents"
+				rendered="#{eventoMB.contentsCount == 0}">
 			No se han encontrado contenidos. Por favor ingrese a la galería del evento y agregue contenidos al album.
 			</a4j:outputPanel>
-			
-			<a4j:outputPanel id="panelThumbs" rendered="#{eventoMB.contentsCount > 0}">
+
+			<a4j:outputPanel id="panelThumbs"
+				rendered="#{eventoMB.contentsCount > 0}">
+				
 				<a4j:form id="formThumb">
-					<rich:dataGrid value="#{eventoMB.selectedCategory.contents}"
-						columns="#{eventoMB.contentsCount}" var="content" rowKeyVar="rk">
-						<a4j:commandLink action="#{eventoMB.updateContent}"
-							reRender="panelContent">
-							<f:setPropertyActionListener value="#{content.contId}"
-								target="#{eventoMB.contentId}" />
-							<h:graphicImage alt="Title"
-								value="/ContentFeeder?id=#{content.contId}&#38;thb=75" />
-						</a4j:commandLink>
-					</rich:dataGrid>
-					<h:outputText value="#{eventoMB.selectedCategory.category}" />		
+					<h:inputHidden id="imageIdList" value="#{eventoMB.orderedList}"/>
+					<a4j:commandButton id="btnUpdateOrder"
+						style="display:none" 
+						value="Ordenar"
+						action="#{eventoMB.updateOrder}">
+					</a4j:commandButton>
+
+					<div id="insertionMarker">
+					<img src="/SuperusuarioUI/images/marker_top.gif" />
+					<img src="/SuperusuarioUI/images/marker_middle.gif" id="insertionMarkerLine" />
+					<img src="/SuperusuarioUI/images/marker_bottom.gif" /></div>
+					<div id="dragDropContent"></div>
+
+					<div id="GalleryContainer">
+						<a4j:repeat
+						value="#{eventoMB.contents}"
+						var="content" rowKeyVar="rk">
+							<div class="imageBox" id="imageBox#{rk}">
+							<div class="imageBox_theImage" 
+							style="background-image:url('/SuperusuarioUI/ContentFeeder?id=#{content.contId}&#38;thb=125')">
+							</div>
+							<div class="imageBox_label"><span>#{content.description}</span></div>
+							</div>
+						</a4j:repeat>
+					</div>
+					<div id="debug" style="clear:both"></div>
+					<h:outputText value="#{eventoMB.selectedCategory.category}" />
+
 				</a4j:form>
 			</a4j:outputPanel>
-			<a4j:outputPanel id="panelContent" rendered="#{eventoMB.contentsCount > 0}">
+
+			<a4j:outputPanel id="panelContent"
+				rendered="#{eventoMB.contentsCount > 0}">
 				<h:form>
 					<h:outputText value="#{eventoMB.selectedContent.contId}" />
 					<h:panelGroup id="mainImage" layout="block">
@@ -76,20 +104,22 @@
 							</h:panelGroup>
 						</h:column>
 					</h:panelGroup>
-					<h:outputText value="#{eventoMB.selectedContent.posAlbum}" />
-					<a4j:outputPanel id="moverPosAtras" rendered="#{eventoMB.selectedContent.posAlbum > 0}">
-						<a4j:commandButton value="Atras" action="#{eventoMB.moverUnaPosAtras}" reRender="panelThumbs, panelContent"/>
-					</a4j:outputPanel>
-					<a4j:outputPanel id="moverPosAdelante" rendered="#{(eventoMB.contentsCount - 1) > eventoMB.selectedContent.posAlbum}">
-						<a4j:commandButton value="Adelante" action="#{eventoMB.moverUnaPosAdelante}" reRender="panelThumbs, panelContent"/>
-					</a4j:outputPanel>
-				
-					<a4j:commandButton value="Publicar Album" onclick="if (!window.confirm('¿Confirma que desea publicar el Album? Una vez finalizado no podrá editarse')) {return false}" 
-					action="#{eventoMB.finalizarAlbum}" styleClass="featured-article"/>
-				
+	
+					<a4j:commandButton value="Publicar Album"
+						onclick="saveImageOrder();if (!window.confirm('¿Confirma que desea publicar el Album? Una vez finalizado no podrá editarse')) {return false}"
+						action="#{eventoMB.finalizarAlbum}" />
+
 				</h:form>
 			</a4j:outputPanel>
 		</h:panelGroup>
+
+		<a4j:form>
+			<h3 class="entry-title"><h:commandLink value="Volver al Evento..." action="verEvento">
+				<f:setPropertyActionListener value="#{subirFotoMB.idEvento}"
+				target="#{eventoMB.evento.evtId}" />
+			</h:commandLink></h3>   
+		</a4j:form>
+
 	</ui:define>
 </ui:composition>
 </html>
