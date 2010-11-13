@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.beans.Notification;
+import partuzabook.servicioDatos.notificaciones.ServicesNotificationRemote;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.serviciosNotificaciones.email.PartuzaMailer;
 
@@ -21,13 +22,15 @@ public class NotificationsBean {
 
 	private static final String INPUT_OBLIG = "Campo obligatorio";
 	private static final Integer PAGE_SIZE = new Integer(5);
-	
+	private static final String SERV_NOTIFICATION = "PartuzabookEAR/ServicesNotification/remote";
+	private static final String SERV_USER = "PartuzabookEAR/ServicesUser/remote";
 
 	private Integer page;
 
 	private PartuzaMailer mailer = new PartuzaMailer();
-	private ServicesUserRemote servicesUser;
-
+	private ServicesNotificationRemote serviceNotification;
+	private ServicesUserRemote serviceUser;
+	
 	private List<DatatypeUser> results;
 	private List<DatatypeUser> users;
 	private String suggest = "";
@@ -48,12 +51,16 @@ public class NotificationsBean {
 	private List<DatatypeNotification> recvNotifications;
 	private int recvNotificationsPage = 1;
 	private int maxRecvNotificationsPage = 1;
+	private int recvUnread;
+	private int recvAll;
 	private List<DatatypeNotification> gralNotifications;
 	private int gralNotificationsPage = 1;
 	private int maxGralNotificationsPage = 1;
+	private int gralUnread;
+	private int gralAll;
 	private List<DatatypeNotification> notifActive;
-
 	
+	private String notId;
 	
 	public NotificationsBean() {
 	}
@@ -66,17 +73,28 @@ public class NotificationsBean {
 		return SessionUtils.getUsername();
 	}
 
-	private ServicesUserRemote getServicesUser() {
-		if (servicesUser == null) {
+	private ServicesNotificationRemote getServicesNotification() {
+		if (serviceNotification == null) {
 			try {
 				Context ctx = getContext();
-				this.servicesUser = (ServicesUserRemote) ctx
-						.lookup("PartuzabookEAR/ServicesUser/remote");
+				this.serviceNotification = (ServicesNotificationRemote) ctx.lookup(SERV_NOTIFICATION);
 			} catch (NamingException e) {
 				e.printStackTrace();
 			}
 		}
-		return this.servicesUser;
+		return this.serviceNotification;
+	}
+	
+	private ServicesUserRemote getServicesUser() {
+		if (serviceUser == null) {
+			try {
+				Context ctx = getContext();
+				this.serviceUser = (ServicesUserRemote) ctx.lookup(SERV_USER);
+			} catch (NamingException e) {
+				e.printStackTrace();
+			}
+		}
+		return this.serviceUser;
 	}
 
 	private Context getContext() throws NamingException {
@@ -91,7 +109,7 @@ public class NotificationsBean {
 	}
 
 	public List<DatatypeNotification> getNotificacionesEnviadas() {
-		this.sentNotifications = getServicesUser().getUpdateNotificationsSent(
+		this.sentNotifications = getServicesNotification().getUpdateNotificationsSent(
 				getUsername());
 		
 		int from = (sentNotificationsPage - 1) * PAGE_SIZE;
@@ -108,12 +126,16 @@ public class NotificationsBean {
 	public List<DatatypeNotification> getNotificacionesRecibidas() {
 		
 		recvNotifications = new ArrayList<DatatypeNotification>();
-			
-		List<DatatypeNotification> aux = getServicesUser().getUpdateNotificationsReceived(getUsername());
+		recvUnread = 0;
+		
+		List<DatatypeNotification> aux = getServicesNotification().getUpdateNotificationsReceived(getUsername());
 		for(Iterator<DatatypeNotification> it = aux.iterator(); it.hasNext(); ) {
 			DatatypeNotification actual = it.next();
-			if(actual.getType() == Notification.MAIL_NOTIF_TYPE)
+			if(actual.getType() == Notification.MAIL_NOTIF_TYPE) {
 				recvNotifications.add(actual);
+				if(!actual.getRead())
+					recvUnread++;
+			}
 		}
 		
 		int from = (recvNotificationsPage - 1) * PAGE_SIZE;
@@ -129,12 +151,15 @@ public class NotificationsBean {
 
 	public List<DatatypeNotification> getNotificacionesGeneral() {
 		gralNotifications = new ArrayList<DatatypeNotification>();
-		
-		List<DatatypeNotification> aux = getServicesUser().getUpdateNotificationsReceived(getUsername());
+		gralUnread = 0;
+		List<DatatypeNotification> aux = getServicesNotification().getUpdateNotificationsReceived(getUsername());
 		for(Iterator<DatatypeNotification> it = aux.iterator(); it.hasNext(); ) {
 			DatatypeNotification actual = it.next();
-			if(actual.getType() != Notification.MAIL_NOTIF_TYPE)
+			if(actual.getType() != Notification.MAIL_NOTIF_TYPE) {
 				gralNotifications.add(actual);
+				if(!actual.getRead())
+					gralUnread++;
+			}
 		}
 		
 		int from = (gralNotificationsPage - 1) * PAGE_SIZE;
@@ -202,12 +227,11 @@ public class NotificationsBean {
 		if (noMessages()) {
 			try {
 
-				DatatypeNotification notif = getServicesUser()
-						.createNotification(getUsername(), toUser,
-								Notification.MAIL_NOTIF_TYPE, body, subject);
+				DatatypeNotification notif = getServicesNotification().createNotification(getUsername(), toUser, Notification.MAIL_NOTIF_TYPE, body, subject);
 
-				String emailTo = getServicesUser().getNormalUserMailAddress(
-						toUser);
+				/*
+				
+				String emailTo = getServicesUser().getNormalUserMailAddress(toUser);
 				if (mailer.sendFormattedMail(notif.userFrom, getServicesUser().getName(notif.userFrom), notif.text,
 						notif.formattedDate, null, emailTo, null, null, subject)) {
 					clearAllMessages();
@@ -217,6 +241,8 @@ public class NotificationsBean {
 					System.out.println("No se pudo enviar el mail");
 					clearAllMessages();					
 				}
+				*/
+				clearAllMessages();				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -396,5 +422,51 @@ public class NotificationsBean {
 		if(gralNotifications.size() % PAGE_SIZE > 0 || gralNotifications.size() == 0)
 			maxGralNotificationsPage++;
 		return maxGralNotificationsPage;
+	}
+	
+	public void notLeida() {
+		this.getServicesNotification().setNotificationRead(Integer.parseInt(notId), true);
+	}
+
+	public void setNotId(String notId) {
+		this.notId = notId;
+	}
+
+	public String getNotId() {
+		return notId;
+	}
+
+	public void setRecvUnread(int recvUnread) {
+		this.recvUnread = recvUnread;
+	}
+
+	public int getRecvUnread() {
+		return recvUnread;
+	}
+
+	public void setGralUnread(int gralUnread) {
+		this.gralUnread = gralUnread;
+	}
+
+	public int getGralUnread() {
+		return gralUnread;
+	}
+
+	public void setRecvAll(int recvAll) {
+		this.recvAll = recvAll;
+	}
+
+	public int getRecvAll() {
+		getNotificacionesRecibidas();
+		return recvNotifications.size();
+	}
+
+	public void setGralAll(int gralAll) {
+		this.gralAll = gralAll;
+	}
+
+	public int getGralAll() {
+		getNotificacionesGeneral();
+		return gralNotifications.size();
 	}
 }
