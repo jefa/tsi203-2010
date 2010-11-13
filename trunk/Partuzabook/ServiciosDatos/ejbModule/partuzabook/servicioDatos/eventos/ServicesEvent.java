@@ -74,6 +74,7 @@ import partuzabook.servicioDatos.exception.InvalidPositionInAlbumException;
 import partuzabook.servicioDatos.exception.UnrecognizedFileTypeException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.servicioDatos.exception.UserNotRelatedToEventException;
+import partuzabook.servicioDatos.notificaciones.ServicesNotificationRemote;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.utils.TranslatorCollection;
 
@@ -107,6 +108,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	private ExternalVideoDAO extVideoDao;
 	private ExternalPhotoDAO extPhotoDao;
 	private ServicesUserRemote servicesUser;
+	private ServicesNotificationRemote servicesNotification;
 
 	public ServicesEvent() {
 
@@ -141,6 +143,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			extPhotoDao = (ExternalPhotoDAO) ctx.lookup("ExternalPhotoDAOBean/local");
 			extVideoDao = (ExternalVideoDAO) ctx.lookup("ExternalVideoDAOBean/local");
 			servicesUser = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");
+			servicesNotification = (ServicesNotificationRemote) ctx.lookup("PartuzabookEAR/ServicesNotification/remote");
 		}
         catch (NamingException e) {
 			e.printStackTrace();
@@ -163,6 +166,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		extVideoDao = null;
 		extPhotoDao = null;
 		servicesUser = null;
+		servicesNotification = null;
 	}
 
 	private Event getEvent(int eventID) throws EventNotFoundException { 
@@ -978,7 +982,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	//	eventDao.persist(event);
 		
 	}
-
+	
 	private void changePosInAlbum(int contentId, int eventID, int newPos) {
 		Event event = getEvent(eventID);
 		// Search for Album category
@@ -1349,7 +1353,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			Admin admin = event.getCreator();
 			String body = PRE_ADMIT_MAIL + '[' + username + "] " + user.getName() + MID_ADMIT_MAIL + '[' + eventId + "] " + event.getEvtName() + POS_ADMIT_MAIL;
 			
-			servicesUser.createNotification(username, admin.getUsername(), Notification.OTHER_NOTIF_TYPE, body, ADMIT_MAIL_SUBJECT);
+			servicesNotification.createNotification(username, admin.getUsername(), Notification.OTHER_NOTIF_TYPE, body, ADMIT_MAIL_SUBJECT);
 		
 		}
 	}
