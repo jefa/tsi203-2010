@@ -24,6 +24,9 @@ INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, 
 INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1003, 'Fiesta de Halloween del grupo de TSI2', '2011-10-31', 180,'', 'Armando Esteban Quito 665', 'rradmin','E',now()::timestamp, 'Otro');
 INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1004, 'Previa de Perry vs Juventus', '2011-10-28', 180,'', 'Aquiles Baeza 1025', 'anadmin','M',now()::timestamp, 'Otro');
 INSERT INTO EVENTS(EVT_ID_AUTO, EVT_NAME, DATE, DURATION, DESCRIPTION, ADDRESS, CREATOR, FLAGS, REG_DATE, CATEGORY) VALUES(1005, 'Fiesta Rave de fin de a�o', '2010-12-31', 300,'', 'Tunel de 8 de Octubre', 'jfadmin','E',now()::timestamp, 'Otro');
+update EVENTS set latitude = 0;
+update EVENTS set longitude = 0;
+
 
 --Insertamos los moderadores de los eventos	
 INSERT INTO MODS(USR_ID, EVT_ID) VALUES('ggismero', 1001);
