@@ -19,12 +19,12 @@
 
 	<ui:define name="body">
 		<script type="">
-			function toggleTab(control, tab)
+			function toggleTab(control, tab, prefix)
 			{
-				jQuery('div.ui-tabs-panel').addClass('ui-tabs-hide');
+				jQuery('div.ui-tabs-panel[id|="'+prefix+'"]').addClass('ui-tabs-hide');
 				jQuery('#' + control).fadeIn();
 				jQuery('#' + control).removeClass('ui-tabs-hide');
-				jQuery('ul.ui-tabs-nav li').removeClass('ui-tabs-selected ui-state-active');
+				jQuery(tab.parentNode.parentNode.children).removeClass('ui-tabs-selected ui-state-active');
 				jQuery(tab.parentNode).addClass('ui-tabs-selected ui-state-active');
 				jQuery("#ulCategories li." + document.getElementById("formCategory:catName").value).addClass("ui-tabs-selected ui-state-active");
 			}
@@ -72,7 +72,8 @@
 						<f:setPropertyActionListener value="#{eventoMB.eventId}"
 							target="#{subirVideoMB.eventId}" />
 					</h:commandButton>
-					<h:commandButton value="Añadir contenido externo" action="subirContExterno">
+					<h:commandButton value="Añadir contenido externo"
+						action="subirContExterno">
 						<f:setPropertyActionListener value="#{eventoMB.eventId}"
 							target="#{subirContExternoMB.eventId}" />
 					</h:commandButton>
@@ -94,18 +95,15 @@
 			<br />
 			<h:outputText>Puede solicitar autorizacion enviando un mensaje al moderador.</h:outputText>
 			<br />
-			<h:commandButton value="Enviar solicitud" action="#{eventoMB.sendAdmitMail}" />
+			<h:commandButton value="Enviar solicitud"
+				action="#{eventoMB.sendAdmitMail}" />
 		</h:panelGroup>
-		<h:panelGroup id="authorizedContent"
+		<h:panelGroup id="authorizedContent" style="padding-top:10px"
 			rendered="#{eventoMB.validUserForContext || eventoMB.hasAlbum}">
-			<a4j:outputPanel id="panelCategories">
+			<a4j:outputPanel id="panelCategories" >
 				<h:form id="formCategory">
 					<h:inputHidden id="catName"
 						value="#{eventoMB.selectedCategory.category}" />
-					<script>
-						jQuery("#ulCategories li").removeClass("ui-tabs-selected ui-state-active");
-						jQuery("#ulCategories li." + document.getElementById("formCategory:catName").value).addClass("ui-tabs-selected ui-state-active");
-					</script>
 
 					<div
 						class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
@@ -123,22 +121,26 @@
 						</a4j:repeat>
 					</ul>
 					</div>
-					
-    			
+
+					<script>
+						jQuery("#ulCategories li").removeClass("ui-tabs-selected ui-state-active");
+						jQuery("#ulCategories li." + document.getElementById("formCategory:catName").value).addClass("ui-tabs-selected ui-state-active");
+					</script>
+
 				</h:form>
-				
-				<h:inputHidden id="cntType" value="#{eventoMB.firstContentType}"/>
-    			<h:inputHidden id="cntUrl" value="#{eventoMB.firstContentUrl}"/>
-    			<h:inputHidden id="cntId" value="#{eventoMB.contentId}"/>  
-				
+
+				<h:inputHidden id="cntType" value="#{eventoMB.firstContentType}" />
+				<h:inputHidden id="cntUrl" value="#{eventoMB.firstContentUrl}" />
+				<h:inputHidden id="cntId" value="#{eventoMB.contentId}" />
+
 			</a4j:outputPanel>
 			<a4j:form id="panelThumbs">
-				<div id="container-image-annotate-text" style="display:none">
-					<h:inputText id="image-annotate-text" />
-				</div>
-				<rich:suggestionbox id="suggestionBoxId" for="image-annotate-text" tokens=",["
-					suggestionAction="#{eventoMB.autocomplete}" var="result"
-					nothingLabel="No se encuentran usuarios" columnClasses="center">
+				<div id="container-image-annotate-text" style="display: none">
+				<h:inputText id="image-annotate-text" /></div>
+				<rich:suggestionbox id="suggestionBoxId" for="image-annotate-text"
+					tokens=",[" suggestionAction="#{eventoMB.autocomplete}"
+					var="result" nothingLabel="No se encuentran usuarios"
+					columnClasses="center">
 					<div><h:column>
 						<h:outputText value="#{result.username}" style="display:none" />
 					</h:column> <h:column>
@@ -157,13 +159,17 @@
 				<ul id="pikame" class="jcarousel-skin-pika">
 					<a4j:repeat value="#{eventoMB.selectedCategory.contents}"
 						var="content">
-						<li>
-							<h:graphicImage rendered="#{content.type eq 0 || content.type eq 2}" value="/ContentFeeder?id=#{content.contId}&#38;thb=74"
-							name="#{content.contId}" onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';"/>
-							<h:graphicImage rendered="#{content.type eq 1 || content.type eq 3}" value="#{content.youtubeUrlScreen}"
-							name="#{content.contId}" onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';"/>
-							<span>#{content.description}<br />Por: #{content.uploadedBy}</span>
-						</li> 
+						<li><h:graphicImage
+							rendered="#{content.type eq 0 || content.type eq 2}"
+							value="/ContentFeeder?id=#{content.contId}&#38;thb=74"
+							name="#{content.contId}"
+							onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';" />
+						<h:graphicImage
+							rendered="#{content.type eq 1 || content.type eq 3}"
+							value="#{content.youtubeUrlScreen}" name="#{content.contId}"
+							onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';" />
+						<span>#{content.description}<br />
+						Por: #{content.uploadedBy}</span></li>
 					</a4j:repeat>
 				</ul>
 				<script>
@@ -228,8 +234,10 @@
 					style="float:right;">
 					<h:graphicImage value="/images/close.png" alt="Eliminar contenido" />
 				</a4j:commandLink>
-				<a4j:commandButton id="btnBeginTag" onclick="beginTag();" value="Etiquetar" />
-				<a4j:commandButton id="btnEndTag" onclick="endTag();" value="Finalizar etiquetado" style="display:none " />
+				<a4j:commandButton id="btnBeginTag" onclick="beginTag();"
+					value="Etiquetar" />
+				<a4j:commandButton id="btnEndTag" onclick="endTag();"
+					value="Finalizar etiquetado" style="display:none " />
 			</a4j:form>
 			<a4j:outputPanel id="panelRating">
 				<h:column id="myRating" styleClass="Clear">
@@ -301,19 +309,6 @@
 	</ui:define>
 	<ui:define name="sidebar" rendered="#{eventoMB.validUserForContext}">
 		<ul class="xoxo" id="ulSidebar">
-			<li class="widgetcontainer clearfix"><h5 class="widgettitle"><img style="border:0" width="14" height="14" src="./template_files/rss.png"/>GMaps</h5>
-			<div id="gmap"><rich:gmap gmapVar="map"
-				style="width:278px;height:278px" id="map"
-				lat="#{eventoMB.evento.latitude}"
-				lng="#{eventoMB.evento.longitude}"
-				enableDoubleClickZoom="true" showGScaleControl="true" zoom="16"
-				mapType="G_NORMAL_MAP" showGMapTypeControl="true"
-				showGLargeMapControl="true" /></div>
-
-			<script>window.onload=function(){
-			addMarkerWithInfo(map, "#{eventoMB.evento.latitude}", "#{eventoMB.evento.longitude}", '#{eventoMB.evento.address}', '', '');
-		}</script>			
-			</li>
 			<li class="multi-sidebar-container">
 			<div
 				class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
@@ -321,14 +316,87 @@
 				class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 				<li
 					class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a
-					href="javascript:null()" onclick="toggleTab('s-etiquetados',this)"><span>Etiquetados</span></a></li>
+					href="javascript:null()" onclick="toggleTab('evt-gmap',this,'evt')"><span>Mapa</span></a></li>
 				<li class="ui-state-default ui-corner-top"><a
-					href="javascript:null()" onclick="toggleTab('s-comentarios',this)"><span>Comentarios</span></a></li>
-				<li class="ui-state-default ui-corner-top"><a
-					href="javascript:null()" onclick="toggleTab('s-twitter',this)"><span>Twitter</span></a></li>
+					href="javascript:null()" onclick="toggleTab('evt-twitter',this,'evt')"><span>Twitter</span></a></li>
 
 			</ul>
-			<div id="s-etiquetados"
+			<div id="evt-gmap"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
+			<div id="gmap"><rich:gmap gmapVar="map"
+				style="width:278px;height:278px" id="map"
+				lat="#{eventoMB.evento.latitude}" lng="#{eventoMB.evento.longitude}"
+				enableDoubleClickZoom="true" showGScaleControl="true" zoom="16"
+				mapType="G_NORMAL_MAP" showGMapTypeControl="true"
+				showGLargeMapControl="true" /></div>
+
+			</div>
+						<div id="evt-twitter" style="height:278px;overflow:auto"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<h:form id="formTwitter">
+				<h:inputHidden id="hiddenHashtag" value="#{eventoMB.evento.hashtag}" />
+				<a href="http://twitter.com/share" class="twitter-share-button" 
+				data-text="#{eventoMB.evento.hashtag}" 
+				data-count="none"
+				data-lang="es"
+				data-url="www.partuzabook.com"
+				>Tweet</a>
+				<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+				<div id="index-featured2">
+				<ul id="twitter" class="hfeed posts-quick-tag clearfix" style="margin-top:5px">
+				</ul>
+				</div>
+			</h:form> <script type="text/javascript">
+		//<![CDATA[
+        var twitterQuery = encodeURIComponent (document.getElementById("formTwitter:hiddenHashtag").value);
+        var requestUrl = "http://search.twitter.com/search.json?q=@query&show_user=true&rpp=10&callback=?".
+            replace (/@query/g, twitterQuery);
+            
+        jQuery.getJSON (requestUrl, function (data)
+        {
+			if (data.results == null)
+			{
+             	var tweet_html = '<li class="post type-post clearfix">';
+				tweet_html += 'No hay tweets sobre el evento :( ';
+                tweet_html += '</li>';
+                jQuery('#twitter').append(tweet_html);
+			}
+			else jQuery.each(data.results, function (i, tweet)
+			{
+             	var tweet_html = '<li class="post type-post clearfix">';
+				tweet_html += '<div style="float:left;margin-right:5px">';
+                tweet_html += '<a href="http://twitter.com/' + tweet.from_user + '" target="_blank">';
+                tweet_html += '<img src="' + tweet.profile_image_url + '" /></a></div>'
+				tweet_html += '<strong><a href="http://twitter.com/' + tweet.from_user + '" target="_blank">';
+				tweet_html += tweet.from_user + '</a></strong>';
+				tweet_html += '<div class="entry-summary">' + tweet.text + '</div>';
+                tweet_html += '</li>';
+                jQuery('#twitter').append(tweet_html);
+			});
+		;
+			
+        });
+      //]]>
+		</script></div>
+			
+</div>
+			<script>window.onload=function(){
+			addMarkerWithInfo(map, "#{eventoMB.evento.latitude}", "#{eventoMB.evento.longitude}", '#{eventoMB.evento.address}', '', '');
+		}</script></li>
+			<li class="multi-sidebar-container">
+			<div
+				class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
+			<ul
+				class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+				<li
+					class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a
+					href="javascript:null()" onclick="toggleTab('cont-etiquetados',this,'cont')"><span>Etiquetados</span></a></li>
+				<li class="ui-state-default ui-corner-top"><a
+					href="javascript:null()" onclick="toggleTab('cont-comentarios',this,'cont')"><span>Comentarios</span></a></li>
+
+			</ul>
+			<div id="cont-etiquetados"
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
 			<a4j:outputPanel id="panelTags"
 				rendered="#{eventoMB.hasAlbum || eventoMB.validUserForContext}">
@@ -398,7 +466,7 @@
 				</h:form>
 			</a4j:outputPanel></div>
 
-			<div id="s-comentarios"
+			<div id="cont-comentarios"
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
 			<a4j:outputPanel id="panelComments"
 				rendered="#{eventoMB.hasAlbum || eventoMB.validUserForContext}">
@@ -463,48 +531,8 @@
 					<!-- #index-featured2 -->
 				</h:panelGroup>
 			</a4j:outputPanel></div>
-			<div id="s-twitter"
-				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-			<h:form id="formTwitter">
-				<h:inputHidden id="hiddenHashtag" value="#{eventoMB.evento.hashtag}" />
-				<div id="index-featured2">
-				<ul id="twitter" class="hfeed posts-quick-tag clearfix">
-				</ul>
-				</div>
-			</h:form> <script type="text/javascript">
-		//<![CDATA[
-        var twitterQuery = encodeURIComponent (document.getElementById("formTwitter:hiddenHashtag").value);
-        var requestUrl = "http://search.twitter.com/search.json?q=@query&show_user=true&rpp=10&callback=?".
-            replace (/@query/g, twitterQuery);
-            
-        jQuery.getJSON (requestUrl, function (data)
-        {
-			jQuery.each(data.results, function (i, tweet)
-			{
-                
-                var date_tweet = new Date(tweet.created_at);
-                var date_now   = new Date();
-                var date_diff  = date_now - date_tweet;
-                var hours      = Math.round(date_diff/(1000*60*60));
 
-                var tweet_html = '<li class="post type-post clearfix">';
-				tweet_html += '<div class="entry-thumbnails-tag">';
-                tweet_html += '<a href="' + tweet.from_user + '" target="_blank">';
-                tweet_html += '<img src="' + tweet.profile_image_url + '" style="display:inline;" /></a>'
-				tweet_html += '<h5 class="entry-title"><a href="http://twitter.com/' + tweet.from_user + '" target="_blank">';
-				tweet_html += tweet.from_user + '</a></h5>';
-				tweet_html += '<div class="entry-summary">' + tweet.text + '</div>';
-                tweet_html += '<div class="tweet_hours">' + hours;
-                tweet_html += ' hours ago</div>';
-				tweet_html += '</div>';
-                tweet_html += '</li>';
-                jQuery('#twitter').append(tweet_html);
-			});
-        });
-      //]]>
-		</script></div>
-
-</div>
+			</div>
 			</li>
 		</ul>
 	</ui:define>
