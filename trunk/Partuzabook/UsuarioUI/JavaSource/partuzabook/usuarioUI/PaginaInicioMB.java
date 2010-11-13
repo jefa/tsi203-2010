@@ -1,10 +1,7 @@
 package partuzabook.usuarioUI;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Properties;
 
 import javax.faces.context.FacesContext;
@@ -19,6 +16,7 @@ import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
+import partuzabook.servicioDatos.notificaciones.ServicesNotificationRemote;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
 public class PaginaInicioMB {
@@ -210,7 +208,7 @@ public class PaginaInicioMB {
 	public List<DatatypeNotification> getMisNotificaciones() {
 		try {
 			Context ctx = getContext();
-			ServicesUserRemote service = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");	
+			ServicesNotificationRemote service = (ServicesNotificationRemote) ctx.lookup("PartuzabookEAR/ServicesNotification/remote");	
 			this.misNotificaciones = service.getUpdateNotifications(getUsername());
 		} catch(NamingException e) {
 			// TODO Auto-generated catch block
@@ -226,7 +224,7 @@ public class PaginaInicioMB {
 	public List<DatatypeNotification> getMisNotificacionesNoLeidas() {
 		try {
 			Context ctx = getContext();
-			ServicesUserRemote service = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");	
+			ServicesNotificationRemote service = (ServicesNotificationRemote) ctx.lookup("PartuzabookEAR/ServicesNotification/remote");	
 			this.misNotificacionesNoLeidas = service.getUpdateNotificationsUnread(getUsername());
 		} catch(NamingException e) {
 			// TODO Auto-generated catch block
