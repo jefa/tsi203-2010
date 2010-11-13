@@ -5,9 +5,7 @@ import javax.ejb.Remote;
 
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeMostTagged;
-import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
-import partuzabook.servicioDatos.exception.MessageTooLongException;
 import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 
@@ -109,21 +107,6 @@ public interface ServicesUserRemote {
     public List<DatatypeEventSummary> getEventSummaryByUser(String username);
     
     /**
-     * Returns a list of the latest X update notifications for the user,
-     * including read and unread 
-     * @param username		- Id for the user
-     * @return				- List of notifications for the user
-     */
-    public List<DatatypeNotification> getUpdateNotifications(String username);
-    
-    /**
-     * Returns a list of unread notifications for the user
-     * @param username		- Id for the user
-     * @return				- List of notifications for the user
-     */
-    public List<DatatypeNotification> getUpdateNotificationsUnread(String username);
-
-    /**
      * Returns a user by from his username.
      * @param username		- Id for the user
      * @return				- A datatype containing the user's info
@@ -157,13 +140,4 @@ public interface ServicesUserRemote {
 	 * @return
 	 */
 	public byte[] getPublicAvatar(String type, int pos, String thumbnail);
-
-	public List<DatatypeNotification> getUpdateNotificationsReceived(
-			String username);
-
-	public List<DatatypeNotification> getUpdateNotificationsSent(String username);
-
-	public DatatypeNotification createNotification(String fromUser, String toUser, Integer type, String message, String subject) throws UserNotFoundException, MessageTooLongException;
-
-	
 }
