@@ -142,3 +142,11 @@ INSERT INTO TAGS(TAG_ID_AUTO, CNT_ID, CREATOR, "posX", "posY", USR_TAG_CUSTOM, U
 INSERT INTO TAGS(TAG_ID_AUTO, CNT_ID, CREATOR, "posX", "posY", USR_TAG_CUSTOM, USR_TAG, FLAGS, REG_DATE) VALUES(1008, 1008, 'ggismero', NULL, NULL, 'usuario_externo_3', NULL,'N', now()::timestamp);
 INSERT INTO TAGS(TAG_ID_AUTO, CNT_ID, CREATOR, "posX", "posY", USR_TAG_CUSTOM, USR_TAG, FLAGS, REG_DATE) VALUES(1009, 1009, 'jefa55', NULL, NULL, 'usuario_externo_4', NULL,'N', now()::timestamp);
 INSERT INTO TAGS(TAG_ID_AUTO, CNT_ID, CREATOR, "posX", "posY", USR_TAG_CUSTOM, USR_TAG, FLAGS, REG_DATE) VALUES(1010, 1010, 'veromanduk', NULL, NULL, 'usuario_externo_5', NULL,'N', now()::timestamp);
+
+
+--Profile pictures para los usuarios creados
+update users set img_path = 'profile/avatar-logos-msn-122.png' where username = 'ggismero';
+update users set img_path = 'profile/527635avatar-mortal-relieve.png' where username = 'rrivem';
+update users set img_path = 'profile/msn.png' where username = 'veromanduk';
+update users set img_path = 'profile/AVATAR0021.png' where username = 'jefa55';
+update users set img_path = 'profile/pinguino_avatar_msn.png' where username = 'aenavcam';
