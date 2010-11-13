@@ -96,7 +96,25 @@ public class ServicesUser implements ServicesUserRemote {
 		newUser.setName(name);
 		newUser.setImgPath("");
 		newUser.setRegDate(new Timestamp(new java.util.Date().getTime()));
+		newUser.setFacebookUser(false);
+		nUserDao.persist(newUser);
 		
+		return (DatatypeUser)new TranslatorUser().translate(newUser);
+	}
+	
+	public DatatypeUser createNormalUser(String username, String password, String mail, String name,long facebookId) throws UserAlreadyExistsException{
+		if (existsAdminUser(username) || existsNormalUser(username)) {
+			throw new UserAlreadyExistsException();
+		}
+		NormalUser newUser = new NormalUser();
+		newUser.setUsername(username);
+		newUser.setPassword(password);
+		newUser.setEmail(mail);
+		newUser.setName(name);
+		newUser.setImgPath("");
+		newUser.setRegDate(new Timestamp(new java.util.Date().getTime()));
+		newUser.setFacebookId(facebookId);
+		newUser.setFacebookUser(true);
 		nUserDao.persist(newUser);
 		
 		return (DatatypeUser)new TranslatorUser().translate(newUser);
@@ -135,6 +153,11 @@ public class ServicesUser implements ServicesUserRemote {
 		return nUserDao.findByID(username) != null;
 	}
 	
+	public boolean existsFacebookUser(long facebookid) {
+		return nUserDao.findByFacebookId(facebookid) != null;
+	}
+
+	
 	public String getName(String username){
 		String name = "";
 		NormalUser nUser = nUserDao.findByID(username);
@@ -155,6 +178,14 @@ public class ServicesUser implements ServicesUserRemote {
 	
 	private NormalUser getNormalUser(String username) {
 		NormalUser user = nUserDao.findByID(username);
+		if (user == null) {
+			throw new UserNotFoundException();
+		} 
+		return user;
+	}
+	
+	public NormalUser getNormalUserByFacebookId(long facebookId) {
+		NormalUser user = nUserDao.findByFacebookId(facebookId);
 		if (user == null) {
 			throw new UserNotFoundException();
 		} 
