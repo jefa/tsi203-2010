@@ -16,6 +16,7 @@ public class TranslatorNotification implements ITranslatable {
     	dat.userFrom = ent.getUserFrom().getUsername();
     	dat.userTo = ent.getUserTo().getUsername();
     	dat.subject = ent.getSubject();
+    	dat.notId = ent.getNotIdAuto();
 		return dat;
 	}
 }
