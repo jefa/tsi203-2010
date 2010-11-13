@@ -25,6 +25,7 @@ import com.google.code.facebookapi.FacebookException;
 import com.google.code.facebookapi.FacebookJsonRestClient;
 import com.google.code.facebookapi.ProfileField;
 
+import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.serviciosUI.multimedia.ServicesUploadRemote;
 
@@ -70,6 +71,8 @@ public class FacebookConnect extends HttpServlet {
 			throws ServletException, IOException {
 		FacebookJsonRestClient fbc = getFacebookJsonRestClient(request);
 		long userId = 0;
+		String userName = "";
+		
 		try {
 			userId = fbc.users_getLoggedInUser();
 		} catch (FacebookException e) {
@@ -77,14 +80,13 @@ public class FacebookConnect extends HttpServlet {
 			e.printStackTrace();
 		}
 		System.out.println("facebook userId:" + userId);
-		String username = String.valueOf(userId);
 		
 		ServicesUserRemote servicesUser = null;
 		try {
 			Context ctx = getContext();
 			servicesUser = (ServicesUserRemote) ctx
 					.lookup("PartuzabookEAR/ServicesUser/remote");
-			if (!servicesUser.existsNormalUser(username) && !servicesUser.existsAdminUser(username)) 
+			if (!servicesUser.existsFacebookUser(userId)) 
 			{
 				List<ProfileField> fields=new ArrayList<ProfileField>();
 				fields.add(ProfileField.FIRST_NAME);
@@ -104,13 +106,19 @@ public class FacebookConnect extends HttpServlet {
 				  System.out.println("facebook response:"+jo.toString(2));
 				  String firstName=jo.getString(ProfileField.FIRST_NAME.toString());
 				  String lastName=jo.getString(ProfileField.LAST_NAME.toString());
-				  String email=jo.getString(ProfileField.PROXIED_EMAIL.toString()); // Facebook no me da el email
-				  servicesUser.createNormalUser(username,String.valueOf(UUID.randomUUID()), "", firstName + " " + lastName); // uso uuid para que no se puedan loguear
+				  userName = firstName.substring(0,2) + lastName;
+				  // buscar una forma de que no se repitan los username
+				  servicesUser.createNormalUser(userName.toLowerCase(),String.valueOf(UUID.randomUUID()), "", firstName + " " + lastName, userId); // uso uuid para que no se puedan loguear
+				}
+				else
+				{
+					NormalUser usuario = servicesUser.getNormalUserByFacebookId(userId);
+					userName = usuario.getUsername();
 				}
 			}
 			
 			HttpSession session = request.getSession(false);
-			session.setAttribute("username", username); 
+			session.setAttribute("username", userName); 
 
 
 		} catch (NamingException ne) {

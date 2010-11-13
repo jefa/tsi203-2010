@@ -6,6 +6,7 @@ import javax.ejb.Remote;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeUser;
+import partuzabook.datos.persistencia.beans.NormalUser;
 import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 
@@ -22,6 +23,8 @@ public interface ServicesUserRemote {
      * @return								- A datatype containing the new user's info
      */
 	public DatatypeUser createNormalUser(String username, String password, String mail, String name) throws UserAlreadyExistsException;
+	
+	public DatatypeUser createNormalUser(String username, String password, String mail, String name,long facebookId) throws UserAlreadyExistsException;
 	
 	/**
      * Registers a new Admin account with id username
@@ -67,6 +70,13 @@ public interface ServicesUserRemote {
 	public String getName(String username);
 	
 	/**
+	 * Returns true if exists user with facebookid
+	 * @param facebookid - Facebook Id's to search for user
+	 */
+	public boolean existsFacebookUser(long facebookid);
+	
+
+	/**
 	 * Returns true if all normal users with username id belonging to usernames exists
 	 * @param usernames		- Id's to search for user
 	 */
@@ -78,6 +88,8 @@ public interface ServicesUserRemote {
 	 * @return				- User's password
 	 */
 	public String getNormalUserPassword(String username);
+	
+	public NormalUser getNormalUserByFacebookId(long facebookId);
 	
 	/**
 	 * Returns the password for the user with id username

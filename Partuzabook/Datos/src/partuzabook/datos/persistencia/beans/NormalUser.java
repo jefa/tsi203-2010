@@ -16,13 +16,14 @@ import javax.persistence.OneToMany;
 @Entity
 @DiscriminatorValue("N")
 @NamedQueries({
-	@NamedQuery(name = "NormalUser.findAll", query = "SELECT o FROM NormalUser o")
+	@NamedQuery(name = "NormalUser.findAll", query = "SELECT o FROM NormalUser o"),		
+	@NamedQuery(name = "NormalUser.findByFacebookId", query = "SELECT o FROM NormalUser o WHERE o.facebookId = :facebookid")
 	})
 public class NormalUser extends User {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="facebook_id")
-	private Integer facebookId;
+	private Long facebookId;
 
 	@Column(name="facebook_user")
 	private Boolean facebookUser;
@@ -58,11 +59,11 @@ public class NormalUser extends User {
 	private List<Event> myModeratedEvents;
 
     
-	public Integer getFacebookId() {
+	public long getFacebookId() {
 		return this.facebookId;
 	}
 
-	public void setFacebookId(Integer facebookId) {
+	public void setFacebookId(long facebookId) {
 		this.facebookId = facebookId;
 	}
 

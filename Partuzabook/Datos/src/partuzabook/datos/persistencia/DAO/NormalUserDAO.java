@@ -8,5 +8,7 @@ import partuzabook.datos.persistencia.beans.NormalUser;
 
 @Local
 public interface NormalUserDAO extends Dao<String, NormalUser>{
+
+	NormalUser findByFacebookId(long facebookid);
 	
 }
