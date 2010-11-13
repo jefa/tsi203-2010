@@ -5,7 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DatatypeEvento implements Serializable{
-	private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 2722839633293578318L;
 
 	private int idEvento;
 
