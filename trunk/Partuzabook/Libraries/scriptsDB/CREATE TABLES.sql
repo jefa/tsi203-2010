@@ -13,6 +13,8 @@ CREATE TABLE users
   "name" character varying(100) NOT NULL,
   img_path character varying(100),
   email character varying(75) NOT NULL,
+  facebook_id integer,
+  facebook_user boolean,
   CONSTRAINT "PK_USERS" PRIMARY KEY (username)
 )
 WITH (
@@ -55,6 +57,7 @@ CREATE TABLE events
   cover integer,
   latitude double precision,
   longitude double precision,
+  hashtag character varying(20),
   CONSTRAINT "PK_EVENTS" PRIMARY KEY (evt_id_auto),
   CONSTRAINT "FK_CREATOR" FOREIGN KEY (creator)
       REFERENCES users (username) MATCH SIMPLE
