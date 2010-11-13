@@ -1,11 +1,10 @@
 package partuzabook.integracion.datatypes;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class DatatypeContenido implements Serializable{
-	private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -3501493919086900216L;
 
 	private String descripcion;
 	
