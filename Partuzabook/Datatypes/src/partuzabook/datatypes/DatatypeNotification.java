@@ -25,9 +25,18 @@ public class DatatypeNotification implements Serializable{
 	
 	public String userTo;
 	
+	public int notId;
 	
 	public DatatypeNotification() {
 		
+	}
+	
+	public Integer getNotId() {
+		return this.notId;
+	}
+	
+	public void setNotId(Integer notId){
+		this.notId = notId;
 	}
 	
 	public Integer getType() {
