@@ -1,5 +1,3 @@
---LA BASE DE DATOS DEBE LLAMARSE Partuzabook
-
 -- Table: users
 
 -- DROP TABLE users;
@@ -13,14 +11,15 @@ CREATE TABLE users
   "name" character varying(100) NOT NULL,
   img_path character varying(100),
   email character varying(75) NOT NULL,
-  facebook_id integer,
-  facebook_user boolean,
+  facebook_id bigint,
+  facebook_user boolean DEFAULT false,
   CONSTRAINT "PK_USERS" PRIMARY KEY (username)
 )
 WITH (
   OIDS=FALSE
 );
 ALTER TABLE users OWNER TO postgres;
+
 
 -- Table: "evtCategory"
 
@@ -37,7 +36,6 @@ WITH (
 ALTER TABLE "evtCategory" OWNER TO postgres;
 
 
-
 -- Table: events
 
 -- DROP TABLE events;
@@ -46,11 +44,9 @@ CREATE TABLE events
 (
   evt_name character varying(100) NOT NULL,
   date timestamp without time zone,
-  duration integer,
   description character varying(200),
   address character varying(50),
   creator character varying(30) NOT NULL,
-  flags character varying(1) NOT NULL,
   reg_date timestamp without time zone NOT NULL,
   evt_id_auto integer NOT NULL,
   category character varying(50),
@@ -58,6 +54,7 @@ CREATE TABLE events
   latitude double precision,
   longitude double precision,
   hashtag character varying(20),
+  duration character varying(50),
   CONSTRAINT "PK_EVENTS" PRIMARY KEY (evt_id_auto),
   CONSTRAINT "FK_CREATOR" FOREIGN KEY (creator)
       REFERENCES users (username) MATCH SIMPLE
@@ -71,6 +68,63 @@ WITH (
 );
 ALTER TABLE events OWNER TO postgres;
 
+
+-- Table: "content"
+
+-- DROP TABLE "content";
+
+CREATE TABLE "content"
+(
+  cnt_id_auto integer NOT NULL,
+  creator character varying(30) NOT NULL,
+  description character varying(100),
+  size integer,
+  url character varying(200),
+  flags character(1) NOT NULL,
+  reg_date timestamp without time zone NOT NULL,
+  duration character varying(10),
+  evt_id integer NOT NULL,
+  pos_gallery integer NOT NULL,
+  pos_album integer,
+  CONSTRAINT "PK_CONTENT" PRIMARY KEY (cnt_id_auto),
+  CONSTRAINT "FK_ALB_EVT" FOREIGN KEY (evt_id)
+      REFERENCES events (evt_id_auto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT "FK_CNT_EVT" FOREIGN KEY (evt_id)
+      REFERENCES events (evt_id_auto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT "FK_CNT_USR" FOREIGN KEY (creator)
+      REFERENCES users (username) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE "content" OWNER TO postgres;
+
+ALTER TABLE events ADD CONSTRAINT "FK_COVER" FOREIGN KEY (cover)
+      REFERENCES "content" (cnt_id_auto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+	  
+-- Table: album
+
+-- DROP TABLE album;
+
+CREATE TABLE album
+(
+  reg_date timestamp without time zone NOT NULL,
+  album_url character varying(50),
+  evt_id integer NOT NULL,
+  alb_id_auto integer NOT NULL,
+  CONSTRAINT "PK_ALBUM" PRIMARY KEY (alb_id_auto),
+  CONSTRAINT "FK_ALB_EVT" FOREIGN KEY (evt_id)
+      REFERENCES events (evt_id_auto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE album OWNER TO postgres;
 
 
 -- Table: "cntCategory"
@@ -91,72 +145,6 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE "cntCategory" OWNER TO postgres;
-
-
-
-
-
--- Table: "content"
-
--- DROP TABLE "content";
-
-CREATE TABLE "content"
-(
-  cnt_id_auto integer NOT NULL,
-  evt_id integer NOT NULL,
-  pos_gallery integer NOT NULL,
-  creator character varying(30) NOT NULL,
-  description character varying(100),
-  duration character varying(10),
-  album boolean,
-  pos_album integer,
-  size integer,
-  url character varying(50),
-  flags character(1) NOT NULL,
-  reg_date timestamp without time zone NOT NULL,
-  CONSTRAINT "PK_CONTENT" PRIMARY KEY (cnt_id_auto),
-  CONSTRAINT "FK_ALB_EVT" FOREIGN KEY (evt_id)
-      REFERENCES events (evt_id_auto) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT "FK_CNT_EVT" FOREIGN KEY (evt_id)
-      REFERENCES events (evt_id_auto) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT "FK_CNT_USR" FOREIGN KEY (creator)
-      REFERENCES users (username) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE "content" OWNER TO postgres;
-
-
---Para evitar la referencia circular, la fk de evento hacia content se agrega luego de creadas las 2 tablas
-ALTER TABLE events
-  ADD CONSTRAINT "FK_COVER" FOREIGN KEY (cover)
-      REFERENCES "content" (cnt_id_auto) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-
--- Table: album
-
--- DROP TABLE album;
-
-CREATE TABLE album
-(
-  reg_date timestamp without time zone NOT NULL,
-  album_url character varying(50),
-  evt_id integer NOT NULL,
-  alb_id_auto integer NOT NULL,
-  CONSTRAINT "PK_ALBUM" PRIMARY KEY (alb_id_auto),
-  CONSTRAINT "FK_ALB_EVT" FOREIGN KEY (evt_id)
-      REFERENCES events (evt_id_auto) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE album OWNER TO postgres;
 
 
 -- Table: "comment"
@@ -182,6 +170,28 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE "comment" OWNER TO postgres;
+
+
+-- Table: "contentCntCategory"
+
+-- DROP TABLE "contentCntCategory";
+
+CREATE TABLE "contentCntCategory"
+(
+  cnt_id integer NOT NULL,
+  cat_id integer NOT NULL,
+  CONSTRAINT "PK_CONTENTCNTCATEGORY" PRIMARY KEY (cnt_id, cat_id),
+  CONSTRAINT "FK_CONTENTCNTCATEGORY_CNTCATEGORY" FOREIGN KEY (cat_id)
+      REFERENCES "cntCategory" (cat_id_auto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT "FK_CONTENTCNTCATEGORY_CONTENT" FOREIGN KEY (cnt_id)
+      REFERENCES "content" (cnt_id_auto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE "contentCntCategory" OWNER TO postgres;
 
 
 -- Table: mods
@@ -214,13 +224,14 @@ CREATE TABLE notifications
 (
   not_id_auto integer NOT NULL,
   usr_frm_id character varying(30) NOT NULL,
-  "text" character varying(100) NOT NULL,
+  "text" character varying(5000) NOT NULL,
   reference character varying(50),
   not_date timestamp without time zone NOT NULL,
   "read" boolean NOT NULL,
   reg_date timestamp without time zone NOT NULL,
   usr_to_id character varying(30) NOT NULL,
   "type" integer NOT NULL,
+  subject character varying(200),
   CONSTRAINT "PK_NOTIFICATIONS" PRIMARY KEY (not_id_auto),
   CONSTRAINT "FK_NOT_USR" FOREIGN KEY (usr_frm_id)
       REFERENCES users (username) MATCH SIMPLE
@@ -311,27 +322,3 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE tags OWNER TO postgres;
-
-
-
-
--- Table: "contentCntCategory"
-
--- DROP TABLE "contentCntCategory";
-
-CREATE TABLE "contentCntCategory"
-(
-  cnt_id integer NOT NULL,
-  cat_id integer NOT NULL,
-  CONSTRAINT "PK_CONTENTCNTCATEGORY" PRIMARY KEY (cnt_id, cat_id),
-  CONSTRAINT "FK_CONTENTCNTCATEGORY_CNTCATEGORY" FOREIGN KEY (cat_id)
-      REFERENCES "cntCategory" (cat_id_auto) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT "FK_CONTENTCNTCATEGORY_CONTENT" FOREIGN KEY (cnt_id)
-      REFERENCES "content" (cnt_id_auto) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE "contentCntCategory" OWNER TO postgres;
