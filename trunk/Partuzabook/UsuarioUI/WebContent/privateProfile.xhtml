@@ -7,7 +7,7 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 <ui:composition template="templates/usuarioUI.xhtml">
-	<ui:define name="title">Private Profile</ui:define>
+	<ui:define name="title">Perfil de #{PublicProfile.user.name}</ui:define>
 	<ui:define name="body">
 	
 		<rich:modalPanel id="panel" width="425" height="345">
@@ -56,10 +56,13 @@
 									</f:facet>
 									<h:outputText value="User id:"></h:outputText><br/>
 									<h:inputText disabled="true" value="#{PublicProfile.user.username}"></h:inputText><br/>
-									<h:outputText value="Nueva contraseña:"></h:outputText><br/>
-									<h:inputSecret value="#{PublicProfile.newPassword}"></h:inputSecret><h:outputText style="color:red" value="#{PublicProfile.newPasswordMessage}"/><br/>
-									<h:outputText value="Confirmación de contraseña:"></h:outputText><br/>
-									<h:inputSecret value="#{PublicProfile.confirmNewPassword}"></h:inputSecret><h:outputText style="color:red" value="#{PublicProfile.confirmNewPasswordMessage}"/><br/>
+									<h:outputText value="Facebook id:"></h:outputText><br/>
+									<h:inputText disabled="#{PublicProfile.user.usuarioFacebook}" value="#{PublicProfile.user.facebookId}"></h:inputText><br/>
+									
+									<h:outputText value="Nueva contraseña:" rendered="#{!PublicProfile.user.usuarioFacebook}"></h:outputText><br/>
+									<h:inputSecret value="#{PublicProfile.newPassword}" rendered="#{!PublicProfile.user.usuarioFacebook}"></h:inputSecret><h:outputText style="color:red" value="#{PublicProfile.newPasswordMessage}" rendered="#{!PublicProfile.user.usuarioFacebook}"/><br/>
+									<h:outputText value="Confirmación de contraseña:" rendered="#{!PublicProfile.user.usuarioFacebook}"></h:outputText><br/>
+									<h:inputSecret value="#{PublicProfile.confirmNewPassword}" rendered="#{!PublicProfile.user.usuarioFacebook}"></h:inputSecret><h:outputText style="color:red" value="#{PublicProfile.confirmNewPasswordMessage}" rendered="#{!PublicProfile.user.usuarioFacebook}"/><br/>
 									<h:outputText value="Nombre:"></h:outputText><br/>
 									<h:inputText value="#{PublicProfile.user.name}"></h:inputText><h:outputText style="color:red" value="#{PublicProfile.nameMessage}"/><br/>
 									<h:outputText value="Email:"></h:outputText><br/>

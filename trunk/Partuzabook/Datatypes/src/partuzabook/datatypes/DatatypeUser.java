@@ -17,6 +17,24 @@ public class DatatypeUser implements Serializable{
 	public short type;
 	
 	public String email;
+	public long facebookId;
+	public long getFacebookId() {
+		return facebookId;
+	}
+
+	public void setFacebookId(long facebookId) {
+		this.facebookId = facebookId;
+	}
+
+	public boolean isUsuarioFacebook() {
+		return usuarioFacebook;
+	}
+
+	public void setUsuarioFacebook(boolean usuarioFacebook) {
+		this.usuarioFacebook = usuarioFacebook;
+	}
+
+	public boolean usuarioFacebook;
 	
 	public String imagePath;
 	
