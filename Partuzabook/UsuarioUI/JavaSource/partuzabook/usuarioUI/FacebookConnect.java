@@ -106,15 +106,15 @@ public class FacebookConnect extends HttpServlet {
 				  System.out.println("facebook response:"+jo.toString(2));
 				  String firstName=jo.getString(ProfileField.FIRST_NAME.toString());
 				  String lastName=jo.getString(ProfileField.LAST_NAME.toString());
-				  userName = firstName.substring(0,2) + lastName;
+				  userName = (firstName.substring(0,2) + lastName).toLowerCase();
 				  // buscar una forma de que no se repitan los username
-				  servicesUser.createNormalUser(userName.toLowerCase(),String.valueOf(UUID.randomUUID()), "", firstName + " " + lastName, userId); // uso uuid para que no se puedan loguear
+				  servicesUser.createNormalUser(userName,String.valueOf(UUID.randomUUID()), "", firstName + " " + lastName, userId); // uso uuid para que no se puedan loguear
 				}
-				else
-				{
-					NormalUser usuario = servicesUser.getNormalUserByFacebookId(userId);
-					userName = usuario.getUsername();
-				}
+			}
+			else
+			{
+				NormalUser usuario = servicesUser.getNormalUserByFacebookId(userId);
+				userName = usuario.getUsername();
 			}
 			
 			HttpSession session = request.getSession(false);
