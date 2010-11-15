@@ -1,26 +1,26 @@
 --Insertamos los usuarios administradores
 INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, IMG_PATH, REG_DATE) VALUES 
-	('ggadmin', 'ggadmin', 'Administrador Gonzalo', 'gegismero@gmail.com', 'A', 'profile/ggadmin/083ab683-c98a-4934-b7ef-56515bfce102.png', now()::timestamp);
+	('ggadmin', '44961675d53a9919b8819dd5c6ed6979', 'Administrador Gonzalo', 'gegismero@gmail.com', 'A', 'profile/ggadmin/083ab683-c98a-4934-b7ef-56515bfce102.png', now()::timestamp);
 INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, IMG_PATH, REG_DATE) VALUES 
-	('vmadmin', 'vmadmin', 'Administrador Veronica', 'veromanduk@gmail.com', 'A', 'profile/vmadmin/msn.png', now()::timestamp);
+	('vmadmin', '90a9557421ed7f7e7aada665a4b1a11b', 'Administrador Veronica', 'veromanduk@gmail.com', 'A', 'profile/vmadmin/msn.png', now()::timestamp);
 INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, IMG_PATH, REG_DATE) VALUES 
-	('rradmin', 'rradmin', 'Administrador Rodrigo', 'rrivem@gmail.com', 'A', 'profile/rradmin/527635avatar-mortal-relieve.png', now()::timestamp);
+	('rradmin', 'b5cd05112dda003a6a09a7f13c0164de', 'Administrador Rodrigo', 'rrivem@gmail.com', 'A', 'profile/rradmin/527635avatar-mortal-relieve.png', now()::timestamp);
 INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, IMG_PATH, REG_DATE) VALUES 
-	('jfadmin', 'jfadmin', 'Administrador Javier', 'jefa55@yahoo.com', 'A', 'profile/jfadmin/AVATAR0021.png', now()::timestamp);
+	('jfadmin', '5e172e37df8fe623a6096eac7df44f24', 'Administrador Javier', 'jefa55@yahoo.com', 'A', 'profile/jfadmin/AVATAR0021.png', now()::timestamp);
 INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, IMG_PATH, REG_DATE) VALUES 
-	('anadmin', 'anadmin', 'Administrador Andres', 'aenavcam@gmail.com', 'A', 'profile/anadmin/pinguino_avatar_msn.png', now()::timestamp);
+	('anadmin', '99f390e3465ad07602a885ef9fa35913', 'Administrador Andres', 'aenavcam@gmail.com', 'A', 'profile/anadmin/pinguino_avatar_msn.png', now()::timestamp);
 
 --Insertamos los usuarios normales
 INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, IMG_PATH, REG_DATE) VALUES 
-	('ggismero', 'ggismero', 'Gonzalo Gismero', 'gegismero@gmail.com', 'N', 'profile/ggismero/083ab683-c98a-4934-b7ef-56515bfce102.png', now()::timestamp);
+	('ggismero', '6197e710a9ca675bb979cd4a1d59df31', 'Gonzalo Gismero', 'gegismero@gmail.com', 'N', 'profile/ggismero/083ab683-c98a-4934-b7ef-56515bfce102.png', now()::timestamp);
 INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, IMG_PATH, REG_DATE) VALUES 
-	('veromanduk', 'veromanduk', 'Veronica Manduca', 'veromanduk@gmail.com', 'N', 'profile/veromanduk/msn.png', now()::timestamp);
+	('veromanduk', 'd6af0f4c05de23616f2d381adcba1a79', 'Veronica Manduca', 'veromanduk@gmail.com', 'N', 'profile/veromanduk/msn.png', now()::timestamp);
 INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, IMG_PATH, REG_DATE) VALUES 
-	('rrivem', 'rrivem', 'Rodrigo Rivera', 'rrivem@gmail.com', 'N', 'profile/rrivem/527635avatar-mortal-relieve.png', now()::timestamp);
+	('rrivem', '836b7d387f1040fccecb3b0496230cea', 'Rodrigo Rivera', 'rrivem@gmail.com', 'N', 'profile/rrivem/527635avatar-mortal-relieve.png', now()::timestamp);
 INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, IMG_PATH, REG_DATE) VALUES 
-	('jefa55', 'jefa55', 'Javier Fradiletti', 'jefa55@yahoo.com', 'N', 'profile/jefa55/AVATAR0021.png', now()::timestamp);
+	('jefa55', '425dd80969b997f4819f949f62a1bef6', 'Javier Fradiletti', 'jefa55@yahoo.com', 'N', 'profile/jefa55/AVATAR0021.png', now()::timestamp);
 INSERT INTO USERS(USERNAME, PASSWORD, NAME, EMAIL, FLAGS, IMG_PATH, REG_DATE) VALUES 
-	('aenavcam', 'aenavcam', 'Andres Navarro', 'aenavcam@yahoo.com', 'N', 'profile/aenavcam/pinguino_avatar_msn.png', now()::timestamp);
+	('aenavcam', 'fb7ca6ca9085584368e4fbbcf2f4287a', 'Andres Navarro', 'aenavcam@yahoo.com', 'N', 'profile/aenavcam/pinguino_avatar_msn.png', now()::timestamp);
 
 --Insertamos las categorias de los eventos	
 insert into "evtCategory" values('Aniversario');
