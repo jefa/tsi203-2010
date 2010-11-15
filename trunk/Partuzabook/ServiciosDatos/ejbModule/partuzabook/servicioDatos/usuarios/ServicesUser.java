@@ -91,9 +91,17 @@ public class ServicesUser implements ServicesUserRemote {
 		if (existsAdminUser(username) || existsNormalUser(username)) {
 			throw new UserAlreadyExistsException();
 		}
+		String pass = "";
+		try {
+			pass = CryptUtils.encript(password);
+		} catch(NoSuchAlgorithmException e) { 
+			//Hacemos la excepcion transparente al usuario
+			System.out.println("Error al crear un usuario, fallo la creación del algoritmo MD5 para el usuario " + username + " con password" + password);
+			throw new UserAlreadyExistsException();
+		}
 		NormalUser newUser = new NormalUser();
 		newUser.setUsername(username);
-		newUser.setPassword(password);
+		newUser.setPassword(pass);
 		newUser.setEmail(mail);
 		newUser.setName(name);
 		newUser.setImgPath("");
@@ -126,9 +134,17 @@ public class ServicesUser implements ServicesUserRemote {
 		if (existsAdminUser(username) || existsNormalUser(username)) {
 			throw new UserAlreadyExistsException();
 		}
+		String pass = "";
+		try {
+			pass = CryptUtils.encript(password);
+		} catch(NoSuchAlgorithmException e) { 
+			//Hacemos la excepcion transparente al usuario
+			System.out.println("Error al crear un usuario, fallo la creación del algoritmo MD5 para el usuario " + username + " con password" + password);
+			throw new UserAlreadyExistsException();
+		}
 		Admin newUser = new Admin();
 		newUser.setUsername(username);
-		newUser.setPassword(password);
+		newUser.setPassword(pass);
 		newUser.setEmail(mail);
 		newUser.setName(name);
 		newUser.setImgPath("");
