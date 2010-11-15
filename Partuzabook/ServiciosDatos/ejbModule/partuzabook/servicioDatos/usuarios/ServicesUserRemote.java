@@ -14,7 +14,7 @@ import partuzabook.servicioDatos.exception.UserNotFoundException;
 public interface ServicesUserRemote {
 
     /**
-     * Registers a new account with id username
+     * Registers a new account with id username.
      * @throws UserAlreadyExistsException	- if id username is already taken
      * @param username						- New user's username for the account
      * @param password						- New user's password
