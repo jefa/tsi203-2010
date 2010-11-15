@@ -1,5 +1,6 @@
 package partuzabook.servicioDatos.usuarios;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ import partuzabook.entityTranslators.TranslatorUser;
 import partuzabook.servicioDatos.exception.MessageTooLongException;
 import partuzabook.servicioDatos.exception.UserAlreadyExistsException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
+import partuzabook.servicioDatos.security.CryptUtils;
 import partuzabook.utils.TranslatorCollection;
 
 /**
@@ -342,6 +344,28 @@ public class ServicesUser implements ServicesUserRemote {
 		nu.setImgPath(imgPath);
 		nUserDao.persist(nu);
 		return (DatatypeUser)new TranslatorUser().translate(nu);
+	}
+
+	public boolean isNormalUserPassword(String username, String password) {
+		NormalUser user = getNormalUser(username);
+		try {
+			return user.getPassword().equals(CryptUtils.encript(password));
+		} catch(NoSuchAlgorithmException e) {
+			System.out.println("Error en la autenticación del usuario " + username + " para la contraseña " + password);
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean isAdminPassword(String username, String password) {
+		Admin user = getAdminUser(username);
+		try {
+			return user.getPassword().equals(CryptUtils.encript(password));
+		} catch(NoSuchAlgorithmException e) {
+			System.out.println("Error en la autenticación del usuario " + username + " para la contraseña " + password);
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

@@ -48,12 +48,15 @@ public class ServicesAutenticacion implements ServicesAutenticacionRemote {
 
     public boolean verifyUserAndPassword(String username, String password) {
     	if (servUser.existsNormalUser(username)) {
+    		/*
     		if (servUser.getNormalUserPassword(username).equals(password)) {
     			return true;
     		}
     		else {
     			return false;
     		}
+    		*/
+    		return servUser.isNormalUserPassword(username, password);
     	}
     	else {
     		return false;
@@ -62,12 +65,15 @@ public class ServicesAutenticacion implements ServicesAutenticacionRemote {
     
     public boolean verifyAdminUserAndPassword(String username, String password) {
     	if (servUser.existsAdminUser(username)) {
+    		/*
     		if (servUser.getAdminUserPassword(username).equals(password)) {
     			return true;
     		}
     		else {
     			return false;
     		}
+    		*/
+    		return servUser.isAdminPassword(username, password);
     	}
     	else {
     		return false;

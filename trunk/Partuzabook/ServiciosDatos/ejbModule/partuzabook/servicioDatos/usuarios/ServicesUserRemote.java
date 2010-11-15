@@ -89,6 +89,22 @@ public interface ServicesUserRemote {
 	 */
 	public String getNormalUserPassword(String username);
 	
+	/**
+	 * Returns true if the users's password is password
+	 * @param username		- Id for the user
+	 * @param password		- password decripted to compare
+	 * @return				- true if the password is ok
+	 */
+	public boolean isNormalUserPassword(String username, String password);
+	
+	/**
+	 * Returns true if the admin's password is password
+	 * @param username		- Id for the user
+	 * @param password		- password decripted to compare
+	 * @return				- true if the password is ok
+	 */
+	public boolean isAdminPassword(String username, String password);
+	
 	public NormalUser getNormalUserByFacebookId(long facebookId);
 	
 	/**
