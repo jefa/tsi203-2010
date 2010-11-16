@@ -114,10 +114,10 @@
 		</h:panelGroup>
 
 		<a4j:form>
-			<h3 class="entry-title"><h:commandLink value="Volver al Evento..." action="verEvento">
+			<h:commandButton value="Volver al evento" action="verEvento">
 				<f:setPropertyActionListener value="#{subirFotoMB.idEvento}"
-				target="#{eventoMB.evento.evtId}" />
-			</h:commandLink></h3>   
+				target="#{eventoMB.eventId}" />
+			</h:commandButton>	
 		</a4j:form>
 
 	</ui:define>

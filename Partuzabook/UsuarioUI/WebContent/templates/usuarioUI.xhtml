@@ -96,7 +96,11 @@ onblur="if(value=='')value='Buscar...'"
 
 <li class="menu-item menu-item-type-taxonomy"><a href="busquedaEventos.jsf">Busqueda</a></li>
 
-<li class="menu-item menu-item-type-taxonomy"><a href="messages.jsf">Mensajes</a></li>
+<li class="menu-item menu-item-type-taxonomy">
+	<h:form rendered="#{loginMB.isUserLogged}">
+	<a href="messages.jsf">Mensajes</a>
+	</h:form>
+</li>
 
 <li class="menu-item menu-item-type-taxonomy">
 	<h:form rendered="#{!loginMB.isUserLogged}">
