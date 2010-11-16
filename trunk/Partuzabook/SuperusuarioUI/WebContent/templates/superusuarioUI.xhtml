@@ -126,6 +126,12 @@ onblur="if(value=='')value='Buscar...'"
 	<div id="nav-content" class="clearfix">
 	<div class="menu-main-menu-container"><ul id="menu-main-menu" class="sf-menu menu clearfix sf-js-enabled sf-shadow">
 
+		<h:form rendered="#{!loginMB.isUserLogged}">
+			<li class="menu-item menu-item-type-taxonomy">
+				<a href="login.jsf">Login</a>
+			</li>
+		</h:form>
+		
 		<h:form rendered="#{loginMB.isUserLogged}">
 			<li class="menu-item menu-item-type-taxonomy">
 				<a href="paginaInicio.jsf">Home</a>

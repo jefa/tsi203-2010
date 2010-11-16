@@ -8,7 +8,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 
-import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.serviciosUI.autenticacion.ServicesAutenticacionRemote;
 
 public class LoginMB {
@@ -20,7 +19,7 @@ public class LoginMB {
 	
 	public boolean getIsUserLogged(){
 		this.userName = getUserName();
-		this.isUserLogged = this.userName != null;
+		this.isUserLogged = this.userName != null && this.userName != "";
 		return this.isUserLogged;
 	}
 
