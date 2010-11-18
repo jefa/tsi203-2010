@@ -239,8 +239,8 @@
 						document.getElementById('j_id26:repToUser').value = '#{notif.userFrom}';
 						document.getElementById('j_id26:repSubject').value = 'Re: #{notif.subject}';
 						document.getElementById('image').src = 'UserImageFeeder?username=#{notif.userFrom}&#38;thb=150';
-						document.getElementById('j_id26:reply').show();
-						#{rich:component('panel')}.hide()">
+						document.getElementById('j_id26:reply').hide();
+						#{rich:component('panel')}.show()">
 				        	
 				        	<div style="float:left;"><img src="UserImageFeeder?username=#{notif.userFrom}&#38;thb=50" hspace="5"/></div> 
 							<strong><h:outputText value="#{notif.subject}"/></strong><br/>
