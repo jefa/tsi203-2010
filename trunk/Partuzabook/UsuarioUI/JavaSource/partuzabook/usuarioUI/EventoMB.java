@@ -73,6 +73,13 @@ public class EventoMB {
 	private String firstContentUrl;
 	private String firstContentId;
 	
+	public EventoMB(){
+		int sessionEvtId = getEvtId();
+		if (sessionEvtId != -1){
+			setEventId(sessionEvtId);
+		}
+	}
+	
 	public void setSelectedContent(DatatypeContent selectedContent){
 		this.selectedContent = selectedContent;
 	}
@@ -256,6 +263,11 @@ public class EventoMB {
 		return SessionUtils.getUsername();
 	}
 
+	public Integer getEvtId() {
+		return SessionUtils.getEventId();
+	}
+
+	
 	public void setEvento(DatatypeEvent evento) {
 		this.evento = evento;
 		// Setear solamente la categoría publica Album en caso que exista
@@ -293,6 +305,10 @@ public class EventoMB {
 	}
 
 	public DatatypeEvent getEvento() {
+		int eventParam = getEvtId();
+		if (eventParam != -1) {
+			setEventId(eventParam);
+		}
 		return this.evento;
 	}
 	
