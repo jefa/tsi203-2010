@@ -84,6 +84,10 @@ public class DatatypeNotification implements Serializable{
 		return text.replace("\n", "<br/>").replace("\r", "");
 	}
 	
+	public String getHTMLTextArea() {
+		return text.replace("\n", "\\n").replace("\r", "");
+	}
+	
 	public void setHTMLText(String HTMLText) {}
 	
 	public String getSubject(){
