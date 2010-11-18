@@ -218,6 +218,9 @@ public class NotificationsBean {
 
 	public String sendMail() {
 		// Limpiamos los mensajes
+		gralNotificationsPage = 1;
+		recvNotificationsPage = 1;
+		sentNotificationsPage = 1;
 		clearMessages();
 		if (toUser == null || toUser.equals(""))
 			toUserMessage = INPUT_OBLIG;
@@ -242,7 +245,7 @@ public class NotificationsBean {
 					clearAllMessages();					
 				}
 				*/
-				clearAllMessages();				
+				clearAllMessages();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
