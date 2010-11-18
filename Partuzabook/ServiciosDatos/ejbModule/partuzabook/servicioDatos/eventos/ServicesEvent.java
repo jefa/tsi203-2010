@@ -660,8 +660,32 @@ public class ServicesEvent implements ServicesEventRemote {
 		com.setText(textComment);
 		com.setUser(nUser);
 		
-		//TODO: Javier enviar notificaciÃ³n por mail a los moderadores que hay un nuevo comentario
-		//para el contenido en el evento.
+		//TODO: Javier enviar notificación por mail a los moderadores que hay un nuevo comentario
+		//para el contenido en el evento. (Me parece que eso ya se está haciendo arriba(GG))
+		//Agrego que se envie una notificacion por mensajeria interna a los moderadores (GG)
+		
+		if (cont.getEvent().getMyMods() != null) {
+			for(ListIterator<NormalUser> it = cont.getEvent().getMyMods().listIterator(); it.hasNext(); ) {
+				NormalUser nu = it.next();
+				Notification ntfTagged = new Notification();
+				ntfTagged.setNotDate(new Timestamp(new java.util.Date().getTime()));
+				ntfTagged.setRead(false);
+				ntfTagged.setReference("La referencia va aca");
+				ntfTagged.setRegDate(new Timestamp(new java.util.Date().getTime()));
+				ntfTagged.setText(nu.getName() + ",\r\n" + userCommenter +" ha comentado un contenido del evento \"" + cont.getEvent().getEvtName() + "\".");
+				ntfTagged.setSubject("Se comentó un contenido de un evento moderado.");
+				ntfTagged.setType(0);
+				ntfTagged.setUserFrom(nUser);	
+				ntfTagged.setUserTo(nu);
+
+				try {
+					notificationDao.persist(ntfTagged);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}			
+		}
 		
 		commentDao.persist(com);
 	}
