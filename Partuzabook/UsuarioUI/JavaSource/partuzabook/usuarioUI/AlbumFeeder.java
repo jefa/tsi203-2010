@@ -61,7 +61,6 @@ public class AlbumFeeder extends HttpServlet {
 				eventId = request.getParameter("evtid");
 				
 				session.setAttribute("evtid", new Integer(eventId));				
-				System.out.println("holaaaa");
 				response.sendRedirect("/UsuarioUI/evento.jsf");
 			}
 			catch(NumberFormatException e) {
