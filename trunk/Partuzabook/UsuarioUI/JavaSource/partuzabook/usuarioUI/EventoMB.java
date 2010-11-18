@@ -196,6 +196,8 @@ public class EventoMB {
 				comentario = comentario.replace("<p>", "").replace("</p>","");
 				service.commentContent(contentId, comentario, getUserName());
 				
+				//Agrego que en la lógica se genere una notificación para los moderadores sobre el comentario (GG).
+				
 				//TODO: Javier enviar notificaciÃ³n por mail a los moderadores que hay un nuevo comentario
 				//para el contenido en el evento.
 
