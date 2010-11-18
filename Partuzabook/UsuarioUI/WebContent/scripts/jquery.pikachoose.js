@@ -30,7 +30,7 @@
  	var defaults = {
 		autoPlay: false,
 		speed: 5000,
-		text: { play: "", stop: "", previous: "Anterior", next: "Siguiente" },
+		text: { play: "", stop: ""},
 		transition:[0],
 		showCaption: true,
 		IESafe: true
@@ -61,8 +61,6 @@
 		this.imgPlay 	= null;
 		this.imgPrev	= null;
 		this.imgNext 	= null;
-		this.textNext	= null;
-		this.textPrev	= null;
 		this.previous  = null;
 		this.next 		= null;
 		this.aniDiv		= null;
@@ -122,9 +120,6 @@
 			this.caption 	= $("<div class='caption'></div>").insertAfter(this.imgNav);
 			if(!this.options.showCaption){ this.caption.hide(); }
 			this.aniDiv		= $("<div class='animation'></div>").insertAfter(this.caption);
-			this.textNav 	= $("<div class='pika-textnav'></div>").insertAfter(this.aniDiv);
-			this.textPrev 	= $("<a class='previous'>"+this.options.text.previous+"</a>").appendTo(this.textNav);
-			this.textNext	= $("<a class='next'>"+this.options.text.next+"</a>").appendTo(this.textNav);
 			this.list.addClass('pika-thumbs');
         	this.list.children('li').wrapInner("<div class='clip' />");
 			this.thumbs = this.list.find('img');
@@ -216,9 +211,7 @@
         bindEvents: function() {
         	this.thumbs.bind('click',{self:this},this.imgClick);
         	this.imgNext.bind('click',{self:this},this.nextClick);
-        	this.textNext.bind('click',{self:this},this.nextClick);
         	this.imgPrev.bind('click',{self:this},this.prevClick);
-        	this.textPrev.bind('click',{self:this},this.prevClick);
         	this.imgPlay.bind('click',{self:this},this.playClick);
         	this.wrap.bind('mouseenter',{self:this},function(e){
         		e.data.self.imgPlay.stop(true,true).fadeIn('fast');
@@ -234,7 +227,10 @@
          * @return undefined
          */
 	     imgClick: function(e,x) {
+	    	clearImageSelected();
 	     	var self = e.data.self;
+	     	self.anchor = $('div.pika-image a.image-selected');
+	     	self.image = self.anchor.children('img');
 	     	if(self.animating){return;}
 			self.caption.fadeOut('slow');
      		if(typeof(x) == 'undefined' || x.how != "auto")
@@ -423,6 +419,8 @@
      			var self = this;
      			this.image.delay(this.options.speed).fadeIn(0,function(){ if(self.options.autoPlay){ self.nextClick(); } });
      		}
+     		updateCleanClone();
+     		initImageSelected();
 	     },//end finishedAnimating
 		 gapper: function(ele, aHeight)
  		 {
@@ -436,6 +434,7 @@
 		 },
 		 nextClick : function(e)
 		 {
+			clearImageSelected();
 		 	var how = "natural";
 		 	try{
 				var self;
@@ -454,6 +453,7 @@
 		 },
 		 prevClick : function(e)
 		 {
+			 clearImageSelected();
 			var self = e.data.self;
 			var prev = self.active.parents('li:first').prev().find('img');
 			if(prev.length == 0){prev = self.list.find('img:last');};

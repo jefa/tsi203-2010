@@ -258,6 +258,7 @@
         var form = $('<div id="image-annotate-edit-form"><form></form></div>');
         this.form = form;
         var input = document.getElementById('panelThumbs:image-annotate-text');
+        input.value = this.note.text;
         form.append(input);
 
         $('body').append(this.form);
@@ -303,7 +304,7 @@
         input.value = '';
         var inputContainer = $('#container-image-annotate-text').append(input); 
         this.form.remove();
-    }
+    };
 
     $.fn.annotateView = function(image, note, photoId) {
         ///	<summary>

@@ -18,7 +18,7 @@
     background-color: #eee;
 }
 .image-annotate-canvas {
-    border: solid 1px #ccc;
+    /*border: solid 1px #ccc;*/
     background-position: left top;
     background-repeat: no-repeat;
     display: block;
@@ -94,7 +94,7 @@
     background: transparent none repeat scroll 0 0;
 }
 #image-annotate-edit-form .form-item {
-    margin: 0 0 5px;
+    margin: 0 0 0px;
 }
 #image-annotate-edit-form .form-button, #image-annotate-edit-form .form-submit {
     margin: 0;
