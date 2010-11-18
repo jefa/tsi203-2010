@@ -27,9 +27,22 @@
 				jQuery(tab.parentNode.parentNode.children).removeClass('ui-tabs-selected ui-state-active');
 				jQuery(tab.parentNode).addClass('ui-tabs-selected ui-state-active');
 				jQuery("#ulCategories li." + document.getElementById("formCategory:catName").value).addClass("ui-tabs-selected ui-state-active");
-			}
-			
+			}			
 		</script>
+		<script type="text/javascript">
+			function posVideoLbl() {
+				document.getElementById('videoLbl').style.top = document.getElementById('formUploadContent:addPhotoButton').offsetTop + 490 + "px";
+			}
+			function refreshVideoLbl() {
+				var type = document.getElementById('cntType').value;
+				if( type == 1 || type == 3){
+					document.getElementById('videoLbl').show();
+				} else {
+					document.getElementById('videoLbl').hide();
+				}
+			}
+		</script>
+		
 		<link rel="stylesheet" href="styles/pikachoose/styles.css"
 			type="text/css" />
 		<link rel="stylesheet" href="styles/lightbox/jquery.lightbox-0.5.css"
@@ -59,12 +72,12 @@
 					class="published">Moderadores: <a4j:repeat
 					value="#{eventoMB.evento.modsUsernames}" var="mods">
 					<h:outputText value="#{mods} " />
-				</a4j:repeat> </abbr> <abbr class="published">Descripción:<br />
+				</a4j:repeat> </abbr><br/> <abbr class="published">Descripción:<br />
 				#{eventoMB.evento.description}</abbr></div>
 				</div>
 				<h:form id="formUploadContent"
 					rendered="#{eventoMB.validUserForContext}">
-					<h:commandButton value="Añadir fotos" action="subirFoto">
+					<h:commandButton id="addPhotoButton" value="Añadir fotos" action="subirFoto">
 						<f:setPropertyActionListener value="#{eventoMB.eventId}"
 							target="#{subirFotoMB.idEvento}" />
 					</h:commandButton>
@@ -116,7 +129,7 @@
 								href="javascript:null()"
 								onclick="toggleTab('s-'+#{category.category},this)"> <a4j:commandLink
 								value="#{category.category}" action="#{eventoMB.updateCategory}"
-								reRender="authorizedContent,panelTags,panelComments,panelCategories">
+								reRender="authorizedContent,panelTags,pan oncomplete="refreshVideoLbl();nelComments,panelCategories">
 								<f:setPropertyActionListener target="#{eventoMB.categoryId}"
 									value="#{category.categoryId}" />
 							</a4j:commandLink> </a></li>
@@ -136,7 +149,8 @@
 				<h:inputHidden id="cntId" value="#{eventoMB.contentId}" />
 
 			</a4j:outputPanel>
-			<a4j:form id="panelThumbs">
+			<a4j:f
+				<a4j:form id="panelThumbs">
 				<div id="container-image-annotate-text" style="display: none">
 				<h:inputText id="image-annotate-text" /></div>
 				<rich:suggestionbox id="suggestionBoxId" for="image-annotate-text"
@@ -165,11 +179,11 @@
 							rendered="#{content.type eq 0 || content.type eq 2}"
 							value="/ContentFeeder?id=#{content.contId}&#38;thb=74"
 							name="#{content.contId}"
-							onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';" />
+							onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId')document.getElementById('videoLbl').hide().value='#{content.contId}';" />
 						<h:graphicImage
 							rendered="#{content.type eq 1 || content.type eq 3}"
 							value="#{content.youtubeUrlScreen}" name="#{content.contId}"
-							onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';" />
+							onclick="document.getElementById('cntType).value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId')document.getElementById('videoLbl').show()).value='#{content.contId}';" />
 						<span>#{content.description}<br />
 						Por: #{content.uploadedBy}</span></li>
 					</a4j:repeat>
@@ -319,7 +333,7 @@
 							query="rating({}).rating('select', #{eventoMB.selectedContent == null ? 0 : eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
 					</h:form>
 				</h:column>
-			</a4j:outputPanel>
+			</a4j:outputP	<h:graphicImage id="videoLbl" value="/images/video.png" style="position:absolute;left:20px" /putPanel>
 		</h:panelGroup>
 	</ui:define>
 	<ui:define name="sidebar" rendered="#{eventoMB.validUserForContext}">
@@ -396,8 +410,10 @@
 		</script></div>
 			
 </div>
-			<script>window.onload=function(){
-			addMarkerWithInfo(map, "#{eventoMB.evento.latitude}", "#{eventoMB.evento.longitude}", '#{eventoMB.evento.address}', '', '');
+			<script>winndow.onload=function(){
+			addMarkerWithInfo(map, "#{eventoMB.evento.latitude}", "#{eventoMB.evento.longitude}", '#{eventoMB.eve		posVideoLbl();
+				refreshVideoLbl();
+	vento.address}', '', '');
 		}</script></li>
 			<li class="multi-sidebar-container">
 			<div
