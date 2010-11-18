@@ -95,8 +95,10 @@
 			<br />
 			<h:outputText>Puede solicitar autorizacion enviando un mensaje al moderador.</h:outputText>
 			<br />
+			<h:form>
 			<h:commandButton value="Enviar solicitud"
 				action="#{eventoMB.sendAdmitMail}" />
+			</h:form>
 		</h:panelGroup>
 		<h:panelGroup id="authorizedContent" style="padding-top:10px"
 			rendered="#{eventoMB.validUserForContext || eventoMB.hasAlbum}">
