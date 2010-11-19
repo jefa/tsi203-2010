@@ -660,8 +660,8 @@ public class ServicesEvent implements ServicesEventRemote {
 		com.setText(textComment);
 		com.setUser(nUser);
 		
-		//TODO: Javier enviar notificación por mail a los moderadores que hay un nuevo comentario
-		//para el contenido en el evento. (Me parece que eso ya se está haciendo arriba(GG))
+		//TODO: Javier enviar notificaciï¿½n por mail a los moderadores que hay un nuevo comentario
+		//para el contenido en el evento. (Me parece que eso ya se estï¿½ haciendo arriba(GG))
 		//Agrego que se envie una notificacion por mensajeria interna a los moderadores (GG)
 		
 		if (cont.getEvent().getMyMods() != null) {
@@ -673,7 +673,7 @@ public class ServicesEvent implements ServicesEventRemote {
 				ntfTagged.setReference("La referencia va aca");
 				ntfTagged.setRegDate(new Timestamp(new java.util.Date().getTime()));
 				ntfTagged.setText(nu.getName() + ",\r\n" + userCommenter +" ha comentado un contenido del evento \"" + cont.getEvent().getEvtName() + "\".");
-				ntfTagged.setSubject("Se comentó un contenido de un evento moderado.");
+				ntfTagged.setSubject("Se comentï¿½ un contenido de un evento moderado.");
 				ntfTagged.setType(0);
 				ntfTagged.setUserFrom(nUser);	
 				ntfTagged.setUserTo(nu);
@@ -1160,12 +1160,14 @@ public class ServicesEvent implements ServicesEventRemote {
 	
 	public List<DatatypeAlbum> getRecentAlbums(int maxAlbums) {
 		// Calculate one week before date
-		Calendar after = new GregorianCalendar();
+/*		Calendar after = new GregorianCalendar();
 		after.set(Calendar.DAY_OF_YEAR, after.get(Calendar.DAY_OF_YEAR) - 7);
 		Date afterDate = new Date(after.getTimeInMillis());
 		
-		// Take the first maxEvents and translate to the datatype
 		List<Album> list =  albumDao.findAllAfterDate(afterDate);
+*/		
+		// Take the first maxEvents and translate to the datatype
+		List<Album> list =  albumDao.findAll(); 
 		if (maxAlbums < list.size()) {
 			list = list.subList(0, maxAlbums);
 		}
