@@ -10,7 +10,7 @@ CREATE TABLE users
   reg_date timestamp without time zone NOT NULL,
   "name" character varying(100) NOT NULL,
   img_path character varying(100),
-  email character varying(75) NOT NULL,
+  email character varying(150) NOT NULL,
   facebook_id bigint,
   facebook_user boolean DEFAULT false,
   CONSTRAINT "PK_USERS" PRIMARY KEY (username)

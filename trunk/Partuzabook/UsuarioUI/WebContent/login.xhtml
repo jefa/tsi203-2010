@@ -14,8 +14,10 @@
 	<ui:define name="body">
 		<script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
 		<script>function facebook_onlogin(){
-  FB.Connect.ifUserConnected("FacebookConnect?back=paginaInicio.jsf",null);
-}
+			 FB.Connect.showPermissionDialog("email" , function(perms) {
+				   FB.Connect.ifUserConnected("FacebookConnect?back=paginaInicio.jsf",null);
+				 });
+		}
 		</script>		<h:form id="LoginForm">
 		<f:view>
 		
@@ -34,7 +36,7 @@
 						<br />
 						<h:commandButton value="Login" action="#{loginMB.validUser}" />
 						<br/><br/>
-						<fb:login-button onlogin="facebook_onlogin();"></fb:login-button>
+						<fb:login-button onlogin="facebook_onlogin();" perms="email"></fb:login-button>
 		<script type="text/javascript">
 			FB.init("70ba156f811176d021c2162f5c4c0150", "http://localhost:8080/UsuarioUI/xd_receiver.htm");
 			</script>
