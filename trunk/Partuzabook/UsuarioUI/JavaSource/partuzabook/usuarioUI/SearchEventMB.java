@@ -14,6 +14,8 @@ import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 
 public class SearchEventMB {
 
+	private static int EVENTS_PER_PAGE = 2;
+	
 	// Search by Event Name
 	private String eventNameSearched ="";
 
@@ -22,9 +24,9 @@ public class SearchEventMB {
 	
 	//Use filters
 	private String eventFilter = "";
-	private static String SEE_ALL = "See All Events";
-	private static String SEE_PAST = "Only Past Events";
-	private static String SEE_NEXT = "Only Upcoming Events";
+	private static String SEE_ALL = "Ver todos los eventos";
+	private static String SEE_PAST = "Ver eventos que ya ocurrieron";
+	private static String SEE_NEXT = "Ver eventos futuros";
 	private String[] options = {SEE_ALL, SEE_PAST, SEE_NEXT};			
 	
 	private List<DatatypeEventSummary> eventResults;
@@ -33,6 +35,10 @@ public class SearchEventMB {
 
 	private List<String> filterByDateOptions;
 	
+	private int paginaActual = 0;
+	private ArrayList<Integer> paginas =null; 
+		
+
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
 		properties.put("java.naming.factory.initial",
@@ -72,7 +78,11 @@ public class SearchEventMB {
 
 	
 	public List<DatatypeEventSummary> getEventResults() {
-		return this.eventResults;
+		if (this.eventResults == null){
+			return null;
+		}
+		return this.eventResults.subList(paginaActual*EVENTS_PER_PAGE, 
+				Math.min((paginaActual+1)*EVENTS_PER_PAGE,eventResults.size()));	
 	}
 
 	public void setEventResults(ArrayList<DatatypeEventSummary> events) {
@@ -105,14 +115,24 @@ public class SearchEventMB {
 		try {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			this.eventResults = service.searchForEventByName(eventNameSearched, 10);
+			this.eventResults = service.searchForEventByName(eventNameSearched, 100);
+
+			paginas = new ArrayList<Integer>();
+			
+			for (int i = 0; i < this.getTotalPaginas(); i++) {
+				paginas.add(new Integer(i));
+			}
+
 			if (this.eventResults == null){
 				this.mensaje = "No se han encontrado resultados";
 			}
 			this.eventDateSearched = null;
 			this.eventFilter = "";
 			this.eventNameSearched = "";
-			return this.eventResults;
+			
+			return this.eventResults.subList(paginaActual*EVENTS_PER_PAGE, 
+					Math.min((paginaActual+1)*EVENTS_PER_PAGE,eventResults.size()));	
+
 		} catch (NamingException e) {
 			e.printStackTrace();
 			return null;
@@ -163,6 +183,31 @@ public class SearchEventMB {
 			e.printStackTrace();
 			return null;
 		} 
+	}
+
+	public ArrayList<Integer> getPaginas() {
+		return paginas;
+	}
+
+
+	public void setPaginas(ArrayList<Integer> paginas) {
+		this.paginas = paginas;
+	}
+
+
+	public int getPaginaActual() {
+		return paginaActual;
+	}
+	
+	public void setPaginaActual(int paginaActual) {
+		this.paginaActual = paginaActual;
+	}
+	
+	public int getTotalPaginas() {
+		if (eventResults == null){
+			return 1;
+		}
+		return eventResults.size() / EVENTS_PER_PAGE + 1;
 	}
 
 }

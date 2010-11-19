@@ -11,75 +11,142 @@
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Busqueda de Eventos</ui:define>
 	<ui:define name="body">
+	
+	<ul class="xoxo" id="ulSidebar">
 
+
+<li class="multi-sidebar-container">
+<div class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
+
+<script type="">
+function toggleTab(control, tab)
+{
+	jQuery('div.ui-tabs-panel').addClass('ui-tabs-hide');
+	jQuery('#' + control).fadeIn();
+	jQuery('#' + control).removeClass('ui-tabs-hide');
+	jQuery('ul.ui-tabs-nav li').removeClass('ui-tabs-selected ui-state-active');
+	jQuery(tab.parentNode).addClass('ui-tabs-selected ui-state-active');
+}
+</script>
+
+<ul class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+
+<li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+<a href="javascript:null()" onclick="toggleTab('s-nombre',this)">
+<span>Busqueda por Nombre</span></a></li>
+<li class="ui-state-default ui-corner-top">
+<a href="javascript:null()" onclick="toggleTab('s-fecha',this)">
+<span>Busqueda por Fecha</span></a></li>
+<li class="ui-state-default ui-corner-top">
+<a href="javascript:null()" onclick="toggleTab('s-categ',this)">
+<span>Busqueda por Categoría</span></a></li>
+
+</ul>
+			
+<div id="s-nombre" class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
 	<h:form id="formSearchByName">	
-		<strong>Busqueda por nombre</strong>
-		<br/>
-		
-		<h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" required="true"/>
-		<a4j:commandButton action="#{SearchEventMB.searchEventsByName}" value="Search" 
-		    reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate" id="searchByName"/> 
+		Ingrese el nombre a buscar
+		<br/>		
+		<h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" 
+		required="true" style="width:200px"/>
+		<a4j:commandButton action="#{SearchEventMB.searchEventsByName}" value="Buscar" 
+		    reRender="resultadoEventos" id="searchByName"/> 
 		<br/>		
 	</h:form>
+</div>
 
-	<br/>
-	<rich:separator/>
-	<br/>
-	
+<div id="s-fecha" class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
 	<h:form id="formSearchByDate">	
-		<strong>Busqueda por fecha</strong>
+		Seleccione una fecha en el calendario
 		<br/>
-
             <rich:calendar value="#{SearchEventMB.eventDateSearched}"
                     datePattern="d/MMM/y"  showApplyButton="false"  
-                    cellWidth="24px" cellHeight="22px" style="width:200px"/>
-          	<a4j:commandButton action="#{SearchEventMB.searchEventsByDate}" value="Search" 
-		    	reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate" id="searchByDate"/>
+                    cellWidth="2px" cellHeight="22px" style="width:10px;"/>
+          	<a4j:commandButton action="#{SearchEventMB.searchEventsByDate}" value="Buscar" 
+		    	reRender="resultadoEventos" id="searchByDate"/>
 
 	</h:form>
-
-	<br/>
-	<rich:separator/>
-	<br/>
-
+</div>
+		
+<div id="s-categ" class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
 	<h:form id="formFilterEventsByDate">	
-		<strong>Filtrar Eventos</strong>
-
+		Seleccione una categoria
+		<br/>
 	    <rich:comboBox selectFirstOnUpdate="false"
-	        defaultLabel="Enter value"
+	        defaultLabel="Seleccione una categoria"
 	        value="#{SearchEventMB.eventFilter}" 
-	        suggestionValues="#{SearchEventMB.filterByDateOptions}" >
+	        suggestionValues="#{SearchEventMB.filterByDateOptions}" 
+	        width="400px">
 	        <a4j:support event="onselect" action="#{SearchEventMB.filterEvents}" 
-	        	reRender="output, formSearchByName, formSearchByDate, formFilterEventsByDate" />		
+	        	reRender="resultadoEventos" />		
 	    </rich:comboBox> 
 	</h:form>
+</div>
 
-	<br/>
-	<rich:separator/>
-	<br/>
+</div>
+</li>
 
-	<h:form id="searchResults">
-		<strong>Resultado de la busqueda</strong>
-		<br/>
+</ul>
+	
+	
+	
+	<h:form id="resultadoEventos">
+		<div id="index-featured2">
+		<div class="home-title">Resultado</div>
 		
-		<a4j:outputPanel id="output">
-			<rich:dataList var="resultado" rendered="#{not empty SearchEventMB.eventResults}"
-				value="#{SearchEventMB.eventResults}" rows="10">				
-				<strong><h:commandLink value="#{resultado.evtName}"
-					action="verEvento">
-					<f:setPropertyActionListener value="#{resultado.evtId}"
-								target="#{eventoMB.eventId}" />
-				</h:commandLink></strong>
-				<br />
-				<h:outputText value="Fecha:" styleClass="label"></h:outputText>
-				<h:outputText value="#{resultado.formattedDate} " />
-				<h:graphicImage value="/ContentFeeder?id=#{resultado.coverId}&#38;thb=1" />
-			</rich:dataList>		
-			<h:outputText value="#{SearchEventMB.mensaje}" 
-				style="font-style:italic" rendered="#{empty SearchEventMB.eventResults}"/>
-		</a4j:outputPanel>
-		<br/>
-	</h:form>			
+		<ul class="hfeed posts-quick clearfix">
+		<a4j:repeat var="resultado" value="#{SearchEventMB.eventResults}" rendered="#{not empty SearchEventMB.eventResults}">
+			<li class="post type-post clearfix">
+			<div class="entry-thumbnails">
+			<h:commandLink action="verEvento" styleClass="entry-thumbnails-link">
+				<f:setPropertyActionListener value="#{resultado.evtId}"
+				target="#{eventoMB.eventId}" />
+				<h:graphicImage
+				value="/ContentFeeder?id=#{resultado.coverId}&#38;thb=115"
+				styleClass="attachment-quick-preview-thumb wp-post-image" />
+			</h:commandLink>
+			</div>
+	
+			<h3 class="entry-title">
+			<h:commandLink value="#{resultado.evtName}" action="verEvento">
+				<f:setPropertyActionListener value="#{resultado.evtId}"
+				target="#{eventoMB.eventId}" />
+			</h:commandLink>
+			</h3>
+	
+			<div class="entry-summary">
+			<div class="entry-info">
+			<abbr class="published">#{resultado.formattedDate}</abbr></div>
+			#{resultado.description}
+			<p class="quick-read-more">
+			<h:commandLink value="Ver evento..." action="verEvento">
+				<f:setPropertyActionListener value="#{resultado.evtId}"
+				target="#{eventoMB.eventId}" />
+			</h:commandLink>
+			</p>
+			</div>
+			</li>
+		</a4j:repeat>
+		</ul>
+
+<a4j:outputPanel rendered="#{SearchEventMB.totalPaginas != 1}"> 
+<div class="wp-pagenavi">
+<span class="pages">Pag. #{SearchEventMB.paginaActual + 1} de #{SearchEventMB.totalPaginas}</span>
+<a4j:repeat  var="pagina" value="#{SearchEventMB.paginas}">
+	<h:outputText value="#{pagina + 1}" rendered="#{pagina == SearchEventMB.paginaActual}" styleClass="current"/>
+	<h:commandLink value="#{pagina + 1}" rendered="#{pagina != SearchEventMB.paginaActual}">
+		<f:setPropertyActionListener value="#{pagina}" target="#{SearchEventMB.paginaActual}" />
+	</h:commandLink>
+</a4j:repeat>
+</div>
+</a4j:outputPanel>
+
+
+		</div>
+	</h:form>
+	
+	
+	
 		<script>
 		if (document.getElementById("formSearchByName:searchField").value!="")
 			document.getElementById("formSearchByName:searchByName").click();
