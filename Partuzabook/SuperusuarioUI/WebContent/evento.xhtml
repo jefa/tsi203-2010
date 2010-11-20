@@ -291,23 +291,15 @@
 					<ul class="hfeed posts-quick-tag clearfix">
 						<a4j:repeat value="#{eventoMB.selectedContent.tags}" var="tag">
 							<li class="post type-post clearfix">
-							<div class="entry-thumbnails-tag"><h:commandLink
-								rendered="#{tag.isRealUser}" action="verPerfil"
-								styleClass="entry-thumbnails-link">
-								<f:setPropertyActionListener value="#{tag.userName}"
-									target="#{Profile.userId}" />
+							<div class="entry-thumbnails-tag">
 								<h:graphicImage
 									value="/UserImageFeeder?username=#{tag.userName}&#38;thb=50"
 									styleClass="attachment-quick-preview-thumb wp-post-image" />
-							</h:commandLink> <h:graphicImage rendered="#{!tag.isRealUser}"
+							 <h:graphicImage rendered="#{!tag.isRealUser}"
 								value="/UserImageFeeder?username=__unr_#{tag.userName}&#38;thb=50"
 								styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
-							<h5 class="entry-title"><h:commandLink
-								rendered="#{tag.isRealUser}" value="#{tag.name}"
-								action="verPerfil">
-								<f:setPropertyActionListener value="#{tag.userName}"
-									target="#{Profile.userId}" />
-							</h:commandLink> <h:outputText rendered="#{!tag.isRealUser}" value="#{tag.name}" />
+							<h5 class="entry-title">
+							<h:outputText rendered="#{!tag.isRealUser}" value="#{tag.name}" />
 							</h5>
 							</li>
 						</a4j:repeat>
@@ -328,14 +320,11 @@
 							<a4j:repeat value="#{eventoMB.selectedContent.comments}"
 								var="comment">
 								<li class="post type-post clearfix">
-								<div class="entry-thumbnails-tag"><h:commandLink
-									action="verPerfil" styleClass="entry-thumbnails-link">
-									<f:setPropertyActionListener value="#{comment.userId}"
-										target="#{Profile.userId}" />
+								<div class="entry-thumbnails-tag">
 									<h:graphicImage
 										value="/UserImageFeeder?username=#{comment.userId}&#38;thb=50"
 										styleClass="attachment-quick-preview-thumb wp-post-image" />
-								</h:commandLink></div>
+								</div>
 								<a4j:commandLink
 									onclick="if (!window.confirm('¿Eliminar el comentario #{comment.text}?')) {return false}"
 									action="#{eventoMB.removeComment}" reRender="panelComments"
@@ -348,11 +337,7 @@
 										alt="Eliminar comentario" />
 								</a4j:commandLink>
 
-								<h5 class="entry-title"><h:commandLink
-									value="#{comment.userName}" action="verPerfil">
-									<f:setPropertyActionListener value="#{comment.userId}"
-										target="#{Profile.userId}" />
-								</h:commandLink></h5>
+								<h5 class="entry-title"><strong>#{comment.userName} </strong></h5>
 								<div class="entry-summary">#{comment.text}</div>
 								</li>
 							</a4j:repeat>

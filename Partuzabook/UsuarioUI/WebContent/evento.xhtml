@@ -448,14 +448,11 @@
 						var="comment">
 						<li class="post type-post clearfix"><h:form
 							id="formCommentsImage">
-							<div class="entry-thumbnails-tag"><h:commandLink
-								action="verPerfil" styleClass="entry-thumbnails-link">
-								<f:setPropertyActionListener value="#{comment.userId}"
-									target="#{Profile.userId}" />
+							<div class="entry-thumbnails-tag">
 								<h:graphicImage
 									value="/UserImageFeeder?username=#{comment.userId}&#38;thb=50"
 									styleClass="attachment-quick-preview-thumb wp-post-image" />
-							</h:commandLink></div>
+							</div>
 						</h:form> <h:form id="formRemoveComment"
 							rendered="#{eventoMB.userIsModerator}">
 							<a4j:commandLink action="#{eventoMB.removeComment}"
@@ -469,11 +466,7 @@
 									alt="Eliminar comentario" />
 							</a4j:commandLink>
 						</h:form> <h:form id="formCommentUser">
-							<h5 class="entry-title"><h:commandLink
-								value="#{comment.userName}" action="verPerfil">
-								<f:setPropertyActionListener value="#{comment.userId}"
-									target="#{Profile.userId}" />
-							</h:commandLink></h5>
+							<h5 class="entry-title"><strong>#{comment.userName} </strong></h5>
 						</h:form>
 						<div class="entry-summary">#{comment.text}</div>
 						</li>

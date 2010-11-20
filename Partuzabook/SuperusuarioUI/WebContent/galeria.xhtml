@@ -229,11 +229,8 @@
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
 			<h:form id="tagPublicProfile">
 				<a4j:repeat value="#{eventoMB.selectedContent.tags}" var="tag">
-					<h:commandLink action="verPerfil" rendered="#{tag.isRealUser}">
-						<f:setPropertyActionListener value="#{tag.userName}"
-							target="#{Profile.userId}" />
-						<h:outputText value="#{tag.userName} " />
-					</h:commandLink>
+						<h:outputText rendered="#{tag.isRealUser}" value="#{tag.userName} " />
+
 					<h:outputText value="#{tag.name}" rendered="#{!tag.isRealUser}" />
 				</a4j:repeat>
 			</h:form></div>
@@ -261,14 +258,11 @@
 					<h:panelGroup>
 						<h:column>
 							<h:form id="formComments">
-								<h:commandLink action="verPerfil">
-									<f:setPropertyActionListener value="#{comment.userId}"
-										target="#{Profile.userId}" />
 									<h:graphicImage
 										value="/UserImageFeeder?username=#{comment.userId}&#38;thb=50"
 										style="border:none" />
 									<h:outputText value="#{comment.userName}" />
-								</h:commandLink>
+
 							</h:form>
 						</h:column>
 						<h:column>
