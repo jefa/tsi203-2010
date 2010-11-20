@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://ejb.integracion.tsi2.fing.edu.uy" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://ejb.integracion.tsi2.fing.edu.uy">
+    <wsdl:documentation>
+		Please Type your service description here
+	</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ejb.integracion.tsi2.fing.edu.uy">
+            <xs:element name="searchEventByType">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="type" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="searchEventByTypeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="searchEventByName">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="searchEventByNameResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="searchEventByDate">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="date" nillable="true" type="xs:date"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="searchEventByDateResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAlbumContents">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="eventID" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAlbumContentsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="searchEventByNameRequest">
+        <wsdl:part name="parameters" element="ns:searchEventByName"/>
+    </wsdl:message>
+    <wsdl:message name="searchEventByNameResponse">
+        <wsdl:part name="parameters" element="ns:searchEventByNameResponse"/>
+    </wsdl:message>
+    <wsdl:message name="searchEventByDateRequest">
+        <wsdl:part name="parameters" element="ns:searchEventByDate"/>
+    </wsdl:message>
+    <wsdl:message name="searchEventByDateResponse">
+        <wsdl:part name="parameters" element="ns:searchEventByDateResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getAlbumContentsRequest">
+        <wsdl:part name="parameters" element="ns:getAlbumContents"/>
+    </wsdl:message>
+    <wsdl:message name="getAlbumContentsResponse">
+        <wsdl:part name="parameters" element="ns:getAlbumContentsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="searchEventByTypeRequest">
+        <wsdl:part name="parameters" element="ns:searchEventByType"/>
+    </wsdl:message>
+    <wsdl:message name="searchEventByTypeResponse">
+        <wsdl:part name="parameters" element="ns:searchEventByTypeResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="IntegracionWSServicePortType">
+        <wsdl:operation name="searchEventByName">
+            <wsdl:input message="ns:searchEventByNameRequest" wsaw:Action="urn:searchEventByName"/>
+            <wsdl:output message="ns:searchEventByNameResponse" wsaw:Action="urn:searchEventByNameResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="searchEventByDate">
+            <wsdl:input message="ns:searchEventByDateRequest" wsaw:Action="urn:searchEventByDate"/>
+            <wsdl:output message="ns:searchEventByDateResponse" wsaw:Action="urn:searchEventByDateResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getAlbumContents">
+            <wsdl:input message="ns:getAlbumContentsRequest" wsaw:Action="urn:getAlbumContents"/>
+            <wsdl:output message="ns:getAlbumContentsResponse" wsaw:Action="urn:getAlbumContentsResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="searchEventByType">
+            <wsdl:input message="ns:searchEventByTypeRequest" wsaw:Action="urn:searchEventByType"/>
+            <wsdl:output message="ns:searchEventByTypeResponse" wsaw:Action="urn:searchEventByTypeResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="IntegracionWSServiceSoap11Binding" type="ns:IntegracionWSServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="searchEventByName">
+            <soap:operation soapAction="urn:searchEventByName" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="searchEventByDate">
+            <soap:operation soapAction="urn:searchEventByDate" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAlbumContents">
+            <soap:operation soapAction="urn:getAlbumContents" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="searchEventByType">
+            <soap:operation soapAction="urn:searchEventByType" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="IntegracionWSServiceSoap12Binding" type="ns:IntegracionWSServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="searchEventByName">
+            <soap12:operation soapAction="urn:searchEventByName" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="searchEventByDate">
+            <soap12:operation soapAction="urn:searchEventByDate" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAlbumContents">
+            <soap12:operation soapAction="urn:getAlbumContents" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="searchEventByType">
+            <soap12:operation soapAction="urn:searchEventByType" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="IntegracionWSServiceHttpBinding" type="ns:IntegracionWSServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="searchEventByName">
+            <http:operation location="IntegracionWSService/searchEventByName"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="searchEventByName"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="searchEventByName"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="searchEventByDate">
+            <http:operation location="IntegracionWSService/searchEventByDate"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="searchEventByDate"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="searchEventByDate"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAlbumContents">
+            <http:operation location="IntegracionWSService/getAlbumContents"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getAlbumContents"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getAlbumContents"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="searchEventByType">
+            <http:operation location="IntegracionWSService/searchEventByType"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="searchEventByType"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="searchEventByType"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="IntegracionWSService">
+        <wsdl:port name="IntegracionWSServiceHttpSoap11Endpoint" binding="ns:IntegracionWSServiceSoap11Binding">
+            <soap:address location="http://localhost:8080/Productora_web/services/IntegracionWSService.IntegracionWSServiceHttpSoap11Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="IntegracionWSServiceHttpSoap12Endpoint" binding="ns:IntegracionWSServiceSoap12Binding">
+            <soap12:address location="http://localhost:8080/Productora_web/services/IntegracionWSService.IntegracionWSServiceHttpSoap12Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="IntegracionWSServiceHttpEndpoint" binding="ns:IntegracionWSServiceHttpBinding">
+            <http:address location="http://localhost:8080/Productora_web/services/IntegracionWSService.IntegracionWSServiceHttpEndpoint/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
