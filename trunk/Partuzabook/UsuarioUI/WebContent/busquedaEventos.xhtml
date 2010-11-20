@@ -155,17 +155,18 @@ function toggleTab(control, tab)
 		</a4j:repeat>
 		</ul>
 
-<a4j:outputPanel rendered="#{SearchEventMB.totalPaginas != 1}"> 
-<div class="wp-pagenavi">
-<span class="pages">Pag. #{SearchEventMB.paginaActual + 1} de #{SearchEventMB.totalPaginas}</span>
-<a4j:repeat  var="pagina" value="#{SearchEventMB.paginas}">
-	<h:outputText value="#{pagina + 1}" rendered="#{pagina == SearchEventMB.paginaActual}" styleClass="current"/>
-	<h:commandLink value="#{pagina + 1}" rendered="#{pagina != SearchEventMB.paginaActual}">
-		<f:setPropertyActionListener value="#{pagina}" target="#{SearchEventMB.paginaActual}" />
-	</h:commandLink>
-</a4j:repeat>
-</div>
-</a4j:outputPanel>
+		<a4j:outputPanel rendered="#{SearchEventMB.totalPaginas != 1}"> 
+		<div class="wp-pagenavi">
+		<span class="pages">Pag. #{SearchEventMB.paginaActual + 1} de #{SearchEventMB.totalPaginas}</span>
+		<a4j:repeat  var="pagina" value="#{SearchEventMB.paginas}">
+			<h:outputText value="#{pagina + 1}" rendered="#{pagina == SearchEventMB.paginaActual}" styleClass="current"/>
+			<a4j:commandLink value="#{pagina + 1}" rendered="#{pagina != SearchEventMB.paginaActual}" reRender="resultadoEventos">
+				<f:setPropertyActionListener value="#{pagina}" target="#{SearchEventMB.paginaActual}" />
+			</a4j:commandLink>
+		</a4j:repeat>
+		</div>
+		</a4j:outputPanel>
+
 
 
 

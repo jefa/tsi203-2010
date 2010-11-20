@@ -118,7 +118,7 @@ public class SearchEventMB {
 
 	
 	public List<DatatypeEventSummary> getEventResults() {
-		if (this.eventResults == null){
+		if (this.eventResults == null || this.eventResults.size() == 0){
 			return null;
 		}
 		return this.eventResults.subList(paginaActual*EVENTS_PER_PAGE, 
@@ -182,8 +182,9 @@ public class SearchEventMB {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
 			this.eventResults = service.searchForEventByName(eventNameSearched, 100);
-			if (this.eventResults == null){
+			if (this.eventResults == null || this.eventResults.size() == 0){
 				this.mensaje = "No se han encontrado resultados";
+				this.getTotalPaginas();
 				return this.eventResults;
 			}
 
@@ -193,6 +194,8 @@ public class SearchEventMB {
 				paginas.add(new Integer(i));
 			}
 
+			this.paginaActual = 0;
+			
 			this.eventDateSearched = null;
 			this.eventFilter = "";
 			this.eventNameSearched = "";
@@ -216,8 +219,9 @@ public class SearchEventMB {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
 			this.eventResults = service.searchForEventByDate(eventDateSearched, 10);
-			if (this.eventResults == null){
+			if (this.eventResults == null || this.eventResults.size() == 0){
 				this.mensaje = "No se han encontrado resultados";
+				this.getTotalPaginas();
 				return this.eventResults;
 			}
 
@@ -226,6 +230,7 @@ public class SearchEventMB {
 			for (int i = 0; i < this.getTotalPaginas(); i++) {
 				paginas.add(new Integer(i));
 			}
+			this.paginaActual = 0;
 			
 			this.eventDateSearched = null;
 			this.eventFilter = "";
@@ -252,8 +257,9 @@ public class SearchEventMB {
 			} else if (this.eventFilter.equals(SEE_NEXT)){
 				this.eventResults = service.filterNextEvents(maxEvents);				
 			}			
-			if (this.eventResults == null){
+			if (this.eventResults == null || this.eventResults.size() == 0){
 				this.mensaje = "No se han encontrado resultados";
+				this.getTotalPaginas();
 				return this.eventResults;
 			}
 
@@ -262,6 +268,7 @@ public class SearchEventMB {
 			for (int i = 0; i < this.getTotalPaginas(); i++) {
 				paginas.add(new Integer(i));
 			}
+			this.paginaActual = 0;
 
 			this.eventDateSearched = null;
 			this.eventFilter = "";
@@ -292,8 +299,9 @@ public class SearchEventMB {
 			} else if (this.eventFilter.equals(this.optionsEvtCateg[3])) {
 				this.eventResults = service.filterEventsByEvtCategory(3, maxEvents);
 			}
-			if (this.eventResults == null){
+			if (this.eventResults == null || this.eventResults.size() == 0){
 				this.mensaje = "No se han encontrado resultados";
+				this.getTotalPaginas();
 				return this.eventResults;
 			}
 
@@ -302,6 +310,7 @@ public class SearchEventMB {
 			for (int i = 0; i < this.getTotalPaginas(); i++) {
 				paginas.add(new Integer(i));
 			}
+			this.paginaActual = 0;
 
 			this.eventDateSearched = null;
 			this.eventFilter = "";
@@ -335,9 +344,12 @@ public class SearchEventMB {
 	}
 	
 	public int getTotalPaginas() {
-		if (eventResults == null){
+		if (eventResults == null || eventResults.size() == 0){
 			return 1;
 		}
+		if ((eventResults.size() % EVENTS_PER_PAGE) == 0) {	
+			return eventResults.size() / EVENTS_PER_PAGE;
+		} 
 		return eventResults.size() / EVENTS_PER_PAGE + 1;
 	}
 
