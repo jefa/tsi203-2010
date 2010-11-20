@@ -14,6 +14,7 @@ import javax.persistence.Query;
 
 import partuzabook.datos.persistencia.beans.CntCategory;
 import partuzabook.datos.persistencia.beans.Event;
+import partuzabook.datos.persistencia.beans.EvtCategory;
 import partuzabook.datos.persistencia.beans.NormalUser;
 
 @Stateless
@@ -24,7 +25,7 @@ public class EventDAOBean extends JpaDao<Integer, Event> implements EventDAO {
 	@Resource
 	SessionContext sc;
 	
-	
+
 	public Event findByName(String name) {
 		Query namedQuery = em.createNamedQuery("Event.findByName");
 		namedQuery.setParameter("name", name);
@@ -89,5 +90,10 @@ public class EventDAOBean extends JpaDao<Integer, Event> implements EventDAO {
 		return (List<Event>)namedQuery.getResultList();		
 	}
 
-
+	public List<Event> findByCategory(EvtCategory eventCateg) {
+		Query namedQuery = em.createNamedQuery("Event.findByCategory");
+		namedQuery.setParameter("evtCategory", eventCateg);
+		return (List<Event>)namedQuery.getResultList();		
+	}
+	
 }

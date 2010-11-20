@@ -48,9 +48,11 @@ function toggleTab(control, tab)
 		Ingrese el nombre a buscar
 		<br/>		
 		<h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" 
-		required="true" style="width:200px"/>
+		style="width:200px"/>
 		<a4j:commandButton action="#{SearchEventMB.searchEventsByName}" value="Buscar" 
-		    reRender="resultadoEventos" id="searchByName"/> 
+		    reRender="resultadoEventos, formSearchByName" id="searchByName"/> 
+		<h:outputText style="color:Red;" id="ErrorNombre" value="#{SearchEventMB.mensajeValidacionNombre}"/>
+		    
 		<br/>		
 	</h:form>
 </div>
@@ -63,14 +65,12 @@ function toggleTab(control, tab)
                     datePattern="d/MMM/y"  showApplyButton="false"  
                     cellWidth="2px" cellHeight="22px" style="width:10px;"/>
           	<a4j:commandButton action="#{SearchEventMB.searchEventsByDate}" value="Buscar" 
-		    	reRender="resultadoEventos" id="searchByDate"/>
+		    	reRender="resultadoEventos, formSearchByDate" id="searchByDate"/>
+			<h:outputText style="color:Red;" id="ErrorFecha" value="#{SearchEventMB.mensajeValidacionFecha}"/>
 
 	</h:form>
-</div>
-		
-<div id="s-categ" class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-	<h:form id="formFilterEventsByDate">	
-		Seleccione una categoria
+		<h:form id="formFilterEventsByDate">	
+		Seleccione un filtro de fecha
 		<br/>
 	    <rich:comboBox selectFirstOnUpdate="false"
 	        defaultLabel="Seleccione una categoria"
@@ -81,6 +81,23 @@ function toggleTab(control, tab)
 	        	reRender="resultadoEventos" />		
 	    </rich:comboBox> 
 	</h:form>
+	
+</div>
+		
+<div id="s-categ" class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+	<h:form id="formFilterEventsByCateg">	
+		Seleccione una categoria
+		<br/>
+	    <rich:comboBox selectFirstOnUpdate="false"
+	        defaultLabel="Seleccione una categoria"
+	        value="#{SearchEventMB.eventFilter}" 
+	        suggestionValues="#{SearchEventMB.filterByCategOptions}" 
+	        width="400px">
+	        <a4j:support event="onselect" action="#{SearchEventMB.filterEventsByEvtCategory}" 
+	        	reRender="resultadoEventos" />		
+	    </rich:comboBox> 
+	</h:form>
+
 </div>
 
 </div>
@@ -93,6 +110,8 @@ function toggleTab(control, tab)
 	<h:form id="resultadoEventos">
 		<div id="index-featured2">
 		<div class="home-title">Resultado</div>
+
+		<h:outputText id="error" value="#{SearchEventMB.mensaje}" rendered="#{empty SearchEventMB.eventResults}"/>
 		
 		<ul class="hfeed posts-quick clearfix">
 		<a4j:repeat var="resultado" value="#{SearchEventMB.eventResults}" rendered="#{not empty SearchEventMB.eventResults}">

@@ -50,7 +50,9 @@ import javax.persistence.Table;
 	@NamedQuery(name = "Event.findContentById",
 			query = "SELECT c FROM Content c WHERE c.id = :content"),
 	@NamedQuery(name = "Event.findByDate",
-			query = "SELECT e FROM Event e WHERE e.date = :date")		
+			query = "SELECT e FROM Event e WHERE e.date = :date"),
+	@NamedQuery(name = "Event.findByCategory",
+			query = "SELECT e FROM Event e WHERE e.evtCategory = :evtCategory")		
 })
 public class Event implements Serializable {
 	private static final long serialVersionUID = 1L;

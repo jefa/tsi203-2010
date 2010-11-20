@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import partuzabook.datos.persistencia.beans.Event;
+import partuzabook.datos.persistencia.beans.EvtCategory;
 import partuzabook.datos.persistencia.beans.NormalUser;
 
 @Local
@@ -27,5 +28,7 @@ public interface EventDAO extends Dao<Integer, Event>{
 	public List<Event> findAllBetweenDates(Date after, Date before);
 	
 	public NormalUser findMostTagged();
+	
+	public List<Event> findByCategory(EvtCategory eventCateg);
 
 }

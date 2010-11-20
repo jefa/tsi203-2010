@@ -685,6 +685,9 @@ public class EventoMB {
 	}
 
 	public boolean getIsInAlbum(){
+		if (this.selectedContent == null){
+			return false;
+		}
 		return this.selectedContent.getPosAlbum() != null;
 	}
 	
