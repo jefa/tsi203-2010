@@ -43,8 +43,8 @@
   <managed-bean-scope>session</managed-bean-scope>
  </managed-bean>
  <managed-bean>
-  <managed-bean-name>PublicProfile</managed-bean-name>
-  <managed-bean-class>partuzabook.usuarioUI.PublicProfile</managed-bean-class>
+  <managed-bean-name>Profile</managed-bean-name>
+  <managed-bean-class>partuzabook.usuarioUI.Profile</managed-bean-class>
   <managed-bean-scope>session</managed-bean-scope>
  </managed-bean>
  <managed-bean>
@@ -117,14 +117,6 @@
    <from-action>#{loginMB.logout}</from-action>
    <from-outcome>logoutsuccess</from-outcome>
    <to-view-id>/login.xhtml</to-view-id>
-  </navigation-case>
- </navigation-rule>
- <navigation-rule>
-  <display-name>verPerfil</display-name>
-  <from-view-id>*</from-view-id>
-  <navigation-case>
-   <from-outcome>verPerfil</from-outcome>
-   <to-view-id>/publicProfile.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
  <navigation-rule>

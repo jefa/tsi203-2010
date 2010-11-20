@@ -7,7 +7,7 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 <ui:composition template="templates/usuarioUI.xhtml">
-	<ui:define name="title">Perfil de #{PublicProfile.user.name}</ui:define>
+	<ui:define name="title">Perfil de #{Profile.user.name}</ui:define>
 	<ui:define name="body">
 	
 		<rich:modalPanel id="panel" width="425" height="345">
@@ -17,14 +17,14 @@
 		    	</h:panelGroup>
 			</f:facet>
 			<a4j:form id="modalUpload">
-				<rich:fileUpload fileUploadListener="#{PublicProfile.listener}"
-			       maxFilesQuantity="#{PublicProfile.cantUploads}"
+				<rich:fileUpload fileUploadListener="#{Profile.listener}"
+			       maxFilesQuantity="#{Profile.cantUploads}"
 			       id="upload"
 			       immediateUpload="true"
 			       acceptedTypes="jpg, gif, png, bmp">
 			   	</rich:fileUpload>
 				<br/>
-				<h:commandButton value="Confirmar" action="#{PublicProfile.confirmAvatarChange}"/>
+				<h:commandButton value="Confirmar" action="#{Profile.confirmAvatarChange}"/>
 				<h:panelGroup>
 					<h:commandButton value="Cancelar" id="hidelink"/>
 					<rich:componentControl for="panel" attachTo="hidelink" operation="hide" event="onclick"/>
@@ -37,13 +37,13 @@
 		<f:view>
 				<rich:panel>
 					<f:facet name="header">
-						<h:outputText value="Perfil de #{PublicProfile.user.name}"></h:outputText>
+						<h:outputText value="Perfil de #{Profile.user.name}"></h:outputText>
 					</f:facet>					
 						<div>
 						<h:panelGrid columns="2" width="100%">
 							<h:panelGroup>
 								
-									<h:graphicImage value="/UserImageFeeder?username=#{PublicProfile.userId}" /><br/>
+									<h:graphicImage value="/UserImageFeeder?username=#{Profile.userId}" /><br/>
 								    <h:outputLink value="#" id="link">
 								        Cambiar imagen de perfil
 								        <rich:componentControl for="panel" attachTo="link" operation="show" event="onclick"/>
@@ -55,26 +55,26 @@
 										<h:outputText value="Información personal"></h:outputText>
 									</f:facet>
 									<h:outputText value="User id:"></h:outputText><br/>
-									<h:inputText disabled="true" value="#{PublicProfile.user.username}"></h:inputText><br/>
+									<h:inputText disabled="true" value="#{Profile.user.username}"></h:inputText><br/>
 									<h:outputText value="Facebook id:"></h:outputText><br/>
-									<h:inputText disabled="#{PublicProfile.user.usuarioFacebook}" value="#{PublicProfile.user.facebookId}"></h:inputText><br/>
+									<h:inputText disabled="#{Profile.user.usuarioFacebook}" value="#{Profile.user.facebookId}"></h:inputText><br/>
 									
-									<h:outputText value="Nueva contraseña:" rendered="#{!PublicProfile.user.usuarioFacebook}"></h:outputText><br/>
-									<h:inputSecret value="#{PublicProfile.newPassword}" rendered="#{!PublicProfile.user.usuarioFacebook}"></h:inputSecret><h:outputText style="color:red" value="#{PublicProfile.newPasswordMessage}" rendered="#{!PublicProfile.user.usuarioFacebook}"/><br/>
-									<h:outputText value="Confirmación de contraseña:" rendered="#{!PublicProfile.user.usuarioFacebook}"></h:outputText><br/>
-									<h:inputSecret value="#{PublicProfile.confirmNewPassword}" rendered="#{!PublicProfile.user.usuarioFacebook}"></h:inputSecret><h:outputText style="color:red" value="#{PublicProfile.confirmNewPasswordMessage}" rendered="#{!PublicProfile.user.usuarioFacebook}"/><br/>
+									<h:outputText value="Nueva contraseña:" rendered="#{!Profile.user.usuarioFacebook}"></h:outputText><br/>
+									<h:inputSecret value="#{Profile.newPassword}" rendered="#{!Profile.user.usuarioFacebook}"></h:inputSecret><h:outputText style="color:red" value="#{Profile.newPasswordMessage}" rendered="#{!Profile.user.usuarioFacebook}"/><br/>
+									<h:outputText value="Confirmación de contraseña:" rendered="#{!Profile.user.usuarioFacebook}"></h:outputText><br/>
+									<h:inputSecret value="#{Profile.confirmNewPassword}" rendered="#{!Profile.user.usuarioFacebook}"></h:inputSecret><h:outputText style="color:red" value="#{Profile.confirmNewPasswordMessage}" rendered="#{!Profile.user.usuarioFacebook}"/><br/>
 									<h:outputText value="Nombre:"></h:outputText><br/>
-									<h:inputText value="#{PublicProfile.user.name}"></h:inputText><h:outputText style="color:red" value="#{PublicProfile.nameMessage}"/><br/>
+									<h:inputText value="#{Profile.user.name}"></h:inputText><h:outputText style="color:red" value="#{Profile.nameMessage}"/><br/>
 									<h:outputText value="Email:"></h:outputText><br/>
-									<h:inputText value="#{PublicProfile.user.email}"></h:inputText><h:outputText style="color:red" value="#{PublicProfile.emailMessage}"/><br/><br/>
-									<h:outputText style="color:red" value="#{PublicProfile.message}"/><br/>
-									<h:commandButton value="Confirmar nuevos datos" action="#{PublicProfile.userModification}"/>
+									<h:inputText value="#{Profile.user.email}"></h:inputText><h:outputText style="color:red" value="#{Profile.emailMessage}"/><br/><br/>
+									<h:outputText style="color:red" value="#{Profile.message}"/><br/>
+									<h:commandButton value="Confirmar nuevos datos" action="#{Profile.userModification}"/>
 								</rich:panel>
 							</h:panelGrid>
 						</div>
-						<rich:dataGrid var="evento" columns="1" elements="#{PublicProfile.cantEventosDelUsuario}" width="100%" value="#{PublicProfile.eventosDelUsuario}">
+						<rich:dataGrid var="evento" columns="1" elements="#{Profile.cantEventosDelUsuario}" width="100%" value="#{Profile.eventosDelUsuario}">
 							<f:facet name="header">
-								<h:outputText value="Eventos a los que #{PublicProfile.user.name} pertenece"></h:outputText>
+								<h:outputText value="Eventos a los que #{Profile.user.name} pertenece"></h:outputText>
 							</f:facet>
 							<h:panelGroup>
 								<h:commandLink value="#{evento.evtName}" action="verEvento">
