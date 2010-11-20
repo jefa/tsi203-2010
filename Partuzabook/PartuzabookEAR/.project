@@ -15,6 +15,7 @@
 		<project>ServiciosNotificaciones</project>
 		<project>Utils</project>
 		<project>SuperusuarioUI</project>
+		<project>IntegracionWebSvc</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
