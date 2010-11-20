@@ -1,4 +1,4 @@
-package partuzabook.integracion;
+package partuzabook.integracion.ws;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -11,9 +11,9 @@ import javax.xml.ws.Service;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 
-import partuzabook.integracion.ws.Busqueda;
-import partuzabook.integracion.ws.BusquedaService;
-import partuzabook.integracion.ws.Evento;;
+import partuzabook.integracion.ws.busqueda.Busqueda;
+import partuzabook.integracion.ws.busqueda.BusquedaService;
+import partuzabook.integracion.ws.busqueda.Evento;
 
 public class WebServiceClient {
 
