@@ -353,6 +353,14 @@ public interface ServicesEventRemote {
 	public void removeContentFromAlbum(int contentID, int eventID);
 	
 	/**
+	 * Sets contentID as cover of eventID. 
+	 * @param contentID
+	 * @param eventID
+	 */
+	public void setCoverImage(int contentID, int eventID);
+	
+	
+	/**
 	 * Returns a list of albums and their information
 	 * @param maxAlbums
 	 */

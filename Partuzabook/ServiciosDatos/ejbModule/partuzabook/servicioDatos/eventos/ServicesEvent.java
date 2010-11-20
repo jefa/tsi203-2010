@@ -1068,6 +1068,15 @@ public class ServicesEvent implements ServicesEventRemote {
 		
 	}
 	
+	public void setCoverImage(int contentID, int eventID) {
+		Event event = getEvent(eventID);
+		Content content = contentDao.findByID(contentID);
+		if (content == null) {
+			throw new ContentNotFoundException();
+		}
+		event.setCover(content);
+	}
+	
 	private void sortContentsInAlbum(CntCategory catAlbum){
 		List<Content> contents = catAlbum.getContents();
 		int i = 0;
@@ -1456,5 +1465,6 @@ public class ServicesEvent implements ServicesEventRemote {
 		
 		return content.getCntIdAuto();	
 	}
+
 
 }
