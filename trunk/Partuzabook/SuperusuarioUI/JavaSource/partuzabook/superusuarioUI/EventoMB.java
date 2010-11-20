@@ -121,6 +121,10 @@ public class EventoMB {
 		return selectedContent;
 	}
 	
+	public boolean isPhotoSelectedContent(){
+		return this.selectedContent.getType() == 1;
+	}
+	
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
 		setSelectedCategory(servicesEvent.getCategoryContents(eventId, categoryId, 1, PAGE_SIZE));
@@ -753,6 +757,18 @@ public class EventoMB {
 			e.printStackTrace();
 		}
 	}
+
+	public void setearCoverEvento() {
+		try {
+			ServicesEventRemote service = getServicesEvent();
+			service.setCoverImage(this.contentId, this.eventId);
+			setEventId(this.eventId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	
 	
 	public void moverUnaPosAtras(){
 		try{

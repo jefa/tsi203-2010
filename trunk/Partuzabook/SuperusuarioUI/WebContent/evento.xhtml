@@ -160,6 +160,12 @@
 									
 			</a4j:form>
 
+			<a4j:form id="panelSetCover" >
+					<a4j:commandButton value="Fijar como portada del evento"
+						action="#{eventoMB.setearCoverEvento}"
+						reRender="panelEvento" />
+			</a4j:form>		
+
 			<a4j:form id="panelAlbum" >		
 				<h:panelGroup
 					rendered="#{eventoMB.albumExists and !eventoMB.isAlbumFinalized}">
