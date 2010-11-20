@@ -215,7 +215,7 @@ ul.sf-menu li li li:hover ul, ul.sf-menu li li li.sfHover ul  { left: 11em; top:
 .footer-sidebar     { overflow: hidden; float: left; margin: 0; padding: 0 0 10px; }
 
 input.rich-combobox-button-icon, input.rich-combobox-button-icon-inactive {
-background-image:url("/UsuarioUI/a4j/g/3_3_3.Finalorg.richfaces.renderkit.html.images.ComboBoxArrowImage/DATB/eAFjYGC4eu!x!!!!ARLjBZQ_.jsf") !important;
+background-image:url("../images/flechaCombo.gif") !important;
 background-repat:no-repeat !important;
 background-position: center center !important;
 }
