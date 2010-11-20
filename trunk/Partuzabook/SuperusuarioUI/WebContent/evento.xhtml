@@ -161,9 +161,11 @@
 			</a4j:form>
 
 			<a4j:form id="panelSetCover" >
+				<h:panelGroup rendered="#{eventoMB.selectedContent.type eq 0 || eventoMB.selectedContent.type eq 2}">
 					<a4j:commandButton value="Fijar como portada del evento"
 						action="#{eventoMB.setearCoverEvento}"
 						reRender="panelEvento" />
+				</h:panelGroup>
 			</a4j:form>		
 
 			<a4j:form id="panelAlbum" >		

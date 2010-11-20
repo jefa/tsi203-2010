@@ -28,12 +28,22 @@ public class SearchEventMB {
 	private static String SEE_PAST = "Ver eventos que ya ocurrieron";
 	private static String SEE_NEXT = "Ver eventos futuros";
 	private String[] options = {SEE_ALL, SEE_PAST, SEE_NEXT};			
+	private static String ANIV = "Aniversario";
+	private static String CASAM = "Casamiento";
+	private static String CUMPLE = "Cumpleaños de quince";
+	private static String OTROS = "Otros";	
+	private String[] optionsEvtCateg = {ANIV, CASAM, CUMPLE, OTROS};			
+
+	
 	
 	private List<DatatypeEventSummary> eventResults;
 	
 	private String mensaje ="";
+	private String mensajeValidacionNombre ="";
+	private String mensajeValidacionFecha ="";
 
 	private List<String> filterByDateOptions;
+	private List<String> filterByCategOptions;
 	
 	private int paginaActual = 0;
 	private ArrayList<Integer> paginas =null; 
@@ -59,13 +69,43 @@ public class SearchEventMB {
 		this.eventNameSearched = eventName;
 		
 	}
+	
+/*	public void validateEventNameSearched(){
+		if (this.eventNameSearched == null || this.eventNameSearched.equals("")){
+			this.mensajeValidacionNombre = "Ingrese un nombre para buscar";
+			this.eventResults = null;
+		}
+	}
 
+	public void validateEventDateSearched(){
+		if (this.eventDateSearched == null || this.eventDateSearched.equals("")){
+			this.mensajeValidacionFecha = "Ingrese una fecha para buscar";
+			this.eventResults = null;
+		}
+	}
+*/
 	public String getMensaje() {
 		return this.mensaje;
 	}
 
 	public void setMensaje(String msj) {
 		this.mensaje = msj;
+	}
+
+	public String getMensajeValidacionNombre() {
+		return this.mensajeValidacionNombre;
+	}
+
+	public void setMensajeValidacionNombre(String msj) {
+		this.mensajeValidacionNombre = msj;
+	}
+
+	public String getMensajeValidacionFecha() {
+		return this.mensajeValidacionFecha;
+	}
+
+	public void setMensajeValidacionFecha(String msj) {
+		this.mensajeValidacionFecha = msj;
 	}
 
 	public Date getEventDateSearched() {
@@ -103,6 +143,20 @@ public class SearchEventMB {
 		this.filterByDateOptions = list;
 	}
 
+	public List<String> getFilterByCategOptions(){
+		if (this.filterByCategOptions == null) {
+			this.filterByCategOptions = new ArrayList<String>();
+			for(int i = 0; i<this.optionsEvtCateg.length; i++) {
+				this.filterByCategOptions.add(optionsEvtCateg[i]);
+			}
+		} 
+		return this.filterByCategOptions;
+	}
+
+	public void setFilterByCategOptions(List<String> list) {
+		this.filterByCategOptions = list;
+	}
+	
 	public String getEventFilter(){
 		return this.eventFilter;
 	}
@@ -113,9 +167,19 @@ public class SearchEventMB {
 	
 	public List<DatatypeEventSummary> searchEventsByName() {
 		try {
+			if (this.eventNameSearched == null || this.eventNameSearched.equals("")){
+				this.eventResults = null;
+				this.mensajeValidacionNombre = "Ingrese un nombre para buscar";
+				return this.eventResults;
+			} 
+			this.mensajeValidacionNombre = "";		
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
 			this.eventResults = service.searchForEventByName(eventNameSearched, 100);
+			if (this.eventResults == null){
+				this.mensaje = "No se han encontrado resultados";
+				return this.eventResults;
+			}
 
 			paginas = new ArrayList<Integer>();
 			
@@ -123,16 +187,12 @@ public class SearchEventMB {
 				paginas.add(new Integer(i));
 			}
 
-			if (this.eventResults == null){
-				this.mensaje = "No se han encontrado resultados";
-			}
 			this.eventDateSearched = null;
 			this.eventFilter = "";
 			this.eventNameSearched = "";
 			
 			return this.eventResults.subList(paginaActual*EVENTS_PER_PAGE, 
 					Math.min((paginaActual+1)*EVENTS_PER_PAGE,eventResults.size()));	
-
 		} catch (NamingException e) {
 			e.printStackTrace();
 			return null;
@@ -142,16 +202,30 @@ public class SearchEventMB {
 	public List<DatatypeEventSummary> searchEventsByDate() {
 		this.eventNameSearched = "";
 		try {
+			if (this.eventDateSearched == null){
+				this.eventResults = null;
+				this.mensajeValidacionFecha = "Ingrese una fecha para buscar";
+				return this.eventResults;
+			} 
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
 			this.eventResults = service.searchForEventByDate(eventDateSearched, 10);
 			if (this.eventResults == null){
 				this.mensaje = "No se han encontrado resultados";
+				return this.eventResults;
 			}
+
+			paginas = new ArrayList<Integer>();
+			
+			for (int i = 0; i < this.getTotalPaginas(); i++) {
+				paginas.add(new Integer(i));
+			}
+			
 			this.eventDateSearched = null;
 			this.eventFilter = "";
 			this.eventNameSearched = "";
-			return this.eventResults;
+			return this.eventResults.subList(paginaActual*EVENTS_PER_PAGE, 
+					Math.min((paginaActual+1)*EVENTS_PER_PAGE,eventResults.size()));	
 		} catch (NamingException e) {
 			e.printStackTrace();
 			return null;
@@ -161,7 +235,7 @@ public class SearchEventMB {
 	public List<DatatypeEventSummary> filterEvents() {
 		this.eventDateSearched = null;
 		this.eventNameSearched = "";
-		int maxEvents = 10; //TODO Quien se encarga de la paginacion?
+		int maxEvents = 10; 
 		try {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
@@ -174,17 +248,68 @@ public class SearchEventMB {
 			}			
 			if (this.eventResults == null){
 				this.mensaje = "No se han encontrado resultados";
+				return this.eventResults;
 			}
+
+			paginas = new ArrayList<Integer>();
+			
+			for (int i = 0; i < this.getTotalPaginas(); i++) {
+				paginas.add(new Integer(i));
+			}
+
 			this.eventDateSearched = null;
 			this.eventFilter = "";
 			this.eventNameSearched = "";
-			return this.eventResults;
+			return this.eventResults.subList(paginaActual*EVENTS_PER_PAGE, 
+					Math.min((paginaActual+1)*EVENTS_PER_PAGE,eventResults.size()));	
 		} catch (NamingException e) {
 			e.printStackTrace();
 			return null;
 		} 
 	}
 
+	public List<DatatypeEventSummary> filterEventsByEvtCategory() {
+		this.eventDateSearched = null;
+		this.eventNameSearched = "";
+		int maxEvents = 10; 
+		try {
+			Context ctx = getContext();
+			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
+			
+			
+			if (this.eventFilter.equals(this.optionsEvtCateg[0])){ 
+				this.eventResults = service.filterEventsByEvtCategory(0, maxEvents);
+			} else if (this.eventFilter.equals(this.optionsEvtCateg[1])) {
+				this.eventResults = service.filterEventsByEvtCategory(1, maxEvents);
+			} else if (this.eventFilter.equals(this.optionsEvtCateg[2])) {
+				this.eventResults = service.filterEventsByEvtCategory(2, maxEvents);
+			} else if (this.eventFilter.equals(this.optionsEvtCateg[3])) {
+				this.eventResults = service.filterEventsByEvtCategory(3, maxEvents);
+			}
+			if (this.eventResults == null){
+				this.mensaje = "No se han encontrado resultados";
+				return this.eventResults;
+			}
+
+			paginas = new ArrayList<Integer>();
+			
+			for (int i = 0; i < this.getTotalPaginas(); i++) {
+				paginas.add(new Integer(i));
+			}
+
+			this.eventDateSearched = null;
+			this.eventFilter = "";
+			this.eventNameSearched = "";
+			return this.eventResults.subList(paginaActual*EVENTS_PER_PAGE, 
+					Math.min((paginaActual+1)*EVENTS_PER_PAGE,eventResults.size()));	
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return null;
+		} 
+	}
+
+	
+	
 	public ArrayList<Integer> getPaginas() {
 		return paginas;
 	}

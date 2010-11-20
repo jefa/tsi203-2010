@@ -93,6 +93,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	private static final String ADMIT_MAIL_SUBJECT = "Solicitud para evento";
 	
 	private EventDAO eventDao;
+	private EvtCategoryDAO evtCategoryDao;
 	private ContentCategoryDAO contentCategoryDao;
 	private ContentDAO contentDao;
 	private CommentDAO commentDao;
@@ -128,6 +129,7 @@ public class ServicesEvent implements ServicesEventRemote {
         try {
 			Context ctx = getContext();
 			eventDao = (EventDAO) ctx.lookup("EventDAOBean/local");  
+			evtCategoryDao = (EvtCategoryDAO) ctx.lookup("EvtCategoryDAOBean/local");  
 			contentCategoryDao = (ContentCategoryDAO) ctx.lookup("ContentCategoryDAOBean/local");  
 			contentDao = (ContentDAO) ctx.lookup("ContentDAOBean/local");
 			commentDao = (CommentDAO) ctx.lookup("CommentDAOBean/local");
@@ -153,6 +155,7 @@ public class ServicesEvent implements ServicesEventRemote {
 	@PreDestroy
 	public void preDestroy() {
 		eventDao = null;
+		evtCategoryDao = null;
 		contentDao = null;
 		commentDao = null;
 		normalUserDao = null;
@@ -639,6 +642,30 @@ public class ServicesEvent implements ServicesEventRemote {
 		return TranslatorCollection.translateEventSummary(afterEvents);
 	}
 
+	/**
+	 * type == 0 -> "Aniversario"
+     * type == 1 -> "Casamiento"
+     * type == 2 -> "Cumpleaños de quince"
+     * type == 3 -> "Otro"
+
+	 */
+	public List<DatatypeEventSummary> filterEventsByEvtCategory(
+			int evtCategory, int maxEvents) {
+		String categ;
+		switch (evtCategory){
+			case 0: categ = "Aniversario"; break;
+			case 1: categ = "Casamiento"; break;
+			case 2: categ = "Cumpleaños de quince"; break;
+			case 3: categ = "Otro"; break;
+			default: categ = "";
+		}
+		if (!categ.equals("")) {
+			EvtCategory eventCateg = evtCategoryDao.findByID(categ);
+			List<Event> eventsByCategory = eventDao.findByCategory(eventCateg);
+			return TranslatorCollection.translateEventSummary(eventsByCategory);
+		}
+		return null;
+	}
 	
 	public void commentContent(int contentID, String textComment,
 			String userCommenter) throws Exception {		
@@ -1465,6 +1492,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		
 		return content.getCntIdAuto();	
 	}
+
 
 
 }

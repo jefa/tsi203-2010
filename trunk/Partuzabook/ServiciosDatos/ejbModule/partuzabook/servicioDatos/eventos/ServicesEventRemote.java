@@ -253,6 +253,17 @@ public interface ServicesEventRemote {
      * @param maxEvents				- Max number of events to return 
      */ 
 	public List<DatatypeEventSummary> filterNextEvents(int maxEvents);
+	
+	/**
+     * Returns a list of maxEvents Events of 'type' event category 
+     * type == 0 -> "Aniversario"
+     * type == 1 -> "Casamiento"
+     * type == 2 -> "Cumpleaños de quince"
+     * type == 3 -> "Otro"
+     * @param maxEvents				- Max number of events to return 
+     */ 
+	public List<DatatypeEventSummary> filterEventsByEvtCategory(int evtCategory,int maxEvents);
+	
 
 	/**
 	 * Create a new Comment associated to the content and to the creator user 
