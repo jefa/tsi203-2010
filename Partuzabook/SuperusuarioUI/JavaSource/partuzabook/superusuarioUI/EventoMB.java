@@ -1,6 +1,5 @@
 package partuzabook.superusuarioUI;
 
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,21 +7,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-import javax.faces.context.FacesContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.http.HttpSession;
 
-import org.richfaces.component.Dropzone;
-import org.richfaces.event.DropEvent;
-
-import partuzabook.datatypes.DatatypeAlbum;
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEvent;
-import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.servicioDatos.exception.ContentNotFoundException;
@@ -30,21 +22,18 @@ import partuzabook.servicioDatos.exception.EventNotFoundException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.serviciosNotificaciones.email.PartuzaMailer;
-import partuzabook.serviciosUI.multimedia.ServicesMultimediaRemote;
-import partuzabook.utils.StringUtils;
 
 public class EventoMB {
 	public static final int PAGE_SIZE = 100;
+	public static final boolean isSuperUser = true;
 	
 	private PartuzaMailer mailer = new PartuzaMailer();
 	
-	private ServicesMultimediaRemote servicesMultimedia;
 	private ServicesEventRemote servicesEvent;
 	private ServicesUserRemote servicesUser;
 	
 	private boolean validUserForContext;
 	private boolean userIsModerator;
-	private String userName;
 	
 	private DatatypeEvent evento;
 	private List<DatatypeCategorySummary> categories;
@@ -70,10 +59,6 @@ public class EventoMB {
 	
 	private boolean hasAlbum;
 	
-	private int tagX1;
-	private int tagX2;
-	private int tagY1;
-	private int tagY2;
 	private List<DatatypeUser> candidates;
 	private List<DatatypeUser> results;
 	private String suggest = "";
@@ -87,27 +72,19 @@ public class EventoMB {
 	private DatatypeCategory album;
 	private boolean isAlbumFinalized;
 
-	private boolean isInAlbum;
+	private boolean contentIsInAlbum;
 	
 	private String orderedList = "";
 	
-	public void setOrderedList(String list){
-		this.orderedList = list;
-	}
-	
-	public String getOrderedList(){
-		return this.orderedList;
-	}
-	
-	public void updateOrder() {
-		System.out.println(orderedList);
-		String[] ordList = orderedList.split(",");
-		int[] ord = new int[ordList.length];
-		for(int i = 0; i < ordList.length; i++){
-			ord[i] = Integer.parseInt(ordList[i].substring(8));
-			System.out.println(ord[i]);
+	public EventoMB(){
+		int sessionEvtId = getEvtId();
+		if (sessionEvtId != -1){
+			setEventId(sessionEvtId);
 		}
-		
+	}
+	
+	public boolean getIsSuperUser() {
+		return isSuperUser;
 	}
 	
 	public void setSelectedContent(DatatypeContent selectedContent){
@@ -136,24 +113,14 @@ public class EventoMB {
 
 	public void updateCategory() {
 		System.out.println("Category Update");
-		/*
-		for(Iterator<DatatypeCategorySummary> it = categories.iterator(); it.hasNext(); ) {
-			DatatypeCategorySummary cat = it.next();
-			if(cat.getCategoryId() == categoryId) {
-				setFirstContentType(selectedCategory.getContents().get(0).getType() + "");
-				setFirstContentUrl(selectedCategory.getContents().get(0).getUrl());
-			}
-		}
-		*/
 	}
 	
 	public void setContentId(Integer contentId) {
 		this.contentId = contentId;
 		suggest = null;
-		if (this.userName != null){
-			setSelectedContent(servicesEvent.getContentDetails(contentId, userName));
-			setRating(servicesEvent.getMyRatingForContent(contentId, userName));
-		}
+		
+		setSelectedContent(servicesEvent.getContentDetails(contentId, getUserName()));
+		setRating(servicesEvent.getMyRatingForContent(contentId, getUserName()));
 	}
 
 	public Integer getContentId() {
@@ -162,7 +129,7 @@ public class EventoMB {
 	
 	public void removeContent() {
 		try {
-			getServicesEvent().removeContentFromEvent(eventId, contentId, userName);
+			getServicesEvent().removeContentFromEvent(eventId, contentId, getUserName());
 			setCategoryId(getCategoryId());
 		} catch (EventNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -182,7 +149,7 @@ public class EventoMB {
 			ServicesEventRemote service = getServicesEvent();
 			setContents(service.getAlbumContents(this.eventId));
 		} else {
-			setContents(selectedCategory.getContents());			
+			setContents(selectedCategory.getContents());
 		}
 		setContentsCount(this.selectedCategory.getContents().size());
 		if (getContentsCount() > 0) {
@@ -261,11 +228,15 @@ public class EventoMB {
 			ServicesEventRemote service = getServicesEvent();
 			if (comentario != "") {
 				comentario = comentario.replace("<p>", "").replace("</p>","");
-				service.commentContent(contentId, comentario, userName);
+				service.commentContent(contentId, comentario, getUserName());
 				
-				//TODO: Obtener mail de todos los moderadores
-				String emailTo = getServicesUser().getNormalUserMailAddress(userName);
-				mailer.sendFormattedMail(userName, getServicesUser().getName(userName),
+				//Agrego que en la l�gica se genere una notificaci�n para los moderadores sobre el comentario (GG).
+				
+				//TODO: Javier enviar notificación por mail a los moderadores que hay un nuevo comentario
+				//para el contenido en el evento.
+
+				String emailTo = getServicesUser().getNormalUserMailAddress(getUserName());
+				mailer.sendFormattedMail(getUserName(), getServicesUser().getName(getUserName()),
 						"Se ha agregado comentario a contenido "+contentId, 
 						new SimpleDateFormat().format(new Date()), null, emailTo, null, null, 
 					"Se ha comentado un evento");
@@ -281,7 +252,7 @@ public class EventoMB {
 	public void removeComment() {
 		try {
 			getServicesEvent().removeCommentFromContent(eventId, contentId,
-					userName, commentToRemoveUser, commentToRemoveText);
+					getUserName(), commentToRemoveUser, commentToRemoveText);
 			setContentId(getContentId());
 		} catch (ContentNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -314,20 +285,19 @@ public class EventoMB {
 	}
 
 	public void setUserIsModerator(boolean userIsModerator) {
-		if (eventId != null && userName != null) {
-			this.userIsModerator = getServicesEvent().isUserModeratorInEvent(eventId, userName);
+		if (eventId != null) {
+			this.userIsModerator = getServicesEvent().isUserModeratorInEvent(eventId, getUserName());
 		}
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-		setValidUserForContext(false);
-	}
-
 	public String getUserName() {
-		return this.userName;
+		return SessionUtils.getUsername();
 	}
 
+	public Integer getEvtId() {
+		return SessionUtils.getEventId();
+	}
+	
 	public void setEvento(DatatypeEvent evento) {
 		this.evento = evento;
 		// Setear solamente la categoría publica Album en caso que exista
@@ -337,7 +307,7 @@ public class EventoMB {
 		while (it.hasNext()) {
 			DatatypeCategorySummary dataCateg = it.next();
 			if (dataCateg.getCategory().equals("Album")){
-				newList.add(dataCateg);	
+				newList.add(dataCateg);
 			}
 		}
 		if (!isValidUserForContext()) {
@@ -361,12 +331,16 @@ public class EventoMB {
 			setCategories(newList);
 			setCategoriesCount(newList.size());
 			if (getCategoriesCount() > 0) {
-				setCategoryId(newList.get(0).getCategoryId());				
+				setCategoryId(newList.get(0).getCategoryId());
 			}
 		}
 	}
 
 	public DatatypeEvent getEvento() {
+		int eventParam = getEvtId();
+		if (eventParam != -1) {
+			setEventId(eventParam);
+		}
 		return this.evento;
 	}
 	
@@ -381,14 +355,14 @@ public class EventoMB {
 	}
 	
 	public Integer getEventId() {
-		return this.eventId; 
+		return this.eventId;
 	}
 
 	public void setEventId(Integer eventId){
 		this.eventId = eventId;
 		setValidUserForContext(false);
 		// Also set the Event
-		setEvento(getServicesEvent().getEventDetails(eventId,true));
+		setEvento(getServicesEvent().getEventDetails(eventId, getIsSuperUser()));
 	}
 
 	public void setCategoriesCount(Integer categoriesCount) {
@@ -427,20 +401,6 @@ public class EventoMB {
 		return servicesUser;
 	}
 
-	private ServicesMultimediaRemote getServicesMultimedia() {
-		try {
-			if (servicesMultimedia == null){
-				Context ctx = getContext();
-				this.servicesMultimedia = (ServicesMultimediaRemote) ctx.lookup("PartuzabookEAR/ServicesMultimedia/remote");
-			}
-			return servicesMultimedia;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	private void setCandidates() {
 		try {
 			Context ctx = getContext();
@@ -471,37 +431,11 @@ public class EventoMB {
 		this.results = results;
 	}
 	
-	public String tagUser() {
-		try {
-			Context ctx = getContext();
-			if (suggest != null && suggest != "") {
-				ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-				service.tagUserInContent(contentId, userName, suggest, tagX1, tagY1);
-
-				String emailTo = getServicesUser().getNormalUserMailAddress(userName);
-				mailer.sendFormattedMail(userName, getServicesUser().getName(userName),
-						"Usuario "+userName+" fue taggeado en contenido "+contentId, 
-						new SimpleDateFormat().format(new Date()), null, emailTo, null, null, 
-					"Ud. ha sido taggeado en evento");
-				
-				suggest = null;
-				setContentId(contentId);
-			}
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
 	public void removeTag() {
 		try {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			service.removeTagInContent(contentId, userName, tagToRemoveUserIsReal, tagToRemoveUser);
+			service.removeTagInContent(contentId, getUserName(), tagToRemoveUserIsReal, tagToRemoveUser);
 			suggest = null;
 			setContentId(getContentId());
 		}
@@ -540,7 +474,7 @@ public class EventoMB {
 		try {
 			ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			this.hasAlbum = service.getEventDetails(eventId,true).getHasAlbum(); 
+			this.hasAlbum = service.getEventDetails(eventId, getIsSuperUser()).getHasAlbum(); 
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -551,46 +485,6 @@ public class EventoMB {
 	public void setHasAlbum(boolean album){
 		this.hasAlbum = album;
 	}
-
-	
-	public int getTagX1(){
-		return this.tagX1;
-	}
-
-	public void setTagX1(int tagX1) {
-		this.tagX1 = tagX1;
-	}
-	
-	public int getTagX2() {
-		return tagX2;
-	}
-
-	public void setTagX2(int tagX2) {
-		this.tagX2 = tagX2;
-	}
-
-	public int getTagY1() {
-		return tagY1;
-	}
-
-	public void setTagY1(int tagY1) {
-		this.tagY1 = tagY1;
-	}
-
-	public int getTagY2() {
-		return tagY2;
-	}
-
-	public void setTagY2(int tagY2) {
-		this.tagY2 = tagY2;
-	}
-	/*public DatatypeContent getContentAtPosition(){
-		if (evento == null)
-			return null;
-		if (evento.contents.size() <= 0)
-			return null;
-		return evento.contents.get(position);
-	}*/
 
 	public void setAverageRates(List<Integer> averageRates) {
 		this.averageRates = averageRates;
@@ -616,7 +510,7 @@ public class EventoMB {
 	
 	public void rate() {
 		try {
-			getServicesEvent().rateContent(contentId, rating, userName);
+			getServicesEvent().rateContent(contentId, rating, getUserName());
 			setContentId(getContentId());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -635,33 +529,9 @@ public class EventoMB {
 		return ctx;
 	}
 
-	/*	public List<DatatypeEventSummary> getEventosRecientes() {
-
-		try {
-			Context ctx = getContext();
-			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");
-			eventosRecientes = service.get.getSummaryEvents(10, 5);
-			return eventosRecientes;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public void setEventosRecientes(
-			ArrayList<DatatypeEventSummary> eventosRecientes) {
-		this.eventosRecientes = eventosRecientes;
-	}*/
-
 	private Boolean calcValidUserForContent() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-		this.userName = SessionUtils.getUsername();		
-		if (userName == null) {
-			return false;
-		} 
-		return getServicesMultimedia().isUserRelatedToEvent(eventId, userName);
+		
+		return getServicesEvent().isUserRelatedToEvent(eventId, getUserName());
 	}
 	
 	public void sendAdmitMail() {
@@ -684,15 +554,15 @@ public class EventoMB {
 		return firstContentUrl;
 	}
 
-	public boolean getIsInAlbum(){
+	public boolean getContentIsInAlbum(){
 		if (this.selectedContent == null){
 			return false;
 		}
 		return this.selectedContent.getPosAlbum() != null;
 	}
 	
-	public void setIsInAlbum(boolean is){
-		this.isInAlbum = is;
+	public void setContentIsInAlbum(boolean contentIsInAlbum){
+		this.contentIsInAlbum = contentIsInAlbum;
 	}
 	
 	public DatatypeCategory getAlbum(){
@@ -713,7 +583,7 @@ public class EventoMB {
 
 	public boolean getAlbumExists(){
 		DatatypeCategory album = getAlbum();
-		if (album == null) {	
+		if (album == null) {
 			this.albumExists = false;
 		} else {
 			this.album = album;
@@ -734,7 +604,7 @@ public class EventoMB {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;	
+		return false;
 	}
 	
 	public void setIsAlbumFinalized(boolean is){
@@ -773,51 +643,12 @@ public class EventoMB {
 
 	
 	
-	public void moverUnaPosAtras(){
-		try{
-			ServicesEventRemote service = getServicesEvent();
-		//	service.changePosInAlbum(this.contentId, this.eventId, this.selectedContent.getPosAlbum()-1) ;
-			setCategoryId(this.categoryId);			
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-	}
-
-	public void moverUnaPosAdelante(){
-		try{
-			ServicesEventRemote service = getServicesEvent();
-		//	service.changePosInAlbum(this.contentId, this.eventId, this.selectedContent.getPosAlbum()+1) ;
-			setCategoryId(this.categoryId);			
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+	public void setOrderedList(String list){
+		this.orderedList = list;
 	}
 	
-	public void finalizarAlbum(){
-		System.out.println(orderedList);
-		String[] ordList = orderedList.split(",");
-		int[] ord = new int[ordList.length];
-		for(int i = 0; i < ordList.length; i++){
-			ord[i] = Integer.parseInt(ordList[i].substring(8));
-			System.out.println(ord[i]);
-		}
-		try{
-			ServicesEventRemote service = getServicesEvent();
-			service.changeAlbumOrder(this.eventId, ord);
-			service.finalizeAlbum(this.eventId);
-		} catch(Exception e){
-			e.printStackTrace();
-		}
+	public String getOrderedList(){
+		return this.orderedList;
 	}
 
-	public void processDrop(DropEvent dropEvent) {
-		Dropzone dropzone = (Dropzone) dropEvent.getComponent();
-		Object dragValue = dropEvent.getDragValue();
-		Object dropValue = dropzone.getDropValue();
-		ServicesEventRemote service = getServicesEvent();
-		DatatypeContent draggedCont = (DatatypeContent) dragValue;
-		DatatypeContent droppedCont = (DatatypeContent) dropValue;
-//		service.changePosInAlbum(draggedCont.getContId(), this.eventId, 
-//				droppedCont.getPosAlbum()) ;
-	}
 }

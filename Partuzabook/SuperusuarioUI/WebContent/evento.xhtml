@@ -5,7 +5,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:rich="http://richfaces.org/rich">
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 
 
@@ -14,30 +15,50 @@
 	<ui:define name="styles">
 	.main-aside {width:300px;}
 	#container {width:660px;}
-	#content {width:660px;} 
+	#content {width:660px;}
 	</ui:define>
 
 	<ui:define name="body">
 		<script type="">
-			function toggleTab(control, tab)
+			function toggleTab(control, tab, prefix)
 			{
-				jQuery('div.ui-tabs-panel').addClass('ui-tabs-hide');
+				jQuery('div.ui-tabs-panel[id|="'+prefix+'"]').addClass('ui-tabs-hide');
 				jQuery('#' + control).fadeIn();
 				jQuery('#' + control).removeClass('ui-tabs-hide');
-				jQuery('ul.ui-tabs-nav li').removeClass('ui-tabs-selected ui-state-active');
+				jQuery(tab.parentNode.parentNode.children).removeClass('ui-tabs-selected ui-state-active');
 				jQuery(tab.parentNode).addClass('ui-tabs-selected ui-state-active');
-				jQuery("#ulCategories li." + document.getElementById("formThumb:catName").value).addClass("ui-tabs-selected ui-state-active");
+				jQuery("#ulCategories li." + document.getElementById("formCategory:catName").value).addClass("ui-tabs-selected ui-state-active");
 			}
 		</script>
+		<script type="text/javascript">
+			function posVideoLbl() {
+				//document.getElementById('videoLbl').style.top = document.getElementById('formUploadContent:addPhotoButton').offsetTop + 490 + "px";
+				document.getElementById('videoLbl').style.top = document.getElementById('panelThumbs').offsetTop + 352 + "px";								
+			}
+			function refreshVideoLbl() {
+				var type = document.getElementById('cntType').value;
+				if( type == 1 || type == 3){
+					document.getElementById('videoLbl').show();
+				} else {
+					document.getElementById('videoLbl').hide();
+				}
+			}
+		</script>
+
 		<link rel="stylesheet" href="styles/pikachoose/styles.css"
 			type="text/css" />
 		<link rel="stylesheet" href="styles/lightbox/jquery.lightbox-0.5.css"
 			type="text/css" />
+		<link rel="stylesheet" href="styles/annotation/annotation.css"
+			type="text/css" />
+		<script type="text/javascript" src="scripts/jquery-ui-1.7.1.js"></script>
 		<script type="text/javascript" src="scripts/jquery.pikachoose.js"></script>
 		<script type="text/javascript" src="scripts/jquery.jcarousel.js"></script>
 		<script type="text/javascript" src="scripts/jquery.lightbox-0.5.js"></script>
+		<script type="text/javascript" src="scripts/jquery.annotate.js"></script>
+		<script type="text/javascript" src="scripts/googlemaps.js"></script>
 
-		<h:panelGroup id="panelEvento">
+		<h:panelGroup id="panelEvento" rendered="#{eventoMB.evento != null}">
 			<div id="index-featured2">
 			<ul class="hfeed posts-quick clearfix">
 				<li class="post type-post clearfix">
@@ -47,30 +68,17 @@
 				<h3 class="entry-title">#{eventoMB.evento.evtName}</h3>
 				<div class="entry-summary">
 				<div class="entry-info"><abbr class="published">#{eventoMB.evento.formattedDate}</abbr>
+				<abbr class="published">#{eventoMB.evento.eventCategory}</abbr> <abbr
+					class="published">#{eventoMB.evento.address}</abbr> <abbr
+					class="published">#{eventoMB.evento.duration}</abbr> <abbr
+					class="published">Moderadores: <a4j:repeat
+					value="#{eventoMB.evento.modsUsernames}" var="mods">
+					<h:outputText value="#{mods} " />
+				</a4j:repeat> </abbr><br />
+				<abbr class="published">Descripción:<br />
+				#{eventoMB.evento.description}</abbr></div>
 				</div>
-				<div class="entry-info"><abbr class="published">#{eventoMB.evento.description}</abbr>
-				</div>
-				<h:inputHidden id="hiddenHashtag" value="#{eventoMB.evento.hashtag}" />
-				</div>
-				<h:form id="formUploadContent"
-					rendered="#{eventoMB.validUserForContext}">
-					<h:commandButton value="Añadir fotos" action="subirFoto">
-						<f:setPropertyActionListener value="#{eventoMB.eventId}"
-							target="#{subirFotoMB.idEvento}" />
-					</h:commandButton>
-					<h:commandButton value="Añadir videos" action="subirVideo">
-						<f:setPropertyActionListener value="#{eventoMB.eventId}"
-							target="#{subirVideoMB.eventId}" />
-					</h:commandButton>
-					<h:commandButton value="Modificar Album" action="modificarAlbum">
-						<f:setPropertyActionListener value="#{eventoMB.album}"
-							target="#{eventoMB.selectedCategory}" />
-					</h:commandButton>
-					<h:commandButton value="Modificar Evento" action="modEvento">
-						<f:setPropertyActionListener value="#{eventoMB.eventId}"
-								target="#{EventMB.evt_id}" />
-					</h:commandButton>
-				</h:form></li>
+				</li>
 			</ul>
 			<!-- .posts-quick --></div>
 			<!-- #index-featured2 -->
@@ -88,18 +96,43 @@
 			<br />
 			<h:outputText>Puede solicitar autorizacion enviando un mensaje al moderador.</h:outputText>
 			<br />
-			<h:commandButton value="Enviar solicitud" />
+			<h:form>
+				<h:commandButton value="Enviar solicitud"
+					action="#{eventoMB.sendAdmitMail}" />
+			</h:form>
 		</h:panelGroup>
-		<h:panelGroup id="authorizedContent"
-			rendered="#{eventoMB.validUserForContext || (eventoMB.hasAlbum and eventoMB.isAlbumFinalized)}">
+		<h:panelGroup id="authorizedContent" style="padding-top:10px"
+			rendered="#{eventoMB.validUserForContext || eventoMB.hasAlbum}">
+			<h:form id="formUploadContent"
+				rendered="#{eventoMB.validUserForContext}">
+				<h:commandButton value="Añadir fotos" action="subirFoto"
+					id="addPhotoButton">
+					<f:setPropertyActionListener value="#{eventoMB.eventId}"
+						target="#{subirFotoMB.idEvento}" />
+				</h:commandButton>
+				<h:commandButton value="Añadir videos" action="subirVideo"
+					id="addVideoButton">
+					<f:setPropertyActionListener value="#{eventoMB.eventId}"
+						target="#{subirVideoMB.eventId}" />
+				</h:commandButton>
+				<h:commandButton value="Añadir contenido externo"
+					id="addExternButton" action="subirContExterno">
+					<f:setPropertyActionListener value="#{eventoMB.eventId}"
+						target="#{subirContExternoMB.eventId}" />
+				</h:commandButton>
+				<h:commandButton value="Modificar Album" rendered="#{eventoMB.isSuperUser}" action="modificarAlbum">
+					<f:setPropertyActionListener value="#{eventoMB.album}"
+						target="#{eventoMB.selectedCategory}" />
+				</h:commandButton>
+				<h:commandButton value="Modificar Evento" rendered="#{eventoMB.isSuperUser}" action="modEvento">
+					<f:setPropertyActionListener value="#{eventoMB.eventId}"
+						target="#{EventMB.evt_id}" />
+				</h:commandButton>
+			</h:form>
 			<a4j:outputPanel id="panelCategories">
 				<h:form id="formCategory">
 					<h:inputHidden id="catName"
 						value="#{eventoMB.selectedCategory.category}" />
-					<script>
-						jQuery("#ulCategories li").removeClass("ui-tabs-selected ui-state-active");
-						jQuery("#ulCategories li." + document.getElementById("formCategory:catName").value).addClass("ui-tabs-selected ui-state-active");
-					</script>
 
 					<div
 						class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
@@ -110,99 +143,300 @@
 								href="javascript:null()"
 								onclick="toggleTab('s-'+#{category.category},this)"> <a4j:commandLink
 								value="#{category.category}" action="#{eventoMB.updateCategory}"
-								reRender="authorizedContent,panelTags,panelComments">
+								reRender="authorizedContent,panelContentDetails"
+								oncomplete="refreshVideoLbl();">
 								<f:setPropertyActionListener target="#{eventoMB.categoryId}"
 									value="#{category.categoryId}" />
 							</a4j:commandLink> </a></li>
 						</a4j:repeat>
 					</ul>
 					</div>
-					<h:inputHidden id="cntType" value="#{eventoMB.firstContentType}" />
-					<h:inputHidden id="cntUrl" value="#{eventoMB.firstContentUrl}" />
+
+					<script>
+						jQuery("#ulCategories li").removeClass("ui-tabs-selected ui-state-active");
+						jQuery("#ulCategories li." + document.getElementById("formCategory:catName").value).addClass("ui-tabs-selected ui-state-active");
+					</script>
 
 				</h:form>
+
+				<h:inputHidden id="cntType" value="#{eventoMB.firstContentType}" />
+				<h:inputHidden id="cntUrl" value="#{eventoMB.firstContentUrl}" />
+				<h:inputHidden id="cntId" value="#{eventoMB.contentId}" />
+
 			</a4j:outputPanel>
 			<a4j:outputPanel id="panelNoContents"
 				rendered="#{eventoMB.contentsCount == 0}">
-			No hay contenidos para esta categ
+				No hay contenidos para esta categoria
 			</a4j:outputPanel>
 
 			<a4j:form id="panelThumbs" rendered="#{eventoMB.contentsCount > 0}">
+				<div id="container-image-annotate-text" style="display: none">
+				<h:inputText id="image-annotate-text" /></div>
+				<rich:suggestionbox id="suggestionBoxId" for="image-annotate-text"
+					tokens=",[" suggestionAction="#{eventoMB.autocomplete}"
+					var="result" nothingLabel="No se encuentran usuarios"
+					columnClasses="center">
+					<div><h:column>
+						<h:outputText value="#{result.username}" style="display:none" />
+					</h:column> <h:column>
+						<h:outputText value="#{result.name}" />
+					</h:column> <h:column>
+						<h:graphicImage
+							value="/UserImageFeeder?username=#{result.username}&#38;thb=30" />
+					</h:column></div>
+				</rich:suggestionbox>
 				<div class="pikachoose" style="height: 620px;"><h:inputHidden
 					id="selectContentId" value="#{eventoMB.contentId}" /> <a4j:commandButton
 					id="btnSelectThumb" action="#{eventoMB.updateCategory}"
-					reRender="panelRating,panelTags,panelComments,panelAlbum"
-					style="display:none;">
+					reRender="panelContentDetails" style="display:none;">
 				</a4j:commandButton>
 				<ul id="pikame" class="jcarousel-skin-pika">
-					<a4j:repeat value="#{eventoMB.contents}"
+					<a4j:repeat value="#{eventoMB.selectedCategory.contents}"
 						var="content">
 						<li><h:graphicImage
-							value="/ContentFeeder?id=#{content.contId}"
+							rendered="#{content.type eq 0 || content.type eq 2}"
+							value="/ContentFeeder?id=#{content.contId}&#38;thb=74"
 							name="#{content.contId}"
-							onclick="document.getElementById('cntType').setAttribute('value','#{content.type}'); document.getElementById('cntUrl').setAttribute('value','#{content.url}');" />
-						<span>#{content.description}</span></li>
+							onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId')document.getElementById('videoLbl').hide().value='#{content.contId}';" />
+						<h:graphicImage
+							rendered="#{content.type eq 1 || content.type eq 3}"
+							value="#{content.youtubeUrlScreen}" name="#{content.contId}"
+							onclick="document.getElementById('cntType).value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId')document.getElementById('videoLbl').show()).value='#{content.contId}';" />
+						<span>#{content.description}<br />
+						Por: #{content.uploadedBy}</span></li>
 					</a4j:repeat>
 				</ul>
+				<h:graphicImage id="videoLbl" value="/images/video.png"
+					style="position:absolute;left:20px" />
 				<script>
 					jQuery("#pikame").PikaChoose();
-					jQuery("#pikame").jcarousel({scroll:5,					
+					jQuery("#pikame").jcarousel({scroll:5,
 						initCallback: function(carousel) {
 					        $(carousel.list).find('img').click(function() {
 				          		carousel.scroll(parseInt($(this).ancestors()[1].getAttribute('jcarouselindex')));
 				        	});
 					    }
 			    	});
-					var img = jQuery(".pika-image a.image-selected");
-					img.lightBox();
-			    </script></div>
+			    	var thumbs = jQuery("div.jcarousel-skin-pika");
+			    	var navigation = jQuery("div.pika-imgnav");
+					var imageSelected = jQuery("div.pika-image a.image-selected");
+			    	var lightboxHref = imageSelected.attr('href');
+			    	var cleanClone = imageSelected.clone();
+					initImageSelected();
+					function beginTag() {
+						jQuery('#formTag\\:btnBeginTag').hide();
+						jQuery('#formTag\\:btnEndTag').show();
 
-									
+						clearImageSelected();
+						thumbs.hide();
+						navigation.hide();
+
+						imageSelected.removeAttr('href');
+						imageSelected.show();
+						var img = imageSelected.children("img");
+						img.annotateImage({
+							editable: true,
+							useAjax: true,
+							getUrl: "GetTagsForContent",
+							saveUrl: "SendTagsForContent",
+							deleteUrl: "DeleteTagsForContent",
+							pickFromButton: false,
+							photoId: document.getElementById("panelThumbs:selectContentId").value
+						});
+						jQuery("#image-annotate-add").removeAttr('href');
+					}
+					function endTag() {
+						jQuery('#formTag\\:btnBeginTag').show();
+						jQuery('#formTag\\:btnEndTag').hide();
+
+						clearImageSelected();
+						thumbs.show();
+						navigation.show();
+						
+						initImageSelected();
+					}
+					function clearImageSelected() {
+						imageSelected = cleanClone.clone();
+						jQuery("div.pika-image a.image-selected").remove();
+						var imageSelectedContainer = jQuery("div.pika-image");
+						imageSelectedContainer.prepend(imageSelected);
+						//aimg = aimgclone;
+					}
+					function initImageSelected() {
+						if (imageSelected) {
+							imageSelected.lightBox();
+							var img = imageSelected.children("img");
+							img.annotateImage({
+								editable: false,
+								useAjax: true,
+								getUrl: "GetTagsForContent",
+								photoId: document.getElementById("panelThumbs:selectContentId").value
+							});
+						}
+					}
+					function updateCleanClone() {
+						if (imageSelected) {
+							cleanClone = imageSelected.clone();
+						}
+					}
+				</script></div>
 			</a4j:form>
+		</h:panelGroup>
+	</ui:define>
+	<ui:define name="sidebar"
+		rendered="#{eventoMB.validUserForContext and (eventoMB.contentsCount > 0)}">
+		<ul class="xoxo" id="ulSidebar">
+			<li class="multi-sidebar-container">
+			<div
+				class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
+			<ul
+				class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+				<li
+					class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a
+					href="javascript:null()" onclick="toggleTab('evt-gmap',this,'evt')"><span>Mapa</span></a></li>
+				<li class="ui-state-default ui-corner-top"><a
+					href="javascript:null()"
+					onclick="toggleTab('evt-twitter',this,'evt')"><span>Twitter</span></a></li>
 
+			</ul>
+			<div id="evt-gmap"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
+			<div id="gmap"><rich:gmap gmapVar="map"
+				style="width:278px;height:278px" id="map"
+				lat="#{eventoMB.evento.latitude}" lng="#{eventoMB.evento.longitude}"
+				enableDoubleClickZoom="true" showGScaleControl="true" zoom="16"
+				mapType="G_NORMAL_MAP" showGMapTypeControl="true"
+				showGLargeMapControl="true" />
+				<h:inputHidden value="#{eventoMB.evento.latitude}"/>
+				<h:inputHidden value="#{eventoMB.evento.longitude}"/>
+			</div>
+			</div>
+			<div id="evt-twitter" style="height: 278px; overflow: auto"
+				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<h:form id="formTwitter">
+				<h:inputHidden id="hiddenHashtag" value="#{eventoMB.evento.hashtag}" />
+				<a href="http://twitter.com/share" class="twitter-share-button"
+					data-text="#{eventoMB.evento.hashtag}" data-count="none"
+					data-lang="es" data-url="www.partuzabook.com">Tweet</a>
+				<script type="text/javascript"
+					src="http://platform.twitter.com/widgets.js"></script>
+
+				<div id="index-featured2">
+				<ul id="twitter" class="hfeed posts-quick-tag clearfix"
+					style="margin-top: 5px">
+				</ul>
+				</div>
+			</h:form> <script type="text/javascript">
+		//<![CDATA[
+        var twitterQuery = encodeURIComponent (document.getElementById("formTwitter:hiddenHashtag").value);
+        var requestUrl = "http://search.twitter.com/search.json?q=@query&show_user=true&rpp=10&callback=?".
+            replace (/@query/g, twitterQuery);
+            
+        jQuery.getJSON (requestUrl, function (data)
+        {
+			if (data.results == null)
+			{
+             	var tweet_html = '<li class="post type-post clearfix">';
+				tweet_html += 'No hay tweets sobre el evento :( ';
+                tweet_html += '</li>';
+                jQuery('#twitter').append(tweet_html);
+			}
+			else jQuery.each(data.results, function (i, tweet)
+			{
+             	var tweet_html = '<li class="post type-post clearfix">';
+				tweet_html += '<div style="float:left;margin-right:5px">';
+                tweet_html += '<a href="http://twitter.com/' + tweet.from_user + '" target="_blank">';
+                tweet_html += '<img src="' + tweet.profile_image_url + '" /></a></div>'
+				tweet_html += '<strong><a href="http://twitter.com/' + tweet.from_user + '" target="_blank">';
+				tweet_html += tweet.from_user + '</a></strong>';
+				tweet_html += '<div class="entry-summary">' + tweet.text + '</div>';
+                tweet_html += '</li>';
+                jQuery('#twitter').append(tweet_html);
+			});
+		;
+			
+        });
+      //]]>
+		</script></div>
+
+			</div>
+			<script>window.onload=function(){
+			addMarkerWithInfo(map, "#{eventoMB.evento.latitude}", "#{eventoMB.evento.longitude}", '#{eventoMB.evento.address}', '', '');
+			posVideoLbl();
+			refreshVideoLbl();
+		}</script></li>
+		</ul>
+		<a4j:outputPanel id="panelContentDetails"
+			rendered="#{eventoMB.validUserForContext and fn:length(eventoMB.contents) > 0}">
+			<a4j:commandLink rendered="#{eventoMB.userIsModerator}"
+				onclick="if(!confirm('¿Eliminar el contenido?'))return false;"
+				value="Eliminar contenido" action="#{eventoMB.removeContent}"
+				reRender="authorizedContent,panelContentDetails"
+				style="float:right;">
+				<h:graphicImage value="/images/close.png" alt="Eliminar contenido" />
+			</a4j:commandLink>
 			<a4j:form id="panelSetCover" >
 				<h:panelGroup rendered="#{eventoMB.selectedContent.type eq 0 || eventoMB.selectedContent.type eq 2}">
 					<a4j:commandButton value="Fijar como portada del evento"
 						action="#{eventoMB.setearCoverEvento}"
 						reRender="panelEvento" />
 				</h:panelGroup>
-			</a4j:form>		
-
-			<a4j:form id="panelAlbum" >		
+			</a4j:form>
+			<a4j:form id="panelAlbum" rendered="#{eventoMB.isSuperUser}">
 				<h:panelGroup
 					rendered="#{eventoMB.albumExists and !eventoMB.isAlbumFinalized}">
-					<h:panelGroup rendered="#{eventoMB.isInAlbum}">
+					<h:panelGroup rendered="#{eventoMB.contentIsInAlbum}">
 						<a4j:commandButton value="Quitar del Album"
 							action="#{eventoMB.quitarContenidoAlbum}"
-							reRender="authorizedContent,panelTags,panelComments,panelAlbum" />
+							reRender="authorizedContent,panelContentDetails" />
 					</h:panelGroup>
-					<h:panelGroup rendered="#{!eventoMB.isInAlbum}">
-
-						<h:column>
-							<a4j:commandButton value="Agregar al Album"
-								action="#{eventoMB.agregarContenidoAlbum}"
-								reRender="panelContent,panelAlbum" />
-						</h:column>
-						<h:column>
-							<a4j:commandLink
-								onclick="if(!confirm('¿Eliminar el contenido?'))return false;"
-								value="Eliminar contenido" action="#{eventoMB.removeContent}"
-								reRender="authorizedContent,panelTags,panelComments,panelCategories"
-								style="float:right;">
-								<h:graphicImage value="/images/close.png"
-									alt="Eliminar contenido" />
-							</a4j:commandLink>
-						</h:column>
+					<h:panelGroup rendered="#{!eventoMB.contentIsInAlbum}">
+						<a4j:commandButton value="Agregar al Album"
+							action="#{eventoMB.agregarContenidoAlbum}" reRender="panelAlbum" />
 					</h:panelGroup>
 				</h:panelGroup>
-				
-			</a4j:form>
 
-			<a4j:outputPanel id="panelRating" rendered="#{eventoMB.contentsCount > 0}">
-					<h:form id="formRating">
-						<span id="hover-test" style="margin: 0 0 0 20px;"></span>
-						<rich:jQuery selector="#formRating .hover-star"
-							query="rating({
+			</a4j:form>
+			<a4j:outputPanel id="panelTagsCount"
+				rendered="#{eventoMB.isSuperUser}">
+				<br />
+				<div id="index-featured2">
+				<ul class="hfeed posts-quick-tag clearfix">
+					<h:outputText
+						value="Cantidad de etiquetados: #{eventoMB.tagsCount}" />
+				</ul>
+				</div>
+			</a4j:outputPanel>
+			<a4j:outputPanel id="panelCommentsCount"
+				rendered="#{eventoMB.isSuperUser}">
+				<div id="index-featured2">
+				<ul class="hfeed posts-quick-tag clearfix">
+					<h:outputText
+						value="Cantidad de comentarios: #{eventoMB.commentsCount}" />
+				</ul>
+				</div>
+				<br />
+			</a4j:outputPanel>
+			<a4j:outputPanel id="panelRating">
+				<a4j:form id="formRating">
+					<div>Tu calificación:</div>
+					<a4j:commandButton id="btnRate" action="#{eventoMB.rate}"
+						style="display:none;" reRender="panelRating">
+					</a4j:commandButton>
+					<h:inputHidden id="txtRating" value="#{eventoMB.rating}" />
+					<input type="radio" class="hover-star" name="myRating" value="1"
+						title="Malo" />
+					<input type="radio" class="hover-star" name="myRating" value="2"
+						title="Regular" />
+					<input type="radio" class="hover-star" name="myRating" value="3"
+						title="Bueno" />
+					<input type="radio" class="hover-star" name="myRating" value="4"
+						title="Muy bueno" />
+					<input type="radio" class="hover-star" name="myRating" value="5"
+						title="Excelente!" />
+					<span id="hover-test" style="margin: 0 0 0 20px;"></span>
+					<rich:jQuery selector="#formRating .hover-star"
+						query="rating({
 								focus: function(value, link){
 									var tip = jQuery('#hover-test');
 									tip[0].data = tip[0].data || tip.html();
@@ -218,117 +452,74 @@
 									$('formRating:btnRate').click();
 								}
 							}).rating('select', #{eventoMB.rating} + '', false);"></rich:jQuery>
-					</h:form>
-
-					<h:outputText value="Calificación global: " />
-					<h:form id="formGlobalRating">
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="0.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="1" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="1.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="2" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="2.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="3" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="3.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="4" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="4.5" />
-						<input type="radio" class="hover-star {half:true}"
-							name="globalRating" value="5" />
-						<rich:jQuery selector="#formGlobalRating .hover-star"
-							query="rating({}).rating('select', #{eventoMB.selectedContent == null ? 0 : eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
-					</h:form>
-
+				</a4j:form>
+				<h:form id="formGlobalRating">
+					<div>Calificación global:</div>
+					<div><input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="0.5" /> <input type="radio"
+						class="hover-star {half:true}" name="globalRating" value="1" /> <input
+						type="radio" class="hover-star {half:true}" name="globalRating"
+						value="1.5" /> <input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="2" /> <input type="radio"
+						class="hover-star {half:true}" name="globalRating" value="2.5" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="3" /> <input type="radio"
+						class="hover-star {half:true}" name="globalRating" value="3.5" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="4" /> <input type="radio"
+						class="hover-star {half:true}" name="globalRating" value="4.5" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="5" /> <rich:jQuery
+						selector="#formGlobalRating .hover-star"
+						query="rating({}).rating('select', #{eventoMB.selectedContent == null ? 0 : eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
+					</div>
+				</h:form>
 			</a4j:outputPanel>
-			
-			<br/>
-			<a4j:outputPanel id="panelTagsCount" >			
-				<div id="index-featured2">
-				<ul class="hfeed posts-quick-tag clearfix">
-					<h:outputText value="Cantidad de etiquetados: #{eventoMB.tagsCount}"/>
-				</ul></div>
-			</a4j:outputPanel>
-
-			<a4j:outputPanel id="panelCommentsCount" >			
-				<div id="index-featured2">
-				<ul class="hfeed posts-quick-tag clearfix">
-					<h:outputText value="Cantidad de comentarios: #{eventoMB.commentsCount}"/>
-				</ul></div>
-			</a4j:outputPanel>
-							
-		</h:panelGroup>
-
-	</ui:define>
-	<ui:define name="sidebar"
-		rendered="#{eventoMB.validUserForContext and (eventoMB.contentsCount > 0)}">
-		<ul class="xoxo" id="ulSidebar">
-			<li class="multi-sidebar-container">
-			<div
-				class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
-			<ul
-				class="tabs clearfix ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-				<li
-					class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a
-					href="javascript:null()" onclick="toggleTab('s-etiquetados',this)"><span>Etiquetados</span></a></li>
-				<li class="ui-state-default ui-corner-top"><a
-					href="javascript:null()" onclick="toggleTab('s-comentarios',this)"><span>Comentarios</span></a></li>
-				<li class="ui-state-default ui-corner-top"><a
-					href="javascript:null()" onclick="toggleTab('s-twitter',this)"><span>Twitter</span></a></li>
-			</ul>
-			<div id="s-etiquetados"
-				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
-			<a4j:outputPanel id="panelTags"
-				rendered="#{eventoMB.contentsCount > 0}">
-				<h:form id="tagPublicProfile">
+			<a4j:form id="formTag"
+				rendered="#{eventoMB.hasAlbum || eventoMB.validUserForContext}">
+				<a4j:commandButton id="btnBeginTag" onclick="beginTag();"
+					value="Etiquetar" />
+				<a4j:commandButton id="btnEndTag" onclick="endTag();"
+					value="Finalizar etiquetado" style="display:none " />
+			</a4j:form>
+			<a4j:outputPanel id="panelComments"
+				rendered="#{eventoMB.hasAlbum || eventoMB.validUserForContext}">
+				<h:form id="formCommentContent">
 					<div id="index-featured2">
 					<ul class="hfeed posts-quick-tag clearfix">
-						<a4j:repeat value="#{eventoMB.selectedContent.tags}" var="tag">
-							<li class="post type-post clearfix">
-							<div class="entry-thumbnails-tag">
-								<h:graphicImage
-									value="/UserImageFeeder?username=#{tag.userName}&#38;thb=50"
-									styleClass="attachment-quick-preview-thumb wp-post-image" />
-							 <h:graphicImage rendered="#{!tag.isRealUser}"
-								value="/UserImageFeeder?username=__unr_#{tag.userName}&#38;thb=50"
-								styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
-							<h5 class="entry-title">
-							<h:outputText rendered="#{!tag.isRealUser}" value="#{tag.name}" />
-							</h5>
-							</li>
-						</a4j:repeat>
+						<li class="post type-post clearfix">
+						<div class="entry-thumbnails-tag"><h:graphicImage
+							value="/UserImageFeeder?username=#{loginMB.userName}&#38;thb=50"
+							styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
+						<h5 class="entry-title"><h:inputText
+							value="#{eventoMB.comentario}"
+							onfocus="if(value=='Escribe un comentario...')value=''"
+							onblur="if(value=='')value='Escribe un comentario...'" /> <a4j:commandButton
+							value="Comentar" action="#{eventoMB.comentar}"
+							reRender="panelComments">
+						</a4j:commandButton></h5>
+						</li>
 					</ul>
 					<!-- .posts-quick --></div>
 					<!-- #index-featured2 -->
 				</h:form>
-			</a4j:outputPanel></div>
-
-			<div id="s-comentarios"
-				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-			<a4j:outputPanel id="panelComments"
-				rendered="#{eventoMB.contentsCount > 0}">
 				<h:panelGroup layout="block" id="commentPanel">
-					<h:form id="formComments">
-						<div id="index-featured2">
-						<ul class="hfeed posts-quick-tag clearfix">
-							<a4j:repeat value="#{eventoMB.selectedContent.comments}"
-								var="comment">
-								<li class="post type-post clearfix">
+					<div id="index-featured2">
+					<ul class="hfeed posts-quick-tag clearfix">
+						<a4j:repeat value="#{eventoMB.selectedContent.comments}"
+							var="comment">
+							<li class="post type-post clearfix"><h:form
+								id="formCommentsImage">
 								<div class="entry-thumbnails-tag">
 									<h:graphicImage
 										value="/UserImageFeeder?username=#{comment.userId}&#38;thb=50"
 										styleClass="attachment-quick-preview-thumb wp-post-image" />
 								</div>
-								<a4j:commandLink
-									onclick="if (!window.confirm('¿Eliminar el comentario #{comment.text}?')) {return false}"
-									action="#{eventoMB.removeComment}" reRender="panelComments"
-									style="float:right;">
+							</h:form> <h:form id="formRemoveComment"
+								rendered="#{eventoMB.userIsModerator}">
+								<a4j:commandLink action="#{eventoMB.removeComment}"
+									onclick="if(!confirm('¿Eliminar el comentario #{comment.text}?'))return false;"
+									reRender="panelComments" style="float:right;">
 									<f:setPropertyActionListener value="#{comment.userId}"
 										target="#{eventoMB.commentToRemoveUser}" />
 									<f:setPropertyActionListener value="#{comment.text}"
@@ -336,60 +527,22 @@
 									<h:graphicImage value="/images/close.png"
 										alt="Eliminar comentario" />
 								</a4j:commandLink>
-
-								<h5 class="entry-title"><strong>#{comment.userName} </strong></h5>
-								<div class="entry-summary">#{comment.text}</div>
-								</li>
-							</a4j:repeat>
-						</ul>
-						<!-- .posts-quick --></div>
-						<!-- #index-featured2 -->
-					</h:form>
+							</h:form> <h:form id="formCommentUser">
+								<h5 class="entry-title"><h:commandLink
+									value="#{comment.userName}" action="verPerfil">
+									<f:setPropertyActionListener value="#{comment.userId}"
+										target="#{Profile.userId}" />
+								</h:commandLink></h5>
+							</h:form>
+							<div class="entry-summary">#{comment.text}</div>
+							</li>
+						</a4j:repeat>
+					</ul>
+					<!-- .posts-quick --></div>
+					<!-- #index-featured2 -->
 				</h:panelGroup>
-			</a4j:outputPanel></div>
-			<div id="s-twitter"
-				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-			<h:form id="formTwitter">
-				<h:inputHidden id="hiddenHashtag" value="#{eventoMB.evento.hashtag}" />
-				<div id="index-featured2">
-				<ul id="twitter" class="hfeed posts-quick-tag clearfix">
-				</ul>
-				</div>
-			</h:form> <script type="text/javascript">
-		//<![CDATA[
-        var twitterQuery = encodeURIComponent (document.getElementById("formTwitter:hiddenHashtag").value);
-        var requestUrl = "http://search.twitter.com/search.json?q=@query&show_user=true&rpp=10&callback=?".
-            replace (/@query/g, twitterQuery);
-            
-        jQuery.getJSON (requestUrl, function (data)
-        {
-			jQuery.each(data.results, function (i, tweet)
-			{
-                
-                var date_tweet = new Date(tweet.created_at);
-                var date_now   = new Date();
-                var date_diff  = date_now - date_tweet;
-                var hours      = Math.round(date_diff/(1000*60*60));
-
-                var tweet_html = '<li class="post type-post clearfix">';
-				tweet_html += '<div class="entry-thumbnails-tag">';
-                tweet_html += '<a href="' + tweet.from_user + '" target="_blank">';
-                tweet_html += '<img src="' + tweet.profile_image_url + '" style="display:inline;" /></a>'
-				tweet_html += '<h5 class="entry-title"><a href="http://twitter.com/' + tweet.from_user + '" target="_blank">';
-				tweet_html += tweet.from_user + '</a></h5>';
-				tweet_html += '<div class="entry-summary">' + tweet.text + '</div>';
-                tweet_html += '<div class="tweet_hours">' + hours;
-                tweet_html += ' hours ago</div>';
-				tweet_html += '</div>';
-                tweet_html += '</li>';
-                jQuery('#twitter').append(tweet_html);
-			});
-        });
-      //]]>
-		</script></div>
-			</div>
-			</li>
-		</ul>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
 	</ui:define>
 </ui:composition>
 </html>

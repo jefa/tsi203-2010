@@ -5,7 +5,7 @@
   src: local('Yanone-thin'), url('http://themes.googleusercontent.com/font?kit=We_iSDqttE3etzfdfhuPRfYfc3bPVUtuDoUoHMkf5-E') format('truetype');
 }
 
-.pikachoose{width:645px;position:relative;margin:45px 15px 10px 0}
+.pikachoose{width:645px;position:relative; margin:10px 15px 10px 0}
 
 .pika-image {position: absolute; top:100px; right:0; height: 480px; width: 625px; background: #fafafa; border: 1px solid #e5e5e5; padding: 9px;}
 	/*position image holders */
@@ -20,8 +20,8 @@
 .pika-imgnav a {position: absolute; text-indent: -5000px; display: block;z-index:3;}
 	.pika-imgnav a.previous {background: url(../../images/pikachoose/prev.png) no-repeat left 50%; height: 480px; width: 50px; top: 9px; left: 9px;cursor:pointer;}
 	.pika-imgnav a.next {background: url(../../images/pikachoose/next.png) no-repeat right 50%; height: 480px; width: 50px; top: 9px; right: 9px;cursor:pointer;}
-	.pika-imgnav a.play {background: url(../../images/pikachoose/play.png) no-repeat 50% 50%; height: 100px; width: 40px;top:0;left:50%;display: none;cursor:pointer;}
-	.pika-imgnav a.pause {background: url(../../images/pikachoose/pause.png) no-repeat 50% 50%; height: 100px; width: 40px;top:0;left:50%;display:none;cursor:pointer;}
+	.pika-imgnav a.play {background: url(../images/pikachoose/play.png) no-repeat 50% 50%; height: 100px; width: 40px;top:0;left:50%;display: none;cursor:pointer;}
+	.pika-imgnav a.pause {background: url(../images/pikachoose/pause.png) no-repeat 50% 50%; height: 100px; width: 40px;top:0;left:50%;display:none;cursor:pointer;}
 
 .pika-textnav {overflow: hidden; margin: 10px 0 0 0;}
 .pika-textnav a {font-size: 12px; text-decoration: none; font-family:  helvetica, arial, sans-serif; color: #333; padding: 4px;}
@@ -47,7 +47,7 @@
 
 .jcarousel-skin-pika .jcarousel-clip-horizontal {
     height: 90px;
-    width: 580px;
+    width: 560px;
 }
 
 .jcarousel-skin-pika .jcarousel-clip-vertical {

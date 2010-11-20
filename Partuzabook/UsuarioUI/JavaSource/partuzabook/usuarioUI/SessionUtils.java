@@ -27,7 +27,6 @@ public class SessionUtils {
 		return  eventId;
 	}
 	
-	
 	static public Object getAttribute(String attribute) {
 		return getSession().getAttribute(attribute);
 	}

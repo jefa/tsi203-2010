@@ -17,6 +17,16 @@ public class SessionUtils {
 		return (String)getSession().getAttribute("username");
 	}
 	
+	static public Integer getEventId() {
+		HttpSession session = getSession();
+		if (session.getAttribute("evtid") == null) {
+			return -1;
+		}
+		Integer eventId = (Integer) session.getAttribute("evtid");
+		session.removeAttribute("evtid");
+		return  eventId;
+	}
+	
 	static public Object getAttribute(String attribute) {
 		return getSession().getAttribute(attribute);
 	}

@@ -125,12 +125,12 @@
 		 */
 		function _set_interface() {
 			// Apply the HTML markup into body tag
-			if(document.getElementById('cntType').getAttribute('value') != 1) {
+			if(document.getElementById('cntType').value != 1 && document.getElementById('cntType').value != 3) {
 				//Es una foto
 				$('body').append('<div id="jquery-overlay"></div><div id="jquery-lightbox"><div id="lightbox-container-image-box"><div id="lightbox-container-image"><img id="lightbox-image"><div style="" id="lightbox-nav"><a href="#" id="lightbox-nav-btnPrev"></a><a href="#" id="lightbox-nav-btnNext"></a></div><div id="lightbox-loading"><a href="#" id="lightbox-loading-link"><img src="' + settings.imageLoading + '"></a></div></div></div><div id="lightbox-container-image-data-box"><div id="lightbox-container-image-data"><div id="lightbox-image-details"><span id="lightbox-image-details-caption"></span><span id="lightbox-image-details-currentNumber"></span></div><div id="lightbox-secNav"><a href="#" id="lightbox-secNav-btnClose"><img src="' + settings.imageBtnClose + '"></a></div></div></div></div>');
 			} else {
 				//Es un video
-				$('body').append('<div id="jquery-overlay"></div><div id="jquery-lightbox"><div id="lightbox-container-image-box"><div id="lightbox-container-image"><object width="480" height="385"><param name="movie" id="gg1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed id="gg2" src="http://www.youtube.com/v/q54PGDzrhqY?fs=1&amp;hl=es_ES" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object><div style="" id="lightbox-nav"><a href="#" id="lightbox-nav-btnPrev"></a><a href="#" id="lightbox-nav-btnNext"></a></div><div id="lightbox-loading"><a href="#" id="lightbox-loading-link"><img src="' + settings.imageLoading + '"></a></div></div></div><div id="lightbox-container-image-data-box"><div id="lightbox-container-image-data"><div id="lightbox-image-details"><span id="lightbox-image-details-caption"></span><span id="lightbox-image-details-currentNumber"></span></div><div id="lightbox-secNav"><a href="#" id="lightbox-secNav-btnClose"><img src="' + settings.imageBtnClose + '"></a></div></div></div></div>');
+				$('body').append('<div id="jquery-overlay"></div><div id="jquery-lightbox"><div id="lightbox-container-image-box"><div id="lightbox-container-image"><object width="480" height="385"><param name="movie" id="gg1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed id="gg2" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object><div style="" id="lightbox-nav"><a href="#" id="lightbox-nav-btnPrev"></a><a href="#" id="lightbox-nav-btnNext"></a></div><div id="lightbox-loading"><a href="#" id="lightbox-loading-link"><img src="' + settings.imageLoading + '"></a></div></div></div><div id="lightbox-container-image-data-box"><div id="lightbox-container-image-data"><div id="lightbox-image-details"><span id="lightbox-image-details-caption"></span><span id="lightbox-image-details-currentNumber"></span></div><div id="lightbox-secNav"><a href="#" id="lightbox-secNav-btnClose"><img src="' + settings.imageBtnClose + '"></a></div></div></div></div>');
 			}
 			//$('body').append('<div id="jquery-overlay"></div><div id="jquery-lightbox"><div id="lightbox-container-image-box"><div id="lightbox-container-image"><img id="lightbox-image"><div style="" id="lightbox-nav"><a href="#" id="lightbox-nav-btnPrev"></a><a href="#" id="lightbox-nav-btnNext"></a></div><div id="lightbox-loading"><a href="#" id="lightbox-loading-link"><img src="' + settings.imageLoading + '"></a></div></div></div><div id="lightbox-container-image-data-box"><div id="lightbox-container-image-data"><div id="lightbox-image-details"><span id="lightbox-image-details-caption"></span><span id="lightbox-image-details-currentNumber"></span></div><div id="lightbox-secNav"><a href="#" id="lightbox-secNav-btnClose"><img src="' + settings.imageBtnClose + '"></a></div></div></div></div>');	
 			//$('body').append('<div id="jquery-overlay"></div><div id="jquery-lightbox"><div id="lightbox-container-image-box"><div id="lightbox-container-image"><object width="480" height="385"><param name="movie" id="gg1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed id="gg2" src="http://www.youtube.com/v/q54PGDzrhqY?fs=1&amp;hl=es_ES" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object><div style="" id="lightbox-nav"><a href="#" id="lightbox-nav-btnPrev"></a><a href="#" id="lightbox-nav-btnNext"></a></div><div id="lightbox-loading"><a href="#" id="lightbox-loading-link"><img src="' + settings.imageLoading + '"></a></div></div></div><div id="lightbox-container-image-data-box"><div id="lightbox-container-image-data"><div id="lightbox-image-details"><span id="lightbox-image-details-caption"></span><span id="lightbox-image-details-currentNumber"></span></div><div id="lightbox-secNav"><a href="#" id="lightbox-secNav-btnClose"><img src="' + settings.imageBtnClose + '"></a></div></div></div></div>');
@@ -194,15 +194,15 @@
 			// Image preload process
 			var objImagePreloader = new Image();
 			objImagePreloader.onload = function() {
-				if(document.getElementById('cntType').getAttribute('value') != 1) {
+				if(document.getElementById('cntType').value != 1 && document.getElementById('cntType').value != 3) {
 					//Es una foto
 					$('#lightbox-image').attr('src',settings.imageArray[settings.activeImage][0]);
 					_resize_container_image_box(objImagePreloader.width,objImagePreloader.height);
 				} else {
 					//Es un video
-					$('#gg1').attr('value',document.getElementById('cntUrl').getAttribute('value'));
-					$('#gg2').attr('src',document.getElementById('cntUrl').getAttribute('value'));
-					_resize_container_image_box(500,500);
+					$('#gg1').attr('value',document.getElementById('cntUrl').value);
+					$('#gg2').attr('src',document.getElementById('cntUrl').value);
+					_resize_container_image_box(480,385);
 				}
 				//$('#lightbox-image').attr('src',settings.imageArray[settings.activeImage][0]);
 				//$('#gg1').attr('value','http://www.youtube.com/v/q54PGDzrhqY?fs=1&amp;hl=es_ES');
@@ -249,10 +249,19 @@
 		 */
 		function _show_image() {
 			$('#lightbox-loading').hide();
-			$('#lightbox-image').fadeIn(function() {
-				_show_image_data();
-				_set_navigation();
-			});
+			if(document.getElementById('cntType').value != 1 && document.getElementById('cntType').value != 3) 
+				//Es una foto
+				$('#lightbox-image').fadeIn(function() {
+					_show_image_data();
+					_set_navigation();
+				});
+			else {
+				//Es un video
+				$('#gg1').fadeIn(function() {
+					_show_image_data();
+					_set_navigation();
+				});
+			}
 			_preload_neighbor_images();
 		};
 		/**

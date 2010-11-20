@@ -5,7 +5,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:rich="http://richfaces.org/rich">
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 
 
@@ -14,7 +15,7 @@
 	<ui:define name="styles">
 	.main-aside {width:300px;}
 	#container {width:660px;}
-	#content {width:660px;} 
+	#content {width:660px;}
 	</ui:define>
 
 	<ui:define name="body">
@@ -27,7 +28,7 @@
 				jQuery(tab.parentNode.parentNode.children).removeClass('ui-tabs-selected ui-state-active');
 				jQuery(tab.parentNode).addClass('ui-tabs-selected ui-state-active');
 				jQuery("#ulCategories li." + document.getElementById("formCategory:catName").value).addClass("ui-tabs-selected ui-state-active");
-			}			
+			}
 		</script>
 		<script type="text/javascript">
 			function posVideoLbl() {
@@ -104,18 +105,28 @@
 			rendered="#{eventoMB.validUserForContext || eventoMB.hasAlbum}">
 			<h:form id="formUploadContent"
 				rendered="#{eventoMB.validUserForContext}">
-				<h:commandButton value="Añadir fotos" action="subirFoto" id="addPhotoButton">
+				<h:commandButton value="Añadir fotos" action="subirFoto"
+					id="addPhotoButton">
 					<f:setPropertyActionListener value="#{eventoMB.eventId}"
 						target="#{subirFotoMB.idEvento}" />
 				</h:commandButton>
-				<h:commandButton value="Añadir videos" action="subirVideo" id="addVideoButton">
+				<h:commandButton value="Añadir videos" action="subirVideo"
+					id="addVideoButton">
 					<f:setPropertyActionListener value="#{eventoMB.eventId}"
 						target="#{subirVideoMB.eventId}" />
 				</h:commandButton>
-				<h:commandButton value="Añadir contenido externo" id="addExternButton"
-					action="subirContExterno">
+				<h:commandButton value="Añadir contenido externo"
+					id="addExternButton" action="subirContExterno">
 					<f:setPropertyActionListener value="#{eventoMB.eventId}"
 						target="#{subirContExternoMB.eventId}" />
+				</h:commandButton>
+				<h:commandButton value="Modificar Album" rendered="#{eventoMB.isSuperUser}" action="modificarAlbum">
+					<f:setPropertyActionListener value="#{eventoMB.album}"
+						target="#{eventoMB.selectedCategory}" />
+				</h:commandButton>
+				<h:commandButton value="Modificar Evento" rendered="#{eventoMB.isSuperUser}" action="modEvento">
+					<f:setPropertyActionListener value="#{eventoMB.eventId}"
+						target="#{EventMB.evt_id}" />
 				</h:commandButton>
 			</h:form>
 			<a4j:outputPanel id="panelCategories">
@@ -132,7 +143,7 @@
 								href="javascript:null()"
 								onclick="toggleTab('s-'+#{category.category},this)"> <a4j:commandLink
 								value="#{category.category}" action="#{eventoMB.updateCategory}"
-								reRender="authorizedContent,panelTags,panelComments,panelCategories"
+								reRender="authorizedContent,panelContentDetails"
 								oncomplete="refreshVideoLbl();">
 								<f:setPropertyActionListener target="#{eventoMB.categoryId}"
 									value="#{category.categoryId}" />
@@ -153,7 +164,12 @@
 				<h:inputHidden id="cntId" value="#{eventoMB.contentId}" />
 
 			</a4j:outputPanel>
-			<a4j:form id="panelThumbs">
+			<a4j:outputPanel id="panelNoContents"
+				rendered="#{eventoMB.contentsCount == 0}">
+				No hay contenidos para esta categoria
+			</a4j:outputPanel>
+
+			<a4j:form id="panelThumbs" rendered="#{eventoMB.contentsCount > 0}">
 				<div id="container-image-annotate-text" style="display: none">
 				<h:inputText id="image-annotate-text" /></div>
 				<rich:suggestionbox id="suggestionBoxId" for="image-annotate-text"
@@ -172,8 +188,7 @@
 				<div class="pikachoose" style="height: 620px;"><h:inputHidden
 					id="selectContentId" value="#{eventoMB.contentId}" /> <a4j:commandButton
 					id="btnSelectThumb" action="#{eventoMB.updateCategory}"
-					reRender="panelRating,panelTags,panelComments"
-					style="display:none;">
+					reRender="panelContentDetails" style="display:none;">
 				</a4j:commandButton>
 				<ul id="pikame" class="jcarousel-skin-pika">
 					<a4j:repeat value="#{eventoMB.selectedCategory.contents}"
@@ -182,15 +197,17 @@
 							rendered="#{content.type eq 0 || content.type eq 2}"
 							value="/ContentFeeder?id=#{content.contId}&#38;thb=74"
 							name="#{content.contId}"
-							onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';document.getElementById('videoLbl').hide()" />
+							onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId')document.getElementById('videoLbl').hide().value='#{content.contId}';" />
 						<h:graphicImage
 							rendered="#{content.type eq 1 || content.type eq 3}"
 							value="#{content.youtubeUrlScreen}" name="#{content.contId}"
-							onclick="document.getElementById('cntType').value='#{content.type}';document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';document.getElementById('videoLbl').show();" />
+							onclick="document.getElementById('cntType).value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId')document.getElementById('videoLbl').show()).value='#{content.contId}';" />
 						<span>#{content.description}<br />
 						Por: #{content.uploadedBy}</span></li>
 					</a4j:repeat>
 				</ul>
+				<h:graphicImage id="videoLbl" value="/images/video.png"
+					style="position:absolute;left:20px" />
 				<script>
 					jQuery("#pikame").PikaChoose();
 					jQuery("#pikame").jcarousel({scroll:5,
@@ -263,19 +280,11 @@
 						}
 					}
 				</script></div>
-				<a4j:commandLink rendered="#{eventoMB.userIsModerator}"
-					onclick="if(!confirm('¿Eliminar el contenido?'))return false;"
-					value="Eliminar contenido" action="#{eventoMB.removeContent}"
-					reRender="authorizedContent,panelTags,panelComments"
-					style="float:right;">
-					<h:graphicImage value="/images/close.png" alt="Eliminar contenido" />
-				</a4j:commandLink>
 			</a4j:form>
-			<h:graphicImage id="videoLbl" value="/images/video.png"
-				style="position:absolute;left:20px" />
 		</h:panelGroup>
 	</ui:define>
-	<ui:define name="sidebar" rendered="#{eventoMB.validUserForContext}">
+	<ui:define name="sidebar"
+		rendered="#{eventoMB.validUserForContext and (eventoMB.contentsCount > 0)}">
 		<ul class="xoxo" id="ulSidebar">
 			<li class="multi-sidebar-container">
 			<div
@@ -297,8 +306,10 @@
 				lat="#{eventoMB.evento.latitude}" lng="#{eventoMB.evento.longitude}"
 				enableDoubleClickZoom="true" showGScaleControl="true" zoom="16"
 				mapType="G_NORMAL_MAP" showGMapTypeControl="true"
-				showGLargeMapControl="true" /></div>
-
+				showGLargeMapControl="true" />
+				<h:inputHidden value="#{eventoMB.evento.latitude}"/>
+				<h:inputHidden value="#{eventoMB.evento.longitude}"/>
+			</div>
 			</div>
 			<div id="evt-twitter" style="height: 278px; overflow: auto"
 				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
@@ -355,126 +366,182 @@
 			refreshVideoLbl();
 		}</script></li>
 		</ul>
-		<a4j:outputPanel id="panelRating">
-			<a4j:form id="formRating">
-				<div>Tu calificación:</div>
-				<a4j:commandButton id="btnRate" action="#{eventoMB.rate}"
-					style="display:none;" reRender="panelRating">
-				</a4j:commandButton>
-				<h:inputHidden id="txtRating" value="#{eventoMB.rating}" />
-				<input type="radio" class="hover-star" name="myRating" value="1"
-					title="Malo" />
-				<input type="radio" class="hover-star" name="myRating" value="2"
-					title="Regular" />
-				<input type="radio" class="hover-star" name="myRating" value="3"
-					title="Bueno" />
-				<input type="radio" class="hover-star" name="myRating" value="4"
-					title="Muy bueno" />
-				<input type="radio" class="hover-star" name="myRating" value="5"
-					title="Excelente!" />
-				<span id="hover-test" style="margin: 0 0 0 20px;"></span>
-				<rich:jQuery selector="#formRating .hover-star"
-					query="rating({
-							focus: function(value, link){
-								var tip = jQuery('#hover-test');
-								tip[0].data = tip[0].data || tip.html();
-								tip.html(link.title || 'value: '+value);
-							},
-							blur: function(value, link){
-								var tip = jQuery('#hover-test');
-								jQuery('#hover-test').html(tip[0].data || '');
-							},
-							callback: function(value, link) {
-								if (value == undefined) value = 0;
-								$('formRating:txtRating').value = value;
-								$('formRating:btnRate').click();
-							}
-						}).rating('select', #{eventoMB.rating} + '', false);"></rich:jQuery>
+		<a4j:outputPanel id="panelContentDetails"
+			rendered="#{eventoMB.validUserForContext and fn:length(eventoMB.contents) > 0}">
+			<a4j:commandLink rendered="#{eventoMB.userIsModerator}"
+				onclick="if(!confirm('¿Eliminar el contenido?'))return false;"
+				value="Eliminar contenido" action="#{eventoMB.removeContent}"
+				reRender="authorizedContent,panelContentDetails"
+				style="float:right;">
+				<h:graphicImage value="/images/close.png" alt="Eliminar contenido" />
+			</a4j:commandLink>
+			<a4j:form id="panelSetCover" >
+				<h:panelGroup rendered="#{eventoMB.selectedContent.type eq 0 || eventoMB.selectedContent.type eq 2}">
+					<a4j:commandButton value="Fijar como portada del evento"
+						action="#{eventoMB.setearCoverEvento}"
+						reRender="panelEvento" />
+				</h:panelGroup>
 			</a4j:form>
-			<h:form id="formGlobalRating">
-				<div>Calificación global:</div>
-				<div><input type="radio" class="hover-star {half:true}"
-					name="globalRating" value="0.5" /> <input type="radio"
-					class="hover-star {half:true}" name="globalRating" value="1" /> <input
-					type="radio" class="hover-star {half:true}" name="globalRating"
-					value="1.5" /> <input type="radio" class="hover-star {half:true}"
-					name="globalRating" value="2" /> <input type="radio"
-					class="hover-star {half:true}" name="globalRating" value="2.5" />
-				<input type="radio" class="hover-star {half:true}"
-					name="globalRating" value="3" /> <input type="radio"
-					class="hover-star {half:true}" name="globalRating" value="3.5" />
-				<input type="radio" class="hover-star {half:true}"
-					name="globalRating" value="4" /> <input type="radio"
-					class="hover-star {half:true}" name="globalRating" value="4.5" />
-				<input type="radio" class="hover-star {half:true}"
-					name="globalRating" value="5" /> <rich:jQuery
-					selector="#formGlobalRating .hover-star"
-					query="rating({}).rating('select', #{eventoMB.selectedContent == null ? 0 : eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
+			<a4j:form id="panelAlbum" rendered="#{eventoMB.isSuperUser}">
+				<h:panelGroup
+					rendered="#{eventoMB.albumExists and !eventoMB.isAlbumFinalized}">
+					<h:panelGroup rendered="#{eventoMB.contentIsInAlbum}">
+						<a4j:commandButton value="Quitar del Album"
+							action="#{eventoMB.quitarContenidoAlbum}"
+							reRender="authorizedContent,panelContentDetails" />
+					</h:panelGroup>
+					<h:panelGroup rendered="#{!eventoMB.contentIsInAlbum}">
+						<a4j:commandButton value="Agregar al Album"
+							action="#{eventoMB.agregarContenidoAlbum}" reRender="panelAlbum" />
+					</h:panelGroup>
+				</h:panelGroup>
+
+			</a4j:form>
+			<a4j:outputPanel id="panelTagsCount"
+				rendered="#{eventoMB.isSuperUser}">
+				<br />
+				<div id="index-featured2">
+				<ul class="hfeed posts-quick-tag clearfix">
+					<h:outputText
+						value="Cantidad de etiquetados: #{eventoMB.tagsCount}" />
+				</ul>
 				</div>
-			</h:form>
-		</a4j:outputPanel>
-		<a4j:form id="formTag"
-			rendered="#{eventoMB.hasAlbum || eventoMB.validUserForContext}">
-			<a4j:commandButton id="btnBeginTag" onclick="beginTag();"
-				value="Etiquetar" />
-			<a4j:commandButton id="btnEndTag" onclick="endTag();"
-				value="Finalizar etiquetado" style="display:none " />
-		</a4j:form>
-		<a4j:outputPanel id="panelComments"
-			rendered="#{eventoMB.hasAlbum || eventoMB.validUserForContext}">
-			<h:form id="formCommentContent">
+			</a4j:outputPanel>
+			<a4j:outputPanel id="panelCommentsCount"
+				rendered="#{eventoMB.isSuperUser}">
 				<div id="index-featured2">
 				<ul class="hfeed posts-quick-tag clearfix">
-					<li class="post type-post clearfix">
-					<div class="entry-thumbnails-tag"><h:graphicImage
-						value="/UserImageFeeder?username=#{loginMB.userName}&#38;thb=50"
-						styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
-					<h5 class="entry-title"><h:inputText
-						value="#{eventoMB.comentario}"
-						onfocus="if(value=='Escribe un comentario...')value=''"
-						onblur="if(value=='')value='Escribe un comentario...'" /> <a4j:commandButton
-						value="Comentar" action="#{eventoMB.comentar}"
-						reRender="panelComments">
-					</a4j:commandButton></h5>
-					</li>
+					<h:outputText
+						value="Cantidad de comentarios: #{eventoMB.commentsCount}" />
 				</ul>
-				<!-- .posts-quick --></div>
-				<!-- #index-featured2 -->
-			</h:form>
-			<h:panelGroup layout="block" id="commentPanel">
-				<div id="index-featured2">
-				<ul class="hfeed posts-quick-tag clearfix">
-					<a4j:repeat value="#{eventoMB.selectedContent.comments}"
-						var="comment">
-						<li class="post type-post clearfix"><h:form
-							id="formCommentsImage">
-							<div class="entry-thumbnails-tag">
-								<h:graphicImage
-									value="/UserImageFeeder?username=#{comment.userId}&#38;thb=50"
-									styleClass="attachment-quick-preview-thumb wp-post-image" />
-							</div>
-						</h:form> <h:form id="formRemoveComment"
-							rendered="#{eventoMB.userIsModerator}">
-							<a4j:commandLink action="#{eventoMB.removeComment}"
-								onclick="if(!confirm('¿Eliminar el comentario #{comment.text}?'))return false;"
-								reRender="panelComments" style="float:right;">
-								<f:setPropertyActionListener value="#{comment.userId}"
-									target="#{eventoMB.commentToRemoveUser}" />
-								<f:setPropertyActionListener value="#{comment.text}"
-									target="#{eventoMB.commentToRemoveText}" />
-								<h:graphicImage value="/images/close.png"
-									alt="Eliminar comentario" />
-							</a4j:commandLink>
-						</h:form> <h:form id="formCommentUser">
-							<h5 class="entry-title"><strong>#{comment.userName} </strong></h5>
-						</h:form>
-						<div class="entry-summary">#{comment.text}</div>
+				</div>
+				<br />
+			</a4j:outputPanel>
+			<a4j:outputPanel id="panelRating">
+				<a4j:form id="formRating">
+					<div>Tu calificación:</div>
+					<a4j:commandButton id="btnRate" action="#{eventoMB.rate}"
+						style="display:none;" reRender="panelRating">
+					</a4j:commandButton>
+					<h:inputHidden id="txtRating" value="#{eventoMB.rating}" />
+					<input type="radio" class="hover-star" name="myRating" value="1"
+						title="Malo" />
+					<input type="radio" class="hover-star" name="myRating" value="2"
+						title="Regular" />
+					<input type="radio" class="hover-star" name="myRating" value="3"
+						title="Bueno" />
+					<input type="radio" class="hover-star" name="myRating" value="4"
+						title="Muy bueno" />
+					<input type="radio" class="hover-star" name="myRating" value="5"
+						title="Excelente!" />
+					<span id="hover-test" style="margin: 0 0 0 20px;"></span>
+					<rich:jQuery selector="#formRating .hover-star"
+						query="rating({
+								focus: function(value, link){
+									var tip = jQuery('#hover-test');
+									tip[0].data = tip[0].data || tip.html();
+									tip.html(link.title || 'value: '+value);
+								},
+								blur: function(value, link){
+									var tip = jQuery('#hover-test');
+									jQuery('#hover-test').html(tip[0].data || '');
+								},
+								callback: function(value, link) {
+									if (value == undefined) value = 0;
+									$('formRating:txtRating').value = value;
+									$('formRating:btnRate').click();
+								}
+							}).rating('select', #{eventoMB.rating} + '', false);"></rich:jQuery>
+				</a4j:form>
+				<h:form id="formGlobalRating">
+					<div>Calificación global:</div>
+					<div><input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="0.5" /> <input type="radio"
+						class="hover-star {half:true}" name="globalRating" value="1" /> <input
+						type="radio" class="hover-star {half:true}" name="globalRating"
+						value="1.5" /> <input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="2" /> <input type="radio"
+						class="hover-star {half:true}" name="globalRating" value="2.5" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="3" /> <input type="radio"
+						class="hover-star {half:true}" name="globalRating" value="3.5" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="4" /> <input type="radio"
+						class="hover-star {half:true}" name="globalRating" value="4.5" />
+					<input type="radio" class="hover-star {half:true}"
+						name="globalRating" value="5" /> <rich:jQuery
+						selector="#formGlobalRating .hover-star"
+						query="rating({}).rating('select', #{eventoMB.selectedContent == null ? 0 : eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
+					</div>
+				</h:form>
+			</a4j:outputPanel>
+			<a4j:form id="formTag"
+				rendered="#{eventoMB.hasAlbum || eventoMB.validUserForContext}">
+				<a4j:commandButton id="btnBeginTag" onclick="beginTag();"
+					value="Etiquetar" />
+				<a4j:commandButton id="btnEndTag" onclick="endTag();"
+					value="Finalizar etiquetado" style="display:none " />
+			</a4j:form>
+			<a4j:outputPanel id="panelComments"
+				rendered="#{eventoMB.hasAlbum || eventoMB.validUserForContext}">
+				<h:form id="formCommentContent">
+					<div id="index-featured2">
+					<ul class="hfeed posts-quick-tag clearfix">
+						<li class="post type-post clearfix">
+						<div class="entry-thumbnails-tag"><h:graphicImage
+							value="/UserImageFeeder?username=#{loginMB.userName}&#38;thb=50"
+							styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
+						<h5 class="entry-title"><h:inputText
+							value="#{eventoMB.comentario}"
+							onfocus="if(value=='Escribe un comentario...')value=''"
+							onblur="if(value=='')value='Escribe un comentario...'" /> <a4j:commandButton
+							value="Comentar" action="#{eventoMB.comentar}"
+							reRender="panelComments">
+						</a4j:commandButton></h5>
 						</li>
-					</a4j:repeat>
-				</ul>
-				<!-- .posts-quick --></div>
-				<!-- #index-featured2 -->
-			</h:panelGroup>
+					</ul>
+					<!-- .posts-quick --></div>
+					<!-- #index-featured2 -->
+				</h:form>
+				<h:panelGroup layout="block" id="commentPanel">
+					<div id="index-featured2">
+					<ul class="hfeed posts-quick-tag clearfix">
+						<a4j:repeat value="#{eventoMB.selectedContent.comments}"
+							var="comment">
+							<li class="post type-post clearfix"><h:form
+								id="formCommentsImage">
+								<div class="entry-thumbnails-tag">
+									<h:graphicImage
+										value="/UserImageFeeder?username=#{comment.userId}&#38;thb=50"
+										styleClass="attachment-quick-preview-thumb wp-post-image" />
+								</div>
+							</h:form> <h:form id="formRemoveComment"
+								rendered="#{eventoMB.userIsModerator}">
+								<a4j:commandLink action="#{eventoMB.removeComment}"
+									onclick="if(!confirm('¿Eliminar el comentario #{comment.text}?'))return false;"
+									reRender="panelComments" style="float:right;">
+									<f:setPropertyActionListener value="#{comment.userId}"
+										target="#{eventoMB.commentToRemoveUser}" />
+									<f:setPropertyActionListener value="#{comment.text}"
+										target="#{eventoMB.commentToRemoveText}" />
+									<h:graphicImage value="/images/close.png"
+										alt="Eliminar comentario" />
+								</a4j:commandLink>
+							</h:form> <h:form id="formCommentUser">
+								<h5 class="entry-title"><h:commandLink
+									value="#{comment.userName}" action="verPerfil">
+									<f:setPropertyActionListener value="#{comment.userId}"
+										target="#{Profile.userId}" />
+								</h:commandLink></h5>
+							</h:form>
+							<div class="entry-summary">#{comment.text}</div>
+							</li>
+						</a4j:repeat>
+					</ul>
+					<!-- .posts-quick --></div>
+					<!-- #index-featured2 -->
+				</h:panelGroup>
+			</a4j:outputPanel>
 		</a4j:outputPanel>
 	</ui:define>
 </ui:composition>

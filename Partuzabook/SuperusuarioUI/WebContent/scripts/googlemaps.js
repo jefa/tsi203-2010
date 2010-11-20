@@ -18,7 +18,7 @@ function initGMap() {
 function addMarker(googlemap, lat, long) {
 	var marker = new GMarker(new GLatLng(lat,long), {draggable:true}); 
 	GEvent.addListener(marker, 'click', function() {
-		marker.openInfoWindow('Matanga dijo la changa <br/>Si esta es la <font style="color:red;">  segunda</font> línea acepta html');
+		marker.openInfoWindow('Matanga dijo la changa <br/>Si esta es la <font style="color:red;">  segunda</font> lï¿½nea acepta html');
 		});
 	googlemap.addOverlay(marker);
 }
@@ -34,8 +34,12 @@ function addMarkerWithInfo(googlemap, lat, long, info, hidden_input_lat, hidden_
 	var marker = new GMarker(new GLatLng(lat,long), {draggable:true, map:map});
 	//document.getElementById('CreateEvent:hidden_coord_lat').value = marker.getLatLng().lat();
 	//document.getElementById('CreateEvent:hidden_coord_lng').value = marker.getLatLng().lng();
-	document.getElementById(hidden_input_lat).value = marker.getLatLng().lat();
-	document.getElementById(hidden_input_lng).value = marker.getLatLng().lng();
+	if (hidden_input_lat) {
+		document.getElementById(hidden_input_lat).value = marker.getLatLng().lat();
+	}
+	if (hidden_input_lng) {
+		document.getElementById(hidden_input_lng).value = marker.getLatLng().lng();
+	}
 	global_map = googlemap;
 	global_marker = marker;
 	GEvent.addListener(marker, 'click', function() {
@@ -62,8 +66,12 @@ function addMarkerWithInfo(googlemap, lat, long, info, hidden_input_lat, hidden_
 function eraseMarkers(googlemap, hidden_lat, hidden_lng) {
 	
 	googlemap.clearOverlays();
-	document.getElementById(hidden_lat).value = '';
-	document.getElementById(hidden_lng).value = '';
+	if (hidden_lat) {
+		document.getElementById(hidden_lat).value = '';
+	}
+	if (hidden_lng) {
+		document.getElementById(hidden_lng).value = '';
+	}
 }
 
 function eraseMarker(googlemap, marker) {
@@ -222,8 +230,8 @@ function  initGeoCoder(map, hidden_lat, hidden_lng) {
 	  reasons=[];
 	  reasons[G_GEO_SUCCESS]            = "Exito.";
 	  reasons[G_GEO_MISSING_ADDRESS]    = "Direccion faltante: No se escribio una direccion.";
-	  reasons[G_GEO_UNKNOWN_ADDRESS]    = "Direccion desconocida:  No se pudo encontrar una locación geografica para la dirección ingresada.";
-	  reasons[G_GEO_UNAVAILABLE_ADDRESS]= "Direccion no disponible:  La coordenadas para la dirección ingresada no pueden ser mostradas por condiciones legales.";
+	  reasons[G_GEO_UNKNOWN_ADDRESS]    = "Direccion desconocida:  No se pudo encontrar una locaciï¿½n geografica para la direcciï¿½n ingresada.";
+	  reasons[G_GEO_UNAVAILABLE_ADDRESS]= "Direccion no disponible:  La coordenadas para la direcciï¿½n ingresada no pueden ser mostradas por condiciones legales.";
 	  reasons[G_GEO_BAD_KEY]            = "Key erronea: La API key es invalida o no corresponde para el dominio dado.";
 	  reasons[G_GEO_TOO_MANY_QUERIES]   = "Demasiadas consultas: La cutoa de consutlas diarias para este sitio fue excedida..";
 	  reasons[G_GEO_SERVER_ERROR]       = "Error del servidor: El pedido no pudo ser procesado satisfactoriamente.";
