@@ -4,20 +4,22 @@ package partuzabook.integracion.ws;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for searchRequest complex type.
+ * <p>Java class for searchByDateRequest complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="searchRequest">
+ * &lt;complexType name="searchByDateRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="nombre" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="fecha" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
  *         &lt;element name="maxEventos" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -28,38 +30,39 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "searchRequest", propOrder = {
-    "nombre",
+@XmlType(name = "searchByDateRequest", propOrder = {
+    "fecha",
     "maxEventos"
 })
-public class SearchRequest {
+public class SearchByDateRequest {
 
     @XmlElement(required = true)
-    protected String nombre;
+    @XmlSchemaType(name = "dateTime")
+    protected XMLGregorianCalendar fecha;
     protected int maxEventos;
 
     /**
-     * Gets the value of the nombre property.
+     * Gets the value of the fecha property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public String getNombre() {
-        return nombre;
+    public XMLGregorianCalendar getFecha() {
+        return fecha;
     }
 
     /**
-     * Sets the value of the nombre property.
+     * Sets the value of the fecha property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setNombre(String value) {
-        this.nombre = value;
+    public void setFecha(XMLGregorianCalendar value) {
+        this.fecha = value;
     }
 
     /**

@@ -1,5 +1,7 @@
 package partuzabook.integracion.ws;
  
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
@@ -30,11 +32,9 @@ import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 public class BusquedaBean {
  
 	@WebMethod
-	public SearchResponse searchByName(SearchRequest request) {
+	public SearchResponse searchByName(SearchByNameRequest request) {
 		
 		SearchResponse sr = new SearchResponse();
-		sr.total = new Integer(10);
-		sr.evento = new ArrayList<Evento>();
 		
 		if (request.getNombre() == null /*|| "".equals(request.getNombre())*/) {
 			System.out.println("BusquedaBean.searchByName(): Nombre no puede ser vacio");
@@ -42,10 +42,9 @@ public class BusquedaBean {
 		}
 
 		try {
-			Context ctx = getContext();
-			ServicesEventRemote srvEvent = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");
-			List<DatatypeEventSummary> eventResults = srvEvent.searchForEventByName(
+			List<DatatypeEventSummary> eventResults = getServicesEvent().searchForEventByName(
 					request.getNombre(), request.getMaxEventos());
+			
 			if (eventResults == null) {
 				System.out.println("BusquedaBean.searchByName(): No se han encontrado resultados");
 				return sr;
@@ -62,6 +61,74 @@ public class BusquedaBean {
 		return sr;
 	}
 
+	@WebMethod
+	public SearchResponse searchByDate(SearchByDateRequest request){
+		
+		SearchResponse sr = new SearchResponse();
+		
+		try {
+			
+			GregorianCalendar c = request.getFecha().toGregorianCalendar();
+			Date dateFrom = new Date(c.getTimeInMillis());
+			
+			List<DatatypeEventSummary> eventResults = getServicesEvent().searchForEventByDate(
+					dateFrom, request.getMaxEventos());
+			
+			if (eventResults == null) {
+				System.out.println("BusquedaBean.searchByDate(): No se han encontrado resultados");
+				return sr;
+			}
+
+			sr.evento = translate(eventResults);
+			sr.total = new Integer(eventResults.size());
+			
+		} catch (NamingException e) {
+			System.out.println("BusquedaBean.searchByDate(): Error haciendo la busqueda: "+e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return sr;
+		
+	}
+	
+	@WebMethod
+	public SearchResponse searchBetweenDate(SearchBetweenDateRequest request){
+
+		SearchResponse sr = new SearchResponse();
+		
+		try {
+			
+			GregorianCalendar c = request.getFechaFrom().toGregorianCalendar();
+			Date dateFrom = new Date(c.getTimeInMillis());
+			c = request.getFechaTo().toGregorianCalendar();
+			Date dateTo = new Date(c.getTimeInMillis());
+			
+			List<DatatypeEventSummary> eventResults = getServicesEvent().searchForEventBetweenDates(
+					dateFrom, dateTo, request.getMaxEventos());
+			
+			if (eventResults == null) {
+				System.out.println("BusquedaBean.searchBetweenDates(): No se han encontrado resultados");
+				return sr;
+			}
+
+			sr.evento = translate(eventResults);
+			sr.total = new Integer(eventResults.size());
+			
+		} catch (NamingException e) {
+			System.out.println("BusquedaBean.searchBetweenDates(): Error haciendo la busqueda: "+e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return sr;
+				
+	}
+
+	private ServicesEventRemote getServicesEvent() throws NamingException {
+		Context ctx = getContext();
+		ServicesEventRemote srvEvent = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");
+		return srvEvent;
+	}
+	
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
 		properties.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
@@ -92,10 +159,5 @@ public class BusquedaBean {
 		}
 		return translatedCollection;
 	}
-
-
-//public List<DatatypeEventSummary> searchForEventByDate(Date date, int maxEvents)
-//public List<DatatypeEventSummary> searchForEventBetweenDates(Date after, Date before, int maxEvents);
-   
 }
  
