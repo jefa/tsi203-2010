@@ -32,12 +32,33 @@
          
          <xsd:import namespace='http://edu.tsi2.ws/integracion/ws'/>
          <xsd:element name='searchByName' 
-                     nillable='true' type='tns:searchRequest'/>
+                     nillable='true' type='tns:searchByNameRequest'/>
          <xsd:element name='searchByNameResponse' 
                      nillable='true' type='tns:searchResponse'/>
-         <xsd:complexType name='searchRequest'>
+         <xsd:element name='searchByDate' 
+                     nillable='true' type='tns:searchByDateRequest'/>
+         <xsd:element name='searchByDateResponse' 
+                     nillable='true' type='tns:searchResponse'/>
+         <xsd:element name='searchBetweenDate' 
+                     nillable='true' type='tns:searchBetweenDateRequest'/>
+         <xsd:element name='searchBetweenDateResponse' 
+                     nillable='true' type='tns:searchResponse'/>
+         <xsd:complexType name='searchByNameRequest'>
             <xsd:sequence>
                <xsd:element name='nombre' type='xsd:string'/>
+               <xsd:element name='maxEventos' type='xsd:int'/>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name='searchByDateRequest'>
+            <xsd:sequence>
+               <xsd:element name='fecha' type='xsd:dateTime'/>
+               <xsd:element name='maxEventos' type='xsd:int'/>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name='searchBetweenDateRequest'>
+            <xsd:sequence>
+               <xsd:element name='fechaFrom' type='xsd:dateTime'/>
+               <xsd:element name='fechaTo' type='xsd:dateTime'/>
                <xsd:element name='maxEventos' type='xsd:int'/>
             </xsd:sequence>
          </xsd:complexType>
@@ -58,12 +79,42 @@
       <part element='tns:searchByNameResponse' 
             name='searchByNameResponse'/>
    </message>
+
+   <message name='Busqueda_searchByDate'>
+      <part element='tns:searchByDate' name='searchByDate'/>
+   </message>
+   <message name='Busqueda_searchByDateResponse'>
+      <part element='tns:searchByDateResponse' 
+            name='searchByDateResponse'/>
+   </message>
+
+   <message name='Busqueda_searchBetweenDate'>
+      <part element='tns:searchBetweenDate' name='searchBetweenDate'/>
+   </message>
+   <message name='Busqueda_searchBetweenDateResponse'>
+      <part element='tns:searchBetweenDateResponse' 
+            name='searchBetweenDateResponse'/>
+   </message>
+
    <portType name='Busqueda'>
       <operation name='searchByName' 
                  parameterOrder='searchByName'>
          <input message='tns:Busqueda_searchByName'/>
          <output message='tns:Busqueda_searchByNameResponse'/>
       </operation>
+
+      <operation name='searchByDate' 
+                 parameterOrder='searchByDate'>
+         <input message='tns:Busqueda_searchByDate'/>
+         <output message='tns:Busqueda_searchByDateResponse'/>
+      </operation>
+
+      <operation name='searchBetweenDate' 
+                 parameterOrder='searchBetweenDate'>
+         <input message='tns:Busqueda_searchBetweenDate'/>
+         <output message='tns:Busqueda_searchBetweenDateResponse'/>
+      </operation>
+
    </portType>
    <binding name='BusquedaBinding' type='tns:Busqueda'>
       <soap:binding style='document' 
@@ -77,6 +128,24 @@
             <soap:body use='literal'/>
          </output>
       </operation>
+      <operation name='searchByDate'>
+         <soap:operation soapAction=''/>
+         <input>
+            <soap:body use='literal'/>
+         </input>
+         <output>
+            <soap:body use='literal'/>
+         </output>
+      </operation>
+      <operation name='searchBetweenDate'>
+         <soap:operation soapAction=''/>
+         <input>
+            <soap:body use='literal'/>
+         </input>
+         <output>
+            <soap:body use='literal'/>
+         </output>
+      </operation>      
    </binding>
    <service name='BusquedaService'>
       <port binding='tns:BusquedaBinding' name='BusquedaPort'>
