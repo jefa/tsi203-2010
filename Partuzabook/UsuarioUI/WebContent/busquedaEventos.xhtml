@@ -49,9 +49,9 @@ function toggleTab(control, tab)
 		<br/>		
 		<h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" 
 		style="width:200px"/>
-		<a4j:commandButton action="#{SearchEventMB.searchEventsByName}" value="Buscar" 
+		<a4j:commandButton action="#{SearchEventMB.searchEventsByName}" value="Buscar" style="margin-left:10px" 
 		    reRender="resultadoEventos, formSearchByName" id="searchByName"/> 
-		<h:outputText style="color:Red;" id="ErrorNombre" value="#{SearchEventMB.mensajeValidacionNombre}"/>
+		<h:outputText style="color:Red;margin-left:10px" id="ErrorNombre" value="#{SearchEventMB.mensajeValidacionNombre}"/>
 		    
 		<br/>		
 	</h:form>
@@ -106,10 +106,25 @@ function toggleTab(control, tab)
 </ul>
 	
 	
-	
-	<h:form id="resultadoEventos">
 		<div id="index-featured2">
-		<div class="home-title">Resultado</div>
+		<h:form>
+		<div class="home-title">Resultado 		<a4j:commandLink action="#{SearchEventMB.limpiarBusqueda}" style="margin-left:5px;vertical-align:top" 
+		    reRender="resultadoEventos" id="cleanSearch">
+<img id="image" src="images/close.png" title="Borrar resultados"/>		    
+		    </a4j:commandLink> 
+
+		</div> 	
+		</h:form>
+	<h:form id="resultadoEventos">
+		
+		<h:commandLink action="verEvento" styleClass="entry-thumbnails-link">
+				<f:setPropertyActionListener value="#{resultado.evtId}"
+				target="#{eventoMB.eventId}" />
+				<h:graphicImage
+				value="/ContentFeeder?id=#{resultado.coverId}&#38;thb=115"
+				styleClass="attachment-quick-preview-thumb wp-post-image" />
+			</h:commandLink>
+		
 
 		<h:outputText id="error" value="#{SearchEventMB.mensaje}" rendered="#{empty SearchEventMB.eventResults}"/>
 		
@@ -161,9 +176,9 @@ function toggleTab(control, tab)
 </a4j:outputPanel>
 
 
-		</div>
+
 	</h:form>
-	
+		</div>	
 	
 	
 		<script>
