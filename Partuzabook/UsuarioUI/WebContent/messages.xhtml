@@ -30,7 +30,12 @@
 				setTimeout('document.getElementById(\'s1\').disabled = false',time);
 				setTimeout('document.getElementById(\'n1\').disabled = false',time);
 			}
-			
+			function hideOnload(time) {
+				document.getElementById('write').hide();
+				document.getElementById('sentbox').hide();
+				document.getElementById('notif').hide();
+				//setTimeout('document.getElementById(\'write\').show()',time);
+			}
 		</script>
 		
 		<ul style="list-style:none;padding-left:0px">
@@ -104,13 +109,13 @@
 					<h:inputHidden value="#{notificationsBean.toUser}" id="repToUser"/>
 					<h:inputHidden value="#{notificationsBean.subject}" id="repSubject"/>
 					<a4j:commandButton reRender="write" value="Responder" id="reply" action="#{notificationsBean.notLeida}"/>
-					<rich:componentControl for="panel" attachTo="reply" operation="hide" event="onclick"/>
-					<rich:effect event="onclick"  for="reply"  type="BlindDown" targetId="write"/>
-					<rich:effect event="onclick"  for="reply"  type="Fade" targetId="inbox"/>
-					<rich:effect event="onclick"  for="reply"  type="Fade" targetId="sentbox"/>
-					<rich:effect event="onclick"  for="reply"  type="Fade" targetId="notif"/>
+						<rich:componentControl for="panel" attachTo="reply" operation="hide" event="onclick"/>
+						<rich:effect event="onclick"  for="reply"  type="BlindDown" targetId="write"/>
+						<rich:effect event="onclick"  for="reply"  type="Fade" targetId="inbox"/>
+						<rich:effect event="onclick"  for="reply"  type="Fade" targetId="sentbox"/>
+						<rich:effect event="onclick"  for="reply"  type="Fade" targetId="notif"/>
 					<a4j:commandButton value="Cerrar" id="hidelink" action="#{notificationsBean.notLeida}"/>
-					<rich:componentControl for="panel" attachTo="hidelink" operation="hide" event="onclick"/>
+						<rich:componentControl for="panel" attachTo="hidelink" operation="hide" event="onclick"/>
 				</a4j:form>
 			</div>
 		</rich:modalPanel>		
@@ -144,7 +149,7 @@
 					<h:inputTextarea value="#{notificationsBean.body}" cols="93" rows="9"/><br/>
 					<br/>
 					<center>
-						<h:commandButton value="Enviar Mensaje" action="#{notificationsBean.sendMail}"/>
+						<h:commandButton value="Enviar Mensaje" action="#{notificationsBean.sendMail}" />						
 					</center>
 				</h:form>		
 			</rich:panel>
@@ -256,6 +261,7 @@
 				<rich:effect for="window" event="onload" type="BlindUp" params="targetId:'notif'"/>
 				<script>window.onload=function(){ 
 					disableButtons(1000);
+					hideOnload(1000);
 				}</script>
 							   		
 	</ui:define>

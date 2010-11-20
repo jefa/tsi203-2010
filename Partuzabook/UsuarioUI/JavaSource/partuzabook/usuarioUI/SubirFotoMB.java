@@ -32,7 +32,7 @@ public class SubirFotoMB{
 	private ArrayList<DatatypeFileAux> filesAux = new ArrayList<DatatypeFileAux>();
 	//private ArrayList<DataTypeFile> files = new ArrayList<DataTypeFile>();
 	private int uploadsAvailable = 5;
-	private boolean autoUpload = false;
+	private boolean autoUpload = true;
 	private boolean useFlash = true;
 	private int idEvento;
 	private String message;
@@ -119,51 +119,55 @@ public class SubirFotoMB{
 		
 		ServicesUploadRemote servUpload = getServicesUpload();
 		if (servUpload != null) {
-			String username = SessionUtils.getUsername();
-			List<DataTypeFile> files  = new ArrayList<DataTypeFile>();
-			for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
-				files.add((DataTypeFile)it.next());
-			}
-			List<String> cnt_id = servUpload.uploadMultimedia(idEvento, username, files);
-		
-			//Agregamos las categorias para cada archivo
-			int i = 0;
-			ServicesEventRemote serE = getServicesEvent();
-			for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
+			try {
+				String username = SessionUtils.getUsername();
+				List<DataTypeFile> files  = new ArrayList<DataTypeFile>();
+				for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
+					files.add((DataTypeFile)it.next());
+				}
+				List<String> cnt_id = servUpload.uploadMultimedia(idEvento, username, files);
 			
-				DatatypeFileAux file = it.next();
+				//Agregamos las categorias para cada archivo
+				int i = 0;
+				ServicesEventRemote serE = getServicesEvent();
+				for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
 				
-				//En catsSelected tengo las categorias seleccionadas, verifiquemos que no hayan nombres repetidos, etc
-				List<String> categoriasSeleccionadas = file.getCatsSelected();
-				//Quitamos todos los ""
-				while(categoriasSeleccionadas.contains("")) {
-					categoriasSeleccionadas.remove("");
+					DatatypeFileAux file = it.next();
+					
+					//En catsSelected tengo las categorias seleccionadas, verifiquemos que no hayan nombres repetidos, etc
+					List<String> categoriasSeleccionadas = file.getCatsSelected();
+					//Quitamos todos los ""
+					while(categoriasSeleccionadas.contains("")) {
+						categoriasSeleccionadas.remove("");
+					}
+					
+					List<DatatypeCategorySummary> categoriasParaAgregar = new ArrayList<DatatypeCategorySummary>();
+					//Pasamos los String a Categorias
+					for(Iterator<DatatypeCategorySummary> it2 = getAllCategories().iterator(); it2.hasNext(); ) {
+						DatatypeCategorySummary dat = it2.next();
+						if(categoriasSeleccionadas.contains(dat.getCategory())) {
+							//Es una categoria que ya existe
+							categoriasParaAgregar.add(dat);
+							categoriasSeleccionadas.remove(dat.getCategory());
+						}					
+					}
+					//Agregamos las categorias que no existen
+					for(Iterator<String> it2 = categoriasSeleccionadas.iterator(); it2.hasNext(); ) {
+						DatatypeCategorySummary nuevaCat = new DatatypeCategorySummary();
+						nuevaCat.setCategory(it2.next());
+						nuevaCat.setCategoryId(0); //0 es porque no existe
+						categoriasParaAgregar.add(nuevaCat);
+					}
+					
+					serE.addCategoryToContent(Integer.parseInt(cnt_id.get(i)), categoriasParaAgregar);
+					i++;
 				}
-				
-				List<DatatypeCategorySummary> categoriasParaAgregar = new ArrayList<DatatypeCategorySummary>();
-				//Pasamos los String a Categorias
-				for(Iterator<DatatypeCategorySummary> it2 = getAllCategories().iterator(); it2.hasNext(); ) {
-					DatatypeCategorySummary dat = it2.next();
-					if(categoriasSeleccionadas.contains(dat.getCategory())) {
-						//Es una categoria que ya existe
-						categoriasParaAgregar.add(dat);
-						categoriasSeleccionadas.remove(dat.getCategory());
-					}					
-				}
-				//Agregamos las categorias que no existen
-				for(Iterator<String> it2 = categoriasSeleccionadas.iterator(); it2.hasNext(); ) {
-					DatatypeCategorySummary nuevaCat = new DatatypeCategorySummary();
-					nuevaCat.setCategory(it2.next());
-					nuevaCat.setCategoryId(0); //0 es porque no existe
-					categoriasParaAgregar.add(nuevaCat);
-				}
-				
-				serE.addCategoryToContent(Integer.parseInt(cnt_id.get(i)), categoriasParaAgregar);
-				i++;
-			}
-			this.message = "Se han subido de forma exitosa";
-			filesAux.clear();
-			setUploadsAvailable(5);
+				this.message = "Las imágenes han sido subidas de forma exitosa.";
+				filesAux.clear();
+				setUploadsAvailable(5);
+			} catch (Exception e) {
+				this.message = "Ocurrió un error al subir las imágenes.";
+			}			
 		}
 		return null;
 	}
