@@ -28,9 +28,9 @@
      * @param o {Hash|String} A set of key/value pairs to set as configuration properties or a method name to call on a formerly created instance.
      */
  	var defaults = {
-		autoPlay: true,
+		autoPlay: false,
 		speed: 5000,
-		text: { play: "", stop: "", previous: "Anterior", next: "Siguiente" },
+		text: { play: "", stop: ""},
 		transition:[0],
 		showCaption: true,
 		IESafe: true
@@ -61,8 +61,6 @@
 		this.imgPlay 	= null;
 		this.imgPrev	= null;
 		this.imgNext 	= null;
-		this.textNext	= null;
-		this.textPrev	= null;
 		this.previous  = null;
 		this.next 		= null;
 		this.aniDiv		= null;
@@ -122,16 +120,17 @@
 			this.caption 	= $("<div class='caption'></div>").insertAfter(this.imgNav);
 			if(!this.options.showCaption){ this.caption.hide(); }
 			this.aniDiv		= $("<div class='animation'></div>").insertAfter(this.caption);
-			this.textNav 	= $("<div class='pika-textnav'></div>").insertAfter(this.aniDiv);
-			this.textPrev 	= $("<a class='previous'>"+this.options.text.previous+"</a>").appendTo(this.textNav);
-			this.textNext	= $("<a class='next'>"+this.options.text.next+"</a>").appendTo(this.textNav);
 			this.list.addClass('pika-thumbs');
         	this.list.children('li').wrapInner("<div class='clip' />");
 			this.thumbs = this.list.find('img');
 			this.active		= this.thumbs.eq(0);
 
 			//fill in info for first image
-			this.finishAnimating({'source':this.active.attr('ref') || this.active.attr('src'),'caption':this.active.parents('li:first').find('span:first').html(), 'clickThrough':this.active.parent().attr('href') || ""});
+			var src = this.active.attr('src');
+			if (src != null) {
+				src = src.replace('thb=74','thb=F625,480');
+        	}
+			this.finishAnimating({'source':this.active.attr('ref') || src,'caption':this.active.parents('li:first').find('span:first').html(), 'clickThrough':this.active.parent().attr('href') || ""});
 		
 			//process all the thumbnails
 			this.thumbs.each(this.createThumb);
@@ -150,7 +149,7 @@
         	if($(this).parent('a').length > 0){ $(this).unwrap(); }
         	$.data(this,'caption',$(this).next('span').html() || "");
         	$(this).next('span').remove();
-        	$.data(this,'source',$(this).attr('ref') || $(this).attr('src'));
+        	$.data(this,'source',$(this).attr('ref') || $(this).attr('src').replace('thb=74', 'thb=F625,480'));
 			//gets each items index to iterate through them. Thanks to Tushar for the fix.
 			$.data(this,'order',$(this).closest('ul').find('li').index($(this).parents('li')));
     		//pass data so it can enter the load scope
@@ -186,6 +185,8 @@
 					width: width+"px",
 					height: height+"px"
 				};
+				self.width = width;
+				self.height = height;
 				self.css(imgcss);
 				self.hover(
 					function(){$(this).stop(true,true).fadeTo(250,1);},
@@ -210,9 +211,7 @@
         bindEvents: function() {
         	this.thumbs.bind('click',{self:this},this.imgClick);
         	this.imgNext.bind('click',{self:this},this.nextClick);
-        	this.textNext.bind('click',{self:this},this.nextClick);
         	this.imgPrev.bind('click',{self:this},this.prevClick);
-        	this.textPrev.bind('click',{self:this},this.prevClick);
         	this.imgPlay.bind('click',{self:this},this.playClick);
         	this.wrap.bind('mouseenter',{self:this},function(e){
         		e.data.self.imgPlay.stop(true,true).fadeIn('fast');
@@ -228,7 +227,10 @@
          * @return undefined
          */
 	     imgClick: function(e,x) {
+	    	clearImageSelected();
 	     	var self = e.data.self;
+	     	self.anchor = $('div.pika-image a.image-selected');
+	     	self.image = self.anchor.children('img');
 	     	if(self.animating){return;}
 			self.caption.fadeOut('slow');
      		if(typeof(x) == 'undefined' || x.how != "auto")
@@ -244,7 +246,10 @@
 	     	self.active = $(this);
 	     	self.active.addClass('active').fadeTo(200,1);
      		var val = self.active.attr('src').split('id=');
-     		document.getElementById('panelThumbs:selectContentId').value = val[1];
+     		if(val.size() > 1)
+     			document.getElementById('panelThumbs:selectContentId').value = val[1].split('&')[0];
+     		else
+     			document.getElementById('panelThumbs:selectContentId').value = document.getElementById('cntId');
      		document.getElementById('panelThumbs:btnSelectThumb').click();
 	     	var data = $.data(this);
 	 		$('<img />').bind('load', {self:self,data:data}, function()
@@ -385,7 +390,7 @@
 						//fade out then in
 						self.aniDiv.hide();
 						self.image.fadeOut('slow',function(){
-							self.image.attr('src',data.source).fadeIn('slow',function()
+							self.image.attr('src',data.source == null ? null : data.source.replace('thb=74','thb=F625,480')).fadeIn('slow',function()
 							{
 								self.finishAnimating(data);
 							});
@@ -398,11 +403,12 @@
 	     finishAnimating: function(data)
 	     {
      		this.animating = false;
-     		this.image.attr('src',data.source);
+     		this.image.attr('src',data.source == null ? null : data.source.replace('thb=74','thb=F625,480'));
      		this.image.attr('width',625);
      		this.image.attr('height',480);
      		this.aniDiv.hide();
-     		this.anchor.attr('href',data.source);
+     		var ref = data.source.replace('thb=F625,480', 'thb=M960,600');
+     		this.anchor.attr('href',ref);
      		this.anchor.addClass('image-selected');
      		if(this.options.showCaption)
      		{
@@ -413,6 +419,8 @@
      			var self = this;
      			this.image.delay(this.options.speed).fadeIn(0,function(){ if(self.options.autoPlay){ self.nextClick(); } });
      		}
+     		updateCleanClone();
+     		initImageSelected();
 	     },//end finishedAnimating
 		 gapper: function(ele, aHeight)
  		 {
@@ -426,6 +434,7 @@
 		 },
 		 nextClick : function(e)
 		 {
+			clearImageSelected();
 		 	var how = "natural";
 		 	try{
 				var self;
@@ -444,6 +453,7 @@
 		 },
 		 prevClick : function(e)
 		 {
+			 clearImageSelected();
 			var self = e.data.self;
 			var prev = self.active.parents('li:first').prev().find('img');
 			if(prev.length == 0){prev = self.list.find('img:last');};

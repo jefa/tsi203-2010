@@ -7,11 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-import javax.faces.context.FacesContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.http.HttpSession;
 
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
@@ -24,14 +22,13 @@ import partuzabook.servicioDatos.exception.EventNotFoundException;
 import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.serviciosNotificaciones.email.PartuzaMailer;
-import partuzabook.serviciosUI.multimedia.ServicesMultimediaRemote;
 
 public class EventoMB {
 	public static final int PAGE_SIZE = 100;
+	public static final boolean isSuperUser = false;
 	
 	private PartuzaMailer mailer = new PartuzaMailer();
 	
-	private ServicesMultimediaRemote servicesMultimedia;
 	private ServicesEventRemote servicesEvent;
 	private ServicesUserRemote servicesUser;
 	
@@ -45,7 +42,10 @@ public class EventoMB {
 
 	private int categoryId;
 	private DatatypeCategory selectedCategory;
+	private List<DatatypeContent> contents;
 	private Integer contentsCount;
+	private int tagsCount;
+	private int commentsCount;
 	
 	private Integer contentId;
 	private DatatypeContent selectedContent;
@@ -59,10 +59,6 @@ public class EventoMB {
 	
 	private boolean hasAlbum;
 	
-	private int tagX1;
-	private int tagX2;
-	private int tagY1;
-	private int tagY2;
 	private List<DatatypeUser> candidates;
 	private List<DatatypeUser> results;
 	private String suggest = "";
@@ -71,7 +67,14 @@ public class EventoMB {
 	
 	private String firstContentType;
 	private String firstContentUrl;
-	private String firstContentId;
+	
+	private boolean albumExists;
+	private DatatypeCategory album;
+	private boolean isAlbumFinalized;
+
+	private boolean contentIsInAlbum;
+	
+	private String orderedList = "";
 	
 	public EventoMB(){
 		int sessionEvtId = getEvtId();
@@ -80,13 +83,23 @@ public class EventoMB {
 		}
 	}
 	
+	public boolean getIsSuperUser() {
+		return isSuperUser;
+	}
+	
 	public void setSelectedContent(DatatypeContent selectedContent){
 		this.selectedContent = selectedContent;
+		setTagsCount(selectedContent.getTags().size());
+		setCommentsCount(selectedContent.getComments().size());
 	}
 	
 	public DatatypeContent getSelectedContent(){
 		//selectedContent = servicesEvent.getContentDetails(contentId, userName);
 		return selectedContent;
+	}
+	
+	public boolean isPhotoSelectedContent(){
+		return this.selectedContent.getType() == 1;
 	}
 	
 	public void setCategoryId(int categoryId) {
@@ -99,24 +112,15 @@ public class EventoMB {
 	}
 
 	public void updateCategory() {
-		System.out.println("holaaa");
-		/*
-		for(Iterator<DatatypeCategorySummary> it = categories.iterator(); it.hasNext(); ) {
-			DatatypeCategorySummary cat = it.next();
-			if(cat.getCategoryId() == categoryId) {
-				setFirstContentType(selectedCategory.getContents().get(0).getType() + "");
-				setFirstContentUrl(selectedCategory.getContents().get(0).getUrl());
-			}
-		}
-		*/
+		System.out.println("Category Update");
 	}
-
+	
 	public void setContentId(Integer contentId) {
 		this.contentId = contentId;
 		suggest = null;
 		
-			setSelectedContent(servicesEvent.getContentDetails(contentId, getUserName()));
-			setRating(servicesEvent.getMyRatingForContent(contentId, getUserName()));
+		setSelectedContent(servicesEvent.getContentDetails(contentId, getUserName()));
+		setRating(servicesEvent.getMyRatingForContent(contentId, getUserName()));
 	}
 
 	public Integer getContentId() {
@@ -141,8 +145,14 @@ public class EventoMB {
 
 	public void setSelectedCategory(DatatypeCategory selectedCategory) {
 		this.selectedCategory = selectedCategory;
+		if (selectedCategory.getCategory().equals("Album")) {
+			ServicesEventRemote service = getServicesEvent();
+			setContents(service.getAlbumContents(this.eventId));
+		} else {
+			setContents(selectedCategory.getContents());
+		}
 		setContentsCount(this.selectedCategory.getContents().size());
-		if(getContentsCount() > 0) {
+		if (getContentsCount() > 0) {
 			setContentId(selectedCategory.getContents().get(0).getContId());
 			setFirstContentType(selectedCategory.getContents().get(0).getType() + "");
 			setFirstContentUrl(selectedCategory.getContents().get(0).getUrl());
@@ -156,6 +166,14 @@ public class EventoMB {
 		return selectedCategory;
 	}
 
+	public void setContents(List<DatatypeContent> list){
+		this.contents = list;
+		setContentsCount(this.contents.size());
+	}
+	
+	public List<DatatypeContent> getContents(){
+		return this.contents;
+	}
 	
 	public void setContentsCount(Integer contentsCount) {
 		this.contentsCount = contentsCount;
@@ -163,6 +181,22 @@ public class EventoMB {
 
 	public Integer getContentsCount() {
 		return contentsCount;
+	}
+	
+	public void setTagsCount(int count){
+		this.tagsCount = count;
+	}
+	
+	public int getTagsCount(){
+		return this.tagsCount;
+	}
+
+	public void setCommentsCount(int count){
+		this.commentsCount = count;
+	}
+	
+	public int getCommentsCount(){
+		return this.commentsCount;
 	}
 
 	public String getComentario(){
@@ -196,7 +230,7 @@ public class EventoMB {
 				comentario = comentario.replace("<p>", "").replace("</p>","");
 				service.commentContent(contentId, comentario, getUserName());
 				
-				//Agrego que en la lógica se genere una notificación para los moderadores sobre el comentario (GG).
+				//Agrego que en la lï¿½gica se genere una notificaciï¿½n para los moderadores sobre el comentario (GG).
 				
 				//TODO: Javier enviar notificaciÃ³n por mail a los moderadores que hay un nuevo comentario
 				//para el contenido en el evento.
@@ -256,11 +290,6 @@ public class EventoMB {
 		}
 	}
 
-	/*public void setUserName(String userName) {
-		this.userName = userName;
-		setValidUserForContext(false);
-	}*/
-
 	public String getUserName() {
 		return SessionUtils.getUsername();
 	}
@@ -268,7 +297,6 @@ public class EventoMB {
 	public Integer getEvtId() {
 		return SessionUtils.getEventId();
 	}
-
 	
 	public void setEvento(DatatypeEvent evento) {
 		this.evento = evento;
@@ -279,7 +307,7 @@ public class EventoMB {
 		while (it.hasNext()) {
 			DatatypeCategorySummary dataCateg = it.next();
 			if (dataCateg.getCategory().equals("Album")){
-				newList.add(dataCateg);	
+				newList.add(dataCateg);
 			}
 		}
 		if (!isValidUserForContext()) {
@@ -302,7 +330,9 @@ public class EventoMB {
 			}
 			setCategories(newList);
 			setCategoriesCount(newList.size());
-			setCategoryId(newList.get(0).getCategoryId());
+			if (getCategoriesCount() > 0) {
+				setCategoryId(newList.get(0).getCategoryId());
+			}
 		}
 	}
 
@@ -325,14 +355,14 @@ public class EventoMB {
 	}
 	
 	public Integer getEventId() {
-		return this.eventId; 
+		return this.eventId;
 	}
 
 	public void setEventId(Integer eventId){
 		this.eventId = eventId;
 		setValidUserForContext(false);
 		// Also set the Event
-		setEvento(getServicesEvent().getEventDetails(eventId, false));
+		setEvento(getServicesEvent().getEventDetails(eventId, getIsSuperUser()));
 	}
 
 	public void setCategoriesCount(Integer categoriesCount) {
@@ -401,32 +431,6 @@ public class EventoMB {
 		this.results = results;
 	}
 	
-	public String tagUser() {
-		try {
-			Context ctx = getContext();
-			if (suggest != null && suggest != "") {
-				ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-				service.tagUserInContent(contentId, getUserName(), suggest, tagX1, tagY1);
-				
-				String emailTo = getServicesUser().getNormalUserMailAddress(getUserName());
-				mailer.sendFormattedMail(getUserName(), getServicesUser().getName(getUserName()),
-						"Usuario "+getUserName()+" fue taggeado en contenido "+contentId, 
-						new SimpleDateFormat().format(new Date()), null, emailTo, null, null, 
-					"Ud. ha sido taggeado en evento");
-				
-				suggest = null;
-				setContentId(contentId);
-			}
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
 	public void removeTag() {
 		try {
 			Context ctx = getContext();
@@ -470,7 +474,7 @@ public class EventoMB {
 		try {
 			ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");	
-			this.hasAlbum = service.getEventDetails(eventId, false).getHasAlbum(); 
+			this.hasAlbum = service.getEventDetails(eventId, getIsSuperUser()).getHasAlbum(); 
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -481,46 +485,6 @@ public class EventoMB {
 	public void setHasAlbum(boolean album){
 		this.hasAlbum = album;
 	}
-
-	
-	public int getTagX1(){
-		return this.tagX1;
-	}
-
-	public void setTagX1(int tagX1) {
-		this.tagX1 = tagX1;
-	}
-	
-	public int getTagX2() {
-		return tagX2;
-	}
-
-	public void setTagX2(int tagX2) {
-		this.tagX2 = tagX2;
-	}
-
-	public int getTagY1() {
-		return tagY1;
-	}
-
-	public void setTagY1(int tagY1) {
-		this.tagY1 = tagY1;
-	}
-
-	public int getTagY2() {
-		return tagY2;
-	}
-
-	public void setTagY2(int tagY2) {
-		this.tagY2 = tagY2;
-	}
-	/*public DatatypeContent getContentAtPosition(){
-		if (evento == null)
-			return null;
-		if (evento.contents.size() <= 0)
-			return null;
-		return evento.contents.get(position);
-	}*/
 
 	public void setAverageRates(List<Integer> averageRates) {
 		this.averageRates = averageRates;
@@ -565,25 +529,6 @@ public class EventoMB {
 		return ctx;
 	}
 
-	/*	public List<DatatypeEventSummary> getEventosRecientes() {
-
-		try {
-			Context ctx = getContext();
-			ServicesEventRemote service = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");
-			eventosRecientes = service.get.getSummaryEvents(10, 5);
-			return eventosRecientes;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public void setEventosRecientes(
-			ArrayList<DatatypeEventSummary> eventosRecientes) {
-		this.eventosRecientes = eventosRecientes;
-	}*/
-
 	private Boolean calcValidUserForContent() {
 		
 		return getServicesEvent().isUserRelatedToEvent(eventId, getUserName());
@@ -592,9 +537,9 @@ public class EventoMB {
 	public void sendAdmitMail() {
 		getServicesEvent().sendAdmitMail(eventId, getUserName());
 	}
-	
+
 	public void setFirstContentType(String firstContentType) {
-		this.firstContentType = firstContentType;
+		//this.firstContentType = firstContentType;
 	}
 
 	public String getFirstContentType() {
@@ -602,10 +547,108 @@ public class EventoMB {
 	}
 
 	public void setFirstContentUrl(String firstContentUrl) {
-		this.firstContentUrl = firstContentUrl;
+		//this.firstContentUrl = firstContentUrl;
 	}
 
 	public String getFirstContentUrl() {
 		return firstContentUrl;
 	}
+
+	public boolean getContentIsInAlbum(){
+		if (this.selectedContent == null){
+			return false;
+		}
+		return this.selectedContent.getPosAlbum() != null;
+	}
+	
+	public void setContentIsInAlbum(boolean contentIsInAlbum){
+		this.contentIsInAlbum = contentIsInAlbum;
+	}
+	
+	public DatatypeCategory getAlbum(){
+		try {
+			ServicesEventRemote service = getServicesEvent();
+			DatatypeCategory dataCntCateg = service.existsAlbum(this.eventId);
+			this.album = dataCntCateg;
+			return this.album;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public void setAlbum(DatatypeCategory alb){
+		this.album = alb;
+	}
+
+	public boolean getAlbumExists(){
+		DatatypeCategory album = getAlbum();
+		if (album == null) {
+			this.albumExists = false;
+		} else {
+			this.album = album;
+			this.albumExists = true;
+		}
+		return this.albumExists;
+	}
+	
+	public void setAlbumExists(boolean exists){
+		this.albumExists = exists;
+	}
+	
+	public boolean getIsAlbumFinalized() {
+		try {
+			ServicesEventRemote service = getServicesEvent();
+			this.isAlbumFinalized =  service.isAlbumFinalized(this.eventId);
+			return this.isAlbumFinalized;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public void setIsAlbumFinalized(boolean is){
+		this.isAlbumFinalized = is;
+	}
+	
+	public void agregarContenidoAlbum() {
+		try {
+			ServicesEventRemote service = getServicesEvent();
+			service.addContentToAlbum(this.contentId, this.eventId);
+			//setCategoryId(this.categoryId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void quitarContenidoAlbum() {
+		try {
+			ServicesEventRemote service = getServicesEvent();
+			service.removeContentFromAlbum(this.contentId, this.eventId);
+			setCategoryId(this.categoryId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setearCoverEvento() {
+		try {
+			ServicesEventRemote service = getServicesEvent();
+			service.setCoverImage(this.contentId, this.eventId);
+			setEventId(this.eventId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	
+	
+	public void setOrderedList(String list){
+		this.orderedList = list;
+	}
+	
+	public String getOrderedList(){
+		return this.orderedList;
+	}
+
 }
