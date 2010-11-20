@@ -61,7 +61,7 @@ public class PaginaInicioMB {
 	}
 	
 	public int getTotalPaginas() {
-		if (misEventosRecientes == null){
+		if (misEventosRecientes == null || misEventosRecientes.size() == 0){
 			return 1;
 		}
 		if ((misEventosRecientes.size() % RECENT_EVENTS_PER_PAGE) == 0) {	
