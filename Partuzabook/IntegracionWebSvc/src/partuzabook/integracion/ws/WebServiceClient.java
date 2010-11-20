@@ -14,6 +14,7 @@ import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl
 import partuzabook.integracion.ws.busqueda.Busqueda;
 import partuzabook.integracion.ws.busqueda.BusquedaService;
 import partuzabook.integracion.ws.busqueda.Evento;
+import partuzabook.utils.Parameters;
 
 public class WebServiceClient {
 
@@ -21,7 +22,7 @@ public class WebServiceClient {
 		
 		try {
 			Service service = Service.create(
-					new URL("http://127.0.0.1:8080/PartuzabookEAR-IntegracionWebSvc/BusquedaBean?wsdl"),
+					new URL("http://"+Parameters.LOCAL_IP+"/PartuzabookEAR-IntegracionWebSvc/BusquedaBean?wsdl"),
 					new QName("http://edu.tsi2.ws/integracion/ws/busqueda", "BusquedaService")
 					
 			);

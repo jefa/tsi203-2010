@@ -22,6 +22,7 @@ import com.sun.xml.bind.v2.TODO;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
+import partuzabook.utils.Parameters;
  
 @Stateless
 @WebService(
@@ -148,12 +149,12 @@ public class BusquedaBean {
 			evento.setDescripcion(datatypeEventSummary.getDescription());
 			evento.setDireccion(datatypeEventSummary.getAddress());
 			XMLGregorianCalendarImpl gCal = new XMLGregorianCalendarImpl();
-			// @TODO: setear todos los campos de fecha en el xml field
+			gCal.setMillisecond((int)datatypeEventSummary.getDate().getTime());
 			evento.setFecha(gCal);
 			evento.setIdEvento(datatypeEventSummary.getEvtId());
 			evento.setNombre(datatypeEventSummary.getEvtName());
 			//evento.setTipo();
-			//evento.setUrlCover();
+			evento.setUrlCover("http://"+Parameters.LOCAL_IP+"/UsuarioUI/ContentFeeder?id="+datatypeEventSummary.getCoverId());
 			translatedCollection.add(evento);
 			i++;
 		}
