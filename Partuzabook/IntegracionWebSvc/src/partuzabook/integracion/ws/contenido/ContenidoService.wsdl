@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions
+    name='BusquedaService'
+    targetNamespace='http://edu.tsi2.ws/integracion/ws/contenido'
+    xmlns='http://schemas.xmlsoap.org/wsdl/'
+    xmlns:ns1='http://edu.tsi2.ws/integracion/ws'
+    xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/'
+    xmlns:tns='http://edu.tsi2.ws/integracion/ws/contenido'
+    xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+
+   <types>
+      <xsd:schema targetNamespace='http://edu.tsi2.ws/integracion/ws'
+                 version='1.0' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+         <xsd:complexType name='contenido'>
+            <xsd:sequence>
+               <xsd:element minOccurs='0' name='descripcion' type='xsd:string'/>
+               <xsd:element minOccurs='0' name='url' type='xsd:string'/>
+            </xsd:sequence>
+         </xsd:complexType>
+      </xsd:schema>
+
+      <xsd:schema
+          targetNamespace='http://edu.tsi2.ws/integracion/ws/contenido'
+          version='1.0'
+          xmlns:ns1='http://edu.tsi2.ws/integracion/ws'
+          xmlns:tns='http://edu.tsi2.ws/integracion/ws/contenido'
+          xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+         
+         <xsd:import namespace='http://edu.tsi2.ws/integracion/ws'/>
+         <xsd:element name='getAlbumContents' 
+                     nillable='true' type='tns:contentRequest'/>
+         <xsd:element name='getAlbumContentsResponse' 
+                     nillable='true' type='tns:contentResponse'/>
+         <xsd:complexType name='contentRequest'>
+            <xsd:sequence>
+               <xsd:element name='eventId' type='xsd:int'/>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name='contentResponse'>
+            <xsd:sequence>
+               <xsd:element minOccurs='0' name='contenido' type='ns1:contenido' maxOccurs="unbounded"/>
+               <xsd:element name='total' type="xsd:int"/>
+            </xsd:sequence>
+         </xsd:complexType>
+      </xsd:schema>
+
+   </types>
+
+   <message name='Contenido_getAlbumContents'>
+      <part element='tns:getAlbumContents' name='getAlbumContents'/>
+   </message>
+   <message name='Contenido_getAlbumContentsResponse'>
+      <part element='tns:getAlbumContentsResponse' name='getAlbumContentsResponse'/>
+   </message>
+
+   <portType name='Contenido'>
+      <operation name='getAlbumContents' 
+                 parameterOrder='getAlbumContents'>
+         <input message='tns:Contenido_getAlbumContents'/>
+         <output message='tns:Contenido_getAlbumContentsResponse'/>
+      </operation>
+
+   </portType>
+   <binding name='ContenidoBinding' type='tns:Contenido'>
+      <soap:binding style='document' 
+                    transport='http://schemas.xmlsoap.org/soap/http'/>
+      <operation name='getAlbumContents'>
+         <soap:operation soapAction=''/>
+         <input>
+            <soap:body use='literal'/>
+         </input>
+         <output>
+            <soap:body use='literal'/>
+         </output>
+      </operation>
+   </binding>
+   <service name='ContenidoService'>
+      <port binding='tns:ContenidoBinding' name='ContenidoPort'>
+
+         <soap:address 
+             location='http://192.168.1.101/partuzabook-integracion/ContenidoBean'/>
+      </port>
+   </service>
+</definitions>
