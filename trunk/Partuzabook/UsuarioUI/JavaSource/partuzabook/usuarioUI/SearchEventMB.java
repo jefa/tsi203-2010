@@ -165,6 +165,12 @@ public class SearchEventMB {
 		this.eventFilter = filter;
 	}
 	
+	public void limpiarBusqueda(){
+		this.mensajeValidacionNombre = "";
+		this.mensajeValidacionFecha= "";
+		this.eventResults = null;
+	}
+	
 	public List<DatatypeEventSummary> searchEventsByName() {
 		try {
 			if (this.eventNameSearched == null || this.eventNameSearched.equals("")){
