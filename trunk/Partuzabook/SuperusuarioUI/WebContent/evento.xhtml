@@ -293,7 +293,7 @@
 								rendered="#{tag.isRealUser}" action="verPerfil"
 								styleClass="entry-thumbnails-link">
 								<f:setPropertyActionListener value="#{tag.userName}"
-									target="#{PublicProfile.userId}" />
+									target="#{Profile.userId}" />
 								<h:graphicImage
 									value="/UserImageFeeder?username=#{tag.userName}&#38;thb=50"
 									styleClass="attachment-quick-preview-thumb wp-post-image" />
@@ -304,7 +304,7 @@
 								rendered="#{tag.isRealUser}" value="#{tag.name}"
 								action="verPerfil">
 								<f:setPropertyActionListener value="#{tag.userName}"
-									target="#{PublicProfile.userId}" />
+									target="#{Profile.userId}" />
 							</h:commandLink> <h:outputText rendered="#{!tag.isRealUser}" value="#{tag.name}" />
 							</h5>
 							</li>
@@ -329,7 +329,7 @@
 								<div class="entry-thumbnails-tag"><h:commandLink
 									action="verPerfil" styleClass="entry-thumbnails-link">
 									<f:setPropertyActionListener value="#{comment.userId}"
-										target="#{PublicProfile.userId}" />
+										target="#{Profile.userId}" />
 									<h:graphicImage
 										value="/UserImageFeeder?username=#{comment.userId}&#38;thb=50"
 										styleClass="attachment-quick-preview-thumb wp-post-image" />
@@ -349,7 +349,7 @@
 								<h5 class="entry-title"><h:commandLink
 									value="#{comment.userName}" action="verPerfil">
 									<f:setPropertyActionListener value="#{comment.userId}"
-										target="#{PublicProfile.userId}" />
+										target="#{Profile.userId}" />
 								</h:commandLink></h5>
 								<div class="entry-summary">#{comment.text}</div>
 								</li>

@@ -17,10 +17,10 @@ import partuzabook.datatypes.DatatypeFileAux;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
-public class PublicProfile {
+public class Profile {
 
 	private static final String INPUT_OBLIG = "Campo obligatorio";
-	private static final String PASS_NOT_EQUALS = "Las contraseñas no coinciden";
+	private static final String PASS_NOT_EQUALS = "Las contraseï¿½as no coinciden";
 	private static final String BAD_EMAIL = "El email ingresado no es un email valido";
 	private static final String SERVICES_USER_REMOTE = "PartuzabookEAR/ServicesUser/remote";
 	
@@ -53,7 +53,7 @@ public class PublicProfile {
 		} catch (NamingException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
-			//TODO: Redirigir a página de error
+			//TODO: Redirigir a pï¿½gina de error
 			e.printStackTrace();
 		}
 	}
@@ -260,7 +260,7 @@ public class PublicProfile {
 				} else {
 					DatatypeUser nu = servicesUser.updateNormalUser(user.username, newPassword, user.email, user.name);
 					user = nu;
-					message = "Usuario modificado con éxito";
+					message = "Usuario modificado con ï¿½xito";
 				}
 			}
 		} catch (NamingException e) {

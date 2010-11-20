@@ -126,7 +126,7 @@ onblur="if(value=='')value='Buscar...'"
 	<h:form rendered="#{loginMB.isUserLogged}">
 	<span style="margin-right:3px">Bienvenido</span> 
 			<h:commandLink value="#{loginMB.name}" action="verMiPerfil">
-				<f:setPropertyActionListener value="#{loginMB.userName}" target="#{PublicProfile.userId}" />
+				<f:setPropertyActionListener value="#{loginMB.userName}" target="#{Profile.userId}" />
 			</h:commandLink>
 	</h:form>
 </div>
