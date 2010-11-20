@@ -21,6 +21,8 @@ import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
 public class PaginaInicioMB {
 
+	private static int RECENT_EVENTS_PER_PAGE = 1;
+
 	// General
 	private boolean isUserLogged;
 	private List<DatatypeEventSummary> eventosRecientes;
@@ -59,7 +61,13 @@ public class PaginaInicioMB {
 	}
 	
 	public int getTotalPaginas() {
-		return misEventosRecientes.size() / 6 + 1;
+		if (misEventosRecientes == null){
+			return 1;
+		}
+		if ((misEventosRecientes.size() % RECENT_EVENTS_PER_PAGE) == 0) {	
+			return misEventosRecientes.size() / RECENT_EVENTS_PER_PAGE;
+		} 
+		return misEventosRecientes.size() / RECENT_EVENTS_PER_PAGE + 1;
 	}
 
 	
@@ -198,7 +206,8 @@ public class PaginaInicioMB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
-		return this.misEventosRecientes.subList(paginaActual*6, Math.min((paginaActual+1)*6,misEventosRecientes.size()));	
+		return this.misEventosRecientes.subList(paginaActual*RECENT_EVENTS_PER_PAGE, 
+				Math.min((paginaActual+1)*RECENT_EVENTS_PER_PAGE,misEventosRecientes.size()));	
 	}
 
 	public void setMisEventosRecientes(ArrayList<DatatypeEventSummary> list) {

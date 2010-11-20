@@ -61,7 +61,7 @@ jQuery('#featured-slideshow').cycle({
 
 </script>
 		</h:form>
-		<h:form id="formMisEventos" rendered="#{paginaInicioMB.isUserLogged}">
+		<a4j:form id="formMisEventos" rendered="#{paginaInicioMB.isUserLogged}" >
 			<div id="index-featured1">
 			<div class="home-title">Mis Eventos Recientes</div>
 			
@@ -69,15 +69,14 @@ jQuery('#featured-slideshow').cycle({
 				<a4j:repeat  var="evento"
 					value="#{paginaInicioMB.misEventosRecientes}">
 					<li class="post type-post clearfix">
-					<div class="entry-thumbnails"><h:commandLink
-						action="verEvento" styleClass="entry-thumbnails-link">
+					<div class="entry-thumbnails"><h:commandLink 
+					action="verEvento" styleClass="entry-thumbnails-link">
 						<f:setPropertyActionListener value="#{evento.evtId}"
 							target="#{eventoMB.eventId}" />
-
-<div style="background-color:#000;background-position:top center;background-repeat:no-repeat;width:195px;height:110px;background-image:url('ContentFeeder?id=#{evento.coverId}&#38;thb=H195')"
-												class="attachment-node-based-thumb wp-post-image"></div>
-
-
+		
+						<div style="background-color:#000;background-position:top center;background-repeat:no-repeat;width:195px;height:110px;background-image:url('ContentFeeder?id=#{evento.coverId}&#38;thb=H195')"
+							class="attachment-node-based-thumb wp-post-image"></div>
+			
 						<span class="entry-meta"> <abbr class="published">#{evento.formattedDate}</abbr>
 						</span>
 					</h:commandLink></div>
@@ -90,20 +89,20 @@ jQuery('#featured-slideshow').cycle({
 				</a4j:repeat>
 			</ul>
 			
-<a4j:outputPanel rendered="#{paginaInicioMB.totalPaginas != 1}"> <div class="wp-pagenavi">
-<span class="pages">Pag. #{paginaInicioMB.paginaActual + 1} de #{paginaInicioMB.totalPaginas}</span>
-<a4j:repeat  var="pagina" value="#{paginaInicioMB.paginas}">
-	<h:outputText value="#{pagina + 1}" rendered="#{pagina == paginaInicioMB.paginaActual}" styleClass="current"/>
-	<h:commandLink value="#{pagina + 1}" rendered="#{pagina != paginaInicioMB.paginaActual}">
-		<f:setPropertyActionListener value="#{pagina}" target="#{paginaInicioMB.paginaActual}" />
-	</h:commandLink>
-</a4j:repeat>
-</div>
-</a4j:outputPanel>
+			<a4j:outputPanel rendered="#{paginaInicioMB.totalPaginas != 1}"> <div class="wp-pagenavi">
+			<span class="pages">Pag. #{paginaInicioMB.paginaActual + 1} de #{paginaInicioMB.totalPaginas}</span>
+			<a4j:repeat  var="pagina" value="#{paginaInicioMB.paginas}">
+				<h:outputText value="#{pagina + 1}" rendered="#{pagina == paginaInicioMB.paginaActual}" styleClass="current"/>
+				<h:commandLink value="#{pagina + 1}" rendered="#{pagina != paginaInicioMB.paginaActual}" >
+					<f:setPropertyActionListener value="#{pagina}" target="#{paginaInicioMB.paginaActual}" />
+				</h:commandLink>
+			</a4j:repeat>
+			</div>
+			</a4j:outputPanel>
 			
 			<!-- .posts-default --></div>
 			<!-- #index-featured1 -->
-		</h:form>
+		</a4j:form>
 
 		<h:form id="eventosRecientes">
 			<div id="index-featured2">
