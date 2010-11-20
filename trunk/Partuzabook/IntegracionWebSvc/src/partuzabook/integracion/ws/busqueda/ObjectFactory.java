@@ -47,11 +47,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SearchBetweenDateRequest }
+     * Create an instance of {@link SearchByDateRequest }
      * 
      */
-    public SearchBetweenDateRequest createSearchBetweenDateRequest() {
-        return new SearchBetweenDateRequest();
+    public SearchByDateRequest createSearchByDateRequest() {
+        return new SearchByDateRequest();
     }
 
     /**
@@ -63,19 +63,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SearchByDateRequest }
-     * 
-     */
-    public SearchByDateRequest createSearchByDateRequest() {
-        return new SearchByDateRequest();
-    }
-
-    /**
      * Create an instance of {@link SearchResponse }
      * 
      */
     public SearchResponse createSearchResponse() {
         return new SearchResponse();
+    }
+
+    /**
+     * Create an instance of {@link SearchBetweenDateRequest }
+     * 
+     */
+    public SearchBetweenDateRequest createSearchBetweenDateRequest() {
+        return new SearchBetweenDateRequest();
     }
 
     /**
