@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions
+    name='BusquedaService'
+    targetNamespace='http://edu.tsi2.ws/integracion/ws/busqueda'
+    xmlns='http://schemas.xmlsoap.org/wsdl/'
+    xmlns:ns1='http://edu.tsi2.ws/integracion/ws'
+    xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/'
+    xmlns:tns='http://edu.tsi2.ws/integracion/ws/busqueda'
+    xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+
+   <types>
+      <xsd:schema targetNamespace='http://edu.tsi2.ws/integracion/ws'
+                 version='1.0' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+         <xsd:complexType name='evento'>
+            <xsd:sequence>
+               <xsd:element minOccurs='0' name='idEvento' type="xsd:int"/>
+               <xsd:element minOccurs='0' name='nombre' type='xsd:string'/>
+               <xsd:element minOccurs='0' name='fecha' type="xsd:dateTime"/>
+               <xsd:element minOccurs='0' name='tipo' type="xsd:int"/>
+               <xsd:element minOccurs='0' name='descripcion' type='xsd:string'/>
+               <xsd:element minOccurs='0' name='direccion' type='xsd:string'/>
+               <xsd:element minOccurs='0' name='urlCover' type='xsd:string'/>
+            </xsd:sequence>
+         </xsd:complexType>
+      </xsd:schema>
+
+      <xsd:schema
+          targetNamespace='http://edu.tsi2.ws/integracion/ws/busqueda'
+          version='1.0'
+          xmlns:ns1='http://edu.tsi2.ws/integracion/ws'
+          xmlns:tns='http://edu.tsi2.ws/integracion/ws/busqueda'
+          xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+         
+         <xsd:import namespace='http://edu.tsi2.ws/integracion/ws'/>
+         <xsd:element name='searchByName' 
+                     nillable='true' type='tns:searchRequest'/>
+         <xsd:element name='searchByNameResponse' 
+                     nillable='true' type='tns:searchResponse'/>
+         <xsd:complexType name='searchRequest'>
+            <xsd:sequence>
+               <xsd:element name='nombre' type='xsd:string'/>
+               <xsd:element name='maxEventos' type='xsd:int'/>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name='searchResponse'>
+            <xsd:sequence>
+               <xsd:element minOccurs='0' name='evento' type='ns1:evento' maxOccurs="unbounded"/>
+               <xsd:element name='total' type="xsd:int"/>
+            </xsd:sequence>
+         </xsd:complexType>
+      </xsd:schema>
+
+   </types>
+
+   <message name='Busqueda_searchByName'>
+      <part element='tns:searchByName' name='searchByName'/>
+   </message>
+   <message name='Busqueda_searchByNameResponse'>
+      <part element='tns:searchByNameResponse' 
+            name='searchByNameResponse'/>
+   </message>
+   <portType name='Busqueda'>
+      <operation name='searchByName' 
+                 parameterOrder='searchByName'>
+         <input message='tns:Busqueda_searchByName'/>
+         <output message='tns:Busqueda_searchByNameResponse'/>
+      </operation>
+   </portType>
+   <binding name='BusquedaBinding' type='tns:Busqueda'>
+      <soap:binding style='document' 
+                    transport='http://schemas.xmlsoap.org/soap/http'/>
+      <operation name='searchByName'>
+         <soap:operation soapAction=''/>
+         <input>
+            <soap:body use='literal'/>
+         </input>
+         <output>
+            <soap:body use='literal'/>
+         </output>
+      </operation>
+   </binding>
+   <service name='BusquedaService'>
+      <port binding='tns:BusquedaBinding' name='BusquedaPort'>
+
+         <soap:address 
+             location='http://localhost:8080/partuzabook-integracion/BusquedaBean'/>
+      </port>
+   </service>
+</definitions>
