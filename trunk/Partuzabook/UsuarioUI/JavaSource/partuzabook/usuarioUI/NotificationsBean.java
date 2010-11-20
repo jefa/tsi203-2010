@@ -215,7 +215,7 @@ public class NotificationsBean {
 		return ((toUserMessage == null || toUserMessage.equals("")) && (bodyMessage == null || bodyMessage
 				.equals("")));
 	}
-
+	
 	public String sendMail() {
 		// Limpiamos los mensajes
 		gralNotificationsPage = 1;
