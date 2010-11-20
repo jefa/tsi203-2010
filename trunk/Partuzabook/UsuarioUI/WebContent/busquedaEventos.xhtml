@@ -10,6 +10,10 @@
 
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Busqueda de Eventos</ui:define>
+	<ui:define name="styles">
+	
+
+	</ui:define>
 	<ui:define name="body">
 	
 	<ul class="xoxo" id="ulSidebar">
@@ -48,7 +52,7 @@ function toggleTab(control, tab)
 		Ingrese el nombre a buscar
 		<br/>		
 		<h:inputText id="searchField" value="#{SearchEventMB.eventNameSearched}" 
-		style="width:200px"/>
+		style="width:320px"/>
 		<a4j:commandButton action="#{SearchEventMB.searchEventsByName}" value="Buscar" style="margin-left:10px" 
 		    reRender="resultadoEventos, formSearchByName" id="searchByName"/> 
 		<h:outputText style="color:Red;margin-left:10px" id="ErrorNombre" value="#{SearchEventMB.mensajeValidacionNombre}"/>
@@ -63,24 +67,13 @@ function toggleTab(control, tab)
 		<br/>
             <rich:calendar value="#{SearchEventMB.eventDateSearched}"
                     datePattern="d/MMM/y"  showApplyButton="false"  
-                    cellWidth="2px" cellHeight="22px" style="width:10px;"/>
+                    cellWidth="2px" cellHeight="22px" />
           	<a4j:commandButton action="#{SearchEventMB.searchEventsByDate}" value="Buscar" 
-		    	reRender="resultadoEventos, formSearchByDate" id="searchByDate"/>
-			<h:outputText style="color:Red;" id="ErrorFecha" value="#{SearchEventMB.mensajeValidacionFecha}"/>
+		    	reRender="resultadoEventos, formSearchByDate" id="searchByDate" style="margin-left:10px"/>
+			<h:outputText style="color:Red;margin-left:10px" id="ErrorFecha" value="#{SearchEventMB.mensajeValidacionFecha}"/>
 
 	</h:form>
-		<h:form id="formFilterEventsByDate">	
-		Seleccione un filtro de fecha
-		<br/>
-	    <rich:comboBox selectFirstOnUpdate="false"
-	        defaultLabel="Seleccione una categoria"
-	        value="#{SearchEventMB.eventFilter}" 
-	        suggestionValues="#{SearchEventMB.filterByDateOptions}" 
-	        width="400px">
-	        <a4j:support event="onselect" action="#{SearchEventMB.filterEvents}" 
-	        	reRender="resultadoEventos" />		
-	    </rich:comboBox> 
-	</h:form>
+		
 	
 </div>
 		
@@ -89,10 +82,9 @@ function toggleTab(control, tab)
 		Seleccione una categoria
 		<br/>
 	    <rich:comboBox selectFirstOnUpdate="false"
-	        defaultLabel="Seleccione una categoria"
 	        value="#{SearchEventMB.eventFilter}" 
 	        suggestionValues="#{SearchEventMB.filterByCategOptions}" 
-	        width="400px">
+	        width="400px" style="margin-bottom:10px">
 	        <a4j:support event="onselect" action="#{SearchEventMB.filterEventsByEvtCategory}" 
 	        	reRender="resultadoEventos" />		
 	    </rich:comboBox> 

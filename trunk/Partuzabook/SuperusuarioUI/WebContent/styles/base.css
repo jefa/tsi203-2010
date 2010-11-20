@@ -80,7 +80,7 @@ ul.sf-menu li li li:hover ul, ul.sf-menu li li li.sfHover ul  { left: 11em; top:
 .widgetcontainer  { padding: 10px; margin-bottom: 10px; }
 .widgetcontainer ul, .widgetcontainer .xoxo, .widgetcontainer ol  { list-style: disc; margin: 0 0 0 15px; padding: 0; }
 .widgetcontainer li  { margin: 3px 0; }
-.widgetcontainer input[type=text], .widgetcontainer input[type=password]  { width: 80%; }
+.widgetcontainer input[type=text],   { width: 80%; }
 
 .multi-sidebar .tabs  { list-style: none; margin: 0 0 5px; padding: 0; overflow: hidden; }
 .multi-sidebar .tabs li  { float: left; padding: 5px; margin: 0 3px 5px 0; }
@@ -213,3 +213,10 @@ ul.sf-menu li li li:hover ul, ul.sf-menu li li li.sfHover ul  { left: 11em; top:
 #footer .footer-message .floatright { margin-left: 20px; }
 .footer-sidebar-container  { margin: 10px; }
 .footer-sidebar     { overflow: hidden; float: left; margin: 0; padding: 0 0 10px; }
+
+input.rich-combobox-button-icon, input.rich-combobox-button-icon-inactive {
+background-image:url("/UsuarioUI/a4j/g/3_3_3.Finalorg.richfaces.renderkit.html.images.ComboBoxArrowImage/DATB/eAFjYGC4eu!x!!!!ARLjBZQ_.jsf") !important;
+background-repat:no-repeat !important;
+background-position: center center !important;
+}
+
