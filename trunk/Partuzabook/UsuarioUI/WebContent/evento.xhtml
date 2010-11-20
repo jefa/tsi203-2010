@@ -182,11 +182,11 @@
 							rendered="#{content.type eq 0 || content.type eq 2}"
 							value="/ContentFeeder?id=#{content.contId}&#38;thb=74"
 							name="#{content.contId}"
-							onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId')document.getElementById('videoLbl').hide().value='#{content.contId}';" />
+							onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';document.getElementById('videoLbl').hide()" />
 						<h:graphicImage
 							rendered="#{content.type eq 1 || content.type eq 3}"
 							value="#{content.youtubeUrlScreen}" name="#{content.contId}"
-							onclick="document.getElementById('cntType).value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId')document.getElementById('videoLbl').show()).value='#{content.contId}';" />
+							onclick="document.getElementById('cntType').value='#{content.type}';document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId').value='#{content.contId}';document.getElementById('videoLbl').show();" />
 						<span>#{content.description}<br />
 						Por: #{content.uploadedBy}</span></li>
 					</a4j:repeat>
