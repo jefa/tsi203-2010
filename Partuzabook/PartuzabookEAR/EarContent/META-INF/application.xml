@@ -8,6 +8,9 @@
     <ejb>Integracion.jar</ejb>
   </module>
   <module>
+    <ejb>IntegracionWebSvc.jar</ejb>
+  </module>
+  <module>
     <ejb>ServiciosIntegracion.jar</ejb>
   </module>
   <module>
