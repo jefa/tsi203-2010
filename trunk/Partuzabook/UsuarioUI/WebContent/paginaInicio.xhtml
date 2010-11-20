@@ -267,12 +267,9 @@ jQuery('#featured-slideshow').cycle({
 					<li class="clearfix"><span class="thumb" style="height: 36px"><h:graphicImage
 						value="/UserImageFeeder?mostTagged=1&#38;pos=#{rk+1}&#38;thb=36"
 						styleClass="attachment-sidebar-thumb wp-post-image" width="36px"
-						height="36px" /></span><h:commandLink
-						value="#{usuarioTaggeado.user.name}" action="verPerfil">
-						<f:setPropertyActionListener
-							value="#{usuarioTaggeado.user.username}"
-							target="#{Profile.userId}" />
-					</h:commandLink><br />
+						height="36px" /></span><strong>
+						#{usuarioTaggeado.user.name}	</strong>
+<br />
 					<span class="sub"><strong>Taggedo en: </strong> <h:outputText
 						value="#{usuarioTaggeado.cantTags} contenidos"></h:outputText></span></li>
 				</a4j:repeat>
