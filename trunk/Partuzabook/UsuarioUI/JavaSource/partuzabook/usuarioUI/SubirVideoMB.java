@@ -4,18 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.http.HttpSession;
 
+import partuzabook.datatypes.DatatypeCategoryAux;
 import partuzabook.datatypes.DatatypeCategorySummary;
+import partuzabook.datatypes.DatatypeFileAux;
 import partuzabook.datatypes.DatatypeYoutubeToken;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.serviciosUI.multimedia.ServicesUploadRemote;
@@ -27,21 +26,24 @@ public class SubirVideoMB{
 	private static final String NEXT_URL = "http://localhost:8080/UsuarioUI/YoutubeRedirect";
 	private static final String TODAS = "Todas";
 	private static final String ALBUM = "Album";
+	private static final String NEW_CAT_NAME_INVALID = "Nombre de categoria no permitido";
+	private static final String NEW_CAT_ALREADY_EXISTS = "La categoria ingresada ya existe.";
+	private static final String RES_OK = "El video fue subido exitosamente";
+	private static final String RES_NO_OK = "Ocurrio un error al subir el video. Intente nuevamente en unos minutos";
 	
 	private int eventId;
 	private String description;
-	private List<DatatypeCategorySummary> allCategories;
-	//private List<DatatypeCategorySummary> myCategories;
+	private List<DatatypeCategoryAux> categories;
+	private String message;
 	
-	private Map<String,String> categoriesToSelect;
-	private List<String> catsSelected;
-	private String catAux;
-	private String newCat;
-	private List<String> newCatsAux;
+	private String newCatAux;
+	private String newCatAuxMessage;
 	
 	private String post_url;
 	private String token_id;
 	private String youtubeFormToken;
+	
+	private boolean videoUploaded = false; //True if a video has been uploaded
 	
 	public SubirVideoMB() {
 	}
@@ -55,73 +57,47 @@ public class SubirVideoMB{
 		return ctx;
 	}
 	
-	private static void filtrarRepetidos(List<String> list) {
-		if(list == null || list.size() == 0)
-			return;
-		String element = list.remove(0);
-		filtrarRepetidos(list);
-		//Comparamos no case sensitive, si fuera case sensitive con el contains alcanzaba
-		boolean agregar = true;
-		for(Iterator<String> it = list.iterator(); it.hasNext(); ) {
-			if(element.equalsIgnoreCase(it.next())){
-				//Agrego de nuevo a la variable a
-				agregar = false;
-			}
-		}
-		if(agregar)
-			list.add(0, element);
-	}
-
 	public String confirmUpload() {
+		newCatAux = "";
+		newCatAuxMessage = "";
+		message = "";
 		try {
+			/*
 			if(getCatsSelected().size() > 0)
 				getCatsSelected().remove(getCatsSelected().size() - 1);
-			
+			*/
 			String username = SessionUtils.getUsername();
 			String youtube_id = (String)SessionUtils.getAttribute("youtube_id");
 			
 			Context ctx = getContext();
 			ServicesUploadRemote service = (ServicesUploadRemote)ctx.lookup(SERVICE_UPLOAD);
 			int cnt_id = service.confirmUploadVideo(eventId, username, youtube_id, description);
-			//System.out.println(cnt_id);
-			ServicesEventRemote serE = getServicesEvent();
-			
-			//En catsSelected tengo las categorias seleccionadas, verifiquemos que no hayan nombres repetidos, etc
-			List<String> categoriasSeleccionadas = getCatsSelected();
-			//Quitamos todos los ""
-			while(categoriasSeleccionadas.contains("")) {
-				categoriasSeleccionadas.remove("");
-			}
-			
-			List<DatatypeCategorySummary> categoriasParaAgregar = new ArrayList<DatatypeCategorySummary>();
-			//Pasamos los String a Categorias
-			for(Iterator<DatatypeCategorySummary> it = getAllCategories().iterator(); it.hasNext(); ) {
-				DatatypeCategorySummary dat = it.next();
-				if(categoriasSeleccionadas.contains(dat.getCategory())) {
-					//Es una categoria que ya existe
-					categoriasParaAgregar.add(dat);
-					categoriasSeleccionadas.remove(dat.getCategory());
-				}					
-			}
-			//Agregamos las categorias que no existen
-			for(Iterator<String> it = categoriasSeleccionadas.iterator(); it.hasNext(); ) {
-				DatatypeCategorySummary nuevaCat = new DatatypeCategorySummary();
-				nuevaCat.setCategory(it.next());
-				nuevaCat.setCategoryId(0); //0 es porque no existe
-				categoriasParaAgregar.add(nuevaCat);
-			}
-			
-			serE.addCategoryToContent(cnt_id, categoriasParaAgregar);
-			youtubeFormToken = null;
+
+			List<String> cats = new ArrayList<String>();
+			for(ListIterator<DatatypeCategoryAux> itCatsAux = getCategories().listIterator(); itCatsAux.hasNext(); ) {
+				DatatypeCategoryAux catAux = itCatsAux.next();
+				if(catAux.isValue()) {
+					cats.add(catAux.getCategory());
+				}
+			}	
+			getServicesEvent().addCategoryToContent(cnt_id, cats);
+			message = RES_OK;
+			setVideoUploaded(false);
+			setCategories(null);
+			description = "";
 			return "verEvento";
 		} catch (NamingException e) {
 			//TODO: Redirigir a una pagina de error
 			e.printStackTrace();
+			message = RES_NO_OK;
 			return "subirVideo";
 		}
 	}
 
 	public void setEventId(int eventId) {
+		if(this.eventId != eventId) {
+			setVideoUploaded(false);
+		}
 		this.eventId = eventId;
 	}
 
@@ -137,8 +113,13 @@ public class SubirVideoMB{
 		return description;
 	}
 
-	public String getYoutubeFormToken() {
+	public void getYoutubeFormToken() {
 			
+		ServicesUploadRemote service = getServicesUpload(); 
+		DatatypeYoutubeToken token = service.getYoutubeToken();
+		this.post_url = token.getPost_url() + "?nexturl=" + NEXT_URL;
+		this.token_id = token.getToken_id();
+		/*
 		if(youtubeFormToken == null || youtubeFormToken.equals("")) {
 			ServicesUploadRemote service = getServicesUpload(); 
 			DatatypeYoutubeToken token = service.getYoutubeToken();
@@ -152,6 +133,7 @@ public class SubirVideoMB{
 			this.token_id = token.getToken_id();
 		}
 		return youtubeFormToken;
+		*/
 	}
 	
 	private void setYoutubeFormToken(String youtubeFormToken) {}
@@ -185,7 +167,13 @@ public class SubirVideoMB{
 	}
 
 	public String getPost_url() {
-		getYoutubeFormToken();
+		if(SessionUtils.getAttribute("youtube_eror") == null || !SessionUtils.getAttribute("youtube_eror").equals("200")){
+			post_url  = null;
+			token_id = null;
+			SessionUtils.removeAttribute("youtube_error");
+		}
+		if(post_url == null || post_url.equals(""))
+			getYoutubeFormToken();
 		return post_url;
 	}
 
@@ -194,105 +182,98 @@ public class SubirVideoMB{
 	}
 
 	public String getToken_id() {
-		getYoutubeFormToken();
 		return token_id;
 	}
-	
-	public void setAllCategories(List<DatatypeCategorySummary> allCategories) {
-		this.allCategories = allCategories;
+
+	public void setCategories(List<DatatypeCategoryAux> categories) {
+		this.categories = categories;
 	}
 
-	public List<DatatypeCategorySummary> getAllCategories() {
-		//if(allCategories == null || allCategories.size() == 0) {
-			//eventId = 1001; //FIXME esta linea es para realizar pruebas. Hay que comentarla para que funcione adecuadamente
-			allCategories = getServicesEvent().getEventDetails(eventId, false).getContentCategories();
-			int i = 0;
-			int remove = 0;
-			for(Iterator<DatatypeCategorySummary> it = allCategories.iterator(); it.hasNext(); ){
-				DatatypeCategorySummary dat = it.next();
-				if(dat.getCategory().equals(TODAS))
-					remove = i;
-				else if(dat.getCategory().equals(ALBUM))
-					remove = i;
-				i++;
-			}
-			allCategories.remove(remove);
-		//}
-		return allCategories;
+	public List<DatatypeCategoryAux> getCategories() {
+		if(categories == null) {
+			categories = getAllCategoriesAux();
+		}
+		return categories;
 	}
 
-	public void setCategoriesToSelect(Map<String, String> categoriesToSelect) {
-		this.categoriesToSelect = categoriesToSelect;
-	}
-
-	public Map<String,String> getCategoriesToSelect() {
-		categoriesToSelect = new HashMap<String, String>();
-		for(Iterator<DatatypeCategorySummary> it = getAllCategories().iterator(); it.hasNext(); ) {
+	public List<DatatypeCategoryAux> getAllCategoriesAux() {
+		List<DatatypeCategorySummary> allCategories = getServicesEvent().getEventDetails(eventId, false).getContentCategories();
+		List<DatatypeCategoryAux> res = new ArrayList<DatatypeCategoryAux>();
+		for(Iterator<DatatypeCategorySummary> it = allCategories.iterator(); it.hasNext(); ){
 			DatatypeCategorySummary dat = it.next();
-			if(!getCatsSelected().contains(dat.getCategory())){
-				categoriesToSelect.put(dat.getCategory(), dat.getCategory());
-			}		
+			if(!dat.getCategory().equalsIgnoreCase(TODAS) && !dat.getCategory().equalsIgnoreCase(ALBUM))
+				res.add(new DatatypeCategoryAux(dat.getCategory(), false));
 		}
-		//if(!(getCatsSelected() == null || getCatsSelected().size() == 0))
-			categoriesToSelect.put("Nueva categoria", "Nueva categoria");
-		return categoriesToSelect;
+		return res;
+	}
+		
+	public void addCategory() {
+		newCatAuxMessage = "";
+		if(newCatAux != null && !newCatAux.equals("")) {
+			//Check if it already exists
+			if(newCatAux.equalsIgnoreCase(TODAS) || newCatAux.equalsIgnoreCase(ALBUM)) {
+				newCatAuxMessage = NEW_CAT_NAME_INVALID;
+				return;
+			}
+			if(getCategories() != null) {
+				for(ListIterator<DatatypeCategoryAux> it = getCategories().listIterator(); it.hasNext(); ) {
+					DatatypeCategoryAux data = it.next();
+					if(data.getCategory().equalsIgnoreCase(newCatAux)) {
+						newCatAuxMessage = NEW_CAT_ALREADY_EXISTS;
+						return;
+					}		
+				}
+				getCategories().add(new DatatypeCategoryAux(newCatAux, true));
+				newCatAux = "";
+			}
+		}
 	}
 
-	public void setCatAux(String catAux) {
-		if(catsSelected == null || catsSelected.size() == 0)
-			catsSelected = new ArrayList<String>();
-		if(!catAux.equals("Nueva categoria"))
-			this.catsSelected.add(catAux);
-		else
-			this.catsSelected.add("");
-	}
-
-	public String getCatAux() {
-		return catAux;
-	}
-	
-	public void setCatsSelected(List<String> catsSelected) {
-		this.catsSelected = catsSelected;
-	}
-
-	public List<String> getCatsSelected() {
-		if(catsSelected == null)
-			catsSelected = new ArrayList<String>();
-		return catsSelected;
-	}
-	
-	public void setNewCatsAux(List<String> newCatsAux) {
-		this.newCatsAux = newCatsAux;
-	}
-
-	public List<String> getNewCatsAux() {
-		if(newCatsAux == null)
-			newCatsAux = new ArrayList<String>();
-		return newCatsAux;
-	}
-	
 	public void borrarCats() {
-		setCatsSelected(new ArrayList<String>());
-		newCatsAux = null;
-	}
-
-	public void setNewCat(String newCat) {
-		if(newCat != null && !newCat.equals("")) {
-			boolean agregar = true;
-			for(Iterator<String> it = getCatsSelected().iterator(); it.hasNext(); ){
-				if(it.next().equalsIgnoreCase(newCat))
-					agregar = false;
-			}
-			if(agregar) {
-				getCatsSelected().add(newCat);
-				getCatsSelected().remove("");
-			}
+		for(Iterator<DatatypeCategoryAux> it2 = getCategories().iterator(); it2.hasNext(); ) {
+			it2.next().setValue(false);
 		}
 	}
 
-	public String getNewCat() {
-		return newCat;
+	public void setNewCatAux(String newCatAux) {
+		this.newCatAux = newCatAux;
 	}
-	
+
+	public String getNewCatAux() {
+		return newCatAux;
+	}
+
+	public void setNewCatAuxMessage(String newCatAuxMessage) {
+		this.newCatAuxMessage = newCatAuxMessage;
+	}
+
+	public String getNewCatAuxMessage() {
+		return newCatAuxMessage;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setVideoUploaded(boolean videoUploaded) {
+		if(!videoUploaded) {
+			SessionUtils.removeAttribute("youtube_id");
+			post_url = null;
+		}
+	}
+
+	public boolean isVideoUploaded() {
+		String youtube_id = (String)SessionUtils.getAttribute("youtube_id");
+		return youtube_id != null && !youtube_id.equals("");
+	}
+
+	public String clearUploadData() {
+		setVideoUploaded(false);
+		return "verEvento";
+	}
 	
 }

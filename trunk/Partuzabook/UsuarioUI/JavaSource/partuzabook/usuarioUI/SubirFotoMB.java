@@ -3,22 +3,20 @@ package partuzabook.usuarioUI;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.ListIterator;
 import java.util.Properties;
 
-import javax.faces.context.FacesContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.http.HttpSession;
 
 import org.richfaces.event.UploadEvent;
 import org.richfaces.model.UploadItem;
 
 import partuzabook.datatypes.DataTypeFile;
+import partuzabook.datatypes.DatatypeCategoryAux;
 import partuzabook.datatypes.DatatypeCategorySummary;
 import partuzabook.datatypes.DatatypeFileAux;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
@@ -28,6 +26,12 @@ public class SubirFotoMB{
 	
 	private static final String TODAS = "Todas";
 	private static final String ALBUM = "Album";
+	private static final String NEW_CAT_ALREADY_EXISTS = "La categoria ingresada ya existe.";
+	private static final int FILE_DESC_MAX_LENGTH = 100;
+	private static final String FILE_DESC_MAX_LEN_ERROR = "La descripcion de uno de los archivos excede el tamaño maximo permitido. (" + FILE_DESC_MAX_LENGTH +")";
+	private static final String RES_OK = "Las imagenes fueron subidas exitosamente";
+	private static final String RES_NO_OK = "Ocurrio un error al subir las imagenes. Intente nuevamente en unos minutos";
+	private static final String NEW_CAT_NAME_INVALID = "Nombre de categoria no permitido";
 	
 	private ArrayList<DatatypeFileAux> filesAux = new ArrayList<DatatypeFileAux>();
 	//private ArrayList<DataTypeFile> files = new ArrayList<DataTypeFile>();
@@ -36,9 +40,14 @@ public class SubirFotoMB{
 	private boolean useFlash = true;
 	private int idEvento;
 	private String message;
-	private String categoriesToSelect;
+	//private String categoriesToSelect;
 	private ServicesEventRemote servicesEvent;
-	private String fileNewCat;
+	private String fileCleanCat;
+	
+	//private List<Boolean> categoriesBoolean;
+	private List<String> categoriesName;
+	private String newCatAux;
+	private String newCatAuxMessage;
 
 	private List<DatatypeCategorySummary> allCategories = null;
 	
@@ -73,7 +82,7 @@ public class SubirFotoMB{
 		if (this.idEvento != idEvento)
 			clearUploadData();	
 		this.idEvento = idEvento;
-		System.out.println("subirFotomb.setEvento():: Event="+idEvento);
+		//System.out.println("subirFotomb.setEvento():: Event="+idEvento);
 	}
 
 	public int getSize() {
@@ -103,7 +112,11 @@ public class SubirFotoMB{
 	    file.setData(item.getData());
 	    filesAux.add(file);
 	    uploadsAvailable--;
-	    getCategoriesToSelect();
+	    List<String> categories = getAllCategoriesName();
+		file.setCategoriesAux(new ArrayList<DatatypeCategoryAux>());	
+		for(ListIterator<String> it2 = categories.listIterator(); it2.hasNext(); ) {
+			file.getCategoriesAux().add(new DatatypeCategoryAux(it2.next(), false));
+		}
 	}  
 	  
 	public String clearUploadData() {
@@ -114,16 +127,19 @@ public class SubirFotoMB{
 	
 	public String confirmUpload() {
 		//Actualizamos las categorias de los files
-		fileNewCat = filesAux.size() + "";
-		addCat();
-		
+		newCatAux = "";
 		ServicesUploadRemote servUpload = getServicesUpload();
 		if (servUpload != null) {
 			try {
 				String username = SessionUtils.getUsername();
 				List<DataTypeFile> files  = new ArrayList<DataTypeFile>();
 				for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
-					files.add((DataTypeFile)it.next());
+					DataTypeFile dataf = (DataTypeFile)it.next();
+					if(dataf.getDescription().length() <= FILE_DESC_MAX_LENGTH)
+						files.add(dataf);
+					else {
+						this.message = FILE_DESC_MAX_LEN_ERROR;
+					}						
 				}
 				List<String> cnt_id = servUpload.uploadMultimedia(idEvento, username, files);
 			
@@ -134,39 +150,24 @@ public class SubirFotoMB{
 				
 					DatatypeFileAux file = it.next();
 					
-					//En catsSelected tengo las categorias seleccionadas, verifiquemos que no hayan nombres repetidos, etc
-					List<String> categoriasSeleccionadas = file.getCatsSelected();
-					//Quitamos todos los ""
-					while(categoriasSeleccionadas.contains("")) {
-						categoriasSeleccionadas.remove("");
-					}
+					List<String> cats = new ArrayList<String>();
 					
-					List<DatatypeCategorySummary> categoriasParaAgregar = new ArrayList<DatatypeCategorySummary>();
-					//Pasamos los String a Categorias
-					for(Iterator<DatatypeCategorySummary> it2 = getAllCategories().iterator(); it2.hasNext(); ) {
-						DatatypeCategorySummary dat = it2.next();
-						if(categoriasSeleccionadas.contains(dat.getCategory())) {
-							//Es una categoria que ya existe
-							categoriasParaAgregar.add(dat);
-							categoriasSeleccionadas.remove(dat.getCategory());
-						}					
-					}
-					//Agregamos las categorias que no existen
-					for(Iterator<String> it2 = categoriasSeleccionadas.iterator(); it2.hasNext(); ) {
-						DatatypeCategorySummary nuevaCat = new DatatypeCategorySummary();
-						nuevaCat.setCategory(it2.next());
-						nuevaCat.setCategoryId(0); //0 es porque no existe
-						categoriasParaAgregar.add(nuevaCat);
-					}
+					for(ListIterator<DatatypeCategoryAux> itCatsAux = file.getCategoriesAux().listIterator(); itCatsAux.hasNext(); ) {
+						DatatypeCategoryAux catAux = itCatsAux.next();
+						if(catAux.isValue()) {
+							cats.add(catAux.getCategory());
+						}
+					}					
+					serE.addCategoryToContent(Integer.parseInt(cnt_id.get(i)), cats);
 					
-					serE.addCategoryToContent(Integer.parseInt(cnt_id.get(i)), categoriasParaAgregar);
 					i++;
 				}
-				this.message = "Las imágenes han sido subidas de forma exitosa.";
+				this.message = RES_OK;
 				filesAux.clear();
 				setUploadsAvailable(5);
 			} catch (Exception e) {
-				this.message = "Ocurrió un error al subir las imágenes.";
+				e.printStackTrace();
+				this.message = RES_NO_OK;
 			}			
 		}
 		return null;
@@ -203,6 +204,7 @@ public class SubirFotoMB{
 
 	public void setFiles(ArrayList<DatatypeFileAux> filesAux) { 
 		this.filesAux = filesAux;
+		//initCategoriesBoolean();
 	}
 
 	public int getUploadsAvailable() {
@@ -229,110 +231,118 @@ public class SubirFotoMB{
 		this.useFlash = useFlash;
 	}
 
+	
+	
 	//Funciones auxiliares para las categorias de las fotos
-	private List<DatatypeCategorySummary> getAllCategories() {
+	private List<String> getAllCategoriesName() {
+		List<String> res = new ArrayList<String>();
+		if(filesAux != null && filesAux.size() > 0 && filesAux.get(0).getCategoriesAux() != null && filesAux.get(0).getCategoriesAux() != null) {
+			for(ListIterator<DatatypeCategoryAux> it = filesAux.get(0).getCategoriesAux().listIterator(); it.hasNext(); ) {
+				res.add(it.next().getCategory());
+			}
+		} else {
+			for(ListIterator<DatatypeCategorySummary> it = getAllCategories().listIterator(); it.hasNext(); ) {
+				res.add(it.next().getCategory());
+			}
+		}
+		return res;
+	}
+	
+	private List<DatatypeCategorySummary> getAllCategories() {		
 		//if(allCategories == null || allCategories.size() == 0) {
-			//eventId = 1001; //FIXME esta linea es para realizar pruebas. Hay que comentarla para que funcione adecuadamente
 			allCategories = getServicesEvent().getEventDetails(idEvento, false).getContentCategories();
 			int i = 0;
-			int remove = 0;
-			for(Iterator<DatatypeCategorySummary> it = allCategories.iterator(); it.hasNext(); ){
+			int todas_i = 0;
+			int album_i = 0;
+			for(ListIterator<DatatypeCategorySummary> it = allCategories.listIterator(); it.hasNext(); ){
 				DatatypeCategorySummary dat = it.next();
-				if(dat.getCategory().equals(TODAS))
-					remove = i;
-				else if(dat.getCategory().equals(ALBUM))
-					remove = i;
+				if(dat.getCategory().equalsIgnoreCase(TODAS))
+					todas_i = i;
+				else if(dat.getCategory().equalsIgnoreCase(ALBUM))
+					album_i = i;
 				i++;
 			}
-			allCategories.remove(remove);
+			allCategories.remove(todas_i);
+			allCategories.remove(album_i-1);
 		//}
 		return allCategories;
 	}
-	//Establece las categorï¿½as que pueden ser seleccionadas
-	public String getCategoriesToSelect() {
-		for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
-			DatatypeFileAux file = it.next();
-			file.setCategoriesToSelect(new HashMap<String, String>());
-			if(file.getCatsSelected() == null)
-				file.setCatsSelected(new ArrayList<String>());
-			
-			for(Iterator<DatatypeCategorySummary> it2 = getAllCategories().iterator(); it2.hasNext(); ) {
-				DatatypeCategorySummary dat = it2.next();
-				if(!file.getCatsSelected().contains(dat.getCategory())){
-					file.getCategoriesToSelect().put(dat.getCategory(), dat.getCategory());
-				}		
-			}
-				file.getCategoriesToSelect().put("Nueva categoria", "Nueva categoria");
-		}
-		return "";
+
+	public void setFileCleanCat(String fileCleanCat) {
+		this.fileCleanCat = fileCleanCat;
 	}
 
-	public void setCategoriesToSelect(String categoriesToSelect) {
-		this.categoriesToSelect = categoriesToSelect;
-	}
-
-	public void setFileNewCat(String fileNewCat) {
-		this.fileNewCat = fileNewCat;
-	}
-
-	public String getFileNewCat() {
-		return fileNewCat;
-	}
-	
-	public void addCat() {
-		
-		for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
-			DatatypeFileAux file = it.next();
-			/*
-			if(!file.getCatAux().equals("Nueva categoria"))
-				file.getCatsSelected().add(file.getCatAux());
-			else
-				file.getCatsSelected().add("");
-			*/
-			if(file.getNewCat() != null && !file.getNewCat().equals("")) {
-				boolean agregar = true;
-				for(Iterator<String> it2 = file.getCatsSelected().iterator(); it2.hasNext(); ){
-					if(it2.next().equalsIgnoreCase(file.getNewCat()))
-						agregar = false;
-				}
-				if(agregar) {
-					file.getCatsSelected().add(file.getNewCat());
-					file.getCatsSelected().remove("");
-				}
-				file.setNewCat("");
-			}
-		}
-		try {
-			DatatypeFileAux file = filesAux.get(Integer.parseInt(fileNewCat));
-			if(file != null) {
-				if(!file.getCatAux().equals("Nueva categoria"))
-					file.getCatsSelected().add(file.getCatAux());
-				else
-					file.getCatsSelected().add("");
-			}
-		} catch(IndexOutOfBoundsException ioub) {}
-		/*
-		if(file.getNewCat() != null && !file.getNewCat().equals("")) {
-			boolean agregar = true;
-			for(Iterator<String> it = file.getCatsSelected().iterator(); it.hasNext(); ){
-				if(it.next().equalsIgnoreCase(file.getNewCat()))
-					agregar = false;
-			}
-			if(agregar) {
-				file.getCatsSelected().add(file.getNewCat());
-				file.getCatsSelected().remove("");
-			}
-			file.setNewCat("");
-		}
-		
-		*/
-		
-		getCategoriesToSelect();
+	public String getFileCleanCat() {
+		return fileCleanCat;
 	}
 	
 	public void borrarCats() {
-		DatatypeFileAux file = filesAux.get(Integer.parseInt(fileNewCat));
-		file.setCatsSelected( new ArrayList<String>());
-		getCategoriesToSelect();
+		for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
+			DatatypeFileAux file = it.next();
+			if(file.getId().equals(fileCleanCat))
+				for(Iterator<DatatypeCategoryAux> it2 = file.getCategoriesAux().iterator(); it2.hasNext(); ) {
+					it2.next().setValue(false);
+				}
+		}
+	}
+
+	
+	public void addCategoriesAux() {
+		newCatAuxMessage = "";
+		if(newCatAux != null && !newCatAux.equals("")) {
+			//Check if it already exists
+			if(newCatAux.equalsIgnoreCase(TODAS) || newCatAux.equalsIgnoreCase(ALBUM)) {
+				newCatAuxMessage = NEW_CAT_NAME_INVALID;
+				return;
+			}				
+			if(filesAux.get(0).getCategoriesAux() != null) {
+				for(Iterator<DatatypeCategoryAux> it = filesAux.get(0).getCategoriesAux().iterator(); it.hasNext(); ) {
+					DatatypeCategoryAux data = it.next();
+					if(data.getCategory().equalsIgnoreCase(newCatAux)) {
+						newCatAuxMessage = NEW_CAT_ALREADY_EXISTS;
+						return;
+					}		
+				}
+				for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
+					it.next().getCategoriesAux().add(new DatatypeCategoryAux(newCatAux, false));		
+				}
+				newCatAux = "";
+			}			
+		}
+	}
+
+	public void initCategoriesAux() {
+		List<String> categories = getAllCategoriesName();
+		for(Iterator<DatatypeFileAux> it = filesAux.iterator(); it.hasNext(); ) {
+			DatatypeFileAux file = it.next();
+			if(file.getCategoriesAux() == null){
+				file.setCategoriesAux(new ArrayList<DatatypeCategoryAux>());	
+	
+				for(ListIterator<String> it2 = categories.listIterator(); it2.hasNext(); ) {
+					file.getCategoriesAux().add(new DatatypeCategoryAux(it2.next(), false));
+				}
+			}
+		}
+	}
+/*
+	public List<String> getCategoriesName() {
+		initCategoriesAux();
+		return null;
+	}
+*/
+	public void setNewCatAux(String newCatAux) {
+		this.newCatAux = newCatAux;
+	}
+
+	public String getNewCatAux() {
+		return newCatAux;
+	}
+
+	public void setNewCatAuxMessage(String newCatAuxMessage) {
+		this.newCatAuxMessage = newCatAuxMessage;
+	}
+
+	public String getNewCatAuxMessage() {
+		return newCatAuxMessage;
 	}
 }
