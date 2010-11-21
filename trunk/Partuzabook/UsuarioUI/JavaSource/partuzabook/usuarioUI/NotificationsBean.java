@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.datos.persistencia.beans.Notification;
+import partuzabook.servicioDatos.exception.MessageTooLongException;
+import partuzabook.servicioDatos.exception.UserNotFoundException;
 import partuzabook.servicioDatos.notificaciones.ServicesNotificationRemote;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.serviciosNotificaciones.email.PartuzaMailer;
@@ -24,7 +26,8 @@ public class NotificationsBean {
 	private static final Integer PAGE_SIZE = new Integer(5);
 	private static final String SERV_NOTIFICATION = "PartuzabookEAR/ServicesNotification/remote";
 	private static final String SERV_USER = "PartuzabookEAR/ServicesUser/remote";
-
+	private static final String SEND_OK = "El mensaje fue enviado";
+	
 	private Integer page;
 
 	private PartuzaMailer mailer = new PartuzaMailer();
@@ -42,6 +45,7 @@ public class NotificationsBean {
 	private String body;
 	private String bodyMessage;
 	private String subject;
+	private String createMessage;
 
 	private String include = "includes/messageCompose.xhtml";
 
@@ -221,6 +225,8 @@ public class NotificationsBean {
 		gralNotificationsPage = 1;
 		recvNotificationsPage = 1;
 		sentNotificationsPage = 1;
+		createMessage = "";
+		
 		clearMessages();
 		if (toUser == null || toUser.equals(""))
 			toUserMessage = INPUT_OBLIG;
@@ -233,7 +239,6 @@ public class NotificationsBean {
 				DatatypeNotification notif = getServicesNotification().createNotification(getUsername(), toUser, Notification.MAIL_NOTIF_TYPE, body, subject);
 
 				/*
-				
 				String emailTo = getServicesUser().getNormalUserMailAddress(toUser);
 				if (mailer.sendFormattedMail(notif.userFrom, getServicesUser().getName(notif.userFrom), notif.text,
 						notif.formattedDate, null, emailTo, null, null, subject)) {
@@ -246,8 +251,13 @@ public class NotificationsBean {
 				}
 				*/
 				clearAllMessages();
+				//createMessage = SEND_OK;
+				return "okay";
 			} catch (Exception e) {
 				e.printStackTrace();
+				if(e.getCause() instanceof MessageTooLongException || e.getCause() instanceof UserNotFoundException) {
+					createMessage = e.getCause().getMessage();
+				}					
 			}
 			return "failure";
 		} else {
@@ -358,7 +368,7 @@ public class NotificationsBean {
 	}
 	
 	public void sentNotificationNextPage() {
-		if(sentNotificationsPage < maxSentNotificationsPage)
+		if(sentNotificationsPage < getMaxSentNotificationsPage())
 			sentNotificationsPage += 1;
 	}
 	
@@ -369,7 +379,7 @@ public class NotificationsBean {
 	
 	public void recvNotificationsNextPage() {
 		
-		if(recvNotificationsPage < maxRecvNotificationsPage)
+		if(recvNotificationsPage < getMaxRecvNotificationsPage())
 			recvNotificationsPage += 1;
 	}
 	
@@ -379,7 +389,7 @@ public class NotificationsBean {
 	}
 	
 	public void gralNotificationsNextPage() {
-		if(gralNotificationsPage < maxGralNotificationsPage)
+		if(gralNotificationsPage < getMaxGralNotificationsPage())
 			gralNotificationsPage += 1;
 	}
 	
@@ -471,5 +481,13 @@ public class NotificationsBean {
 	public int getGralAll() {
 		getNotificacionesGeneral();
 		return gralNotifications.size();
+	}
+
+	public void setCreateMessage(String createMessage) {
+		this.createMessage = createMessage;
+	}
+
+	public String getCreateMessage() {
+		return createMessage;
 	}
 }
