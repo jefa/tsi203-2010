@@ -409,12 +409,11 @@ public interface ServicesEventRemote {
 			String description);
 	
 	/**
-	 * Add categories to content with id = cntId. If the categories doesn't exist they are created. 
-	 * To mark a category as new, set the catId in the DatatypeCategorySummary to 0
+	 * Add categories to content with id = cntId. If the categories doesn't exist in the evento, they are created. 
 	 * @param cntId				- Id of the content
 	 * @param catsToAdd			- List of categories to add
 	 * */
-	public void addCategoryToContent(int cntId, List<DatatypeCategorySummary> catsToAdd);
+	public void addCategoryToContent(int cntId, List<String> catsToAdd);
 
 	/**
 	 * Creates a new external video from a youtube video
