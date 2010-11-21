@@ -30,4 +30,8 @@ public class SessionUtils {
 	static public Object getAttribute(String attribute) {
 		return getSession().getAttribute(attribute);
 	}
+	
+	static public void removeAttribute(String attribute) {
+		getSession().removeAttribute(attribute);
+	}
 }
