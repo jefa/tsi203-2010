@@ -26,10 +26,10 @@ public class EventMB {
 	private static final String INPUT_OBLIG = "Campo obligatorio";
 	private static final String MOD_NOT_FOUND = "No existe el usuario ";
 	private static final String PARTICIPANT_NOT_FOUND = "No existe el usuario ";
-	private static final String NO_MODS = "Se asignï¿½ el evento como moderado, pero no se establecieron moderadores.";
+	private static final String NO_MODS = "Se asignó el evento como moderado, pero no se establecieron moderadores.";
 	private static final String EVENT_NOT_FOUND = "No se encontrï¿½ el evento";
 	
-	//Para la creaciï¿½n de eventos:
+	//Para la creación de eventos:
 	private String nameC;
 	private String nameMessageC;
 	private String descriptionC;
