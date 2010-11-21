@@ -36,15 +36,16 @@ public class YoutubeRedirect extends HttpServlet {
 				request.getSession().setAttribute("youtube_eror", status);			
 				if(status.equals("200")) {
 					//Subida de video ok
-					request.getSession().setAttribute("youtube_id", request.getParameter("id"));	
-					redirect = FINISH_UPLOAD_PAGE;
+					request.getSession().setAttribute("youtube_id", request.getParameter("id"));
+					//redirect = FINISH_UPLOAD_PAGE;
+					redirect = ERROR_PAGE;
 				}		
 			}
 		}
 		response.sendRedirect(redirect);
 	
 	}
-	
+	/*
 	public String getYoutubeFormToken() {
 		String youtubeFormToken;
 	
@@ -59,7 +60,7 @@ public class YoutubeRedirect extends HttpServlet {
 		
 		return youtubeFormToken;
 	}
-	
+	*/
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
 		properties.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
