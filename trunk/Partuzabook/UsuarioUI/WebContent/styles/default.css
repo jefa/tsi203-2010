@@ -249,3 +249,5 @@ label.error				{ border: 1px solid #D8000C; color: #D8000C; background: #FFBABA;
 #footer .widgetcontent	{ font-size: 12px; background: none; padding: 0; border: none; }
 #footer .footer-message	{ font-size: 11px; }
 .footer-sidebar-container  { border-bottom: 1px solid #CCC; }
+
+.hovergreen				{background: #D9D4CD; }
