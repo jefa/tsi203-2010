@@ -21,7 +21,7 @@ import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
 public class PaginaInicioMB {
 
-	private static int RECENT_EVENTS_PER_PAGE = 1;
+	private static int RECENT_EVENTS_PER_PAGE = 6;
 
 	// General
 	private boolean isUserLogged;

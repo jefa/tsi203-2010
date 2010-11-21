@@ -70,20 +70,6 @@ public class SearchEventMB {
 		
 	}
 	
-/*	public void validateEventNameSearched(){
-		if (this.eventNameSearched == null || this.eventNameSearched.equals("")){
-			this.mensajeValidacionNombre = "Ingrese un nombre para buscar";
-			this.eventResults = null;
-		}
-	}
-
-	public void validateEventDateSearched(){
-		if (this.eventDateSearched == null || this.eventDateSearched.equals("")){
-			this.mensajeValidacionFecha = "Ingrese una fecha para buscar";
-			this.eventResults = null;
-		}
-	}
-*/
 	public String getMensaje() {
 		return this.mensaje;
 	}
@@ -172,6 +158,8 @@ public class SearchEventMB {
 	}
 	
 	public List<DatatypeEventSummary> searchEventsByName() {
+		this.mensajeValidacionNombre = "";
+		this.mensajeValidacionFecha = "";
 		try {
 			if (this.eventNameSearched == null || this.eventNameSearched.equals("")){
 				this.eventResults = null;
@@ -209,6 +197,8 @@ public class SearchEventMB {
 	}
 
 	public List<DatatypeEventSummary> searchEventsByDate() {
+		this.mensajeValidacionNombre = "";
+		this.mensajeValidacionFecha = "";
 		this.eventNameSearched = "";
 		try {
 			if (this.eventDateSearched == null){
