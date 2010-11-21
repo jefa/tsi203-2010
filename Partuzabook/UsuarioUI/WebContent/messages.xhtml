@@ -125,7 +125,7 @@
 				</f:facet>
 				<h:form>
 					<h:outputText value="Para:" style="margin-right:23px"/>
-					<h:inputText id="toField" value="#{notificationsBean.toUser}" size="60"/>
+					<h:inputText id="toField" value="#{notificationsBean.toUser}" size="60" maxlength="30"/>
 					<h:outputText value="#{notificationsBean.toUserMessage}" style="color:red"/>
 					<rich:suggestionbox width="360" id="suggestionBoxId" for="toField" tokens=",[]"
 	                   suggestionAction="#{notificationsBean.autocomplete}" var="result"
@@ -143,13 +143,14 @@
 	                </rich:suggestionbox>
 					<br/><br/>
 					<h:outputText value="Asunto:" style="margin-right:10px"/>
-					<h:inputText id="subjectField" value="#{notificationsBean.subject}" size="60"/><br/><br/>
+					<h:inputText id="subjectField" value="#{notificationsBean.subject}" size="60" maxlength="200"/><br/><br/>
 					<h:outputText value="Mensaje: "/>
 					<h:outputText value="#{notificationsBean.bodyMessage}" style="color:red"/><br/>
 					<h:inputTextarea value="#{notificationsBean.body}" cols="93" rows="9"/><br/>
 					<br/>
 					<center>
-						<h:commandButton value="Enviar Mensaje" action="#{notificationsBean.sendMail}" />						
+						<h:commandButton value="Enviar Mensaje" action="#{notificationsBean.sendMail}"  
+							oncomplete="if('#{notificationsBean.createMessage}' != '') alert('#{notificationsBean.createMessage}');" />						
 					</center>
 				</h:form>		
 			</rich:panel>
@@ -187,6 +188,12 @@
 						    <h:outputText value="#{notif.userFrom} - " style="font-style:italic"/>
 							<h:outputText value="#{notif.formattedDate}" />
 				    	</rich:dataGrid>
+				    	<script>
+				    		jQuery('.rich-table-row td').hover(
+						    		function() {jQuery(this).addClass("hovergreen");},
+						    		function() {jQuery(this).removeClass("hovergreen");}
+						    	)
+				    	</script>
 			    	</a4j:form>
 				</rich:panel>
 				
@@ -215,6 +222,12 @@
 						    <h:outputText value="#{notif.userFrom} - " style="font-style:italic"/>
 							<h:outputText value="#{notif.formattedDate}" />					
 				    	</rich:dataGrid>
+				    	<script>
+				    		jQuery('.rich-table-row td').hover(
+						    		function() {jQuery(this).addClass("hovergreen");},
+						    		function() {jQuery(this).removeClass("hovergreen");}
+						    	)
+				    	</script>
 				    </a4j:form>
 				</rich:panel>
 				
@@ -253,6 +266,12 @@
 							<h:outputText value="#{notif.formattedDate}" />
 												
 				    	</rich:dataGrid>
+				    	<script>
+				    		jQuery('.rich-table-row td').hover(
+						    		function() {jQuery(this).addClass("hovergreen");},
+						    		function() {jQuery(this).removeClass("hovergreen");}
+						    	)
+				    	</script>
 				    </a4j:form>
 				</rich:panel>
 				
