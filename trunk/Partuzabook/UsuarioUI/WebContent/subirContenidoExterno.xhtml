@@ -10,49 +10,69 @@
 <ui:composition template="templates/usuarioUI.xhtml">
 	<ui:define name="title">Subir contenido externo</ui:define>
 	<ui:define name="body">
+	
+		<rich:modalPanel id="panelNewCat" height="140">
+			<f:facet name="header">
+		    	<h:panelGroup>
+		        	<h:outputText value="Crear una categoria"></h:outputText>
+		    	</h:panelGroup>
+			</f:facet>
+			<a4j:form>
+				<h:outputText value="Nombre de la nueva categoria:"/><br/>
+				<h:inputText value="#{subirContExternoMB.newCatAux}" size="41" maxlength="100"/><br/><br/>
+				<p align="right">
+					<h:panelGroup>
+						<a4j:commandButton reRender="info" value="Confirmar" id="confirmarNewcat" action="#{subirContExternoMB.addCategory}" 
+						oncomplete="if('#{subirContExternoMB.newCatAuxMessage}' != '') alert('#{subirContExternoMB.newCatAuxMessage}'); else #{rich:component('panelNewCat')}.hide();"/>
+					</h:panelGroup>						
+					<h:panelGroup>
+						<a4j:commandButton value="Cancelar" id="cancelarNewCat" />
+						<rich:componentControl for="panelNewCat" attachTo="cancelarNewCat" operation="hide" event="onclick"/>
+					</h:panelGroup>
+				</p>
+			</a4j:form>
+		</rich:modalPanel>
+		
+		
 		<a4j:form>
-		
-		<h:inputHidden value="#{subirContExternoMB.eventId}"/>
-		
-		<h:outputText value="Tipo de contenido:" /><br/>
-		<h:selectOneRadio value="#{subirContExternoMB.type}">
-			<f:selectItem itemValue="P" itemLabel="Foto de una web externa"/>
-			<f:selectItem itemValue="V" itemLabel="Video de youtube"/>
-		</h:selectOneRadio>
-		
-		<br/>
-		<h:outputText value="Dirección del contenido:" /><br/>
+			<rich:panel id="info">
+				<h:inputHidden value="#{subirContExternoMB.eventId}"/>
+				
+				<h:outputText value="Tipo de contenido:" /><br/>
+				<h:selectOneRadio value="#{subirContExternoMB.type}">
+					<f:selectItem itemValue="P" itemLabel="Foto de una web externa"/>
+					<f:selectItem itemValue="V" itemLabel="Video de youtube"/>
+				</h:selectOneRadio>
+				
+				<br/>
+				<h:outputText value="Dirección del contenido:" /><br/>
 				<h:inputText value="#{subirContExternoMB.url}" size="60"/>
 				<h:outputText value="#{subirContExternoMB.urlMessage}" style="color:red"/>
 				<br/>
-		
-		<a4j:outputPanel id="panelCategories">
-			<br/><h:outputText value="Categorias:" />			
-			
-				<a4j:repeat value="#{subirContExternoMB.catsSelected}" var="catList">
-					<h:outputText value="#{catList}"/>
-					<h:inputText value="#{subirContExternoMB.newCat}" rendered="#{catList eq ''}"/>
-					<h:outputText value=", "/>
+				
+				<h:outputText value="Descripción:" /><br/>
+				<h:inputTextarea value="#{subirContExternoMB.description}" cols="85" rows="3"/><br/><br/>
+				<h:outputText value="Categorías:" />
+				<a4j:repeat value="#{subirContExternoMB.categories}" var="category">						 
+					<h:selectBooleanCheckbox value="#{category.value}" style="margin-left:20px"/>
+					<h:outputText value="#{category.category}"/>
 				</a4j:repeat>
 				
+				<br/><br/>							
+				<a4j:commandButton id="newCatButton" value="Nueva Categoria"/>
+				<rich:componentControl for="panelNewCat" attachTo="newCatButton" operation="show" event="onclick"/>
+				<a4j:commandButton value="Desmarcar categorias" reRender="info" action="#{subirContExternoMB.borrarCats}"/>
+		
 				<br/>
-					<h:selectOneMenu value="#{subirContExternoMB.catAux}">
-						<f:selectItems value="#{subirContExternoMB.categoriesToSelect}" />
-					</h:selectOneMenu>
-					
-				<a4j:commandButton value="Agregar Categoria" reRender="panelCategories"/>
-				<!-- a4j:commandButton value="Confirmar Categorias" reRender="panelCategories"/-->
-				<a4j:commandButton value="Borrar Categorias" reRender="panelCategories" action="#{subirContExternoMB.borrarCats}"/>
-
-		</a4j:outputPanel>
-				<br/><br/>
-			<h:outputText value="Descripción del contenido:" /><br/>
-				<h:inputText value="#{subirContExternoMB.description}" size="60"/>
-			<br/><br/>
-			<h:commandButton value="Confirmar el nuevo contenido" action="#{subirContExternoMB.confirmUpload}"/>
-			
+				<p align="right">
+					<h:commandButton action="#{subirContExternoMB.confirmUpload}" value="Confirmar"/>
+					<rich:spacer height="3" />
+					<h:commandButton value="Volver al evento" action="verEvento">
+						<f:setPropertyActionListener value="#{subirContExternoMB.eventId}" target="#{eventoMB.eventId}" />
+					</h:commandButton>
+				</p>	
+			</rich:panel>
 		</a4j:form>	
-
 	</ui:define>
 </ui:composition>
 </body>

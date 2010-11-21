@@ -11,6 +11,28 @@
 	<ui:define name="title">Subir foto</ui:define>
 	<ui:define name="body">
 	
+		<rich:modalPanel id="panelNewCat" height="140">
+			<f:facet name="header">
+		    	<h:panelGroup>
+		        	<h:outputText value="Crear una categoria"></h:outputText>
+		    	</h:panelGroup>
+			</f:facet>
+			<a4j:form>
+				<h:outputText value="Nombre de la nueva categoria:"/><br/>
+				<h:inputText value="#{subirFotoMB.newCatAux}" size="41" maxlength="100"/><br/><br/>
+				<p align="right">
+					<h:panelGroup>
+						<a4j:commandButton reRender="info" value="Confirmar" id="confirmarNewcat" action="#{subirFotoMB.addCategoriesAux}" 
+						oncomplete="if('#{subirFotoMB.newCatAuxMessage}' != '') alert('#{subirFotoMB.newCatAuxMessage}'); else #{rich:component('panelNewCat')}.hide();"/>
+					</h:panelGroup>						
+					<h:panelGroup>
+						<a4j:commandButton value="Cancelar" id="cancelarNewCat" />
+						<rich:componentControl for="panelNewCat" attachTo="cancelarNewCat" operation="hide" event="onclick"/>
+					</h:panelGroup>
+				</p>
+			</a4j:form>
+		</rich:modalPanel>
+	
 		<rich:modalPanel id="panel" width="425" height="345">
 			<f:facet name="header">
 		    	<h:panelGroup>
@@ -47,9 +69,8 @@
 				</f:facet>						
 				<h:outputText value="No se han agregado archivos"
 					rendered="#{subirFotoMB.size==0}" />
+					
 					<rich:dataGrid value="#{subirFotoMB.filesAux}" var="file"  rowKeyVar="row"	width="100%">
-							
-						
 							
 							<div style="float:left;margin-right: 10px">
 								<a4j:mediaOutput element="img" mimeType="#{file.mime}"
@@ -60,26 +81,20 @@
 							</div> 
 								
 								<strong><h:outputText value="#{file.name}" /></strong><br/><br/>
-								<!-- h:outputText value="Tamaño(bytes):" /><br/>
-								<h:outputText value="#{file.length}" /><br/-->
 								<h:outputText value="Descripción:" /><br/>
 								<h:inputTextarea value="#{file.description}" cols="85" rows="3"/><br/><br/>
 								<h:outputText value="Categorías:" />
-								<a4j:repeat value="#{file.catsSelected}" var="catList">
-									<h:outputText value="#{catList}"/>
-									<h:inputText value="#{file.newCat}" rendered="#{catList eq ''}" onblur="this.disabled = true;"/>
-									<h:outputText value=", "/>
+								
+								<a4j:repeat value="#{file.categoriesAux}" var="category">						 
+									<h:selectBooleanCheckbox value="#{category.value}" style="margin-left:20px"/>
+									<h:outputText value="#{category.category}"/>
 								</a4j:repeat>
 								
-								<h:selectOneMenu value="#{file.catAux}">
-									<f:selectItems value="#{file.categoriesToSelect}" />
-								</h:selectOneMenu>
-								
-								<a4j:commandButton value="Agregar Categoria" reRender="info" action="#{subirFotoMB.addCat}">
-									<f:setPropertyActionListener value="#{file.id}" target="#{subirFotoMB.fileNewCat}" />
-								</a4j:commandButton>
-								<a4j:commandButton value="Borrar Categorias" reRender="info" action="#{subirFotoMB.borrarCats}">
-									<f:setPropertyActionListener value="#{file.id}" target="#{subirFotoMB.fileNewCat}" />
+								<br/><br/>							
+								<a4j:commandButton id="newCatButton" value="Nueva Categoria"/>
+								<rich:componentControl for="panelNewCat" attachTo="newCatButton" operation="show" event="onclick"/>
+								<a4j:commandButton value="Desmarcar categorias" reRender="info" action="#{subirFotoMB.borrarCats}">
+									<f:setPropertyActionListener value="#{file.id}" target="#{subirFotoMB.fileCleanCat}" />
 								</a4j:commandButton>
 							
 				</rich:dataGrid>
@@ -99,7 +114,7 @@
 					<h:commandButton value="Volver al evento" action="verEvento">
 						<f:setPropertyActionListener value="#{subirFotoMB.idEvento}" target="#{eventoMB.eventId}" />
 					</h:commandButton>
-				</p>	
+				</p>
 			</rich:panel>
 		</a4j:form>
 		<script>window.onload=function(){ 
