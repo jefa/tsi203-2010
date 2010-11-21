@@ -496,6 +496,31 @@ public class ServicesEvent implements ServicesEventRemote {
 			}
 		}
 	}
+	
+	private void sendNotificationsForUploadContent(Content cont, User uploader) {
+		if (cont.getEvent().getMyMods() != null) {
+			for(ListIterator<NormalUser> it = cont.getEvent().getMyMods().listIterator(); it.hasNext(); ) {
+				NormalUser nu = it.next();
+				Notification ntfTagged = new Notification();
+				ntfTagged.setNotDate(new Timestamp(new java.util.Date().getTime()));
+				ntfTagged.setRead(false);
+				ntfTagged.setReference("La referencia va aca");
+				ntfTagged.setRegDate(new Timestamp(new java.util.Date().getTime()));
+				ntfTagged.setText(nu.getName() + ",\r\n" + uploader.getName() + " ha agregado un contenido en el evento \"" + cont.getEvent().getEvtName() + "\".");
+				ntfTagged.setSubject("Se subió un contenido en un evento moderado.");
+				ntfTagged.setType(0);
+				ntfTagged.setUserFrom(uploader);	
+				ntfTagged.setUserTo(nu);
+
+				try {
+					notificationDao.persist(ntfTagged);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}			
+		}
+	}
 
 	public List<String> uploadContent(int eventID, String username, List<DataTypeFile> files) {
 		if (!isUserRelatedToEvent(eventID, username)) {
@@ -551,6 +576,8 @@ public class ServicesEvent implements ServicesEventRemote {
 				event.setCover(content);
 			}
 			result.add(content.getCntIdAuto() + "");
+						
+			sendNotificationsForUploadContent(content, user);
 		}
 		return result;
 	}
@@ -1242,10 +1269,12 @@ public class ServicesEvent implements ServicesEventRemote {
 		categoryTodas.getContents().add(content);
 		contentDao.persist(content);
 		
+		sendNotificationsForUploadContent(content, user);
+		
 		return content.getCntIdAuto();		
 	}
 	
-	public void addCategoryToContent(int cntId, List<DatatypeCategorySummary> catsToAdd) {
+	public void addCategoryToContent(int cntId, List<String> catsToAdd) {
 		if(catsToAdd == null || catsToAdd.size() == 0)
 			return;
 
@@ -1260,24 +1289,23 @@ public class ServicesEvent implements ServicesEventRemote {
 		} 
 		
 		//Agregamos las categorias
-		for(Iterator<DatatypeCategorySummary> it = catsToAdd.iterator(); it.hasNext(); ) {
-			DatatypeCategorySummary cat = it.next();
-			int cat_id = cat.getCategoryId();
-			if(cat_id == 0){
+		for(Iterator<String> it = catsToAdd.iterator(); it.hasNext(); ) {
+			String categoryName = it.next();
+			CntCategory category = contentCategoryDao.findByNameInEvent(content.getEvent(), categoryName);
+			if(category == null){
 				//No existe la categoria, la creamos y la agregamos al contenido
 				CntCategory newCat = new CntCategory();
-				newCat.setCategory(cat.getCategory());
+				newCat.setCategory(categoryName);
 				newCat.setEvent(content.getEvent());
 				contentCategoryDao.persist(newCat);
 				
 				newCat.setContents(new ArrayList<Content>());
 				newCat.getContents().add(content);
 				content.getCntCategories().add(newCat);
-			} else if(!myCatsId.contains(cat_id)) {
+			} else if(!myCatsId.contains(category.getCatIdAuto())) {
 				//La categoria existe, pero no pertenece al contenido, la agregamos
-				CntCategory oldCat = contentCategoryDao.findByID(cat_id);
-				oldCat.getContents().add(content);
-				content.getCntCategories().add(oldCat);
+				category.getContents().add(content);
+				content.getCntCategories().add(category);
 			}
 		}
 		contentDao.persist(content);
@@ -1454,7 +1482,9 @@ public class ServicesEvent implements ServicesEventRemote {
 		categoryTodas.getContents().add(content);
 		contentDao.persist(content);
 		
-		return content.getCntIdAuto();		
+		sendNotificationsForUploadContent(content, user);
+		
+		return content.getCntIdAuto();
 	}
 
 	public int uploadExternPhoto(int eventId, String creator,
@@ -1490,9 +1520,9 @@ public class ServicesEvent implements ServicesEventRemote {
 		categoryTodas.getContents().add(content);
 		contentDao.persist(content);
 		
+		sendNotificationsForUploadContent(content, user);
+		
 		return content.getCntIdAuto();	
 	}
-
-
 
 }
