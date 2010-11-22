@@ -33,14 +33,14 @@
 		<script type="text/javascript">
 			function posVideoLbl() {
 				//document.getElementById('videoLbl').style.top = document.getElementById('formUploadContent:addPhotoButton').offsetTop + 490 + "px";
-				document.getElementById('videoLbl').style.top = document.getElementById('panelThumbs').offsetTop + 352 + "px";								
+				document.getElementById('panelThumbs:videoLbl').style.top = 258 + 'px';
 			}
 			function refreshVideoLbl() {
 				var type = document.getElementById('cntType').value;
 				if( type == 1 || type == 3){
-					document.getElementById('videoLbl').show();
+					jQuery('#panelThumbs\\:videoLbl').show();
 				} else {
-					document.getElementById('videoLbl').hide();
+					jQuery('#panelThumbs\\:videoLbl').hide();
 				}
 			}
 		</script>
@@ -197,18 +197,29 @@
 							rendered="#{content.type eq 0 || content.type eq 2}"
 							value="/ContentFeeder?id=#{content.contId}&#38;thb=74"
 							name="#{content.contId}"
-							onclick="document.getElementById('cntType').value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId')document.getElementById('videoLbl').hide().value='#{content.contId}';" />
+							onclick="clickPicture(#{content.type},'#{content.url}',#{content.contId})" />
 						<h:graphicImage
 							rendered="#{content.type eq 1 || content.type eq 3}"
 							value="#{content.youtubeUrlScreen}" name="#{content.contId}"
-							onclick="document.getElementById('cntType).value='#{content.type}'; document.getElementById('cntUrl').value='#{content.url}'; document.getElementById('cntId')document.getElementById('videoLbl').show()).value='#{content.contId}';" />
+							onclick="clickPicture(#{content.type},'#{content.url}',#{content.contId})" />
 						<span>#{content.description}<br />
 						Por: #{content.uploadedBy}</span></li>
 					</a4j:repeat>
 				</ul>
 				<h:graphicImage id="videoLbl" value="/images/video.png"
-					style="position:absolute;left:20px" />
+					style="position:relative;left:10px;display:none" />
 				<script>
+					function clickPicture(type,url,contId) {
+						document.getElementById('cntType').value=type;
+						document.getElementById('cntUrl').value=url;
+						document.getElementById('cntId').value=contId;
+						if (type == 0 || type == 2) {
+							document.getElementById('panelThumbs:videoLbl').hide();
+						}
+						else {
+							document.getElementById('panelThumbs:videoLbl').show();
+						}
+					}
 					jQuery("#pikame").PikaChoose();
 					jQuery("#pikame").jcarousel({scroll:5,
 						initCallback: function(carousel) {
@@ -224,6 +235,8 @@
 			    	var cleanClone = imageSelected.clone();
 					initImageSelected();
 					function beginTag() {
+						var type = document.getElementById('cntType').value;
+						if (type == 0 || type == 2) {
 						jQuery('#formTag\\:btnBeginTag').hide();
 						jQuery('#formTag\\:btnEndTag').show();
 
@@ -233,16 +246,17 @@
 
 						imageSelected.removeAttr('href');
 						imageSelected.show();
-						var img = imageSelected.children("img");
-						img.annotateImage({
-							editable: true,
-							useAjax: true,
-							getUrl: "GetTagsForContent",
-							saveUrl: "SendTagsForContent",
-							deleteUrl: "DeleteTagsForContent",
-							pickFromButton: false,
-							photoId: document.getElementById("panelThumbs:selectContentId").value
-						});
+							var img = imageSelected.children("img");
+							img.annotateImage({
+								editable: true,
+								useAjax: true,
+								getUrl: "GetTagsForContent",
+								saveUrl: "SendTagsForContent",
+								deleteUrl: "DeleteTagsForContent",
+								pickFromButton: false,
+								photoId: document.getElementById("panelThumbs:selectContentId").value
+							});
+						}
 						jQuery("#image-annotate-add").removeAttr('href');
 					}
 					function endTag() {
@@ -265,13 +279,16 @@
 					function initImageSelected() {
 						if (imageSelected) {
 							imageSelected.lightBox();
-							var img = imageSelected.children("img");
-							img.annotateImage({
-								editable: false,
-								useAjax: true,
-								getUrl: "GetTagsForContent",
-								photoId: document.getElementById("panelThumbs:selectContentId").value
-							});
+							var type = document.getElementById('cntType').value;
+							if (type == 0 || type == 2) {
+								var img = imageSelected.children("img");
+								img.annotateImage({
+									editable: false,
+									useAjax: true,
+									getUrl: "GetTagsForContent",
+									photoId: document.getElementById("panelThumbs:selectContentId").value
+								});
+							}
 						}
 					}
 					function updateCleanClone() {
