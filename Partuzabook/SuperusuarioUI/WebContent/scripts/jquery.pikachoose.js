@@ -76,6 +76,8 @@
         	return;
         }
 		
+		this.aniDiv.append("<img />");
+		/*
 		var y = 0;
 		var x = 0;
 		for(var t = 0; t<25;t++)
@@ -89,7 +91,7 @@
 				y=0;
 			}
 		}
-
+		*/
     };//end PikaChoose function(e, o)
     
     var $pc = $.PikaChoose;
@@ -120,6 +122,8 @@
 			this.caption 	= $("<div class='caption'></div>").insertAfter(this.imgNav);
 			if(!this.options.showCaption){ this.caption.hide(); }
 			this.aniDiv		= $("<div class='animation'></div>").insertAfter(this.caption);
+			this.aniDiv.css('width', 625);
+			this.aniDiv.css('height', 480);
 			this.list.addClass('pika-thumbs');
         	this.list.children('li').wrapInner("<div class='clip' />");
 			this.thumbs = this.list.find('img');
@@ -255,8 +259,8 @@
 	 		$('<img />').bind('load', {self:self,data:data}, function()
 			{
 				//in this scope self referes to the PikaChoose object
-				self.aniDiv.css({height:self.image.height(),width:self.image.width()}).fadeIn('fast');
-				self.aniDiv.children('div').css({'width':'20%','height':'20%','float':'left'});
+				self.aniDiv.fadeIn('fast');
+				//self.aniDiv.children('div').css({'width':'20%','height':'20%','float':'left'});
 		
 				//decide our transition
 				var n = 0;
@@ -279,26 +283,30 @@
 	     	
 	     		var self = this; //self in this scope refers to PikaChoose object. Needed for callbacks on animations
 				var aWidth = self.aniDiv.children('div').eq(0).width();
+				aWidth = 625;
 				var aHeight = self.aniDiv.children('div').eq(0).height();
+				aHeight = 480;
+				/*
 				self.aniDiv.children().each(function()
 				{
 					//position myself absolutely
 					var div = $(this);
-					var xOffset = Math.floor(div.parent().width()/5)*div.attr('col');
-					var yOffset = Math.floor(div.parent().height()/5)*div.attr('row');
+					var xOffset = Math.floor(aWidth/5)*div.attr('col');
+					var yOffset = Math.floor(aHeight/5)*div.attr('row');
 					div.css({
 						'background':'url('+data.source+') -'+xOffset+'px -'+yOffset+'px',
-						'background-size':'100%',
-						'-moz-bacground-size':'100%',
-						'width':'0px',
-						'height':'0px',
+						'background-length':'625 480',
+						'background-origin':'content',
+						'width':aWidth,
+						'height':aHeight,
 						'position':'absolute',
 						'top':yOffset+'px',
 						'left':xOffset+'px',
 						'float':'none'
 					});
 				});//end ani_divs.children.each
-
+				*/
+				self.aniDiv.children('img').attr('src',data.source).attr('width',aWidth).attr('height',aHeight);
 	     		switch(n)
 				{
 					case 0:
@@ -404,8 +412,8 @@
 	     {
      		this.animating = false;
      		this.image.attr('src',data.source == null ? null : data.source.replace('thb=74','thb=F625,480'));
-     		this.image.attr('width',625);
-     		this.image.attr('height',480);
+ 			this.image.attr('width',625);
+ 			this.image.attr('height',480);
      		this.aniDiv.hide();
      		var ref = data.source.replace('thb=F625,480', 'thb=M960,600');
      		this.anchor.attr('href',ref);
