@@ -179,7 +179,17 @@ public class ServicesUser implements ServicesUserRemote {
 			throw new UserNotFoundException();
 
 		NormalUser nu = nUserDao.findByID(username);
-		nu.setPassword(password);
+		if (password != null)
+		{
+			String pass = "";
+			try {
+				pass = CryptUtils.encript(password);
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
+			nu.setPassword(pass);
+		}
+			
 		nu.setEmail(mail);
 		nu.setName(name);
 		nUserDao.persist(nu);
