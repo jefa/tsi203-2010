@@ -176,6 +176,11 @@
 					top:	arrPageScroll[1] + (arrPageSizes[3] / 10),
 					left:	arrPageScroll[0]
 				});
+				var jqlightbox = $('#jquery-lightbox'); 
+				var height = jqlightbox.height();
+				$('#jquery-lightbox').css({
+					top:	arrPageScroll[1] + (arrPageSizes[3] - height) / 2
+				}).show();
 			});
 		}
 		/**
