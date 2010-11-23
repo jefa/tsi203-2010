@@ -1245,8 +1245,18 @@ public class ServicesEvent implements ServicesEventRemote {
 		}
 		
 		Event event = getEvent(eventId);
-		
-		NormalUser user = normalUserDao.findByID(creator);	
+		User user;
+		NormalUser nUser = normalUserDao.findByID(creator);
+		if (nUser == null) {
+			// Try if user is Admin
+			Admin admin = adminDao.findByID(creator);
+			if (admin == null){
+				throw new UserNotFoundException();
+			}
+			user = admin;
+		} else {
+			user = nUser;
+		}	
 		Video content = new Video();	
 		content.setEvent(event);
 		content.setUser(user);
@@ -1458,7 +1468,19 @@ public class ServicesEvent implements ServicesEventRemote {
 		
 		Event event = getEvent(eventId);
 		
-		NormalUser user = normalUserDao.findByID(creator);	
+		User user;
+		NormalUser nUser = normalUserDao.findByID(creator);
+		if (nUser == null) {
+			// Try if user is Admin
+			Admin admin = adminDao.findByID(creator);
+			if (admin == null){
+				throw new UserNotFoundException();
+			}
+			user = admin;
+		} else {
+			user = nUser;
+		}
+		
 		ExternalVideo content = new ExternalVideo();	
 		content.setEvent(event);
 		content.setUser(user);
@@ -1496,7 +1518,19 @@ public class ServicesEvent implements ServicesEventRemote {
 		
 		Event event = getEvent(eventId);
 		
-		NormalUser user = normalUserDao.findByID(creator);	
+		User user;
+		NormalUser nUser = normalUserDao.findByID(creator);
+		if (nUser == null) {
+			// Try if user is Admin
+			Admin admin = adminDao.findByID(creator);
+			if (admin == null){
+				throw new UserNotFoundException();
+			}
+			user = admin;
+		} else {
+			user = nUser;
+		}
+		
 		ExternalPhoto content = new ExternalPhoto();	
 		
 		String urlToSave = fileSystem.saveExternalFile(eventId + "/", url);
