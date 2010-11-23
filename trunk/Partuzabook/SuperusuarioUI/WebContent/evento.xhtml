@@ -503,7 +503,7 @@
 				</h:form>
 			</a4j:outputPanel>
 			<a4j:form id="formTag"
-				rendered="#{eventoMB.hasAlbum || eventoMB.validUserForContext}">
+				rendered="#{!evento.isSuperUser and (eventoMB.hasAlbum || eventoMB.validUserForContext)}">
 				<a4j:commandButton id="btnBeginTag" onclick="beginTag();"
 					value="Etiquetar" />
 				<a4j:commandButton id="btnEndTag" onclick="endTag();"
