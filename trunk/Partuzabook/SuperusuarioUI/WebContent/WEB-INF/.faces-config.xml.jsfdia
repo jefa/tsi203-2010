@@ -82,9 +82,16 @@
   </PROCESS-ITEM>
   <PROCESS-ITEM ID="rules:#evento.xhtml:2" NAME="item2"
    PATH="/evento.xhtml" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID=":modificarAlbum:#album.xhtml" NAME="output"
+   <PROCESS-ITEM-OUTPUT
+    ID="subirContExterno::#subirContenidoExterno.xhtml" NAME="output"
+    PATH="/subirContenidoExterno.xhtml"
+    TARGET="rules:#subirContenidoExterno.xhtml" TITLE="subirContExterno" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+  <PROCESS-ITEM ID="rules:#evento.xhtml:3" NAME="item3"
+   PATH="/evento.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="modificarAlbum::#album.xhtml" NAME="output"
     PATH="/album.xhtml" TARGET="rules:#album.xhtml"
-    TITLE="modificarAlbum:[any]" model-entity="JSFProcessItemOutput"/>
+    TITLE="modificarAlbum" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#event.xhtml" PATH="/event.xhtml"
@@ -114,4 +121,6 @@
   SHAPE="560,1233,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#subirFoto.xhtml" PATH="/subirFoto.xhtml"
   SHAPE="560,1057,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#subirContenidoExterno.xhtml"
+  PATH="/subirContenidoExterno.xhtml" SHAPE="576,1057,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>
