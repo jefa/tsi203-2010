@@ -83,6 +83,12 @@
 				</a4j:repeat> </abbr><br />
 				<abbr class="published">Descripción:<br />
 				#{eventoMB.evento.description}</abbr></div>
+				<h:form>
+					<h:commandButton value="Modificar Evento" rendered="#{eventoMB.isSuperUser}" action="modEvento">
+						<f:setPropertyActionListener value="#{eventoMB.eventId}"
+							target="#{EventMB.evt_id}" />
+					</h:commandButton>
+				</h:form>
 				</div>
 				</li>
 			</ul>
@@ -130,11 +136,8 @@
 					<f:setPropertyActionListener value="#{eventoMB.album}"
 						target="#{eventoMB.selectedCategory}" />
 				</h:commandButton>
-				<h:commandButton value="Modificar Evento" rendered="#{eventoMB.isSuperUser}" action="modEvento">
-					<f:setPropertyActionListener value="#{eventoMB.eventId}"
-						target="#{EventMB.evt_id}" />
-				</h:commandButton>
 			</h:form>
+			<br/>
 			<a4j:outputPanel id="panelCategories">
 				<h:form id="formCategory">
 					<h:inputHidden id="catName"
@@ -307,7 +310,7 @@
 		</h:panelGroup>
 	</ui:define>
 	<ui:define name="sidebar"
-		rendered="#{eventoMB.validUserForContext and (eventoMB.contentsCount > 0)}">
+		rendered="#{eventoMB.validUserForContext}">
 		<ul class="xoxo" id="ulSidebar">
 			<li class="multi-sidebar-container">
 			<div
@@ -390,7 +393,7 @@
 		}</script></li>
 		</ul>
 		<a4j:outputPanel id="panelContentDetails"
-			rendered="#{eventoMB.validUserForContext and (eventoMB.contentsCount > 0)}">
+			rendered="#{eventoMB.validUserForContext and eventoMB.selectedContent != null}">
 			<a4j:commandLink rendered="#{eventoMB.userIsModerator}"
 				onclick="if(!confirm('¿Eliminar el contenido?'))return false;"
 				value="Eliminar contenido" action="#{eventoMB.removeContent}"
