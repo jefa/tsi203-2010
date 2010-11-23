@@ -415,7 +415,7 @@
  			this.image.attr('width',625);
  			this.image.attr('height',480);
      		this.aniDiv.hide();
-     		var ref = data.source.replace('thb=F625,480', 'thb=M960,600');
+     		var ref = data.source.replace('thb=F625,480', 'thb=M960,500');
      		this.anchor.attr('href',ref);
      		this.anchor.addClass('image-selected');
      		if(this.options.showCaption)

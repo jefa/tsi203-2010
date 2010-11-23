@@ -33,14 +33,20 @@
 		<script type="text/javascript">
 			function posVideoLbl() {
 				//document.getElementById('videoLbl').style.top = document.getElementById('formUploadContent:addPhotoButton').offsetTop + 490 + "px";
-				document.getElementById('videoLbl').style.top = document.getElementById('panelThumbs').offsetTop + 352 + "px";								
+				var videoLbl = document.getElementById('panelThumbs:videoLbl');
+				if (videoLbl) {
+					videoLbl.style.top = 258 + 'px';
+				}
 			}
 			function refreshVideoLbl() {
-				var type = document.getElementById('cntType').value;
-				if( type == 1 || type == 3){
-					jQuery('#panelThumbs\\:videoLbl').show();
-				} else {
-					jQuery('#panelThumbs\\:videoLbl').hide();
+				var cntType = document.getElementById('cntType');
+				if (cntType) {
+					var type = cntType.value;
+					if( type == 1 || type == 3){
+						jQuery('#panelThumbs\\:videoLbl').show();
+					} else {
+						jQuery('#panelThumbs\\:videoLbl').hide();
+					}
 				}
 			}
 		</script>
@@ -392,7 +398,7 @@
 				style="float:right;">
 				<h:graphicImage value="/images/close.png" alt="Eliminar contenido" />
 			</a4j:commandLink>
-			<a4j:form id="panelSetCover" >
+			<a4j:form id="panelSetCover" rendered="#{eventoMB.isSuperUser}">
 				<h:panelGroup rendered="#{eventoMB.selectedContent.type eq 0 || eventoMB.selectedContent.type eq 2}">
 					<a4j:commandButton value="Fijar como portada del evento"
 						action="#{eventoMB.setearCoverEvento}"
