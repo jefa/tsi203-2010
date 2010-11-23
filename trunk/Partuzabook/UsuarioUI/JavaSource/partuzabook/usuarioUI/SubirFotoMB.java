@@ -252,8 +252,8 @@ public class SubirFotoMB{
 		//if(allCategories == null || allCategories.size() == 0) {
 			allCategories = getServicesEvent().getEventDetails(idEvento, false).getContentCategories();
 			int i = 0;
-			int todas_i = 0;
-			int album_i = 0;
+			int todas_i = -1;
+			int album_i = -1;
 			for(ListIterator<DatatypeCategorySummary> it = allCategories.listIterator(); it.hasNext(); ){
 				DatatypeCategorySummary dat = it.next();
 				if(dat.getCategory().equalsIgnoreCase(TODAS))
@@ -262,9 +262,14 @@ public class SubirFotoMB{
 					album_i = i;
 				i++;
 			}
-			allCategories.remove(todas_i);
-			allCategories.remove(album_i-1);
-		//}
+			if(todas_i > -1) {
+				allCategories.remove(todas_i);
+				if(todas_i < album_i)
+					album_i--;
+			}
+			if(album_i > -1) {
+				allCategories.remove(album_i);
+			}
 		return allCategories;
 	}
 
