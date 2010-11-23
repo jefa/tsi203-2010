@@ -24,6 +24,8 @@ import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.serviciosNotificaciones.email.PartuzaMailer;
 
 public class EventoMB {
+	private static int THUMBS_PER_PAGE = 2;
+	
 	public static final int PAGE_SIZE = 100;
 	public static final boolean isSuperUser = true;
 	
@@ -75,6 +77,8 @@ public class EventoMB {
 	private boolean contentIsInAlbum;
 	
 	private String orderedList = "";
+	private int paginaActual = 0;
+	private ArrayList<Integer> paginas =null; 
 	
 	public EventoMB(){
 		int sessionEvtId = getEvtId();
@@ -172,7 +176,14 @@ public class EventoMB {
 	}
 	
 	public List<DatatypeContent> getContents(){
-		return this.contents;
+		paginas = new ArrayList<Integer>();
+		
+		for (int i = 0; i < this.getTotalPaginas(); i++) {
+			paginas.add(new Integer(i));
+		}
+		
+		return this.contents.subList(paginaActual*THUMBS_PER_PAGE, 
+				Math.min((paginaActual+1)*THUMBS_PER_PAGE,this.contents.size()));	
 	}
 	
 	public void setContentsCount(Integer contentsCount) {
@@ -651,4 +662,59 @@ public class EventoMB {
 		return this.orderedList;
 	}
 
+	public void updateOrder() {
+	//	System.out.println(orderedList);
+		String[] ordList = orderedList.split(",");
+		int[] ord = new int[ordList.length];
+		for(int i = 0; i < ordList.length; i++){
+			ord[i] = Integer.parseInt(ordList[i].substring(8));
+	//		System.out.println(ord[i]);
+		}
+		try {
+			ServicesEventRemote service = getServicesEvent();		 
+			service.changeAlbumOrder(this.eventId, ord);
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	public void finalizarAlbum(){
+		updateOrder();		
+		try {
+			ServicesEventRemote service = getServicesEvent();		 
+			service.finalizeAlbum(this.eventId);
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public ArrayList<Integer> getPaginas() {
+		return paginas;
+	}
+
+
+	public void setPaginas(ArrayList<Integer> paginas) {
+		this.paginas = paginas;
+	}
+
+
+	public int getPaginaActual() {
+		return paginaActual;
+	}
+	
+	public void setPaginaActual(int paginaActual) {
+		this.paginaActual = paginaActual;
+	}
+	
+	public int getTotalPaginas() {
+		if (this.contents == null || this.contents.size() == 0){
+			return 1;
+		}
+		if ((this.contents.size() % THUMBS_PER_PAGE) == 0) {	
+			return this.contents.size() / THUMBS_PER_PAGE;
+		} 
+		return this.contents.size() / THUMBS_PER_PAGE + 1;
+	}
+
+	
 }

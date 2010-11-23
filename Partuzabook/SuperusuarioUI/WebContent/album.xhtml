@@ -88,7 +88,18 @@
 						</a4j:repeat>
 					</div>
 					<div id="debug" style="clear:both"></div>
-					<h:outputText value="#{eventoMB.selectedCategory.category}" />
+
+			<a4j:outputPanel rendered="#{eventoMB.totalPaginas != 1}"> <div class="wp-pagenavi">
+			<span class="pages">Pag. #{eventoMB.paginaActual + 1} de #{eventoMB.totalPaginas}</span>
+			<a4j:repeat  var="pagina" value="#{eventoMB.paginas}">
+				<h:outputText value="#{pagina + 1}" rendered="#{pagina == eventoMB.paginaActual}" styleClass="current"/>
+				<h:commandLink value="#{pagina + 1}" rendered="#{pagina != eventoMB.paginaActual}" >
+					<f:setPropertyActionListener value="#{pagina}" target="#{eventoMB.paginaActual}" />
+				</h:commandLink>
+			</a4j:repeat>
+			</div>
+			</a4j:outputPanel>
+
 
 				</a4j:form>
 			</a4j:outputPanel>
@@ -104,6 +115,8 @@
 							</h:panelGroup>
 						</h:column>
 					</h:panelGroup>
+					<a4j:commandButton value="Guardar cambios"
+						onclick="saveImageOrder();"/>
 	
 					<a4j:commandButton value="Publicar Album"
 						onclick="saveImageOrder();if (!window.confirm('¿Confirma que desea publicar el Album? Una vez finalizado no podrá editarse')) {return false}"
