@@ -19,9 +19,9 @@ import partuzabook.serviciosUI.multimedia.ServicesUploadRemote;
 public class YoutubeRedirect extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private static final String ERROR_PAGE = "http://localhost:8080/UsuarioUI/subirVideo.jsf";
-	private static final String FINISH_UPLOAD_PAGE = "http://localhost:8080/UsuarioUI/videoAddDescription.jsf";
-	private static final String NEXT_URL = "http://localhost:8080/UsuarioUI/YoutubeRedirect?username=#{loginMB.userName}";
+	private static final String ERROR_PAGE = "http://localhost:8080/SuperusuarioUI/subirVideo.jsf";
+	private static final String FINISH_UPLOAD_PAGE = "http://localhost:8080/SuperusuarioUI/videoAddDescription.jsf";
+	private static final String NEXT_URL = "http://localhost:8080/SuperusuarioUI/YoutubeRedirect?username=#{loginMB.userName}";
 	private static final String SERVICE_UPLOAD = "PartuzabookEAR/ServicesUpload/remote";
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,15 +36,16 @@ public class YoutubeRedirect extends HttpServlet {
 				request.getSession().setAttribute("youtube_eror", status);			
 				if(status.equals("200")) {
 					//Subida de video ok
-					request.getSession().setAttribute("youtube_id", request.getParameter("id"));	
-					redirect = FINISH_UPLOAD_PAGE;
+					request.getSession().setAttribute("youtube_id", request.getParameter("id"));
+					//redirect = FINISH_UPLOAD_PAGE;
+					redirect = ERROR_PAGE;
 				}		
 			}
 		}
 		response.sendRedirect(redirect);
 	
 	}
-	
+	/*
 	public String getYoutubeFormToken() {
 		String youtubeFormToken;
 	
@@ -59,7 +60,7 @@ public class YoutubeRedirect extends HttpServlet {
 		
 		return youtubeFormToken;
 	}
-	
+	*/
 	private Context getContext() throws NamingException {
 		Properties properties = new Properties();
 		properties.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
