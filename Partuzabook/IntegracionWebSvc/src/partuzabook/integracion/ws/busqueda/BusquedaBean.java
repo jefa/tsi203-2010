@@ -152,16 +152,10 @@ public class BusquedaBean {
 			evento.setDireccion(datatypeEventSummary.getAddress());
 			
 			
-		    TimeZone tz = TimeZone.getDefault ();
-		    Calendar c = Calendar.getInstance (tz);
-		    c.setTime (datatypeEventSummary.getDate());
-			XMLGregorianCalendarImpl gCal = new XMLGregorianCalendarImpl();
-			gCal.setDay(c.get(Calendar.DAY_OF_MONTH));
-			gCal.setMonth(c.get(Calendar.MONTH));
-			gCal.setYear(c.get(Calendar.YEAR));
-			gCal.setHour(c.get(Calendar.HOUR));
-			gCal.setMinute(c.get(Calendar.MINUTE));
-			gCal.setSecond(c.get(Calendar.SECOND));
+			GregorianCalendar gc = new GregorianCalendar();
+			gc.setTimeInMillis(datatypeEventSummary.getDate().getTime());
+			XMLGregorianCalendarImpl gCal = new XMLGregorianCalendarImpl(gc);
+				
 			
 			evento.setFecha(gCal);
 			evento.setIdEvento(datatypeEventSummary.getEvtId());
