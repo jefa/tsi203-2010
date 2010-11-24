@@ -81,7 +81,10 @@ public class DatatypeEventSummary implements Serializable{
 
 	public String getFormattedDate() {
 		SimpleDateFormat df = new SimpleDateFormat("d MMM yyyy"); 
-		return df.format(date);
+		if (date != null)
+			return df.format(date);
+		else 
+			return df.format(new Date());
 	}
 
 	public String getDescription() {
