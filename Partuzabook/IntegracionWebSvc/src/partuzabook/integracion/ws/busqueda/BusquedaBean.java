@@ -1,11 +1,13 @@
 package partuzabook.integracion.ws.busqueda;
  
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import javax.ejb.Stateless;
 import javax.jws.WebService;
@@ -148,8 +150,19 @@ public class BusquedaBean {
 			Evento evento = new Evento();
 			evento.setDescripcion(datatypeEventSummary.getDescription());
 			evento.setDireccion(datatypeEventSummary.getAddress());
+			
+			
+		    TimeZone tz = TimeZone.getDefault ();
+		    Calendar c = Calendar.getInstance (tz);
+		    c.setTime (datatypeEventSummary.getDate());
 			XMLGregorianCalendarImpl gCal = new XMLGregorianCalendarImpl();
-			gCal.setMillisecond((int)datatypeEventSummary.getDate().getTime());
+			gCal.setDay(c.get(Calendar.DAY_OF_MONTH));
+			gCal.setMonth(c.get(Calendar.MONTH));
+			gCal.setYear(c.get(Calendar.YEAR));
+			gCal.setHour(c.get(Calendar.HOUR));
+			gCal.setMinute(c.get(Calendar.MINUTE));
+			gCal.setSecond(c.get(Calendar.SECOND));
+			
 			evento.setFecha(gCal);
 			evento.setIdEvento(datatypeEventSummary.getEvtId());
 			evento.setNombre(datatypeEventSummary.getEvtName());

@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/facebook-java-api-annotation-processor-3.0.2.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/facebook-java-api-schema-3.0.2.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/json-20080701.jar"/>
+	<classpathentry kind="src" path="/IntegracionWebSvc"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

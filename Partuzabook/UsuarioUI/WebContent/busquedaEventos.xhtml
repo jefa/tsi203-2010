@@ -167,7 +167,40 @@ function toggleTab(control, tab)
 		</div>
 		</a4j:outputPanel>
 
+<br/>
 
+		<a4j:repeat var="resultado" value="#{SearchEventMB.externalEventResults}" rendered="#{not empty SearchEventMB.externalEventResults}">
+			<li class="post type-post clearfix">
+			<div class="entry-thumbnails">
+			<h:commandLink action="verEvento" styleClass="entry-thumbnails-link">
+				<f:setPropertyActionListener value="#{resultado.evtId}"
+				target="#{eventoMB.eventId}" />
+				<h:graphicImage
+				value="/ContentFeeder?id=#{resultado.coverId}&#38;thb=115"
+				styleClass="attachment-quick-preview-thumb wp-post-image" />
+			</h:commandLink>
+			</div>
+	
+			<h3 class="entry-title">
+			<h:commandLink value="#{resultado.evtName}" action="verEvento">
+				<f:setPropertyActionListener value="#{resultado.evtId}"
+				target="#{eventoMB.eventId}" />
+			</h:commandLink>
+			</h3>
+	
+			<div class="entry-summary">
+			<div class="entry-info">
+			<abbr class="published">#{resultado.formattedDate}</abbr></div>
+			#{resultado.description}
+			<p class="quick-read-more">
+			<h:commandLink value="Ver evento..." action="verEvento">
+				<f:setPropertyActionListener value="#{resultado.evtId}"
+				target="#{eventoMB.eventId}" />
+			</h:commandLink>
+			</p>
+			</div>
+			</li>
+		</a4j:repeat>
 
 
 	</h:form>
