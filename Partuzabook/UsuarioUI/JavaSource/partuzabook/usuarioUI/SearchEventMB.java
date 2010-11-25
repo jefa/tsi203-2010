@@ -387,20 +387,20 @@ public class SearchEventMB {
 		}
 	}
 	
-	private List<DatatypeEventSummary> convertWSList(List<Evento> returnWS)
+	private List<DatatypeEventSummary> convertWSList(List<DataEvent> returnWS)
 	{
 		List<DatatypeEventSummary> salida = new ArrayList<DatatypeEventSummary>();
 		
-		for (Evento evento : returnWS) {
+		for (DataEvent evento : returnWS) {
 			System.out.println("Evento encontrado:::  " + evento.getNombre());
 			DatatypeEventSummary temp = new DatatypeEventSummary();
 			// TODO: que da ver como corno guardaar la coverURL
 			//evento.getUrlCover();
-			if (evento.getDireccion() != null) temp.setAddress(evento.getDireccion());
-			if (evento.getFecha() != null) temp.setDate(evento.getFecha().toGregorianCalendar().getTime());
-			if (evento.getDescripcion() != null) temp.setDescription(evento.getDescripcion());
-			if (evento.getNombre() != null) temp.setEvtName(evento.getNombre());
-			if (evento.getIdEvento() != null) temp.setEvtId(evento.getIdEvento());
+			if (evento.getDireccion() != null) temp.setAddress(evento.getDireccion().getValue());
+			if (evento.getFecha() != null) temp.setDate(evento.getFecha().getValue().toGregorianCalendar().getTime());
+			if (evento.getDescripcion() != null) temp.setDescription(evento.getDescripcion().getValue());
+			if (evento.getNombre() != null) temp.setEvtName(evento.getNombre().getValue());
+			if (evento.getIdEvento() != null) temp.setEvtId(evento.getIdEvento().getValue());
 			salida.add(temp);
 		}
 		return salida;
@@ -408,11 +408,6 @@ public class SearchEventMB {
 		
 	private IntegracionWSServicePortType getServiceProductora1() throws MalformedURLException
 	{
-		/*Service service = Service.create(
-				new URL("http://localhost:8080/PartuzabookEAR-IntegracionWebSvc/BusquedaBean?wsdl"),
-				new QName("http://edu.tsi2.ws/integracion/ws/busqueda", "BusquedaService")
-				
-		);*/
 		Service service = Service.create(
 				new URL("http://localhost:8180/PruebaIntegracion/services/IntegracionWSService?wsdl"),
 				new QName("http://ws.integracion.tsi2.fing.edu.uy", "IntegracionWSService")
