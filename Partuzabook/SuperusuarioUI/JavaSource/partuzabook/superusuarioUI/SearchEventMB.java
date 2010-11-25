@@ -14,7 +14,7 @@ import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 
 public class SearchEventMB {
 
-	private static int EVENTS_PER_PAGE = 2;
+	private static int EVENTS_PER_PAGE = 6;
 
 	// Search by Event Name
 	private String eventNameSearched ="";
