@@ -150,7 +150,7 @@
       <port binding='tns:BusquedaBinding' name='BusquedaPort'>
 
          <soap:address 
-             location='http://192.168.1.101/partuzabook-integracion/BusquedaBean'/>
+             location='http://localhost:8080/partuzabook-integracion/BusquedaBean'/>
       </port>
    </service>
 </definitions>

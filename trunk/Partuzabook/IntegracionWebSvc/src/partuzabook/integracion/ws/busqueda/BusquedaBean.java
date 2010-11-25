@@ -1,13 +1,11 @@
 package partuzabook.integracion.ws.busqueda;
  
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.TimeZone;
 
 import javax.ejb.Stateless;
 import javax.jws.WebService;
@@ -16,14 +14,11 @@ import javax.jws.soap.SOAPBinding;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
-import com.sun.xml.bind.v2.TODO;
 
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
-import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 import partuzabook.utils.Parameters;
  
 @Stateless

@@ -77,7 +77,7 @@
       <port binding='tns:ContenidoBinding' name='ContenidoPort'>
 
          <soap:address 
-             location='http://192.168.1.101/partuzabook-integracion/ContenidoBean'/>
+             location='http://localhost:8080/partuzabook-integracion/ContenidoBean'/>
       </port>
    </service>
 </definitions>

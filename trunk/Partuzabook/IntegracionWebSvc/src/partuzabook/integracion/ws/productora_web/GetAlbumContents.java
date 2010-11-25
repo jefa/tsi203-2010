@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "getAlbumContents")
 public class GetAlbumContents {
 
-    @XmlElementRef(name = "eventID", namespace = "http://ejb.integracion.tsi2.fing.edu.uy", type = JAXBElement.class)
+    @XmlElementRef(name = "eventID", namespace = "http://ws.integracion.tsi2.fing.edu.uy", type = JAXBElement.class)
     protected JAXBElement<String> eventID;
 
     /**

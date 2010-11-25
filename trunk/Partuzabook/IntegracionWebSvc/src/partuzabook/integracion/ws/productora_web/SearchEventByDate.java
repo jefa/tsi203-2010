@@ -20,7 +20,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="date" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
+ *         &lt;element name="date" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,7 +36,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlRootElement(name = "searchEventByDate")
 public class SearchEventByDate {
 
-    @XmlElementRef(name = "date", namespace = "http://ejb.integracion.tsi2.fing.edu.uy", type = JAXBElement.class)
+    @XmlElementRef(name = "date", namespace = "http://ws.integracion.tsi2.fing.edu.uy", type = JAXBElement.class)
     protected JAXBElement<XMLGregorianCalendar> date;
 
     /**
