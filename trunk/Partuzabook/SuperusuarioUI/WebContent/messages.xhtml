@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+	
+<ui:composition template="templates/superusuarioUI.xhtml">
+	<ui:define name="styles">
+		.main-aside {width:160px; float:left;}
+		#container {width:800px; float:right;}
+		#content {width:800px;} 
+	</ui:define>
+	
+	
+	
+	<ui:define name="sidebar">
+
+	<script type="text/javascript">
+			function disableButtons(time)
+			{
+				document.getElementById('w1').disabled = true;
+				document.getElementById('i1').disabled = true;
+				document.getElementById('s1').disabled = true;
+				document.getElementById('n1').disabled = true;
+				setTimeout('document.getElementById(\'w1\').disabled = false',time);
+				setTimeout('document.getElementById(\'i1\').disabled = false',time);
+				setTimeout('document.getElementById(\'s1\').disabled = false',time);
+				setTimeout('document.getElementById(\'n1\').disabled = false',time);
+			}
+			function hideOnload(time) {
+				document.getElementById('write').hide();
+				document.getElementById('sentbox').hide();
+				document.getElementById('notif').hide();
+				//setTimeout('document.getElementById(\'write\').show()',time);
+			}
+			function cleanRedactar() {
+				document.getElementById('j_id30:toField').value = '';
+				document.getElementById('j_id30:subjectField').value = '';
+				document.getElementById('j_id30:textArea').value = '';
+			}
+		</script>
+		
+		<ul style="list-style:none;padding-left:0px">
+			<li style="padding-bottom: 4px">
+				<h:commandButton id="w1" value="Redactar" style="width:150px; text-align:left" onclick="disableButtons(1000); cleanRedactar();"/>
+			</li>
+			<li style="padding-bottom: 4px">
+				<h:commandButton id="i1" value="Bandeja de Entrada (#{notificationsBean.recvUnread})" style="width:150px; text-align:left" onclick="disableButtons(1000)"/>
+			</li>
+			<li style="padding-bottom: 4px">
+				<h:commandButton id="s1" value="Elementos Enviados" style="width:150px; text-align:left" onclick="disableButtons(1000)"/>
+			</li>
+			<li>
+				<h:commandButton id="n1" value="Notificaciones (#{notificationsBean.gralUnread})" style="width:150px; text-align:left" onclick="disableButtons(1000)"/>
+			</li>
+		</ul>
+				<rich:effect event="onclick"  for="w1"  type="BlindDown" targetId="write"/>
+				<rich:effect event="onclick"  for="w1"  type="BlindUp" targetId="inbox"/>
+				<rich:effect event="onclick"  for="w1"  type="BlindUp" targetId="sentbox"/>
+				<rich:effect event="onclick"  for="w1"  type="BlindUp" targetId="notif"/>
+				
+				<rich:effect event="onclick"  for="i1"  type="BlindUp" targetId="write"/>
+				<rich:effect event="onclick"  for="i1"  type="BlindDown" targetId="inbox"/>
+				<rich:effect event="onclick"  for="i1"  type="BlindUp" targetId="sentbox"/>
+				<rich:effect event="onclick"  for="i1"  type="BlindUp" targetId="notif"/>
+				
+				<rich:effect event="onclick"  for="s1"  type="BlindUp" targetId="write"/>
+				<rich:effect event="onclick"  for="s1"  type="BlindUp" targetId="inbox"/>
+				<rich:effect event="onclick"  for="s1"  type="BlindDown" targetId="sentbox"/>
+				<rich:effect event="onclick"  for="s1"  type="BlindUp" targetId="notif"/>
+				
+				<rich:effect event="onclick"  for="n1"  type="BlindUp" targetId="write"/>
+				<rich:effect event="onclick"  for="n1"  type="BlindUp" targetId="inbox"/>
+				<rich:effect event="onclick"  for="n1"  type="BlindUp" targetId="sentbox"/>
+				<rich:effect event="onclick"  for="n1"  type="BlindDown" targetId="notif"/>
+	</ui:define>
+	
+	<ui:define name="body">
+		<rich:modalPanel id="panel" width="700" height="300">
+			<f:facet name="header">
+		        	<h:outputText value="Mensaje"/>
+			</f:facet>
+				<div style="float:left;"><img id="image" src="UserImageFeeder?username=#{loginMB.userName}&#38;thb=150" hspace="5"/></div> 
+				<div id="modalSubject"/>
+				<hr/>
+				<div id="modalInfo"/>
+				<br/>
+				<!--div id="modalBody"/-->
+				<textarea rows="8" cols="61" id="modalBody" readonly="readonly"/>
+				<div id="modalTo" style="display: none"/>
+
+				<!-- 	
+				<h:panelGrid columns="2" elements="1" width="100%">
+					<h:column>
+						<h:graphicImage value="/UserImageFeeder?username=#{loginMB.userName}&#38;thb=150" style="padding-bottom: 4px; vertical-align: middle;"/>
+					</h:column>
+					<h:column>
+						<div id="modalSubject"/>
+						<hr/>
+						<div id="modalInfo"/>
+						<br/>
+						<div id="modalBody"/>
+						<div id="modalTo" style="display: none"/>
+					</h:column>
+					
+				</h:panelGrid>
+			 	-->
+			<div align="right">
+				<a4j:form>
+					<h:inputHidden value="#{notificationsBean.notId}" id="repNotId"/>
+					<h:inputHidden value="#{notificationsBean.toUser}" id="repToUser"/>
+					<h:inputHidden value="#{notificationsBean.subject}" id="repSubject"/>
+					<a4j:commandButton reRender="write" value="Responder" id="reply" action="#{notificationsBean.notLeida}"/>
+						<rich:componentControl for="panel" attachTo="reply" operation="hide" event="onclick"/>
+						<rich:effect event="onclick"  for="reply"  type="BlindDown" targetId="write"/>
+						<rich:effect event="onclick"  for="reply"  type="Fade" targetId="inbox"/>
+						<rich:effect event="onclick"  for="reply"  type="Fade" targetId="sentbox"/>
+						<rich:effect event="onclick"  for="reply"  type="Fade" targetId="notif"/>
+					<a4j:commandButton value="Cerrar" id="hidelink" action="#{notificationsBean.notLeida}"/>
+						<rich:componentControl for="panel" attachTo="hidelink" operation="hide" event="onclick"/>
+				</a4j:form>
+			</div>
+		</rich:modalPanel>		
+			<rich:panel id="write" >	
+				<f:facet name="header">
+					<h:outputText value="Redactar nuevo Mensaje Privado"/>
+				</f:facet>
+				<h:form>
+					<h:outputText value="Para:" style="margin-right:23px"/>
+					<h:inputText id="toField" value="#{notificationsBean.toUser}" size="60" maxlength="30"/>
+					<h:outputText value="#{notificationsBean.toUserMessage}" style="color:red"/>
+					<rich:suggestionbox width="360" id="suggestionBoxId" for="toField" tokens=",[]"
+	                   suggestionAction="#{notificationsBean.autocomplete}" var="result"
+	                   fetchValue="#{result.username}"
+						nothingLabel="No hay usuarios que coincidan" columnClasses="center">
+	                    <h:column>
+	                        <h:graphicImage value="/UserImageFeeder?username=#{result.username}&#38;thb=30" />
+	                    </h:column>
+	                    <h:column>
+	                        <h:outputText value="#{result.name}" />
+	                    </h:column>
+	                    <h:column>
+	                        <h:outputText value=" #{result.username}" style="font-style:italic" />
+	                    </h:column>
+	                </rich:suggestionbox>
+					<br/><br/>
+					<h:outputText value="Asunto:" style="margin-right:10px"/>
+					<h:inputText id="subjectField" value="#{notificationsBean.subject}" size="60" maxlength="200"/><br/><br/>
+					<h:outputText value="Mensaje: "/>
+					<h:outputText value="#{notificationsBean.bodyMessage}" style="color:red"/><br/>
+					<h:inputTextarea id="textArea" value="#{notificationsBean.body}" cols="93" rows="9"/><br/>
+					<br/>
+					<center>
+						<h:commandButton value="Enviar Mensaje" action="#{notificationsBean.sendMail}"  
+							oncomplete="if('#{notificationsBean.createMessage}' != '') alert('#{notificationsBean.createMessage}');" />						
+					</center>
+				</h:form>		
+			</rich:panel>
+			
+			
+				<rich:panel id="inbox">
+					<f:facet name="header">
+						<h:outputText value="Bandeja de Entrada"/>
+					</f:facet>
+					<a4j:form>
+						
+						<h:outputText value="#{notificationsBean.recvAll} mensajes recibidos (#{notificationsBean.recvUnread} sin leer)"/>
+						
+						<div style="float:right;">
+							<a4j:commandButton value="Anterior" reRender="inbox" action="#{notificationsBean.recvNotificationsPreviousPage}"/>
+							<em><h:outputText value=" Pagina #{notificationsBean.recvNotificationsPage} de #{notificationsBean.maxRecvNotificationsPage} "/></em>
+							<a4j:commandButton value="Siguiente" reRender="inbox" action="#{notificationsBean.recvNotificationsNextPage}"/><br/>
+						</div>
+						<br/>
+						<br/>
+						
+						<rich:dataGrid id="inboxDataGrid" value="#{notificationsBean.notificacionesRecibidas}" var="notif" columns="1" elements="10" width="775px" 
+						onRowClick="document.getElementById('modalSubject').innerHTML = '&lt;strong&gt;#{notif.subject}&lt;/strong&gt;'; 
+						document.getElementById('modalInfo').innerHTML = 'De #{notif.userFrom} Para #{notif.userTo}, #{notif.formattedDate}'; 
+						document.getElementById('modalBody').value = '#{notif.HTMLTextArea}';
+						document.getElementById('modalTo').innerHTML = '#{notif.userFrom}';
+						document.getElementById('j_id21:repNotId').value = '#{notif.notId}'; 
+						document.getElementById('j_id21:repToUser').value = '#{notif.userFrom}';
+						document.getElementById('j_id21:repSubject').value = 'Re: #{notif.subject}';
+						document.getElementById('image').src = 'UserImageFeeder?username=#{notif.userFrom}&#38;thb=150';
+						document.getElementById('j_id21:reply').show();
+						#{rich:component('panel')}.show()">
+							<div style="float:left;"><img src="UserImageFeeder?username=#{notif.userFrom}&#38;thb=50" hspace="5"/></div> 
+							<strong><h:outputText value="#{notif.subject}"/></strong><br/>
+						    <h:outputText value="#{notif.userFrom} - " style="font-style:italic"/>
+							<h:outputText value="#{notif.formattedDate}" />
+				    	</rich:dataGrid>
+				    	<script>
+				    		jQuery('.rich-table-row td').hover(
+						    		function() {jQuery(this).addClass("hovergreen");},
+						    		function() {jQuery(this).removeClass("hovergreen");}
+						    	)
+				    	</script>
+			    	</a4j:form>
+				</rich:panel>
+				
+				<rich:panel id="sentbox">
+					<f:facet name="header">
+						<h:outputText value="Elementos Enviados"></h:outputText>
+					</f:facet>
+					<a4j:form>
+						<p align="right">
+							<a4j:commandButton value="Anterior" reRender="sentbox" action="#{notificationsBean.sentNotificationPreviousPage}"/>
+							<em><h:outputText value=" Pagina #{notificationsBean.sentNotificationsPage} de #{notificationsBean.maxSentNotificationsPage} "/></em>
+							<a4j:commandButton value="Siguiente" reRender="sentbox" action="#{notificationsBean.sentNotificationNextPage}"/><br/>
+						</p>
+						<rich:dataGrid value="#{notificationsBean.notificacionesEnviadas}" var="notif" columns="1" elements="10" width="775px"
+						onRowClick="document.getElementById('modalSubject').innerHTML = '&lt;strong&gt;#{notif.subject}&lt;/strong&gt;'; 
+						document.getElementById('modalInfo').innerHTML = 'De #{notif.userFrom} Para #{notif.userTo}, #{notif.formattedDate}'; 
+						document.getElementById('modalBody').value = '#{notif.HTMLTextArea}'; 
+						document.getElementById('modalTo').innerHTML = '#{notif.userFrom}'; 
+						document.getElementById('j_id21:repToUser').value = '#{notif.userFrom}';
+						document.getElementById('j_id21:repSubject').value = 'Re: #{notif.subject}';
+						document.getElementById('image').src = 'UserImageFeeder?username=#{notif.userFrom}&#38;thb=150';
+						document.getElementById('j_id21:reply').hide();
+						#{rich:component('panel')}.show()">
+				        	<div style="float:left;"><img src="UserImageFeeder?username=#{notif.userFrom}&#38;thb=50" hspace="5"/></div> 
+							<strong><h:outputText value="#{notif.subject}"/></strong><br/>
+						    <h:outputText value="#{notif.userFrom} - " style="font-style:italic"/>
+							<h:outputText value="#{notif.formattedDate}" />					
+				    	</rich:dataGrid>
+				    	<script>
+				    		jQuery('.rich-table-row td').hover(
+						    		function() {jQuery(this).addClass("hovergreen");},
+						    		function() {jQuery(this).removeClass("hovergreen");}
+						    	)
+				    	</script>
+				    </a4j:form>
+				</rich:panel>
+				
+				<rich:panel id="notif">
+					<f:facet name="header">
+						<h:outputText value="Notificaciones Recibidas"></h:outputText>
+					</f:facet>
+					<a4j:form>
+						<h:outputText value="#{notificationsBean.gralAll} notificaciones recibidas (#{notificationsBean.gralUnread} sin leer)"/>
+						
+						<div style="float:right;">
+							<a4j:commandButton value="Anterior" reRender="notif" action="#{notificationsBean.gralNotificationsPreviousPage}"/>
+							<em><h:outputText value=" Pagina #{notificationsBean.gralNotificationsPage} de #{notificationsBean.maxGralNotificationsPage} "/></em>
+							<a4j:commandButton value="Siguiente" reRender="notif" action="#{notificationsBean.gralNotificationsNextPage}"/><br/>
+						</div>
+						
+						<br/>
+						<br/>
+						
+						
+						<rich:dataGrid value="#{notificationsBean.notificacionesGeneral}" var="notif" columns="1" elements="10" width="775px"
+						onRowClick="document.getElementById('modalSubject').innerHTML = '&lt;strong&gt;#{notif.subject}&lt;/strong&gt;'; 
+						document.getElementById('modalInfo').innerHTML = 'De #{notif.userFrom} Para #{notif.userTo}, #{notif.formattedDate}'; 
+						document.getElementById('modalBody').value = '#{notif.HTMLTextArea}';  
+						document.getElementById('modalTo').innerHTML = '#{notif.userFrom}';
+						document.getElementById('j_id21:repNotId').value = '#{notif.notId}'; 
+						document.getElementById('j_id21:repToUser').value = '#{notif.userFrom}';
+						document.getElementById('j_id21:repSubject').value = 'Re: #{notif.subject}';
+						document.getElementById('image').src = 'UserImageFeeder?username=#{notif.userFrom}&#38;thb=150';
+						document.getElementById('j_id21:reply').hide();
+						#{rich:component('panel')}.show()">
+				        	<div style="float:left;">
+				        	<div style="float:left;"><img src="UserImageFeeder?username=#{notif.userFrom}&#38;thb=50" hspace="5"/></div> 
+							<strong><h:outputText value="#{notif.subject}"/></strong><br/>
+						    <h:outputText value="#{notif.userFrom} - " style="font-style:italic"/>
+							<h:outputText value="#{notif.formattedDate}" />
+							</div>
+				    	</rich:dataGrid>
+				    	<script>
+				    		jQuery('.rich-table-row td').hover(
+						    		function() {jQuery(this).addClass("hovergreen");},
+						    		function() {jQuery(this).removeClass("hovergreen");}
+						    	)
+				    	</script>
+				    </a4j:form>
+				</rich:panel>
+				
+				<rich:effect for="window" event="onload" type="BlindUp" params="targetId:'write'"/>
+				<rich:effect for="window" event="onload" type="BlindUp" params="targetId:'sentbox'"/>
+				<rich:effect for="window" event="onload" type="BlindUp" params="targetId:'notif'"/>
+				<script>window.onload=function(){ 
+					disableButtons(1000);
+					hideOnload(1000);
+				}</script>
+							   		
+	</ui:define>
+	
+		
+</ui:composition>
+</html>

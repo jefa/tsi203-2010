@@ -23,7 +23,7 @@
 				<h:inputText id="findEvent" value="#{EventMB.findName}" size="50"/>
 				<h:commandButton value="Buscar Evento" action="#{EventMB.searchEvent}"/><br/>
 				<h:outputText vaue="#{EventMB.findEventMessage}"/>
-				<rich:suggestionbox id="eventSuggestionBoxId" for="findEvent" tokens=",["
+				<rich:suggestionbox width="320" id="eventSuggestionBoxId" for="findEvent" tokens=",["
 					suggestionAction="#{EventMB.findEventAutocomplete}" var="eventResult"
 					nothingLabel="No hay eventos que coincidan" columnClasses="center">
 					<!-- h:column>
@@ -114,6 +114,8 @@
 				        </rich:panel>
 				        <h:outputText value="#{EventMB.participantsMessageM}" style="color:red"></h:outputText><br/>
 				</a4j:outputPanel>
+				
+				<hr/>
 				
 				<a4j:outputPanel id="modPanel" style="margin-left:60px">
 				<h:outputText value="Evento es moderado:"/>
