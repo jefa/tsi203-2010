@@ -121,6 +121,14 @@ public class BusquedaBean {
 				
 	}
 
+	@WebMethod
+	public SearchResponse searchByType(SearchByTypeRequest request){
+
+		SearchResponse sr = new SearchResponse();
+		return sr;
+				
+	}
+
 	private ServicesEventRemote getServicesEvent() throws NamingException {
 		Context ctx = getContext();
 		ServicesEventRemote srvEvent = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");

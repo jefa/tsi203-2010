@@ -28,6 +28,8 @@ public class ObjectFactory {
     private final static QName _SearchByDateResponse_QNAME = new QName("http://edu.tsi2.ws/integracion/ws/busqueda", "searchByDateResponse");
     private final static QName _SearchBetweenDate_QNAME = new QName("http://edu.tsi2.ws/integracion/ws/busqueda", "searchBetweenDate");
     private final static QName _SearchBetweenDateResponse_QNAME = new QName("http://edu.tsi2.ws/integracion/ws/busqueda", "searchBetweenDateResponse");
+    private final static QName _SearchByType_QNAME = new QName("http://edu.tsi2.ws/integracion/ws/busqueda", "searchByType");
+    private final static QName _SearchByTypeResponse_QNAME = new QName("http://edu.tsi2.ws/integracion/ws/busqueda", "searchByTypeResponse");
     private final static QName _SearchByNameResponse_QNAME = new QName("http://edu.tsi2.ws/integracion/ws/busqueda", "searchByNameResponse");
     private final static QName _SearchByDate_QNAME = new QName("http://edu.tsi2.ws/integracion/ws/busqueda", "searchByDate");
 
@@ -39,27 +41,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Evento }
+     * Create an instance of {@link SearchBetweenDateRequest }
      * 
      */
-    public Evento createEvento() {
-        return new Evento();
-    }
-
-    /**
-     * Create an instance of {@link SearchByDateRequest }
-     * 
-     */
-    public SearchByDateRequest createSearchByDateRequest() {
-        return new SearchByDateRequest();
-    }
-
-    /**
-     * Create an instance of {@link SearchByNameRequest }
-     * 
-     */
-    public SearchByNameRequest createSearchByNameRequest() {
-        return new SearchByNameRequest();
+    public SearchBetweenDateRequest createSearchBetweenDateRequest() {
+        return new SearchBetweenDateRequest();
     }
 
     /**
@@ -71,11 +57,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SearchBetweenDateRequest }
+     * Create an instance of {@link SearchByDateRequest }
      * 
      */
-    public SearchBetweenDateRequest createSearchBetweenDateRequest() {
-        return new SearchBetweenDateRequest();
+    public SearchByDateRequest createSearchByDateRequest() {
+        return new SearchByDateRequest();
+    }
+
+    /**
+     * Create an instance of {@link Evento }
+     * 
+     */
+    public Evento createEvento() {
+        return new Evento();
+    }
+
+    /**
+     * Create an instance of {@link SearchByNameRequest }
+     * 
+     */
+    public SearchByNameRequest createSearchByNameRequest() {
+        return new SearchByNameRequest();
+    }
+
+    /**
+     * Create an instance of {@link SearchByTypeRequest }
+     * 
+     */
+    public SearchByTypeRequest createSearchByTypeRequest() {
+        return new SearchByTypeRequest();
     }
 
     /**
@@ -112,6 +122,24 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://edu.tsi2.ws/integracion/ws/busqueda", name = "searchBetweenDateResponse")
     public JAXBElement<SearchResponse> createSearchBetweenDateResponse(SearchResponse value) {
         return new JAXBElement<SearchResponse>(_SearchBetweenDateResponse_QNAME, SearchResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SearchByTypeRequest }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://edu.tsi2.ws/integracion/ws/busqueda", name = "searchByType")
+    public JAXBElement<SearchByTypeRequest> createSearchByType(SearchByTypeRequest value) {
+        return new JAXBElement<SearchByTypeRequest>(_SearchByType_QNAME, SearchByTypeRequest.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SearchResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://edu.tsi2.ws/integracion/ws/busqueda", name = "searchByTypeResponse")
+    public JAXBElement<SearchResponse> createSearchByTypeResponse(SearchResponse value) {
+        return new JAXBElement<SearchResponse>(_SearchByTypeResponse_QNAME, SearchResponse.class, null, value);
     }
 
     /**

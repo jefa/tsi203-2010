@@ -43,6 +43,10 @@
                      nillable='true' type='tns:searchBetweenDateRequest'/>
          <xsd:element name='searchBetweenDateResponse' 
                      nillable='true' type='tns:searchResponse'/>
+         <xsd:element name='searchByType' 
+                     nillable='true' type='tns:searchByTypeRequest'/>
+         <xsd:element name='searchByTypeResponse' 
+                     nillable='true' type='tns:searchResponse'/>
          <xsd:complexType name='searchByNameRequest'>
             <xsd:sequence>
                <xsd:element name='nombre' type='xsd:string'/>
@@ -60,6 +64,11 @@
                <xsd:element name='fechaFrom' type='xsd:dateTime'/>
                <xsd:element name='fechaTo' type='xsd:dateTime'/>
                <xsd:element name='maxEventos' type='xsd:int'/>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name='searchByTypeRequest'>
+            <xsd:sequence>
+               <xsd:element name='tipoEvento' type='xsd:int'/>
             </xsd:sequence>
          </xsd:complexType>
          <xsd:complexType name='searchResponse'>
@@ -95,6 +104,14 @@
             name='searchBetweenDateResponse'/>
    </message>
 
+   <message name='Busqueda_searchByType'>
+      <part element='tns:searchByType' name='searchByType'/>
+   </message>
+   <message name='Busqueda_searchByTypeResponse'>
+      <part element='tns:searchByTypeResponse' 
+            name='searchByTypeResponse'/>
+   </message>
+
    <portType name='Busqueda'>
       <operation name='searchByName' 
                  parameterOrder='searchByName'>
@@ -112,6 +129,12 @@
                  parameterOrder='searchBetweenDate'>
          <input message='tns:Busqueda_searchBetweenDate'/>
          <output message='tns:Busqueda_searchBetweenDateResponse'/>
+      </operation>
+
+      <operation name='searchByType' 
+                 parameterOrder='searchByType'>
+         <input message='tns:Busqueda_searchByType'/>
+         <output message='tns:Busqueda_searchByTypeResponse'/>
       </operation>
 
    </portType>
@@ -137,6 +160,15 @@
          </output>
       </operation>
       <operation name='searchBetweenDate'>
+         <soap:operation soapAction=''/>
+         <input>
+            <soap:body use='literal'/>
+         </input>
+         <output>
+            <soap:body use='literal'/>
+         </output>
+      </operation>      
+      <operation name='searchByType'>
          <soap:operation soapAction=''/>
          <input>
             <soap:body use='literal'/>
