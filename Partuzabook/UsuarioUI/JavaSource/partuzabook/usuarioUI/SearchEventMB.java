@@ -17,6 +17,8 @@ import javax.xml.ws.Service;
 import partuzabook.datatypes.DatatypeEventSummary;
 import partuzabook.integracion.ws.busqueda.Busqueda;
 import partuzabook.integracion.ws.busqueda.Evento;
+import partuzabook.integracion.ws.productora_web.DataEvent;
+import partuzabook.integracion.ws.productora_web.IntegracionWSServicePortType;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
 import partuzabook.utils.Parameters;
 
@@ -368,20 +370,12 @@ public class SearchEventMB {
 	public List<DatatypeEventSummary> searchEventsByNameExterno(String name, int maxResults) {
 		try {
 
-			Service service = getServiceProductora1();
+			IntegracionWSServicePortType ws = getServiceProductora1();
+
+			List<DataEvent> result = ws.searchEventByName(name);
 			
-			Busqueda busqueda = service.getPort(Busqueda.class);
-			Holder<List<Evento>> c = new Holder<List<Evento>>();
-			c.value = new ArrayList<Evento>();
-			Holder<Integer> tot = new Holder<Integer>();
-			tot.value = new Integer(0);
+			System.out.println("TOTAL ES:::  " + result.size());
 			
-			busqueda.searchByName(name, maxResults, c, tot);
-			
-			System.out.println("TOTAL ES:::  " + tot.value);
-			
-			List<Evento> result = c.value;
-		
 			if (result !=null && result.size() > 0)
 				return convertWSList(result);
 			else 
@@ -411,15 +405,19 @@ public class SearchEventMB {
 		}
 		return salida;
 	}
-	
-	private Service getServiceProductora1() throws MalformedURLException
+		
+	private IntegracionWSServicePortType getServiceProductora1() throws MalformedURLException
 	{
-		Service service = Service.create(
+		/*Service service = Service.create(
 				new URL("http://localhost:8080/PartuzabookEAR-IntegracionWebSvc/BusquedaBean?wsdl"),
 				new QName("http://edu.tsi2.ws/integracion/ws/busqueda", "BusquedaService")
 				
+		);*/
+		Service service = Service.create(
+				new URL("http://localhost:8180/PruebaIntegracion/services/IntegracionWSService?wsdl"),
+				new QName("http://ws.integracion.tsi2.fing.edu.uy", "IntegracionWSService")
 		);
-		return service;
+		return service.getPort(IntegracionWSServicePortType.class);
 	}
 
 	public void setExternalEventResults(List<DatatypeEventSummary> externalEventResults) {
