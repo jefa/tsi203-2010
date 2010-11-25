@@ -1,6 +1,7 @@
 
 package partuzabook.integracion.ws.productora_web;
 
+import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -16,7 +17,7 @@ import javax.xml.ws.ResponseWrapper;
  * Generated source version: 2.0
  * 
  */
-@WebService(name = "IntegracionWSServicePortType", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy")
+@WebService(name = "IntegracionWSServicePortType", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy")
 public interface IntegracionWSServicePortType {
 
 
@@ -24,56 +25,56 @@ public interface IntegracionWSServicePortType {
      * 
      * @param name
      * @return
-     *     returns java.lang.Object
+     *     returns java.util.List<partuzabook.integracion.ws.productora_web.DataEvent>
      */
     @WebMethod(action = "urn:searchEventByName")
-    @WebResult(targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy")
-    @RequestWrapper(localName = "searchEventByName", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.SearchEventByName")
-    @ResponseWrapper(localName = "searchEventByNameResponse", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.SearchEventByNameResponse")
-    public Object searchEventByName(
-        @WebParam(name = "name", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy")
+    @WebResult(targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy")
+    @RequestWrapper(localName = "searchEventByName", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.SearchEventByName")
+    @ResponseWrapper(localName = "searchEventByNameResponse", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.SearchEventByNameResponse")
+    public List<DataEvent> searchEventByName(
+        @WebParam(name = "name", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy")
         String name);
 
     /**
      * 
      * @param date
      * @return
-     *     returns java.lang.Object
+     *     returns java.util.List<partuzabook.integracion.ws.productora_web.DataEvent>
      */
     @WebMethod(action = "urn:searchEventByDate")
-    @WebResult(targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy")
-    @RequestWrapper(localName = "searchEventByDate", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.SearchEventByDate")
-    @ResponseWrapper(localName = "searchEventByDateResponse", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.SearchEventByDateResponse")
-    public Object searchEventByDate(
-        @WebParam(name = "date", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy")
+    @WebResult(targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy")
+    @RequestWrapper(localName = "searchEventByDate", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.SearchEventByDate")
+    @ResponseWrapper(localName = "searchEventByDateResponse", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.SearchEventByDateResponse")
+    public List<DataEvent> searchEventByDate(
+        @WebParam(name = "date", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy")
         XMLGregorianCalendar date);
 
     /**
      * 
      * @param eventID
      * @return
-     *     returns java.lang.Object
+     *     returns java.util.List<partuzabook.integracion.ws.productora_web.DataContent>
      */
     @WebMethod(action = "urn:getAlbumContents")
-    @WebResult(targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy")
-    @RequestWrapper(localName = "getAlbumContents", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.GetAlbumContents")
-    @ResponseWrapper(localName = "getAlbumContentsResponse", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.GetAlbumContentsResponse")
-    public Object getAlbumContents(
-        @WebParam(name = "eventID", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy")
+    @WebResult(targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy")
+    @RequestWrapper(localName = "getAlbumContents", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.GetAlbumContents")
+    @ResponseWrapper(localName = "getAlbumContentsResponse", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.GetAlbumContentsResponse")
+    public List<DataContent> getAlbumContents(
+        @WebParam(name = "eventID", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy")
         String eventID);
 
     /**
      * 
      * @param type
      * @return
-     *     returns java.lang.Object
+     *     returns java.util.List<partuzabook.integracion.ws.productora_web.DataEvent>
      */
     @WebMethod(action = "urn:searchEventByType")
-    @WebResult(targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy")
-    @RequestWrapper(localName = "searchEventByType", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.SearchEventByType")
-    @ResponseWrapper(localName = "searchEventByTypeResponse", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.SearchEventByTypeResponse")
-    public Object searchEventByType(
-        @WebParam(name = "type", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy")
+    @WebResult(targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy")
+    @RequestWrapper(localName = "searchEventByType", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.SearchEventByType")
+    @ResponseWrapper(localName = "searchEventByTypeResponse", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy", className = "partuzabook.integracion.ws.productora_web.SearchEventByTypeResponse")
+    public List<DataEvent> searchEventByType(
+        @WebParam(name = "type", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy")
         Integer type);
 
 }

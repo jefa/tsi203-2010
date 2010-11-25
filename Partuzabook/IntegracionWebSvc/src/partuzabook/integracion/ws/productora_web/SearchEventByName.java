@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "searchEventByName")
 public class SearchEventByName {
 
-    @XmlElementRef(name = "name", namespace = "http://ejb.integracion.tsi2.fing.edu.uy", type = JAXBElement.class)
+    @XmlElementRef(name = "name", namespace = "http://ws.integracion.tsi2.fing.edu.uy", type = JAXBElement.class)
     protected JAXBElement<String> name;
 
     /**

@@ -16,7 +16,7 @@ import javax.xml.ws.WebServiceClient;
  * Generated source version: 2.0
  * 
  */
-@WebServiceClient(name = "IntegracionWSService", targetNamespace = "http://ejb.integracion.tsi2.fing.edu.uy", wsdlLocation = "file:/C:/_Person/fing/TSI2/obligatorio/Partuzabook/IntegracionWebSvc/build/../src/partuzabook/integracion/ws/productora_web/integracionWSService.wsdl")
+@WebServiceClient(name = "IntegracionWSService", targetNamespace = "http://ws.integracion.tsi2.fing.edu.uy", wsdlLocation = "file:/C:/_Person/fing/TSI2/obligatorio/Partuzabook/IntegracionWebSvc/build/../src/partuzabook/integracion/ws/productora_web/IntegracionWSService.wsdl")
 public class IntegracionWSService
     extends Service
 {
@@ -29,9 +29,9 @@ public class IntegracionWSService
         try {
             URL baseUrl;
             baseUrl = partuzabook.integracion.ws.productora_web.IntegracionWSService.class.getResource(".");
-            url = new URL(baseUrl, "file:/C:/_Person/fing/TSI2/obligatorio/Partuzabook/IntegracionWebSvc/build/../src/partuzabook/integracion/ws/productora_web/integracionWSService.wsdl");
+            url = new URL(baseUrl, "file:/C:/_Person/fing/TSI2/obligatorio/Partuzabook/IntegracionWebSvc/build/../src/partuzabook/integracion/ws/productora_web/IntegracionWSService.wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'file:/C:/_Person/fing/TSI2/obligatorio/Partuzabook/IntegracionWebSvc/build/../src/partuzabook/integracion/ws/productora_web/integracionWSService.wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'file:/C:/_Person/fing/TSI2/obligatorio/Partuzabook/IntegracionWebSvc/build/../src/partuzabook/integracion/ws/productora_web/IntegracionWSService.wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         INTEGRACIONWSSERVICE_WSDL_LOCATION = url;
@@ -42,7 +42,7 @@ public class IntegracionWSService
     }
 
     public IntegracionWSService() {
-        super(INTEGRACIONWSSERVICE_WSDL_LOCATION, new QName("http://ejb.integracion.tsi2.fing.edu.uy", "IntegracionWSService"));
+        super(INTEGRACIONWSSERVICE_WSDL_LOCATION, new QName("http://ws.integracion.tsi2.fing.edu.uy", "IntegracionWSService"));
     }
 
     /**
@@ -52,7 +52,7 @@ public class IntegracionWSService
      */
     @WebEndpoint(name = "IntegracionWSServiceHttpSoap11Endpoint")
     public IntegracionWSServicePortType getIntegracionWSServiceHttpSoap11Endpoint() {
-        return super.getPort(new QName("http://ejb.integracion.tsi2.fing.edu.uy", "IntegracionWSServiceHttpSoap11Endpoint"), IntegracionWSServicePortType.class);
+        return super.getPort(new QName("http://ws.integracion.tsi2.fing.edu.uy", "IntegracionWSServiceHttpSoap11Endpoint"), IntegracionWSServicePortType.class);
     }
 
 }

@@ -25,10 +25,16 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _GetAlbumContentsResponseReturn_QNAME = new QName("http://ejb.integracion.tsi2.fing.edu.uy", "return");
-    private final static QName _SearchEventByNameName_QNAME = new QName("http://ejb.integracion.tsi2.fing.edu.uy", "name");
-    private final static QName _GetAlbumContentsEventID_QNAME = new QName("http://ejb.integracion.tsi2.fing.edu.uy", "eventID");
-    private final static QName _SearchEventByDateDate_QNAME = new QName("http://ejb.integracion.tsi2.fing.edu.uy", "date");
+    private final static QName _DataEventDescripcion_QNAME = new QName("http://ws.integracion.tsi2.fing.edu.uy/xsd", "descripcion");
+    private final static QName _DataEventUrlPortada_QNAME = new QName("http://ws.integracion.tsi2.fing.edu.uy/xsd", "urlPortada");
+    private final static QName _DataEventFecha_QNAME = new QName("http://ws.integracion.tsi2.fing.edu.uy/xsd", "fecha");
+    private final static QName _DataEventIdEvento_QNAME = new QName("http://ws.integracion.tsi2.fing.edu.uy/xsd", "idEvento");
+    private final static QName _DataEventDireccion_QNAME = new QName("http://ws.integracion.tsi2.fing.edu.uy/xsd", "direccion");
+    private final static QName _DataEventNombre_QNAME = new QName("http://ws.integracion.tsi2.fing.edu.uy/xsd", "nombre");
+    private final static QName _SearchEventByNameName_QNAME = new QName("http://ws.integracion.tsi2.fing.edu.uy", "name");
+    private final static QName _DataContentUrlPublica_QNAME = new QName("http://ws.integracion.tsi2.fing.edu.uy/xsd", "urlPublica");
+    private final static QName _SearchEventByDateDate_QNAME = new QName("http://ws.integracion.tsi2.fing.edu.uy", "date");
+    private final static QName _GetAlbumContentsEventID_QNAME = new QName("http://ws.integracion.tsi2.fing.edu.uy", "eventID");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: partuzabook.integracion.ws.productora_web
@@ -38,19 +44,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetAlbumContentsResponse }
+     * Create an instance of {@link DataEvent }
      * 
      */
-    public GetAlbumContentsResponse createGetAlbumContentsResponse() {
-        return new GetAlbumContentsResponse();
-    }
-
-    /**
-     * Create an instance of {@link SearchEventByNameResponse }
-     * 
-     */
-    public SearchEventByNameResponse createSearchEventByNameResponse() {
-        return new SearchEventByNameResponse();
+    public DataEvent createDataEvent() {
+        return new DataEvent();
     }
 
     /**
@@ -62,19 +60,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SearchEventByType }
+     * Create an instance of {@link SearchEventByDate }
      * 
      */
-    public SearchEventByType createSearchEventByType() {
-        return new SearchEventByType();
+    public SearchEventByDate createSearchEventByDate() {
+        return new SearchEventByDate();
     }
 
     /**
-     * Create an instance of {@link GetAlbumContents }
+     * Create an instance of {@link DataContent }
      * 
      */
-    public GetAlbumContents createGetAlbumContents() {
-        return new GetAlbumContents();
+    public DataContent createDataContent() {
+        return new DataContent();
     }
 
     /**
@@ -86,14 +84,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SearchEventByDate }
-     * 
-     */
-    public SearchEventByDate createSearchEventByDate() {
-        return new SearchEventByDate();
-    }
-
-    /**
      * Create an instance of {@link SearchEventByTypeResponse }
      * 
      */
@@ -102,28 +92,96 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Object }{@code >}}
+     * Create an instance of {@link SearchEventByType }
      * 
      */
-    @XmlElementDecl(namespace = "http://ejb.integracion.tsi2.fing.edu.uy", name = "return", scope = GetAlbumContentsResponse.class)
-    public JAXBElement<Object> createGetAlbumContentsResponseReturn(Object value) {
-        return new JAXBElement<Object>(_GetAlbumContentsResponseReturn_QNAME, Object.class, GetAlbumContentsResponse.class, value);
+    public SearchEventByType createSearchEventByType() {
+        return new SearchEventByType();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Object }{@code >}}
+     * Create an instance of {@link SearchEventByNameResponse }
      * 
      */
-    @XmlElementDecl(namespace = "http://ejb.integracion.tsi2.fing.edu.uy", name = "return", scope = SearchEventByNameResponse.class)
-    public JAXBElement<Object> createSearchEventByNameResponseReturn(Object value) {
-        return new JAXBElement<Object>(_GetAlbumContentsResponseReturn_QNAME, Object.class, SearchEventByNameResponse.class, value);
+    public SearchEventByNameResponse createSearchEventByNameResponse() {
+        return new SearchEventByNameResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetAlbumContents }
+     * 
+     */
+    public GetAlbumContents createGetAlbumContents() {
+        return new GetAlbumContents();
+    }
+
+    /**
+     * Create an instance of {@link GetAlbumContentsResponse }
+     * 
+     */
+    public GetAlbumContentsResponse createGetAlbumContentsResponse() {
+        return new GetAlbumContentsResponse();
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ejb.integracion.tsi2.fing.edu.uy", name = "name", scope = SearchEventByName.class)
+    @XmlElementDecl(namespace = "http://ws.integracion.tsi2.fing.edu.uy/xsd", name = "descripcion", scope = DataEvent.class)
+    public JAXBElement<String> createDataEventDescripcion(String value) {
+        return new JAXBElement<String>(_DataEventDescripcion_QNAME, String.class, DataEvent.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.integracion.tsi2.fing.edu.uy/xsd", name = "urlPortada", scope = DataEvent.class)
+    public JAXBElement<String> createDataEventUrlPortada(String value) {
+        return new JAXBElement<String>(_DataEventUrlPortada_QNAME, String.class, DataEvent.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link XMLGregorianCalendar }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.integracion.tsi2.fing.edu.uy/xsd", name = "fecha", scope = DataEvent.class)
+    public JAXBElement<XMLGregorianCalendar> createDataEventFecha(XMLGregorianCalendar value) {
+        return new JAXBElement<XMLGregorianCalendar>(_DataEventFecha_QNAME, XMLGregorianCalendar.class, DataEvent.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Integer }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.integracion.tsi2.fing.edu.uy/xsd", name = "idEvento", scope = DataEvent.class)
+    public JAXBElement<Integer> createDataEventIdEvento(Integer value) {
+        return new JAXBElement<Integer>(_DataEventIdEvento_QNAME, Integer.class, DataEvent.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.integracion.tsi2.fing.edu.uy/xsd", name = "direccion", scope = DataEvent.class)
+    public JAXBElement<String> createDataEventDireccion(String value) {
+        return new JAXBElement<String>(_DataEventDireccion_QNAME, String.class, DataEvent.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.integracion.tsi2.fing.edu.uy/xsd", name = "nombre", scope = DataEvent.class)
+    public JAXBElement<String> createDataEventNombre(String value) {
+        return new JAXBElement<String>(_DataEventNombre_QNAME, String.class, DataEvent.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.integracion.tsi2.fing.edu.uy", name = "name", scope = SearchEventByName.class)
     public JAXBElement<String> createSearchEventByNameName(String value) {
         return new JAXBElement<String>(_SearchEventByNameName_QNAME, String.class, SearchEventByName.class, value);
     }
@@ -132,36 +190,36 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ejb.integracion.tsi2.fing.edu.uy", name = "eventID", scope = GetAlbumContents.class)
-    public JAXBElement<String> createGetAlbumContentsEventID(String value) {
-        return new JAXBElement<String>(_GetAlbumContentsEventID_QNAME, String.class, GetAlbumContents.class, value);
+    @XmlElementDecl(namespace = "http://ws.integracion.tsi2.fing.edu.uy/xsd", name = "descripcion", scope = DataContent.class)
+    public JAXBElement<String> createDataContentDescripcion(String value) {
+        return new JAXBElement<String>(_DataEventDescripcion_QNAME, String.class, DataContent.class, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Object }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ejb.integracion.tsi2.fing.edu.uy", name = "return", scope = SearchEventByDateResponse.class)
-    public JAXBElement<Object> createSearchEventByDateResponseReturn(Object value) {
-        return new JAXBElement<Object>(_GetAlbumContentsResponseReturn_QNAME, Object.class, SearchEventByDateResponse.class, value);
+    @XmlElementDecl(namespace = "http://ws.integracion.tsi2.fing.edu.uy/xsd", name = "urlPublica", scope = DataContent.class)
+    public JAXBElement<String> createDataContentUrlPublica(String value) {
+        return new JAXBElement<String>(_DataContentUrlPublica_QNAME, String.class, DataContent.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XMLGregorianCalendar }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ejb.integracion.tsi2.fing.edu.uy", name = "date", scope = SearchEventByDate.class)
+    @XmlElementDecl(namespace = "http://ws.integracion.tsi2.fing.edu.uy", name = "date", scope = SearchEventByDate.class)
     public JAXBElement<XMLGregorianCalendar> createSearchEventByDateDate(XMLGregorianCalendar value) {
         return new JAXBElement<XMLGregorianCalendar>(_SearchEventByDateDate_QNAME, XMLGregorianCalendar.class, SearchEventByDate.class, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Object }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ejb.integracion.tsi2.fing.edu.uy", name = "return", scope = SearchEventByTypeResponse.class)
-    public JAXBElement<Object> createSearchEventByTypeResponseReturn(Object value) {
-        return new JAXBElement<Object>(_GetAlbumContentsResponseReturn_QNAME, Object.class, SearchEventByTypeResponse.class, value);
+    @XmlElementDecl(namespace = "http://ws.integracion.tsi2.fing.edu.uy", name = "eventID", scope = GetAlbumContents.class)
+    public JAXBElement<String> createGetAlbumContentsEventID(String value) {
+        return new JAXBElement<String>(_GetAlbumContentsEventID_QNAME, String.class, GetAlbumContents.class, value);
     }
 
 }

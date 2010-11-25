@@ -1,13 +1,13 @@
 package partuzabook.integracion.ws;
 
 import java.net.URL;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
-import partuzabook.integracion.ws.productora_web.IntegracionWSService;
+import partuzabook.integracion.ws.productora_web.DataEvent;
 import partuzabook.integracion.ws.productora_web.IntegracionWSServicePortType;
-
 
 public class WebServiceProductorawebClient {
 
@@ -15,14 +15,15 @@ public class WebServiceProductorawebClient {
 		
 		try {
 			Service service = Service.create(
-					new URL("http://192.168.1.126:8080/Productora_web/services/IntegracionWSService?wsdl"),
-					new QName("{http://ejb.integracion.tsi2.fing.edu.uy}IntegracionWSService", "IntegracionWSService")
-					
+				new URL("http://192.168.1.101:8180/PruebaIntegracion/services/IntegracionWSService?wsdl"),
+				new QName("http://ws.integracion.tsi2.fing.edu.uy", "IntegracionWSService")
 			);
 			IntegracionWSServicePortType ws = service.getPort(IntegracionWSServicePortType.class);
 			//IntegracionWSServicePortType ws = new IntegracionWSService().getPort(IntegracionWSServicePortType.class);
 			
-			Object resutl = ws.searchEventByName("");			
+			List<DataEvent> resutl = ws.searchEventByName("");
+			
+			System.out.println("RESULT:::: "+resutl.size());
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
