@@ -101,14 +101,28 @@ public class ServicesNotification implements ServicesNotificationRemote {
 	}
 
     public List<DatatypeNotification> getUpdateNotifications(String user) {
-    	NormalUser nUser = getNormalUser(user);
+    	User nUser;
+    	if(existsNormalUser(user)) {
+			nUser = nUserDao.findByID(user);
+		} else if(existsAdminUser(user)) {
+			nUser = adminDao.findByID(user);
+		} else {
+			throw new UserNotFoundException("No existe el usuario " + user);
+		}
     	List<Notification> notif = nUser.getNotificationsReceived();
     	return TranslatorCollection.translateNotification(notif);
     }
 
     public List<DatatypeNotification> getUpdateNotificationsUnread(String user) {
     	List<Notification> unreadNotif = new ArrayList<Notification>();
-    	NormalUser nUser = getNormalUser(user);  
+    	User nUser;
+    	if(existsNormalUser(user)) {
+			nUser = nUserDao.findByID(user);
+		} else if(existsAdminUser(user)) {
+			nUser = adminDao.findByID(user);
+		} else {
+			throw new UserNotFoundException("No existe el usuario " + user);
+		}  
     	List<Notification> notif = nUser.getNotificationsReceived();
     	Iterator<Notification> it = notif.iterator();
     	while (it.hasNext()) {
@@ -122,13 +136,27 @@ public class ServicesNotification implements ServicesNotificationRemote {
     }
     
 	public List<DatatypeNotification> getUpdateNotificationsReceived(String username) {
-    	NormalUser nUser = getNormalUser(username);
+    	User nUser;
+    	if(existsNormalUser(username)) {
+			nUser = nUserDao.findByID(username);
+		} else if(existsAdminUser(username)) {
+			nUser = adminDao.findByID(username);
+		} else {
+			throw new UserNotFoundException("No existe el usuario " + username);
+		}
     	List<Notification> notif = nUser.getNotificationsReceived();
     	return TranslatorCollection.translateNotification(notif);
 	}
 
 	public List<DatatypeNotification> getUpdateNotificationsSent(String username) {
-    	NormalUser nUser = getNormalUser(username);
+    	User nUser;
+    	if(existsNormalUser(username)) {
+			nUser = nUserDao.findByID(username);
+		} else if(existsAdminUser(username)) {
+			nUser = adminDao.findByID(username);
+		} else {
+			throw new UserNotFoundException("No existe el usuario " + username);
+		}
     	List<Notification> notif = nUser.getNotificationsCreated();
     	return TranslatorCollection.translateNotification(notif);
 	}

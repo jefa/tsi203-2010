@@ -433,7 +433,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			ntfTagged.setRead(false);
 			ntfTagged.setReference("La referencia va aca");
 			ntfTagged.setRegDate(new Timestamp(new java.util.Date().getTime()));
-			ntfTagged.setText(tagged.getName() +",\r\nhas sido etiquetado en un contendio del evento \"" + cont.getEvent().getEvtName() + "\" por " + tagger.getName() + ".");
+			ntfTagged.setText(tagged.getName() +",\r\nhas sido etiquetado en un contenido del evento \"" + cont.getEvent().getEvtName() + "\" por " + tagger.getName() + ".");
 			ntfTagged.setSubject("Has sido etiquetado!");
 			ntfTagged.setType(0);
 			ntfTagged.setUserFrom(nUserTagger);	
