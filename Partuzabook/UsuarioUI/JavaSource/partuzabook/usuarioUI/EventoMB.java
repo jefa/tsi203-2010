@@ -121,6 +121,14 @@ public class EventoMB {
 		
 		setSelectedContent(servicesEvent.getContentDetails(contentId, getUserName()));
 		setRating(servicesEvent.getMyRatingForContent(contentId, getUserName()));
+		for(Iterator<DatatypeContent> it = this.getContents().iterator(); it.hasNext(); ) {
+			DatatypeContent data = it.next();
+			if(data.getContId() == contentId) {
+				firstContentType = data.getType() + "";
+				firstContentUrl = data.getUrl();
+			}
+		}
+		 
 	}
 
 	public Integer getContentId() {
