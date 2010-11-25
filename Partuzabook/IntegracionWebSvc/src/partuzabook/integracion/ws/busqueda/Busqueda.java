@@ -84,4 +84,21 @@ public interface Busqueda {
         @WebParam(name = "total", targetNamespace = "", mode = WebParam.Mode.OUT)
         Holder<Integer> total);
 
+    /**
+     * 
+     * @param total
+     * @param tipoEvento
+     * @param evento
+     */
+    @WebMethod
+    @RequestWrapper(localName = "searchByType", targetNamespace = "http://edu.tsi2.ws/integracion/ws/busqueda", className = "partuzabook.integracion.ws.busqueda.SearchByTypeRequest")
+    @ResponseWrapper(localName = "searchByTypeResponse", targetNamespace = "http://edu.tsi2.ws/integracion/ws/busqueda", className = "partuzabook.integracion.ws.busqueda.SearchResponse")
+    public void searchByType(
+        @WebParam(name = "tipoEvento", targetNamespace = "")
+        int tipoEvento,
+        @WebParam(name = "evento", targetNamespace = "", mode = WebParam.Mode.OUT)
+        Holder<List<Evento>> evento,
+        @WebParam(name = "total", targetNamespace = "", mode = WebParam.Mode.OUT)
+        Holder<Integer> total);
+
 }
