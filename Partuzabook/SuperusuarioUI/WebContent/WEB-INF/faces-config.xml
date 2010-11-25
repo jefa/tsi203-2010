@@ -38,6 +38,11 @@
   <managed-bean-scope>session</managed-bean-scope>
  </managed-bean>
  <managed-bean>
+  <managed-bean-name>notificationsBean</managed-bean-name>
+  <managed-bean-class>partuzabook.superusuarioUI.NotificationsBean</managed-bean-class>
+  <managed-bean-scope>session</managed-bean-scope>
+ </managed-bean>
+ <managed-bean>
   <managed-bean-name>RegisterAdminMB</managed-bean-name>
   <managed-bean-class>partuzabook.superusuarioUI.RegisterAdminMB</managed-bean-class>
   <managed-bean-scope>request</managed-bean-scope>
