@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -86,8 +87,9 @@ public class WebServiceProductoraExternoPartuzabook implements WebServiceProduct
 		holderEventos.value = new ArrayList<Evento>();
 		Holder<Integer> holderTotal = new Holder<Integer>();
 		holderTotal.value = new Integer(0);
-		XMLGregorianCalendar g = new XMLGregorianCalendarImpl();
-		g.setMillisecond((int) date.getTime());
+		GregorianCalendar gc = new GregorianCalendar();
+		gc.setTimeInMillis(date.getTime());
+		XMLGregorianCalendar g = new XMLGregorianCalendarImpl(gc);
 		service.searchByDate(g, 100, holderEventos, holderTotal);
 		return TranslatorCollection.translateFromEvento(holderEventos.value);
 	}
