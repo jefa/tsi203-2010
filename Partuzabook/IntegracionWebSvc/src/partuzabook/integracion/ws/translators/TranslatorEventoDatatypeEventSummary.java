@@ -14,7 +14,7 @@ public class TranslatorEventoDatatypeEventSummary implements ITranslatable {
 		DatatypeEventSummary dat = new DatatypeEventSummary();
 		dat.setEvtName(evento.getNombre());
 		dat.setEvtId(evento.getIdEvento());
-		dat.setDate(new Date(evento.getFecha().getMillisecond()));
+		dat.setDate(evento.getFecha().toGregorianCalendar().getTime());
 		dat.setDescription(evento.getDescripcion());
 		dat.setAddress(evento.getDireccion());
 		if (evento.getUrlCover() == null || evento.getUrlCover() == "") {
