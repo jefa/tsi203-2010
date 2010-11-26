@@ -37,6 +37,7 @@ public class SubirContExternoMB{
 	
 	
 	private int eventId;
+	private String eventName;
 	private String description;
 	
 	private String type = "P";
@@ -128,6 +129,15 @@ public class SubirContExternoMB{
 
 	public int getEventId() {
 		return eventId;
+	}
+
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
+		setEventId(getServicesEvent().searchForEventByName(eventName, 1).get(0).getEvtId());
+	}
+
+	public String getEventName() {
+		return eventName;
 	}
 
 	public void setDescription(String description) {

@@ -181,7 +181,7 @@ public class FileSystem implements FileSystemLocal {
 			String path = getBasePath();
 			int ind = dirWeb.split("\\.").length - 1;
 			String mime = dirWeb.split("\\.")[ind];
-			String extension = "." + mime;
+			String extension = ".jpg";
 
 			new File(path + dirlocal).mkdirs();
 

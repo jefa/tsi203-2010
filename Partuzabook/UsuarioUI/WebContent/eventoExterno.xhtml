@@ -19,6 +19,27 @@
 	</ui:define>
 
 	<ui:define name="body">
+		<script type="text/javascript">
+			function posVideoLbl() {
+				//document.getElementById('videoLbl').style.top = document.getElementById('formUploadContent:addPhotoButton').offsetTop + 490 + "px";
+				var videoLbl = document.getElementById('panelThumbs:videoLbl');
+				if (videoLbl) {
+					videoLbl.style.top = 258 + 'px';
+				}
+			}
+			function refreshVideoLbl() {
+				var cntType = document.getElementById('cntType');
+				if (cntType) {
+					var type = cntType.value;
+					if( type == 1 || type == 3){
+						jQuery('#panelThumbs\\:videoLbl').show();
+					} else {
+						jQuery('#panelThumbs\\:videoLbl').hide();
+					}
+				}
+			}
+		</script>
+		
 		<link rel="stylesheet" href="styles/pikachoose/styles.css"
 			type="text/css" />
 		<link rel="stylesheet" href="styles/lightbox/jquery.lightbox-0.5.css"
@@ -49,9 +70,8 @@
 			<!-- #index-featured2 -->
 		</h:panelGroup>
 
-		<h:inputHidden id="cntType" value="#{eventoMB.firstContentType}" />
-		<h:inputHidden id="cntUrl" value="#{eventoMB.firstContentUrl}" />
-		<h:inputHidden id="cntId" value="#{eventoMB.contentId}" />
+		<h:inputHidden id="cntType" value="#{eventoExternoMB.selectedContentType}" />
+		<h:inputHidden id="cntUrl" value="#{eventoExternoMB.selectedContentUrl}" />
 		
 		<h:panelGroup id="authorizedContent" style="padding-top:10px">
 			<a4j:outputPanel id="panelNoContents"
@@ -60,8 +80,9 @@
 			</a4j:outputPanel>
 
 			<a4j:form id="panelThumbs" rendered="#{eventoExternoMB.contentsCount > 0}">
-				<div class="pikachoose" style="height: 620px;"><h:inputHidden
-					id="selectContentId" value="#{eventoExternoMB.contentId}" /> 
+				<div class="pikachoose" style="height: 620px;">
+					<h:inputHidden id="selectContentId" value="" /> 
+					<h:inputHidden id="selectContentUrl" value="#{eventoExternoMB.selectedContentUrl}" /> 
 					<a4j:commandButton id="btnSelectThumb"
 						reRender="panelContentDetails" style="display:none;">
 					</a4j:commandButton>
@@ -72,18 +93,27 @@
 								rendered="#{content.type eq 0 || content.type eq 2}"
 								value="#{content.url}"
 								name="#{content.contId}"
-								/>
+								onclick="clickPicture(#{content.type},'#{content.url}')" />
 							<h:graphicImage
 								rendered="#{content.type eq 1 || content.type eq 3}"
 								value="#{content.youtubeUrlScreen}" name="#{content.contId}"
-								/>
+								onclick="clickPicture(#{content.type},'#{content.url}')" />
 							<span>#{content.description}<br /></span></li>
 						</a4j:repeat>
 					</ul>
 					<h:graphicImage id="videoLbl" value="/images/video.png"
 						style="position:relative;left:10px;display:none" />
 					<script>
-						function clickPicture(type,url,contId) {
+						function clickPicture(type,url) {
+							document.getElementById('cntType').value=type;
+							document.getElementById('cntUrl').value=url;
+							document.getElementById('panelThumbs:selectContentUrl').value=url;
+							if (type == 0 || type == 2) {
+								jQuery('#panelThumbs\\:videoLbl').hide();
+							}
+							else {
+								jQuery('#panelThumbs\\:videoLbl').show();
+							}
 						}
 						jQuery("#pikame").PikaChoose();
 						jQuery("#pikame").jcarousel({scroll:5,
@@ -94,6 +124,8 @@
 						    }
 				    	});
 						initImageSelected();
+						posVideoLbl();
+						refreshVideoLbl();
 						function beginTag() {
 						}
 						function endTag() {
@@ -114,7 +146,32 @@
 	<ui:define name="sidebar">
 		<a4j:outputPanel id="panelContentDetails"
 			rendered="#{eventoExternoMB.selectedContent != null}">
-			Aca deben ir las opciones para agregar el contenido a un evento local
+			<div style="margin-top:260px;">
+				<a4j:outputPanel rendered="#{not loginMB.isUserLogged}">
+					Debe loguearse para poder agregar contenido a sus eventos.
+				</a4j:outputPanel>
+				<a4j:outputPanel rendered="#{loginMB.isUserLogged}">
+					<h:form>
+					Agregar al evento:
+				    <rich:comboBox selectFirstOnUpdate="false"
+				        value="#{eventoExternoMB.eventoUser}" 
+				        suggestionValues="#{eventoExternoMB.eventosUser}" 
+				        width="300px" style="margin-bottom:10px">
+				        <a4j:support event="onselect" action="subirContExterno">
+							<f:setPropertyActionListener value="#{eventoExternoMB.eventoUser}"
+								target="#{subirContExternoMB.eventName}" />
+							<f:setPropertyActionListener value="#{eventoExternoMB.selectedContent.url}"
+								target="#{subirContExternoMB.url}" />
+							<f:setPropertyActionListener
+								value="#{(eventoExternoMB.selectedContentType eq '2') ? 'P' : 'V'}"
+								target="#{subirContExternoMB.type}" />
+							<f:setPropertyActionListener value="#{eventoExternoMB.selectedContent.description}"
+								target="#{subirContExternoMB.description}" />
+				        </a4j:support>		
+				    </rich:comboBox> 
+					</h:form>
+				</a4j:outputPanel>
+			</div>
 		</a4j:outputPanel>
 	</ui:define>
 </ui:composition>

@@ -160,6 +160,7 @@ public class SearchEventMB {
 		this.mensajeValidacionNombre = "";
 		this.mensajeValidacionFecha = "";
 		this.eventResults = null;
+		this.externalEventResults = null;
 	}
 
 	public List<DatatypeEventSummary> searchEventsByName() {
@@ -176,10 +177,9 @@ public class SearchEventMB {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx
 					.lookup("PartuzabookEAR/ServicesEvent/remote");
-			this.eventResults = service.searchForEventByName(eventNameSearched,
-					100);
-			
+			this.eventResults = service.searchForEventByName(eventNameSearched,100);
 			this.setExternalEventResults(searchEventsByNameExterno(eventNameSearched));
+			
 			if (this.eventResults == null || this.eventResults.size() == 0) {
 				this.mensaje = "No se han encontrado resultados";
 				this.getTotalPaginas();
@@ -221,16 +221,15 @@ public class SearchEventMB {
 			Context ctx = getContext();
 			ServicesEventRemote service = (ServicesEventRemote) ctx
 					.lookup("PartuzabookEAR/ServicesEvent/remote");
-			this.eventResults = service.searchForEventByDate(eventDateSearched,
-					10);
+			this.eventResults = service.searchForEventByDate(eventDateSearched,10);
+			this.setExternalEventResults(searchEventsByDateExterno(eventDateSearched));
+			
 			if (this.eventResults == null || this.eventResults.size() == 0) {
 				this.mensaje = "No se han encontrado resultados";
 				this.getTotalPaginas();
 				return this.eventResults;
 			}
 
-			this.setExternalEventResults(searchEventsByDateExterno(eventDateSearched));
-			
 			paginas = new ArrayList<Integer>();
 
 			for (int i = 0; i < this.getTotalPaginas(); i++) {
@@ -312,13 +311,13 @@ public class SearchEventMB {
 
 			
 			this.eventResults = service.filterEventsByEvtCategory(getEvtCategoryPos(eventFilter), maxEvents);
+			this.setExternalEventResults(searchEventsByTypeExterno(getEvtCategoryPos(eventFilter)));			
 			if (this.eventResults == null || this.eventResults.size() == 0) {
 				this.mensaje = "No se han encontrado resultados";
 				this.getTotalPaginas();
 				return this.eventResults;
 			}
 			
-			this.setExternalEventResults(searchEventsByTypeExterno(getEvtCategoryPos(eventFilter)));			
 
 			paginas = new ArrayList<Integer>();
 
