@@ -89,38 +89,22 @@
 					</div>
 					<div id="debug" style="clear:both"></div>
 
-			<a4j:outputPanel rendered="#{eventoMB.totalPaginas != 1}"> <div class="wp-pagenavi">
-			<span class="pages">Pag. #{eventoMB.paginaActual + 1} de #{eventoMB.totalPaginas}</span>
-			<a4j:repeat  var="pagina" value="#{eventoMB.paginas}">
-				<h:outputText value="#{pagina + 1}" rendered="#{pagina == eventoMB.paginaActual}" styleClass="current"/>
-				<h:commandLink value="#{pagina + 1}" rendered="#{pagina != eventoMB.paginaActual}" >
-					<f:setPropertyActionListener value="#{pagina}" target="#{eventoMB.paginaActual}" />
-				</h:commandLink>
-			</a4j:repeat>
-			</div>
-			</a4j:outputPanel>
-
-
 				</a4j:form>
 			</a4j:outputPanel>
 
 			<a4j:outputPanel id="panelContent"
 				rendered="#{eventoMB.contentsCount > 0}">
 				<h:form>
-					<h:outputText value="#{eventoMB.selectedContent.contId}" />
-					<h:panelGroup id="mainImage" layout="block">
-						<h:column>
-							<h:panelGroup id="tagContentPanel">
-								<h:graphicImage value="/ContentFeeder?id=#{eventoMB.contentId}" />
-							</h:panelGroup>
-						</h:column>
-					</h:panelGroup>
 					<a4j:commandButton value="Guardar cambios"
-						onclick="saveImageOrder();"/>
-	
+						onclick="saveImageOrder();"
+						oncomplete="window.alert('Los cambios han sido guardados')"/>
+				</h:form>
+				<h:form>	
 					<a4j:commandButton value="Publicar Album"
 						onclick="saveImageOrder();if (!window.confirm('¿Confirma que desea publicar el Album? Una vez finalizado no podrá editarse')) {return false}"
-						action="#{eventoMB.finalizarAlbum}" />
+						action="#{eventoMB.finalizarAlbum}" 
+						oncomplete="window.alert('El album ha sido finalizado. No podran realizarse modificaciones')"
+						reRender="AlbumFinalized, NotAlbumFinalized"/>
 
 				</h:form>
 			</a4j:outputPanel>
