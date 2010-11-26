@@ -1,8 +1,5 @@
 package partuzabook.usuarioUI;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -10,14 +7,11 @@ import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
 
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.datatypes.DatatypeEventSummary;
-import partuzabook.integracion.ws.productora_web.DataContent;
-import partuzabook.integracion.ws.productora_web.IntegracionWSServicePortType;
 import partuzabook.integracion.ws.proxy.WebServiceProductoraExternoRemote;
+import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
 public class EventoExternoMB {
 	public static final int PAGE_SIZE = 100;
@@ -29,9 +23,13 @@ public class EventoExternoMB {
 	private List<DatatypeContent> contents;
 	private Integer contentsCount;
 
-	private Integer contentId;
 	private DatatypeContent selectedContent;
-
+	private String selectedContentType;
+	private String selectedContentUrl;
+	
+	private String eventoUser;
+	private List<String> eventosUser;
+	
 	public EventoExternoMB() {
 
 	}
@@ -107,10 +105,10 @@ public class EventoExternoMB {
 	public void setContents(List<DatatypeContent> contents) {
 		this.contents = contents;
 		if (contents.size() > 0) {
-			setSelectedContent(contents.get(0));
+			setSelectedContentUrl(contents.get(0).getUrl());
 		}
 		else {
-			setSelectedContent(null);
+			setSelectedContentUrl(null);
 		}
 	}
 
@@ -126,20 +124,65 @@ public class EventoExternoMB {
 		return contentsCount;
 	}
 
-	public void setContentId(Integer contentId) {
-		this.contentId = contentId;
-	}
-
-	public Integer getContentId() {
-		return contentId;
-	}
-
 	public void setSelectedContent(DatatypeContent selectedContent) {
 		this.selectedContent = selectedContent;
+		setSelectedContentType(selectedContent.getType() + "");
 	}
 
 	public DatatypeContent getSelectedContent() {
 		return selectedContent;
+	}
+
+	public void setSelectedContentType(String selectedContentType) {
+		this.selectedContentType = selectedContentType;
+	}
+
+	public String getSelectedContentType() {
+		return selectedContentType;
+	}
+
+	private DatatypeContent findByUrl(String url) {
+		Iterator<DatatypeContent> it = contents.iterator();
+		while (it.hasNext()) {
+			DatatypeContent datatypeContent = (DatatypeContent) it.next();
+			if (datatypeContent.getUrl().equals(url)) {
+				return datatypeContent;
+			}
+		}
+		return null;
+	}
+	
+	public void setSelectedContentUrl(String selectedContentUrl) {
+		this.selectedContentUrl = selectedContentUrl;
+		setSelectedContent(findByUrl(selectedContentUrl));
+	}
+
+	public String getSelectedContentUrl() {
+		return selectedContentUrl;
+	}
+
+	public void setEventoUser(String eventoUser) {
+		this.eventoUser = eventoUser;
+	}
+
+	public String getEventoUser() {
+		return eventoUser;
+	}
+
+	public void setEventosUser(List<String> eventosUser) {
+		this.eventosUser = eventosUser;
+	}
+
+	public List<String> getEventosUser() {
+		try {
+			Context ctx = getContext();
+			ServicesUserRemote service = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");
+			eventosUser = service.getEventNamesForUser(SessionUtils.getUsername());
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return eventosUser;
 	}
 
 }

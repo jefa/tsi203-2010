@@ -65,7 +65,10 @@
 		
 				<br/>
 				<p align="right">
-					<h:commandButton action="#{subirContExternoMB.confirmUpload}" value="Confirmar"/>
+					<h:commandButton action="#{subirContExternoMB.confirmUpload}" value="Confirmar">
+						<f:setPropertyActionListener value="#{subirContExternoMB.eventId}"
+							target="#{eventoMB.eventId}" />
+					</h:commandButton>
 					<rich:spacer height="3" />
 					<h:commandButton value="Volver al evento" action="verEvento">
 						<f:setPropertyActionListener value="#{subirContExternoMB.eventId}" target="#{eventoMB.eventId}" />

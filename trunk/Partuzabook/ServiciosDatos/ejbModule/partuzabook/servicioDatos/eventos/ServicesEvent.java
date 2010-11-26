@@ -221,7 +221,7 @@ public class ServicesEvent implements ServicesEventRemote {
 		name = name.toLowerCase();
 		// First search by full name entered
 		List<Event> list =  eventDao.findBySimilarName(name);
-		if (list.size() > maxEvents) {
+		if (list.size() >= maxEvents) {
 			list = list.subList(0, maxEvents);
 			return TranslatorCollection.translateEventSummary(list);
 		} else if (list.size() < maxEvents) {
@@ -507,7 +507,7 @@ public class ServicesEvent implements ServicesEventRemote {
 				ntfTagged.setReference("La referencia va aca");
 				ntfTagged.setRegDate(new Timestamp(new java.util.Date().getTime()));
 				ntfTagged.setText(nu.getName() + ",\r\n" + uploader.getName() + " ha agregado un contenido en el evento \"" + cont.getEvent().getEvtName() + "\".");
-				ntfTagged.setSubject("Se subió un contenido en un evento moderado.");
+				ntfTagged.setSubject("Se subiï¿½ un contenido en un evento moderado.");
 				ntfTagged.setType(0);
 				ntfTagged.setUserFrom(uploader);	
 				ntfTagged.setUserTo(nu);
@@ -1486,7 +1486,13 @@ public class ServicesEvent implements ServicesEventRemote {
 		content.setUser(user);
 		content.setRegDate(new Timestamp(new java.util.Date().getTime()));
 		//Debo modificar la url para que quede como las demï¿½s. http://www.youtube.com/watch?v=sdV4xpTiS1s&feature=topvideos
-		String urlToSave = YOUTUBE_PRE + url.substring(31,42) + YOUTUBE_POS;
+		if (url.startsWith("http://www.youtube.com/watch?v=")) {
+			url = url.substring(31, 42);
+		}
+		else if (url.startsWith("http://www.youtube.com/v/")) {
+			url = url.substring(25, 36);
+		}
+		String urlToSave = YOUTUBE_PRE + url + YOUTUBE_POS;
 		content.setUrl(urlToSave);
 		
 		content.setDescription(description);

@@ -168,4 +168,11 @@ public interface ServicesUserRemote {
 	 * @return
 	 */
 	public byte[] getPublicAvatar(String type, int pos, String thumbnail);
+
+	/**
+	 * Returns a collection of the event names the user belongs to
+	 * @param username
+	 * @return
+	 */
+	public List<String> getEventNamesForUser(String username);
 }

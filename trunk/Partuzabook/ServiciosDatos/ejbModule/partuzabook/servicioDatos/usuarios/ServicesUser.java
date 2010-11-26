@@ -445,4 +445,15 @@ public class ServicesUser implements ServicesUserRemote {
 		}
 	}
 
+	public List<String> getEventNamesForUser(String username) {
+		NormalUser user = getNormalUser(username);
+		List<String> list = new ArrayList<String>();
+		Iterator<Event> it = user.getMyEvents().iterator();
+		while (it.hasNext()) {
+			Event event = (Event) it.next();
+			list.add(event.getEvtName());
+		}
+		return list;
+	}
+
 }

@@ -100,7 +100,7 @@ function toggleTab(control, tab)
 	
 		<div id="index-featured2">
 		<h:form>
-		<div class="home-title">Resultado 		<a4j:commandLink action="#{SearchEventMB.limpiarBusqueda}" style="margin-left:5px;vertical-align:top" 
+		<div class="home-title">RESULTADOS EN PARTUZABOOK<a4j:commandLink action="#{SearchEventMB.limpiarBusqueda}" style="margin-left:5px;vertical-align:top" 
 		    reRender="resultadoEventos" id="cleanSearch">
 <img id="image" src="images/close.png" title="Borrar resultados"/>		    
 		    </a4j:commandLink> 
@@ -170,6 +170,9 @@ function toggleTab(control, tab)
 <br/>
 		
 		<div class="home-title">RESULTADOS EN OTRAS PRODUCTORAS</div> 	
+		
+		<h:outputText id="errorExternal" value="#{SearchEventMB.mensaje}" rendered="#{empty SearchEventMB.externalEventResults}"/>
+		
 		<ul class="hfeed posts-quick clearfix">
 		<a4j:repeat var="resultado" value="#{SearchEventMB.externalEventResults}"
 			rendered="#{not empty SearchEventMB.externalEventResults}">

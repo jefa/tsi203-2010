@@ -106,5 +106,13 @@
  <PROCESS-ITEM NAME="rules:#messages.xhtml" PATH="/messages.xhtml"
   SHAPE="240,1505,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#eventoExterno.xhtml"
-  PATH="/eventoExterno.xhtml" SHAPE="448,1601,0,0" model-entity="JSFProcessGroup"/>
+  PATH="/eventoExterno.xhtml" SHAPE="448,1601,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#eventoExterno.xhtml:0" NAME="item"
+   PATH="/eventoExterno.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="subirContExterno::#subirContenidoExterno.xhtml" NAME="output"
+    PATH="/subirContenidoExterno.xhtml"
+    TARGET="rules:#subirContenidoExterno.xhtml" TITLE="subirContExterno" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
 </PROCESS>
