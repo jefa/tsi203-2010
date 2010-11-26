@@ -1,6 +1,8 @@
 package partuzabook.integracion.ws.translators;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
+
 import javax.xml.datatype.XMLGregorianCalendar;
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 
@@ -15,7 +17,7 @@ public class TranslatorDataEventDatatypeEventSummary implements ITranslatable {
 		DatatypeEventSummary dat = new DatatypeEventSummary();
 		dat.setEvtName(dataEvent.getNombre().getValue());
 		dat.setEvtId(dataEvent.getIdEvento().getValue());
-		dat.setDate(new Date(dataEvent.getFecha().getValue().getMillisecond()));
+		dat.setDate(dataEvent.getFecha().getValue().toGregorianCalendar().getTime());
 		dat.setDescription(dataEvent.getDescripcion().getValue());
 		dat.setAddress(dataEvent.getDireccion().getValue());
 		if (dataEvent.getUrlPortada().getValue() == null || dataEvent.getUrlPortada().getValue() == "") {
@@ -32,9 +34,10 @@ public class TranslatorDataEventDatatypeEventSummary implements ITranslatable {
 		Evento evento = new Evento();
 		evento.setNombre(dat.getEvtName());
 		evento.setIdEvento(dat.getEvtId());
-		XMLGregorianCalendar c = new XMLGregorianCalendarImpl();
-		c.setMillisecond((int) dat.getDate().getTime());
-		evento.setFecha(c);
+		GregorianCalendar gc = new GregorianCalendar();
+		gc.setTimeInMillis(dat.getDate().getTime());
+		XMLGregorianCalendar g = new XMLGregorianCalendarImpl(gc);
+		evento.setFecha(g);
 		evento.setDescripcion(dat.getDescription());
 		evento.setDireccion(dat.getAddress());
 		if (dat.getCoverUrl() == null || dat.getCoverUrl() == "") {

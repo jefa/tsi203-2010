@@ -3,6 +3,7 @@ package partuzabook.integracion.ws.proxy;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -56,8 +57,9 @@ public class WebServiceProductoraExternoProductoraWeb implements WebServiceProdu
 	@Override
 	public List<DatatypeEventSummary> searchEventByDate(Date date) {
 		IntegracionWSServicePortType service = getService();
-		XMLGregorianCalendar g = new XMLGregorianCalendarImpl();
-		g.setMillisecond((int) date.getTime());
+		GregorianCalendar gc = new GregorianCalendar();
+		gc.setTimeInMillis(date.getTime());
+		XMLGregorianCalendar g = new XMLGregorianCalendarImpl(gc);
 		return TranslatorCollection.translateFromDataEvent(service.searchEventByDate(g));
 	}
 
@@ -65,8 +67,9 @@ public class WebServiceProductoraExternoProductoraWeb implements WebServiceProdu
 	public List<DatatypeEventSummary> searchEventBetweenDates(Date before,
 			Date after) {
 		IntegracionWSServicePortType service = getService();
-		XMLGregorianCalendar g = new XMLGregorianCalendarImpl();
-		g.setMillisecond((int) before.getTime());
+		GregorianCalendar gc = new GregorianCalendar();
+		gc.setTimeInMillis(before.getTime());
+		XMLGregorianCalendar g = new XMLGregorianCalendarImpl(gc);
 		return TranslatorCollection.translateFromDataEvent(service.searchEventByDate(g));
 	}
 
