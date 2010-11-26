@@ -477,6 +477,10 @@ public class EventoMB {
 		this.suggest = suggest;
 	}
 
+	public boolean isHasAlbum(){
+		return getHasAlbum();
+	}
+	
 	public boolean getHasAlbum(){
 		Context ctx;
 		try {
@@ -486,6 +490,8 @@ public class EventoMB {
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception e) {
+			return false;
 		}
 		return this.hasAlbum;
 	}
