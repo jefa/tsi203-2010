@@ -176,7 +176,8 @@ public class EventoMB {
 	}
 	
 	public List<DatatypeContent> getContents(){
-		paginas = new ArrayList<Integer>();
+		return this.contents;
+	/*	paginas = new ArrayList<Integer>();
 		
 		for (int i = 0; i < this.getTotalPaginas(); i++) {
 			paginas.add(new Integer(i));
@@ -184,6 +185,7 @@ public class EventoMB {
 		
 		return this.contents.subList(paginaActual*THUMBS_PER_PAGE, 
 				Math.min((paginaActual+1)*THUMBS_PER_PAGE,this.contents.size()));	
+	*/ 
 	}
 	
 	public void setContentsCount(Integer contentsCount) {
