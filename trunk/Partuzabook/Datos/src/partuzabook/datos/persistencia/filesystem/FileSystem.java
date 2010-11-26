@@ -71,14 +71,14 @@ public class FileSystem implements FileSystemLocal {
 			String extension = "." + mimeType.split("/")[1];
 			extension = extension.replace("unknown", "jpg");
 			new File(path + dir).mkdirs();
-			FileOutputStream fstream = new FileOutputStream(path + dir + uuid
+			FileOutputStream fstream = new FileOutputStream(path + dir + uuid + "tmp" 
 					+ extension);
 			fstream.write(data);
 			fstream.close();
 			
 			if (mimeType.contains("image")) {
-				data = getThumbnail(dir + uuid + extension, "M960,600");
-				fstream = new FileOutputStream(path + dir + uuid
+				data = getThumbnail(dir + uuid + "tmp" + extension , "M960,600");
+				fstream = new FileOutputStream(path + dir + uuid 
 						+ extension);
 				fstream.write(data);
 				fstream.close();
