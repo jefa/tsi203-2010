@@ -10,6 +10,8 @@ public class TranslatorContenido_TypeDatatypeContent implements ITranslatable {
 		DatatypeContent dat = new DatatypeContent();
 		dat.setUrl(contenidoType.getUrl());
 		dat.setDescription(contenidoType.getDescripcion());
+		dat.setType(contenidoType.getUrl().contains("youtube") ?
+			DatatypeContent.EXTERNAL_VIDEO : DatatypeContent.EXTERNAL_PHOTO);
 		return dat;
 	}
 }

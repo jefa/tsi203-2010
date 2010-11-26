@@ -106,6 +106,12 @@ public class EventoExternoMB {
 
 	public void setContents(List<DatatypeContent> contents) {
 		this.contents = contents;
+		if (contents.size() > 0) {
+			setSelectedContent(contents.get(0));
+		}
+		else {
+			setSelectedContent(null);
+		}
 	}
 
 	public List<DatatypeContent> getContents() {

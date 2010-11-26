@@ -28,7 +28,7 @@ public class TranslatorContentSummary implements ITranslatable {
 			dat.setType(DatatypeContent.EXTERNAL_VIDEO);
 		}
 		dat.setDescription(ent.getDescription());
-		if (ent instanceof Photo || ent instanceof Video) {
+		if (ent instanceof Photo || ent instanceof ExternalPhoto) {
 			dat.setUrl(ent.getCntIdAuto().toString());
 		}
 		else {
