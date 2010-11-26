@@ -73,23 +73,21 @@
 					styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
 				<h3 class="entry-title">#{eventoMB.evento.evtName}</h3>
 				<div class="entry-summary">
-				<div class="entry-info"><abbr class="published">#{eventoMB.evento.formattedDate}</abbr>
-				<abbr class="published">#{eventoMB.evento.eventCategory}</abbr> <abbr
-					class="published">#{eventoMB.evento.address}</abbr> <abbr
-					class="published">#{eventoMB.evento.duration}</abbr> <abbr
-					class="published">Moderadores: <a4j:repeat
-					value="#{eventoMB.evento.modsUsernames}" var="mods">
+				<div class="entry-info"><abbr class="published"><strong
+					style="margin-right: 5px">Fecha:</strong>&nbsp;#{eventoMB.evento.formattedDate}<strong
+					style="margin-left: 10px; margin-right: 5px">Categoria:</strong>&nbsp;#{eventoMB.evento.eventCategory}</abbr><br />
+				<abbr class="published"><strong style="margin-right: 5px">Direccion:</strong>&nbsp;#{eventoMB.evento.address}</abbr>
+				<br />
+				<abbr class="published"><strong style="margin-right: 5px">Duracion:</strong>&nbsp;#{eventoMB.evento.duration}</abbr>
+				<br />
+				<abbr class="published"><strong style="margin-right: 5px">Moderadores:</strong>
+				&nbsp;<a4j:repeat value="#{eventoMB.evento.modsUsernames}"
+					var="mods">
 					<h:outputText value="#{mods} " />
 				</a4j:repeat> </abbr><br />
-				<abbr class="published">Descripción:<br />
+				<abbr class="published"><strong style="margin-right: 5px">Descripción:</strong>&nbsp;
 				#{eventoMB.evento.description}</abbr></div>
-				<h:form>
-					<h:commandButton value="Modificar Evento"
-						rendered="#{eventoMB.isSuperUser}" action="modEvento">
-						<f:setPropertyActionListener value="#{eventoMB.eventId}"
-							target="#{EventMB.evt_id}" />
-					</h:commandButton>
-				</h:form></div>
+				</div>
 				</li>
 			</ul>
 			<!-- .posts-quick --></div>
@@ -102,43 +100,42 @@
 			<br />
 		</h:panelGroup>
 
-		<h:panelGroup id="notAuthorizedContent"
-			rendered="#{!eventoMB.validUserForContext and loginMB.isUserLogged}">
-			<h:outputText>Usted no esta autorizado a ver contenido privado de este evento.</h:outputText>
-			<br />
-			<h:outputText>Puede solicitar autorizacion enviando un mensaje al moderador.</h:outputText>
-			<br />
-	<a4j:form>
-                <a4j:commandButton value="Enviar solicitud"
-                    action="#{eventoMB.sendAdmitMail}" oncomplete="alert('Se ha enviado una solicitud al administrador creador del evento.');"/>
-            </a4j:form>
-		</h:panelGroup>
-		<h:panelGroup id="authorizedContent" style="padding-top:10px"
+
+		<h:form id="formUploadContent" style="margin-top:0;margin-bottom:10px"
+			rendered="#{eventoMB.validUserForContext}">
+			<h:commandButton value="Añadir fotos" action="subirFoto"
+				id="addPhotoButton" style="margin-right:5px">
+				<f:setPropertyActionListener value="#{eventoMB.eventId}"
+					target="#{subirFotoMB.idEvento}" />
+			</h:commandButton>
+			<h:commandButton value="Añadir videos" action="subirVideo"
+				id="addVideoButton" style="margin-right:5px">
+				<f:setPropertyActionListener value="#{eventoMB.eventId}"
+					target="#{subirVideoMB.eventId}" />
+			</h:commandButton>
+			<h:commandButton value="Añadir cont. externo" id="addExternButton"
+				action="subirContExterno" style="margin-right:5px">
+				<f:setPropertyActionListener value="#{eventoMB.eventId}"
+					target="#{subirContExternoMB.eventId}" />
+			</h:commandButton>
+			<h:commandButton value="Modificar Evento"
+				rendered="#{eventoMB.isSuperUser}" style="margin-right:5px"
+				action="modEvento">
+				<f:setPropertyActionListener value="#{eventoMB.eventId}"
+					target="#{EventMB.evt_id}" />
+			</h:commandButton>
+
+			<h:commandButton value="Modificar Album"
+				rendered="#{eventoMB.isSuperUser}" action="modificarAlbum">
+				<f:setPropertyActionListener value="#{eventoMB.album}"
+					target="#{eventoMB.selectedCategory}" />
+			</h:commandButton>
+		</h:form>
+
+		<h:panelGroup id="authorizedContent"
+			style="position:absolute;left:10px;top:210px"
 			rendered="#{eventoMB.validUserForContext || eventoMB.hasAlbum}">
-			<h:form id="formUploadContent"
-				rendered="#{eventoMB.validUserForContext}">
-				<h:commandButton value="Añadir fotos" action="subirFoto"
-					id="addPhotoButton">
-					<f:setPropertyActionListener value="#{eventoMB.eventId}"
-						target="#{subirFotoMB.idEvento}" />
-				</h:commandButton>
-				<h:commandButton value="Añadir videos" action="subirVideo"
-					id="addVideoButton">
-					<f:setPropertyActionListener value="#{eventoMB.eventId}"
-						target="#{subirVideoMB.eventId}" />
-				</h:commandButton>
-				<h:commandButton value="Añadir contenido externo"
-					id="addExternButton" action="subirContExterno">
-					<f:setPropertyActionListener value="#{eventoMB.eventId}"
-						target="#{subirContExternoMB.eventId}" />
-				</h:commandButton>
-				<h:commandButton value="Modificar Album"
-					rendered="#{eventoMB.isSuperUser}" action="modificarAlbum">
-					<f:setPropertyActionListener value="#{eventoMB.album}"
-						target="#{eventoMB.selectedCategory}" />
-				</h:commandButton>
-			</h:form>
-			<br />
+
 			<a4j:outputPanel id="panelCategories">
 				<h:form id="formCategory">
 					<h:inputHidden id="catName"
@@ -390,14 +387,50 @@
 			refreshVideoLbl();
 		}</script></li>
 
-			<li class="multi-sidebar-container">
-			<div
-				class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
-			<div style="height: 475px"
-				class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
+			<a4j:outputPanel id="panelContentAlbum"
+				rendered="#{!loginMB.isUserLogged and eventoMB.hasAlbum}">
+				<li class="multi-sidebar-container">
+				<div
+					class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
+				<div style="height: 477px"
+					class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
+				Debe estar logueado para ver informacion adicional</div>
+				</div>
+				</li>
+			</a4j:outputPanel>
+
+			<a4j:outputPanel id="panelContentAlbumInterno"
+				rendered="#{!eventoMB.validUserForContext and loginMB.isUserLogged}">
+				<li class="multi-sidebar-container">
+				<div
+					class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
+				<div style="height: 477px"
+					class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
+
+				<h:outputText>Usted no esta autorizado a ver contenido privado de este evento.</h:outputText>
+				<br />
+				<h:outputText>Puede solicitar autorizacion enviando un mensaje al moderador.</h:outputText>
+				<br />
+				<br />
+				<a4j:form>
+					<a4j:commandButton value="Enviar solicitud"
+						action="#{eventoMB.sendAdmitMail}"
+						oncomplete="alert('Se ha enviado una solicitud al administrador creador del evento.');" />
+				</a4j:form></div>
+				</div>
+				</li>
+			</a4j:outputPanel>
+
+
 
 			<a4j:outputPanel id="panelContentDetails"
 				rendered="#{eventoMB.validUserForContext and eventoMB.selectedContent != null}">
+				<li class="multi-sidebar-container">
+				<div
+					class="multi-sidebar clearfix ui-tabs ui-widget ui-widget-content ui-corner-all">
+				<div style="height: 477px"
+					class="widgetcontainer clearfix ui-tabs-panel ui-widget-content ui-corner-bottom">
+
 				<a4j:outputPanel rendered="#{eventoMB.contentsCount > 0}">
 					<div style="position: absolute; top: 350px; left: -150px"><a4j:commandLink
 						rendered="#{eventoMB.userIsModerator}"
@@ -408,14 +441,16 @@
 						<h:graphicImage value="/images/close.png" alt="Eliminar contenido"
 							style="vertical-align:middle;margin-left:5px" />
 					</a4j:commandLink></div>
-					<a4j:form id="panelSetCover" rendered="#{eventoMB.isSuperUser}">
+					<a4j:form id="panelSetCover" rendered="#{eventoMB.isSuperUser}"
+						style="margin-bottom:5px">
 						<h:panelGroup
 							rendered="#{eventoMB.selectedContent.type eq 0 || eventoMB.selectedContent.type eq 2}">
 							<a4j:commandButton value="Fijar como portada del evento"
 								action="#{eventoMB.setearCoverEvento}" reRender="panelEvento" />
 						</h:panelGroup>
 					</a4j:form>
-					<a4j:form id="panelAlbum" rendered="#{eventoMB.isSuperUser}">
+					<a4j:form id="panelAlbum" rendered="#{eventoMB.isSuperUser}"
+						style="margin-bottom:5px;">
 						<h:panelGroup
 							rendered="#{eventoMB.albumExists and !eventoMB.isAlbumFinalized}">
 							<h:panelGroup rendered="#{eventoMB.contentIsInAlbum}">
@@ -431,56 +466,47 @@
 						</h:panelGroup>
 
 					</a4j:form>
-					<a4j:outputPanel id="panelTagsCount"
-						rendered="#{eventoMB.isSuperUser}">
-						<br />
-						<div id="index-featured2">
-						<ul class="hfeed posts-quick-tag clearfix">
-							<h:outputText
-								value="Cantidad de etiquetados: #{eventoMB.tagsCount}" />
-						</ul>
-						</div>
-					</a4j:outputPanel>
-					<a4j:outputPanel id="panelCommentsCount"
-						rendered="#{eventoMB.isSuperUser}">
-						<div id="index-featured2">
-						<ul class="hfeed posts-quick-tag clearfix">
-							<h:outputText
-								value="Cantidad de comentarios: #{eventoMB.commentsCount}" />
-						</ul>
-						</div>
-						<br />
-					</a4j:outputPanel>
 					<a4j:form id="formTag"
 						rendered="#{!evento.isSuperUser and (eventoMB.hasAlbum || eventoMB.validUserForContext)}">
-						<h5 class="entry-title" style="margin-top:0px"><a4j:commandButton
+						<h5 class="entry-title" style="margin-top: 0px;margin-bottom: 5px"><a4j:commandButton
 							id="btnBeginTag" onclick="beginTag();" value="Etiquetar" /> <a4j:commandButton
 							id="btnEndTag" onclick="endTag();" value="Finalizar etiquetado"
 							style="display:none " /></h5>
 					</a4j:form>
-					
+					<a4j:outputPanel id="panelTagsCount"
+						rendered="#{eventoMB.isSuperUser}">
+						<br />
+						<div id="index-featured2"><h:outputText
+							value="Cantidad de etiquetados: #{eventoMB.tagsCount}" /></div>
+					</a4j:outputPanel>
+					<a4j:outputPanel id="panelCommentsCount"
+						rendered="#{eventoMB.isSuperUser}" >
+						<div id="index-featured2" style="border-bottom:1px dotted #CCCCCC;"><h:outputText
+							value="Cantidad de comentarios: #{eventoMB.commentsCount}" /></div>
+						<br />
+					</a4j:outputPanel>
+
 					<a4j:outputPanel id="panelRating">
-						<h5 class="entry-title"
-								style="padding-top: 10px; border-top: 1px dotted #CCCCCC">
-						<a4j:form id="formRating">
-							<div>Tu calificación:</div>
-							<a4j:commandButton id="btnRate" action="#{eventoMB.rate}"
-								style="display:none;" reRender="panelRating">
-							</a4j:commandButton>
-							<h:inputHidden id="txtRating" value="#{eventoMB.rating}" />
-							<input type="radio" class="hover-star" name="myRating" value="1"
-								title="Malo" />
-							<input type="radio" class="hover-star" name="myRating" value="2"
-								title="Regular" />
-							<input type="radio" class="hover-star" name="myRating" value="3"
-								title="Bueno" />
-							<input type="radio" class="hover-star" name="myRating" value="4"
-								title="Muy bueno" />
-							<input type="radio" class="hover-star" name="myRating" value="5"
-								title="Excelente!" />
-							<span id="hover-test" style="margin: 0 0 0 20px;"></span>
-							<rich:jQuery selector="#formRating .hover-star"
-								query="rating({
+						<ul class="hfeed posts-quick-tag clearfix" style="">
+
+							<a4j:form id="formRating" rendered="#{!eventoMB.isSuperUser}">
+								<li class="post type-post clearfix">
+								<div class="entry-summary">
+								<div>Tu calificación:</div>
+								<a4j:commandButton id="btnRate" action="#{eventoMB.rate}"
+									style="display:none;" reRender="panelRating">
+								</a4j:commandButton> <h:inputHidden id="txtRating" value="#{eventoMB.rating}" /> <input
+									type="radio" class="hover-star" name="myRating" value="1"
+									title="Malo" /> <input type="radio" class="hover-star"
+									name="myRating" value="2" title="Regular" /> <input
+									type="radio" class="hover-star" name="myRating" value="3"
+									title="Bueno" /> <input type="radio" class="hover-star"
+									name="myRating" value="4" title="Muy bueno" /> <input
+									type="radio" class="hover-star" name="myRating" value="5"
+									title="Excelente!" /> <span id="hover-test"
+									style="margin: 0 0 0 20px;"></span> <rich:jQuery
+									selector="#formRating .hover-star"
+									query="rating({
 								focus: function(value, link){
 									var tip = jQuery('#hover-test');
 									tip.css('display','none');
@@ -497,37 +523,42 @@
 									$('formRating:btnRate').click();
 								}
 							}).rating('select', #{eventoMB.rating} + '', false);"></rich:jQuery>
-						</a4j:form>
-						<br/>
-						<h:form id="formGlobalRating">
-							<div>Calificación global:</div>
-							<div><input type="radio" class="hover-star {half:true}"
-								name="globalRating" value="0.5" /> <input type="radio"
-								class="hover-star {half:true}" name="globalRating" value="1" />
-							<input type="radio" class="hover-star {half:true}"
-								name="globalRating" value="1.5" /> <input type="radio"
-								class="hover-star {half:true}" name="globalRating" value="2" />
-							<input type="radio" class="hover-star {half:true}"
-								name="globalRating" value="2.5" /> <input type="radio"
-								class="hover-star {half:true}" name="globalRating" value="3" />
-							<input type="radio" class="hover-star {half:true}"
-								name="globalRating" value="3.5" /> <input type="radio"
-								class="hover-star {half:true}" name="globalRating" value="4" />
-							<input type="radio" class="hover-star {half:true}"
-								name="globalRating" value="4.5" /> <input type="radio"
-								class="hover-star {half:true}" name="globalRating" value="5" />
-							<rich:jQuery selector="#formGlobalRating .hover-star"
-								query="rating({}).rating('select', #{eventoMB.selectedContent == null ? 0 : eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
-							</div>
-						</h:form>
-						</h5>
+								</div>
+								</li>
+							</a4j:form>
+							<li class="post type-post clearfix">
+							<div class="entry-summary"><h:form id="formGlobalRating">
+								<div>Calificación global:</div>
+								<div><input type="radio" class="hover-star {half:true}"
+									name="globalRating" value="0.5" /> <input type="radio"
+									class="hover-star {half:true}" name="globalRating" value="1" />
+								<input type="radio" class="hover-star {half:true}"
+									name="globalRating" value="1.5" /> <input type="radio"
+									class="hover-star {half:true}" name="globalRating" value="2" />
+								<input type="radio" class="hover-star {half:true}"
+									name="globalRating" value="2.5" /> <input type="radio"
+									class="hover-star {half:true}" name="globalRating" value="3" />
+								<input type="radio" class="hover-star {half:true}"
+									name="globalRating" value="3.5" /> <input type="radio"
+									class="hover-star {half:true}" name="globalRating" value="4" />
+								<input type="radio" class="hover-star {half:true}"
+									name="globalRating" value="4.5" /> <input type="radio"
+									class="hover-star {half:true}" name="globalRating" value="5" />
+								<rich:jQuery selector="#formGlobalRating .hover-star"
+									query="rating({}).rating('select', #{eventoMB.selectedContent == null ? 0 : eventoMB.selectedContent.avgScore} + '').rating('readOnly', true);"></rich:jQuery>
+								</div>
+							</h:form></div>
+
+							</li>
+						</ul>
+
 					</a4j:outputPanel>
 
 					<a4j:outputPanel id="panelComments"
 						rendered="#{eventoMB.hasAlbum || eventoMB.validUserForContext}">
-						<h:form id="formCommentContent">
-							<h5 class="entry-title"
-								style="padding-top: 10px; border-top: 1px dotted #CCCCCC"><h:inputText
+						<h:form id="formCommentContent"
+							rendered="#{!eventoMB.isSuperUser}">
+							<h5 class="entry-title"><h:inputText
 								value="#{eventoMB.comentario}"
 								onfocus="if(value=='Escribe un comentario...')value=''"
 								onblur="if(value=='')value='Escribe un comentario...'" /> <a4j:commandButton
@@ -536,7 +567,7 @@
 							</a4j:commandButton></h5>
 						</h:form>
 						<h:panelGroup layout="block" id="commentPanel"
-							style="overflow: auto;height:300px;width:283px;padding-right:5px">
+							style="overflow: auto;height:280px;width:283px;padding-right:5px">
 							<div id="index-featured2">
 							<ul class="hfeed posts-quick-tag clearfix" style="">
 
@@ -544,7 +575,7 @@
 									var="comment">
 									<li class="post type-post clearfix"><h:form
 										id="formCommentsImage">
-										<div style="float: left; margin-right: 5px">' <img
+										<div style="float: left; margin-right: 5px"><img
 											src="UserImageFeeder?username=#{comment.userId}&#38;thb=50" /></div>
 									</h:form> <strong>#{comment.userId}</strong>
 									<div class="entry-summary">#{comment.text}</div>
@@ -570,10 +601,10 @@
 							<!-- #index-featured2 -->
 						</h:panelGroup>
 					</a4j:outputPanel>
-				</a4j:outputPanel>
-			</a4j:outputPanel></div>
-			</div>
-			</li>
+				</a4j:outputPanel></div>
+				</div>
+				</li>
+			</a4j:outputPanel>
 		</ul>
 
 	</ui:define>
