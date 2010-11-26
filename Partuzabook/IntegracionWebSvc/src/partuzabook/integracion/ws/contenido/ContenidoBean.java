@@ -15,6 +15,7 @@ import javax.naming.NamingException;
 
 import partuzabook.datatypes.DatatypeContent;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
+import partuzabook.utils.Parameters;
 
 @Stateless
 @WebService(
@@ -72,7 +73,12 @@ public class ContenidoBean {
 			System.out.println("ContenidoBean.getAlbumContents(): Encotnrado contenido "+datatypeContent.getDescription());
 			Contenido_Type content = new Contenido_Type();
 			content.setDescripcion(datatypeContent.getDescription());
-			content.setUrl(datatypeContent.getUrl());
+			if (datatypeContent.getUrl().contains("http://")) {
+				content.setUrl(datatypeContent.getUrl());
+			}
+			else {
+				content.setUrl("http://"+Parameters.PARTUZABOOK_IP+"/UsuarioUI/ContentFeeder?id="+datatypeContent.getUrl());
+			}
 			translatedCollection.add(content);
 			i++;
 		}

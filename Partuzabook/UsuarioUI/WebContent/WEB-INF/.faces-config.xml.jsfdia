@@ -60,13 +60,11 @@
     TITLE="#{loginMB.logout}:logoutsuccess" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
- <PROCESS-ITEM NAME="rules:#publicProfile.xhtml"
-  PATH="/publicProfile.xhtml" SHAPE="240,1073,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:*:3" PATH="*" SHAPE="32,1169,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:*:3" NAME="item" PATH="*" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID="verPerfil::#publicProfile.xhtml"
-    NAME="output" PATH="/publicProfile.xhtml"
-    TARGET="rules:#publicProfile.xhtml" TITLE="verPerfil" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="verMiPerfil::#privateProfile.xhtml"
+    NAME="output" PATH="/privateProfile.xhtml"
+    TARGET="rules:#privateProfile.xhtml" TITLE="verMiPerfil" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#register.xhtml" PATH="/register.xhtml"
@@ -89,22 +87,24 @@
   SHAPE="480,865,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:*:4" PATH="*" SHAPE="32,1489,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:*:4" NAME="item" PATH="*" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID="verMiPerfil::#privateProfile.xhtml"
-    NAME="output" PATH="/privateProfile.xhtml"
-    TARGET="rules:#privateProfile.xhtml" TITLE="verMiPerfil" model-entity="JSFProcessItemOutput"/>
-  </PROCESS-ITEM>
- </PROCESS-ITEM>
- <PROCESS-ITEM NAME="rules:#busquedaEventos.xhtml"
-  PATH="/busquedaEventos.xhtml" SHAPE="240,1505,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM NAME="rules:#subirContenidoExterno.xhtml"
-  PATH="/subirContenidoExterno.xhtml" SHAPE="480,577,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM NAME="rules:*:5" PATH="*" SHAPE="32,1713,0,0" model-entity="JSFProcessGroup">
-  <PROCESS-ITEM ID="rules:*:5" NAME="item" PATH="*" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="buscar::#busquedaEventos.xhtml"
     NAME="output" PATH="/busquedaEventos.xhtml"
     TARGET="rules:#busquedaEventos.xhtml" TITLE="buscar" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#busquedaEventos.xhtml"
+  PATH="/busquedaEventos.xhtml" SHAPE="240,1505,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#busquedaEventos.xhtml:0" NAME="item"
+   PATH="/busquedaEventos.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="verEventoExterno::#eventoExterno.xhtml"
+    NAME="output" PATH="/eventoExterno.xhtml"
+    TARGET="rules:#eventoExterno.xhtml" TITLE="verEventoExterno" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#subirContenidoExterno.xhtml"
+  PATH="/subirContenidoExterno.xhtml" SHAPE="480,577,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#messages.xhtml" PATH="/messages.xhtml"
   SHAPE="240,1505,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#eventoExterno.xhtml"
+  PATH="/eventoExterno.xhtml" SHAPE="448,1601,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

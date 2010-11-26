@@ -8,6 +8,7 @@ import javax.xml.ws.Service;
 
 import partuzabook.integracion.ws.productora_web.DataEvent;
 import partuzabook.integracion.ws.productora_web.IntegracionWSServicePortType;
+import partuzabook.utils.Parameters;
 
 public class WebServiceProductorawebClient {
 
@@ -15,7 +16,7 @@ public class WebServiceProductorawebClient {
 		
 		try {
 			Service service = Service.create(
-				new URL("http://192.168.1.101:8180/PruebaIntegracion/services/IntegracionWSService?wsdl"),
+				new URL("http://" + Parameters.PRODUCTORA_WEB_IP + "/PruebaIntegracion/services/IntegracionWSService?wsdl"),
 				new QName("http://ws.integracion.tsi2.fing.edu.uy", "IntegracionWSService")
 			);
 			IntegracionWSServicePortType ws = service.getPort(IntegracionWSServicePortType.class);

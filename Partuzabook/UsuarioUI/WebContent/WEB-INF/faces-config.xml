@@ -28,6 +28,11 @@
   <managed-bean-scope>session</managed-bean-scope>
  </managed-bean>
  <managed-bean>
+  <managed-bean-name>eventoExternoMB</managed-bean-name>
+  <managed-bean-class>partuzabook.usuarioUI.EventoExternoMB</managed-bean-class>
+  <managed-bean-scope>session</managed-bean-scope>
+ </managed-bean>
+ <managed-bean>
   <managed-bean-name>loginMB</managed-bean-name>
   <managed-bean-class>partuzabook.usuarioUI.LoginMB</managed-bean-class>
   <managed-bean-scope>request</managed-bean-scope>
@@ -64,6 +69,14 @@
   <navigation-case>
    <from-outcome>verEvento</from-outcome>
    <to-view-id>/evento.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <display-name>verEventoExterno</display-name>
+  <from-view-id>/busquedaEventos.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>verEventoExterno</from-outcome>
+   <to-view-id>/eventoExterno.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
  <navigation-rule>

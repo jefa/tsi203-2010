@@ -65,7 +65,7 @@ public class Authentication implements Filter {
 		 * resp.sendRedirect("index.jsf"); return; } } } else {
 		 */
 		if (!isPublic && (session == null || session.getAttribute("username") == null)) {
-			System.out.println("Authentication.doFilter(): ACCESO NO AUTORIZADO");
+			System.out.println("Authentication.doFilter(): ACCESO NO AUTORIZADO : " + url);
 			resp.sendRedirect("login.jsf");
 			
 			return;
@@ -84,6 +84,7 @@ public class Authentication implements Filter {
 		publicURLs.add("/busquedaEventos.jsf");
 		publicURLs.add("/login.jsf");
 		publicURLs.add("/evento.jsf");
+		publicURLs.add("/eventoExterno.jsf");
 		publicURLs.add("/register.jsf");
 		publicURLs.add("/ContentFeeder");
 		publicURLs.add("/AlbumFeeder");		

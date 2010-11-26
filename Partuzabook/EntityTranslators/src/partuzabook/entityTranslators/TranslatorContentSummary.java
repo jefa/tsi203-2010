@@ -28,7 +28,12 @@ public class TranslatorContentSummary implements ITranslatable {
 			dat.setType(DatatypeContent.EXTERNAL_VIDEO);
 		}
 		dat.setDescription(ent.getDescription());
-		dat.setUrl(ent.getUrl());
+		if (ent instanceof Photo || ent instanceof Video) {
+			dat.setUrl(ent.getCntIdAuto().toString());
+		}
+		else {
+			dat.setUrl(ent.getUrl());
+		}
 		dat.setUploadedBy(ent.getUser().getName());
 		return dat;
 	}

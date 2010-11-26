@@ -244,13 +244,13 @@
     </wsdl:binding>
     <wsdl:service name="IntegracionWSService">
         <wsdl:port name="IntegracionWSServiceHttpSoap11Endpoint" binding="ns:IntegracionWSServiceSoap11Binding">
-            <soap:address location="http://192.168.1.101:8180/PruebaIntegracion/services/IntegracionWSService.IntegracionWSServiceHttpSoap11Endpoint/"/>
+            <soap:address location="http://localhost:8180/PruebaIntegracion/services/IntegracionWSService.IntegracionWSServiceHttpSoap11Endpoint/"/>
         </wsdl:port>
         <wsdl:port name="IntegracionWSServiceHttpSoap12Endpoint" binding="ns:IntegracionWSServiceSoap12Binding">
             <soap12:address location="http://192.168.1.101:8180/PruebaIntegracion/services/IntegracionWSService.IntegracionWSServiceHttpSoap12Endpoint/"/>
         </wsdl:port>
         <wsdl:port name="IntegracionWSServiceHttpEndpoint" binding="ns:IntegracionWSServiceHttpBinding">
-            <http:address location="http://192.168.1.101:8180/PruebaIntegracion/services/IntegracionWSService.IntegracionWSServiceHttpEndpoint/"/>
+            <http:address location="http://localhost:8180/PruebaIntegracion/services/IntegracionWSService.IntegracionWSServiceHttpEndpoint/"/>
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>
