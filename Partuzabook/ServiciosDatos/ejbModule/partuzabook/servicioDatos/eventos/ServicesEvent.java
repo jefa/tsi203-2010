@@ -435,7 +435,7 @@ public class ServicesEvent implements ServicesEventRemote {
 			ntfTagged.setRegDate(new Timestamp(new java.util.Date().getTime()));
 			ntfTagged.setText(tagged.getName() +",\r\nhas sido etiquetado en un contenido del evento \"" + cont.getEvent().getEvtName() + "\" por " + tagger.getName() + ".");
 			ntfTagged.setSubject("Has sido etiquetado!");
-			ntfTagged.setType(0);
+			ntfTagged.setType(2);
 			ntfTagged.setUserFrom(nUserTagger);	
 			ntfTagged.setUserTo(nUserTagged);
 
@@ -508,7 +508,7 @@ public class ServicesEvent implements ServicesEventRemote {
 				ntfTagged.setRegDate(new Timestamp(new java.util.Date().getTime()));
 				ntfTagged.setText(nu.getName() + ",\r\n" + uploader.getName() + " ha agregado un contenido en el evento \"" + cont.getEvent().getEvtName() + "\".");
 				ntfTagged.setSubject("Se subi� un contenido en un evento moderado.");
-				ntfTagged.setType(0);
+				ntfTagged.setType(2);
 				ntfTagged.setUserFrom(uploader);	
 				ntfTagged.setUserTo(nu);
 
@@ -728,7 +728,7 @@ public class ServicesEvent implements ServicesEventRemote {
 				ntfTagged.setRegDate(new Timestamp(new java.util.Date().getTime()));
 				ntfTagged.setText(nu.getName() + ",\r\n" + userCommenter +" ha comentado un contenido del evento \"" + cont.getEvent().getEvtName() + "\".");
 				ntfTagged.setSubject("Se coment� un contenido de un evento moderado.");
-				ntfTagged.setType(0);
+				ntfTagged.setType(2);
 				ntfTagged.setUserFrom(nUser);	
 				ntfTagged.setUserTo(nu);
 
