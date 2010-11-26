@@ -19,11 +19,11 @@
 <iframe src="whereToSubmit.html" name="myIframe" frameborder="0" height="1" width="1" />
 
 	<ui:define name="body">
-<rich:page>
 		<link rel="stylesheet" href="styles/floating-gallery.css"
 			type="text/css" />
 		<script type="text/javascript" src="scripts/floating-gallery.js"></script>
 		<script type="text/javascript" src="scripts/documentation.js"></script>
+
 
 		<h:panelGroup id="panelEvento">
 			<div id="index-featured2">
@@ -75,61 +75,31 @@
 					<img src="/SuperusuarioUI/images/marker_middle.gif" id="insertionMarkerLine" />
 					<img src="/SuperusuarioUI/images/marker_bottom.gif" /></div>
 					<div id="dragDropContent"></div>
-					
-					<h:inputHidden id="newPosAlbum" value="#{eventoMB.newPosAlbum}"/>
 
-					
-					<a4j:outputPanel id="dragndrop">
-						<rich:dragIndicator id="indicator" />
-						
-						<h:dataTable id="src" value="#{eventoMB.contents}" var="content" >
-								<h:column>
-								<a4j:outputPanel onmouseover="document.getElementById('formThumb:newPosAlbum').value = #{content.contId}">
-									<rich:dragSupport dragType="CONTENIDO" dragIndicator=":indicator" dragValue="#{content}">
-										<rich:dndParam name="label" value="#{content.contId}" />
-									</rich:dragSupport>
-									
-										<a4j:outputPanel rendered="#{content.type eq 0 || content.type eq 2}">
-											<div class="imageBox_theImage" 
-												style="background-image:url('/SuperusuarioUI/ContentFeeder?id=#{content.contId}&#38;thb=125')">
-											</div>
-											<div class="imageBox_label"><span>#{content.description}</span></div>
-										</a4j:outputPanel>
-										<a4j:outputPanel rendered="#{content.type eq 1 || content.type eq 3}">
-											<div class="imageBox_theImage" 
-												style="background-image:url(#{content.youtubeUrlScreen})">
-											</div>
-											<div class="imageBox_label"><span>#{content.description}</span></div>
-										</a4j:outputPanel>
-									
-									</a4j:outputPanel>
-								</h:column>
-								
-							</h:dataTable>
-						
-						<rich:dropSupport id="php" acceptedTypes="CONTENIDO" dropValue="CONTENIDO" 
-							dropListener="#{eventoMB.processDrop}" reRender="dragndrop">
-	                	</rich:dropSupport>
-	                	
-					</a4j:outputPanel>
-					
-				
+					<div id="GalleryContainer">
+						<a4j:repeat
+						value="#{eventoMB.contents}"
+						var="content" rowKeyVar="rk">
+							<div class="imageBox" id="imageBox#{rk}">
+							<div class="imageBox_theImage" 
+							style="background-image:url('/SuperusuarioUI/ContentFeeder?id=#{content.contId}&#38;thb=125')">
+							</div>
+							<div class="imageBox_label"><span>#{content.description}</span></div>
+							</div>
+						</a4j:repeat>
+					</div>
+					<div id="debug" style="clear:both"></div>
+
 				</a4j:form>
 			</a4j:outputPanel>
 
 			<a4j:outputPanel id="panelContent"
 				rendered="#{eventoMB.contentsCount > 0}">
 				<h:form>
-					<a4j:commandButton rendered="false" value="Guardar cambios"
+					<a4j:commandButton value="Guardar cambios"
 						onclick="saveImageOrder();"
 						oncomplete="window.alert('Los cambios han sido guardados')"/>
 				</h:form>
-				<h:form>
-					<a4j:commandButton value="Guardar cambios"
-						action="#{eventoMB.updateOrder}"
-						oncomplete="window.alert('Los cambios han sido guardados')"/>
-				</h:form>
-				
 				<h:form>	
 					<a4j:commandButton value="Publicar Album"
 						onclick="saveImageOrder();if (!window.confirm('¿Confirma que desea publicar el Album? Una vez finalizado no podrá editarse')) {return false}"
@@ -143,12 +113,9 @@
 
 		<a4j:form>
 			<h:commandButton value="Volver al evento" action="verEvento">
-				<f:setPropertyActionListener value="#{eventoMB.eventId}"
-							target="#{eventoMB.eventId}" />
 			</h:commandButton>	
 		</a4j:form>
-</rich:page>
+
 	</ui:define>
-	
 </ui:composition>
 </html>

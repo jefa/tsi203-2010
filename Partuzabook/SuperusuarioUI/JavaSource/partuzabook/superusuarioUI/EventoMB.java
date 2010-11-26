@@ -1,18 +1,16 @@
 package partuzabook.superusuarioUI;
 
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-
-import org.richfaces.event.DropEvent;
 
 import partuzabook.datatypes.DatatypeCategory;
 import partuzabook.datatypes.DatatypeCategorySummary;
@@ -47,7 +45,7 @@ public class EventoMB {
 
 	private int categoryId;
 	private DatatypeCategory selectedCategory;
-	private List<DatatypeContent> contents;   private int newPosAlbum = -1;
+	private List<DatatypeContent> contents;
 	private Integer contentsCount;
 	private int tagsCount;
 	private int commentsCount;
@@ -666,7 +664,7 @@ public class EventoMB {
 	public String getOrderedList(){
 		return this.orderedList;
 	}
-/*
+
 	public void updateOrder() {
 	//	System.out.println(orderedList);
 		String[] ordList = orderedList.split(",");
@@ -682,16 +680,7 @@ public class EventoMB {
 			e.printStackTrace();
 		}
 	}
-*/
-	public void updateOrder() {
-		try {
-			ServicesEventRemote service = getServicesEvent();		 
-			service.updateAlbum(this.eventId, contents);
-		} catch(Exception e){
-			e.printStackTrace();
-		}
-	}
-	
+
 	public void finalizarAlbum(){
 		updateOrder();		
 		try {
@@ -730,37 +719,5 @@ public class EventoMB {
 		return this.contents.size() / THUMBS_PER_PAGE + 1;
 	}
 
-	
-	public void processDrop(DropEvent arg0) {
-		if(newPosAlbum == -1)
-			return;
-		int posBorrar = -1;
-		int posNueva = -1;
-		int i = 0;
-		DatatypeContent source = (DatatypeContent)arg0.getDragValue();
-		for(ListIterator<DatatypeContent> li = contents.listIterator(); li.hasNext(); ) {
-			DatatypeContent dc = li.next();
-			if(dc.getContId() == source.getContId())
-				posBorrar = i;
-			else if(dc.getContId() == newPosAlbum)
-				posNueva = i;
-			i++;
-		}
-		
-		if(posBorrar != -1 && posNueva != -1) {
-			contents.remove(posBorrar);
-			contents.add(posNueva, source);
-			newPosAlbum = -1;
-		}
-				
-	}
-
-	public void setNewPosAlbum(int newPosAlbum) {
-		this.newPosAlbum = newPosAlbum;
-	}
-
-	public int getNewPosAlbum() {
-		return newPosAlbum;
-	}
 	
 }
