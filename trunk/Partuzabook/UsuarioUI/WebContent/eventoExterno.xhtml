@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+
+
+<ui:composition template="templates/usuarioUI.xhtml">
+	<ui:define name="title">Ver evento externo</ui:define>
+	<ui:define name="styles">
+	.main-aside {width:300px;}
+	#container {width:660px;}
+	#content {width:660px;}
+	</ui:define>
+
+	<ui:define name="body">
+		<link rel="stylesheet" href="styles/pikachoose/styles.css"
+			type="text/css" />
+		<link rel="stylesheet" href="styles/lightbox/jquery.lightbox-0.5.css"
+			type="text/css" />
+		<script type="text/javascript" src="scripts/jquery.pikachoose.js"></script>
+		<script type="text/javascript" src="scripts/jquery.jcarousel.js"></script>
+		<script type="text/javascript" src="scripts/jquery.lightbox-0.5.js"></script>
+
+		<h:panelGroup id="panelEvento" rendered="#{eventoExternoMB.evento != null}">
+			<div id="index-featured2">
+			<ul class="hfeed posts-quick clearfix">
+				<li class="post type-post clearfix">
+				<div class="entry-thumbnails"><h:graphicImage
+					value="#{eventoExternoMB.evento.coverUrl}"
+					styleClass="attachment-quick-preview-thumb wp-post-image" /></div>
+				<h3 class="entry-title">#{eventoExternoMB.evento.evtName}</h3>
+				<div class="entry-summary">
+				<div class="entry-info"><abbr class="published">#{eventoExternoMB.evento.formattedDate}</abbr>
+				<abbr class="published">#{eventoExternoMB.evento.eventCategory}</abbr> <abbr
+					class="published">#{eventoExternoMB.evento.address}</abbr> <abbr
+					class="published">#{eventoExternoMB.evento.duration}</abbr> <br />
+				<abbr class="published">Descripción:<br />
+				#{eventoExternoMB.evento.description}</abbr></div>
+				</div>
+				</li>
+			</ul>
+			<!-- .posts-quick --></div>
+			<!-- #index-featured2 -->
+		</h:panelGroup>
+
+		<h:panelGroup id="authorizedContent" style="padding-top:10px">
+			<a4j:outputPanel id="panelNoContents"
+				rendered="#{eventoExternoMB.contentsCount == 0}">
+				No hay contenidos para esta categoria
+			</a4j:outputPanel>
+
+			<a4j:form id="panelThumbs" rendered="#{eventoExternoMB.contentsCount > 0}">
+				<div class="pikachoose" style="height: 620px;"><h:inputHidden
+					id="selectContentId" value="#{eventoExternoMB.contentId}" /> 
+					<a4j:commandButton id="btnSelectThumb"
+						reRender="panelContentDetails" style="display:none;">
+					</a4j:commandButton>
+					<ul id="pikame" class="jcarousel-skin-pika">
+						<a4j:repeat value="#{eventoExternoMB.contents}"
+							var="content">
+							<li><h:graphicImage
+								rendered="#{content.type eq 0 || content.type eq 2}"
+								value="#{content.url}"
+								name="#{content.contId}"
+								/>
+							<h:graphicImage
+								rendered="#{content.type eq 1 || content.type eq 3}"
+								value="#{content.youtubeUrlScreen}" name="#{content.contId}"
+								/>
+							<span>#{content.description}<br /></span></li>
+						</a4j:repeat>
+					</ul>
+					<h:graphicImage id="videoLbl" value="/images/video.png"
+						style="position:relative;left:10px;display:none" />
+					<script>
+						function clickPicture(type,url,contId) {
+						}
+						jQuery("#pikame").PikaChoose();
+						jQuery("#pikame").jcarousel({scroll:5,
+							initCallback: function(carousel) {
+						        jQuery(carousel.list).find('img').click(function() {
+					          		carousel.scroll(parseInt(jQuery(this).parents('.jcarousel-item').attr('jcarouselindex')));
+					        	});
+						    }
+				    	});
+						initImageSelected();
+						function beginTag() {
+						}
+						function endTag() {
+						}
+						function clearImageSelected() {
+						}
+						function initImageSelected() {
+						}
+						function updateCleanClone() {
+						}
+					</script>
+				</div>
+			</a4j:form>
+		</h:panelGroup>
+	</ui:define>
+	<ui:define name="sidebar">
+		<a4j:outputPanel id="panelContentDetails"
+			rendered="#{eventoExternoMB.selectedContent != null}">
+			Aca deben ir las opciones para agregar el contenido a un evento local
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

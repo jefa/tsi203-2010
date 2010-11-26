@@ -125,6 +125,24 @@ public class BusquedaBean {
 	public SearchResponse searchByType(SearchByTypeRequest request){
 
 		SearchResponse sr = new SearchResponse();
+
+		try {
+			List<DatatypeEventSummary> eventResults = getServicesEvent().filterEventsByEvtCategory(
+					request.getTipoEvento(), 100);
+			
+			if (eventResults == null) {
+				System.out.println("BusquedaBean.searchByType(): No se han encontrado resultados");
+				return sr;
+			}
+
+			sr.evento = translate(eventResults);
+			sr.total = new Integer(eventResults.size());
+			
+		} catch (NamingException e) {
+			System.out.println("BusquedaBean.searchByType(): Error haciendo la busqueda: "+e.getMessage());
+			e.printStackTrace();
+		}
+		
 		return sr;
 				
 	}
@@ -164,7 +182,7 @@ public class BusquedaBean {
 			evento.setIdEvento(datatypeEventSummary.getEvtId());
 			evento.setNombre(datatypeEventSummary.getEvtName());
 			//evento.setTipo();
-			evento.setUrlCover("http://"+Parameters.LOCAL_IP+"/UsuarioUI/ContentFeeder?id="+datatypeEventSummary.getCoverId());
+			evento.setUrlCover("http://"+Parameters.PARTUZABOOK_IP+"/UsuarioUI/ContentFeeder?id="+datatypeEventSummary.getCoverId());
 			translatedCollection.add(evento);
 			i++;
 		}

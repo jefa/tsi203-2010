@@ -11,16 +11,13 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.xml.namespace.QName;
-import javax.xml.ws.Holder;
 import javax.xml.ws.Service;
 
 import partuzabook.datatypes.DatatypeEventSummary;
-import partuzabook.integracion.ws.busqueda.Busqueda;
-import partuzabook.integracion.ws.busqueda.Evento;
 import partuzabook.integracion.ws.productora_web.DataEvent;
 import partuzabook.integracion.ws.productora_web.IntegracionWSServicePortType;
+import partuzabook.integracion.ws.proxy.WebServiceProductoraExternoRemote;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
-import partuzabook.utils.Parameters;
 
 public class SearchEventMB {
 
@@ -182,7 +179,7 @@ public class SearchEventMB {
 			this.eventResults = service.searchForEventByName(eventNameSearched,
 					100);
 			
-			this.setExternalEventResults(searchEventsByNameExterno(eventNameSearched,100));
+			this.setExternalEventResults(searchEventsByNameExterno(eventNameSearched));
 			if (this.eventResults == null || this.eventResults.size() == 0) {
 				this.mensaje = "No se han encontrado resultados";
 				this.getTotalPaginas();
@@ -232,6 +229,8 @@ public class SearchEventMB {
 				return this.eventResults;
 			}
 
+			this.setExternalEventResults(searchEventsByDateExterno(eventDateSearched));
+			
 			paginas = new ArrayList<Integer>();
 
 			for (int i = 0; i < this.getTotalPaginas(); i++) {
@@ -292,6 +291,15 @@ public class SearchEventMB {
 			return null;
 		}
 	}
+	
+	private int getEvtCategoryPos(String evtCategory) {
+		for (int i = 0; i < optionsEvtCateg.length; i++) {
+			if (evtCategory.equals(optionsEvtCateg[i])) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
 	public List<DatatypeEventSummary> filterEventsByEvtCategory() {
 		this.eventDateSearched = null;
@@ -302,24 +310,15 @@ public class SearchEventMB {
 			ServicesEventRemote service = (ServicesEventRemote) ctx
 					.lookup("PartuzabookEAR/ServicesEvent/remote");
 
-			if (this.eventFilter.equals(this.optionsEvtCateg[0])) {
-				this.eventResults = service.filterEventsByEvtCategory(0,
-						maxEvents);
-			} else if (this.eventFilter.equals(this.optionsEvtCateg[1])) {
-				this.eventResults = service.filterEventsByEvtCategory(1,
-						maxEvents);
-			} else if (this.eventFilter.equals(this.optionsEvtCateg[2])) {
-				this.eventResults = service.filterEventsByEvtCategory(2,
-						maxEvents);
-			} else if (this.eventFilter.equals(this.optionsEvtCateg[3])) {
-				this.eventResults = service.filterEventsByEvtCategory(3,
-						maxEvents);
-			}
+			
+			this.eventResults = service.filterEventsByEvtCategory(getEvtCategoryPos(eventFilter), maxEvents);
 			if (this.eventResults == null || this.eventResults.size() == 0) {
 				this.mensaje = "No se han encontrado resultados";
 				this.getTotalPaginas();
 				return this.eventResults;
 			}
+			
+			this.setExternalEventResults(searchEventsByTypeExterno(getEvtCategoryPos(eventFilter)));			
 
 			paginas = new ArrayList<Integer>();
 
@@ -367,54 +366,75 @@ public class SearchEventMB {
 		return eventResults.size() / EVENTS_PER_PAGE + 1;
 	}
 
-	public List<DatatypeEventSummary> searchEventsByNameExterno(String name, int maxResults) {
+	public List<DatatypeEventSummary> searchEventsByNameExterno(String name) {
 		try {
-
-			IntegracionWSServicePortType ws = getServiceProductora1();
-
-			List<DataEvent> result = ws.searchEventByName(name);
-			
-			System.out.println("TOTAL ES:::  " + result.size());
-			
-			if (result !=null && result.size() > 0)
-				return convertWSList(result);
-			else 
-				return null;
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			List<DatatypeEventSummary> partuzabookResults =
+				getPartuzabookProxy().searchEventByName(name);
+//			List<DatatypeEventSummary> productoraWebResults =
+//				getProductoraWebProxy().searchEventByName(name);
+//			partuzabookResults.addAll(productoraWebResults);
+			return partuzabookResults;
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	private List<DatatypeEventSummary> convertWSList(List<DataEvent> returnWS)
-	{
-		List<DatatypeEventSummary> salida = new ArrayList<DatatypeEventSummary>();
-		
-		for (DataEvent evento : returnWS) {
-			System.out.println("Evento encontrado:::  " + evento.getNombre());
-			DatatypeEventSummary temp = new DatatypeEventSummary();
-			// TODO: que da ver como corno guardaar la coverURL
-			//evento.getUrlCover();
-			if (evento.getDireccion() != null) temp.setAddress(evento.getDireccion().getValue());
-			if (evento.getFecha() != null) temp.setDate(evento.getFecha().getValue().toGregorianCalendar().getTime());
-			if (evento.getDescripcion() != null) temp.setDescription(evento.getDescripcion().getValue());
-			if (evento.getNombre() != null) temp.setEvtName(evento.getNombre().getValue());
-			if (evento.getIdEvento() != null) temp.setEvtId(evento.getIdEvento().getValue());
-			salida.add(temp);
+	public List<DatatypeEventSummary> searchEventsByDateExterno(Date date) {
+		try {
+			List<DatatypeEventSummary> partuzabookResults =
+				getPartuzabookProxy().searchEventByDate(date);
+//			List<DatatypeEventSummary> productoraWebResults =
+//				getProductoraWebProxy().searchEventByDate(date);
+//			partuzabookResults.addAll(productoraWebResults);
+			return partuzabookResults;
 		}
-		return salida;
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
-		
-	private IntegracionWSServicePortType getServiceProductora1() throws MalformedURLException
-	{
-		Service service = Service.create(
-				new URL("http://localhost:8180/PruebaIntegracion/services/IntegracionWSService?wsdl"),
-				new QName("http://ws.integracion.tsi2.fing.edu.uy", "IntegracionWSService")
-		);
-		return service.getPort(IntegracionWSServicePortType.class);
+	
+	public List<DatatypeEventSummary> searchEventsByTypeExterno(Integer type) {
+		try {
+			List<DatatypeEventSummary> partuzabookResults =
+				getPartuzabookProxy().searchEventByType(type);
+//			List<DatatypeEventSummary> productoraWebResults =
+//				getProductoraWebProxy().searchEventByType(type);
+//			partuzabookResults.addAll(productoraWebResults);
+			return partuzabookResults;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
-
+	
+	private WebServiceProductoraExternoRemote getPartuzabookProxy() {
+		try {
+			Context ctx = getContext();
+			return (WebServiceProductoraExternoRemote) ctx
+				.lookup("PartuzabookEAR/WebServiceProductoraExternoPartuzabook/remote");
+		} 
+		catch (NamingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private WebServiceProductoraExternoRemote getProductoraWebProxy() {
+		try {
+			Context ctx = getContext();
+			return (WebServiceProductoraExternoRemote) ctx
+				.lookup("PartuzabookEAR/WebServiceProductoraExternoProductoraWeb/remote");
+		} 
+		catch (NamingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public void setExternalEventResults(List<DatatypeEventSummary> externalEventResults) {
 		this.externalEventResults = externalEventResults;
 	}

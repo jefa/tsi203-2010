@@ -27,6 +27,8 @@ public class DatatypeEventSummary implements Serializable{
 	
 	private Integer coverId;
 	
+	private String coverUrl;
+	
 	private String hashtag;
 	
 	private List<String> modsUsernames;
@@ -115,6 +117,14 @@ public class DatatypeEventSummary implements Serializable{
 
 	public Integer getCoverId() {
 		return coverId;
+	}
+
+	public void setCoverUrl(String coverUrl) {
+		this.coverUrl = coverUrl;
+	}
+
+	public String getCoverUrl() {
+		return coverUrl;
 	}
 
 	public static long getSerialVersionUID() {

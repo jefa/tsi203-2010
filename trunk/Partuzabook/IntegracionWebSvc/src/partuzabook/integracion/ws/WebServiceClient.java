@@ -22,7 +22,7 @@ public class WebServiceClient {
 		
 		try {
 			Service service = Service.create(
-					new URL("http://"+Parameters.LOCAL_IP+"/PartuzabookEAR-IntegracionWebSvc/BusquedaBean?wsdl"),
+					new URL("http://"+Parameters.PARTUZABOOK_IP+"/PartuzabookEAR-IntegracionWebSvc/BusquedaBean?wsdl"),
 					new QName("http://edu.tsi2.ws/integracion/ws/busqueda", "BusquedaService")
 					
 			);

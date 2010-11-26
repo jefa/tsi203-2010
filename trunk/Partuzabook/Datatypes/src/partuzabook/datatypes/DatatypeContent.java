@@ -164,7 +164,7 @@ public class DatatypeContent implements Serializable {
 	}
 	
 	private String getScreen(String url, String size ) {
-		if(url == null){ return ""; }
+		if(url == null || !url.contains("http://")){ return ""; }
 		size = (size == null) ? "big" : size;
 		String vid = url.substring(25, 36);
 		if(size == "small"){

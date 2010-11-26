@@ -168,23 +168,26 @@ function toggleTab(control, tab)
 		</a4j:outputPanel>
 
 <br/>
-
-		<a4j:repeat var="resultado" value="#{SearchEventMB.externalEventResults}" rendered="#{not empty SearchEventMB.externalEventResults}">
+		
+		<div class="home-title">RESULTADOS EN OTRAS PRODUCTORAS</div> 	
+		<ul class="hfeed posts-quick clearfix">
+		<a4j:repeat var="resultado" value="#{SearchEventMB.externalEventResults}"
+			rendered="#{not empty SearchEventMB.externalEventResults}">
 			<li class="post type-post clearfix">
 			<div class="entry-thumbnails">
-			<h:commandLink action="verEvento" styleClass="entry-thumbnails-link">
-				<f:setPropertyActionListener value="#{resultado.evtId}"
-				target="#{eventoMB.eventId}" />
+			<h:commandLink action="verEventoExterno" styleClass="entry-thumbnails-link">
+				<f:setPropertyActionListener value="#{resultado}"
+				target="#{eventoExternoMB.evento}" />
 				<h:graphicImage
-				value="/ContentFeeder?id=#{resultado.coverId}&#38;thb=115"
+				value="#{resultado.coverUrl}" style="width:115px;height:115px;"
 				styleClass="attachment-quick-preview-thumb wp-post-image" />
 			</h:commandLink>
 			</div>
 	
 			<h3 class="entry-title">
-			<h:commandLink value="#{resultado.evtName}" action="verEvento">
-				<f:setPropertyActionListener value="#{resultado.evtId}"
-				target="#{eventoMB.eventId}" />
+			<h:commandLink value="#{resultado.evtName}" action="verEventoExterno">
+				<f:setPropertyActionListener value="#{resultado}"
+				target="#{eventoExternoMB.evento}" />
 			</h:commandLink>
 			</h3>
 	
@@ -193,7 +196,7 @@ function toggleTab(control, tab)
 			<abbr class="published">#{resultado.formattedDate}</abbr></div>
 			#{resultado.description}
 			<p class="quick-read-more">
-			<h:commandLink value="Ver evento..." action="verEvento">
+			<h:commandLink value="Ver evento..." action="verEventoExterno">
 				<f:setPropertyActionListener value="#{resultado.evtId}"
 				target="#{eventoMB.eventId}" />
 			</h:commandLink>
@@ -201,7 +204,7 @@ function toggleTab(control, tab)
 			</div>
 			</li>
 		</a4j:repeat>
-
+		</ul>
 
 	</h:form>
 		</div>	
