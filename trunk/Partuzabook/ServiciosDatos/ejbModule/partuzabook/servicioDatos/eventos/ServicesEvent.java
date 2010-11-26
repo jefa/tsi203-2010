@@ -727,7 +727,7 @@ public class ServicesEvent implements ServicesEventRemote {
 				ntfTagged.setReference("La referencia va aca");
 				ntfTagged.setRegDate(new Timestamp(new java.util.Date().getTime()));
 				ntfTagged.setText(nu.getName() + ",\r\n" + userCommenter +" ha comentado un contenido del evento \"" + cont.getEvent().getEvtName() + "\".");
-				ntfTagged.setSubject("Se coment� un contenido de un evento moderado.");
+				ntfTagged.setSubject("Se ha comentado un contenido de un evento moderado.");
 				ntfTagged.setType(2);
 				ntfTagged.setUserFrom(nUser);	
 				ntfTagged.setUserTo(nu);
