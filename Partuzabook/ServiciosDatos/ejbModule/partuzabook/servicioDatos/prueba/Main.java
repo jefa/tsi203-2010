@@ -12,6 +12,7 @@ import partuzabook.datatypes.DatatypeMostTagged;
 import partuzabook.datatypes.DatatypeNotification;
 import partuzabook.datatypes.DatatypeUser;
 import partuzabook.servicioDatos.eventos.ServicesEventRemote;
+import partuzabook.servicioDatos.notificaciones.ServicesNotificationRemote;
 import partuzabook.servicioDatos.usuarios.ServicesUserRemote;
 
 public class Main {
@@ -30,6 +31,7 @@ public class Main {
 	        Context ctx = new InitialContext(properties);
 	        System.out.println("Got context - Main");
 	        ServicesUserRemote usr = (ServicesUserRemote) ctx.lookup("PartuzabookEAR/ServicesUser/remote");
+	        ServicesNotificationRemote notif = (ServicesNotificationRemote) ctx.lookup("PartuzabookEAR/ServicesNotification/remote");
 	        ServicesEventRemote evt = (ServicesEventRemote) ctx.lookup("PartuzabookEAR/ServicesEvent/remote");
 	        if (usr != null) {
 	        	System.out.println("**** Testeando CU Ver pagina de Inicio ****");
@@ -38,7 +40,7 @@ public class Main {
 	        	List<DatatypeContent> album = evt.getOrderedAlbum(101);
 	        	System.out.println(album);
 	        	System.out.println("1. Invocando getUpdateNotifications para " + usuario);
-	        	List<DatatypeNotification> list = usr.getUpdateNotifications(usuario);
+	        	List<DatatypeNotification> list = notif.getUpdateNotifications(usuario);
 		        if (list == null){
 		        	System.out.println("   Result: NULL");
 		        } else {
