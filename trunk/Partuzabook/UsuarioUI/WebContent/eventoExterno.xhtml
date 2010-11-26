@@ -49,6 +49,10 @@
 			<!-- #index-featured2 -->
 		</h:panelGroup>
 
+		<h:inputHidden id="cntType" value="#{eventoMB.firstContentType}" />
+		<h:inputHidden id="cntUrl" value="#{eventoMB.firstContentUrl}" />
+		<h:inputHidden id="cntId" value="#{eventoMB.contentId}" />
+		
 		<h:panelGroup id="authorizedContent" style="padding-top:10px">
 			<a4j:outputPanel id="panelNoContents"
 				rendered="#{eventoExternoMB.contentsCount == 0}">
@@ -97,6 +101,8 @@
 						function clearImageSelected() {
 						}
 						function initImageSelected() {
+							var imageSelected = jQuery("div.pika-image a.image-selected");
+							imageSelected.lightBox();
 						}
 						function updateCleanClone() {
 						}

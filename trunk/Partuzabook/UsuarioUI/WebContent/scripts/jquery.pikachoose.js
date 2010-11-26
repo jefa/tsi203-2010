@@ -282,9 +282,9 @@
 	     {
 	     	
 	     		var self = this; //self in this scope refers to PikaChoose object. Needed for callbacks on animations
-				var aWidth = self.aniDiv.children('div').eq(0).width();
+				var aWidth = self.aniDiv.children().eq(0).width();
 				aWidth = 625;
-				var aHeight = self.aniDiv.children('div').eq(0).height();
+				var aHeight = self.aniDiv.children().eq(0).height();
 				aHeight = 480;
 				/*
 				self.aniDiv.children().each(function()

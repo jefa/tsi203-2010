@@ -393,7 +393,7 @@
 		}</script></li>
 		</ul>
 		<a4j:outputPanel id="panelContentDetails"
-			rendered="#{eventoMB.validUserForContext}" >
+			rendered="#{eventoMB.validUserForContext} and eventoMB.selectedContent != null}">
 			<a4j:outputPanel rendered="#{eventoMB.contentsCount > 0}">
 			<a4j:commandLink rendered="#{eventoMB.userIsModerator}"
 				onclick="if(!confirm('¿Eliminar el contenido?'))return false;"

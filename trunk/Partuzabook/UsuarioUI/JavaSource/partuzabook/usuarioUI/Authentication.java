@@ -89,6 +89,7 @@ public class Authentication implements Filter {
 		publicURLs.add("/ContentFeeder");
 		publicURLs.add("/AlbumFeeder");		
 		publicURLs.add("/UserImageFeeder");
+		publicURLs.add("/GetTagsForContent");
 		publicURLs.add("/images");
 		publicURLs.add("/styles");
 		publicURLs.add("/scripts");
