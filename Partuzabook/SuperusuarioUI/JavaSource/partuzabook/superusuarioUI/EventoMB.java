@@ -550,7 +550,7 @@ public class EventoMB {
 	}
 
 	public void setFirstContentType(String firstContentType) {
-		//this.firstContentType = firstContentType;
+		this.firstContentType = firstContentType;
 	}
 
 	public String getFirstContentType() {
@@ -558,7 +558,7 @@ public class EventoMB {
 	}
 
 	public void setFirstContentUrl(String firstContentUrl) {
-		//this.firstContentUrl = firstContentUrl;
+		this.firstContentUrl = firstContentUrl;
 	}
 
 	public String getFirstContentUrl() {
