@@ -442,4 +442,6 @@ public interface ServicesEventRemote {
 	 */
 	public void sendAdmitMail(Integer eventId, String userName)
 		throws EventNotFoundException, UserNotFoundException;
+	
+	public void updateAlbum(Integer eventId, List<DatatypeContent> contenido);
 }

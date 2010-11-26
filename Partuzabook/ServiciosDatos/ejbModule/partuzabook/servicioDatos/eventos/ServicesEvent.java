@@ -1565,4 +1565,21 @@ public class ServicesEvent implements ServicesEventRemote {
 		return content.getCntIdAuto();	
 	}
 
+	public void updateAlbum(Integer eventId, List<DatatypeContent> contenido){
+		
+		Event event = getEvent(eventId);
+		
+		CntCategory catAlbum = contentCategoryDao.findByNameInEvent(event, "Album");
+		if (catAlbum == null) {	
+			throw new AlbumNotFoundException();
+		}
+		int i = 0;
+		for(ListIterator<DatatypeContent> li = contenido.listIterator(); li.hasNext(); ) {
+			Content cnt = contentDao.findByID(li.next().getContId());
+			cnt.setPosAlbum(i);
+			contentDao.persist(cnt);
+			i++;
+		}
+	}
+
 }
